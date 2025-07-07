@@ -413,9 +413,18 @@ def fetch_and_rank_papers(keywords,
 
         # Boost score for target journals (only if at least 2 keywords matched)
         if paper.get('source') == 'PubMed' and paper.get('journal'):
-            if is_high_impact_journal(
-                    paper['journal']) and len(matched_keywords) >= 2:
-                relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
+            # if is_high_impact_journal(
+            #         paper['journal']) and len(matched_keywords) >= 2:
+            #     relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
+            if is_high_impact_journal(paper['journal']):
+                if len(matched_keywords) >= 5:
+                    relevance_score += 4.5
+                elif 5 > len(matched_keywords) >= 4:
+                    relevance_score += 3.5
+                elif 4 > len(matched_keywords) >= 3:
+                    relevance_score += 3.0
+                elif 3 > len(matched_keywords) >= 2:
+                    relevance_score += 2.5
 
         # Format authors list
         authors = paper.get('authors', [])
