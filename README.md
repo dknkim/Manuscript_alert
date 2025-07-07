@@ -2,6 +2,71 @@
 
 A local web application that helps researchers stay updated with the latest papers in Alzheimer's disease and neuroimaging from PubMed, arXiv, bioRxiv, and medRxiv.
 
+---
+
+## 🐍 Using with Conda Environment (Recommended)
+
+### 1. Create and Activate Your Conda Environment
+```bash
+conda create -n manuscript_alert python=3.11
+conda activate manuscript_alert
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the App
+```bash
+./run_alert_app_conda.sh
+```
+- This script will check your conda environment, install any missing dependencies, and launch the app.
+- The app will open in your default browser at http://localhost:8501
+
+### 4. Stopping and Restarting the App
+- To stop: Press `Ctrl+C` in the terminal where the app is running.
+- To restart after making changes to `app.py`:
+  ```bash
+  conda activate manuscript_alert
+  ./run_alert_app_conda.sh
+  ```
+
+### 5. If You See "Port 8501 is already in use"
+- Find the process using the port:
+  ```bash
+  netstat -tlnp | grep 8501
+  # Example output: tcp 0 0 0.0.0.0:8501 0.0.0.0:* LISTEN 12345/python3.11
+  ```
+- Kill the process (replace 12345 with your PID):
+  ```bash
+  kill -9 12345
+  # If needed, use sudo: sudo kill -9 12345
+  ```
+- Then restart the app.
+
+### 6. Example Workflow (Full Session)
+```bash
+# 1. Activate your conda environment
+conda activate manuscript_alert
+
+# 2. Install dependencies (first time only)
+pip install -r requirements.txt
+
+# 3. Start the app
+./run_alert_app_conda.sh
+
+# 4. If you update app.py, stop the app (Ctrl+C) and restart:
+./run_alert_app_conda.sh
+
+# 5. If you get a port error, find and kill the process:
+netstat -tlnp | grep 8501
+kill -9 <PID>
+./run_alert_app_conda.sh
+```
+
+---
+
 ## Features
 
 - **Multi-source paper fetching**: PubMed, arXiv, bioRxiv, and medRxiv
