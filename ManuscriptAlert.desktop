@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Manuscript Alert System
+Comment=Stay updated with the latest papers in Alzheimer's disease and neuroimaging
+Exec=/usr/bin/bash /path/to/your/project/run_alert_app.sh
+Type=Application
+Terminal=true
+Icon=applications-science
+Categories=Science;Education;Network;
+Keywords=research;papers;alzheimer;neuroimaging;pubmed;arxiv; 

@@ -1,0 +1,10 @@
+##usage
+
+1. activate conda env
+2. ./run_alert_app_conda.sh
+
+
+##rerun after changes
+1. netstat -tlnp | grep 8501
+2. kill-9 <3319261> #kill if under use
+3. ./run_alert_app_conda.sh
