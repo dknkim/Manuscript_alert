@@ -72,13 +72,14 @@ def main():
             st.success("Keywords saved!")
             st.rerun()
 
-        # Date range selection
-        st.subheader("Date Range")
-        days_back = st.slider("Days to look back:",
-                              min_value=1,
-                              max_value=21,
-                              value=7,
-                              help="Number of days to search back from today")
+        # Journal Quality Filter
+        st.subheader("Journal Quality")
+        show_high_impact_only = st.checkbox(
+            "🌟 Relevant Journals Only",
+            value=False,
+            help=
+            "Show only papers from: Nature/JAMA/NPJ/Science journals, Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
+        )
 
         # Search limit selection
         st.subheader("Search Limits")
@@ -123,15 +124,6 @@ def main():
                                      value=True,
                                      help="Include papers from PubMed")
 
-        # Journal Quality Filter
-        st.subheader("Journal Quality")
-        show_high_impact_only = st.checkbox(
-            "🌟 Relevant Journals Only",
-            value=False,
-            help=
-            "Show only papers from: Nature/JAMA/NPJ/Science journals, Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
-        )
-
         # Refresh data
         st.subheader("Data Management")
         if st.button("🔄 Refresh Data"):
@@ -142,6 +134,14 @@ def main():
                 os.remove('paper_cache.json')
             st.success("All caches cleared! Data will be refreshed.")
             st.rerun()
+
+        # Date range selection (moved here)
+        st.subheader("Date Range")
+        days_back = st.slider("Days to look back:",
+                              min_value=1,
+                              max_value=21,
+                              value=7,
+                              help="Number of days to search back from today")
 
     # Main content area
     col1, col2 = st.columns([3, 1])
@@ -418,13 +418,13 @@ def fetch_and_rank_papers(keywords,
             #     relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
             if is_high_impact_journal(paper['journal']):
                 if len(matched_keywords) >= 5:
-                    relevance_score += 4.5
+                    relevance_score += 5.0
                 elif 5 > len(matched_keywords) >= 4:
-                    relevance_score += 3.5
+                    relevance_score += 4.1
                 elif 4 > len(matched_keywords) >= 3:
-                    relevance_score += 3.0
+                    relevance_score += 3.6
                 elif 3 > len(matched_keywords) >= 2:
-                    relevance_score += 2.5
+                    relevance_score += 3.1
 
         # Format authors list
         authors = paper.get('authors', [])
