@@ -310,19 +310,10 @@ manuscript-alert-system/
 └── README.md            # This file
 ```
 
-## Contributing
-
-To contribute to this project:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
 
 ## License
 
-This project is open source. Please check the license file for details.
+This project is open source. Buy me a coffee when we meet.
 
 ## Support
 
