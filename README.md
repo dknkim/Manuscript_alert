@@ -24,6 +24,29 @@ pip install -r requirements.txt
 - This script will check your conda environment, install any missing dependencies, and launch the app.
 - The app will open in your default browser at http://localhost:8501
 
+#### ⚡ Running Remotely
+If you are running the app on a remote server (e.g., via SSH), you will not be able to access http://localhost:8501 directly from your local browser. Use one of the following methods:
+
+**Option 1: SSH Port Forwarding (Recommended)**
+1. On your local machine, run:
+   ```bash
+   ssh -L 8501:localhost:8501 your_username@remote_server_ip
+   ```
+2. Then open [http://localhost:8501](http://localhost:8501) in your local browser.
+
+**Option 2: Access via Network/External URL**
+1. Launch the app with this command (or modify the script):
+   ```bash
+   streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0
+   ```
+2. Open the Network or External URL shown in the terminal (e.g., http://10.110.5.6:8501 or http://171.66.11.71:8501) from your local browser.
+3. Make sure your server's firewall allows inbound connections on port 8501:
+   ```bash
+   sudo ufw allow 8501
+   ```
+
+> **Note:** Exposing the app to the internet can have security implications. SSH port forwarding is safer for most users.
+
 ### 4. Stopping and Restarting the App
 - To stop: Press `Ctrl+C` in the terminal where the app is running.
 - To restart after making changes to `app.py`:
