@@ -496,8 +496,11 @@ def get_exclusion_patterns():
             'skeletal radiology',
             'clinical radiology',
             'academic radiology',
+            'investigative radiology',
             'case reports',  # This will exclude "radiology case reports"
             'oral surgery',  # This will exclude the long oral surgery journal name
+            'korean journal of radiology',
+            'the neuroradiology journal',
         ],
         # Brain subspecialties - exclude these specific patterns
         'brain_exclusions': [
@@ -613,7 +616,7 @@ def is_high_impact_journal(journal_name):
             'ebiomedicine',
             'journal of magnetic resonance imaging',
             'magnetic resonance in medicine',
-            #'investigative radiology',
+            'radiology',
             'jmri',
             'j magn reson imaging',
             #'brain',
