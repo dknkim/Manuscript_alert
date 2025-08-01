@@ -55,7 +55,7 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
   ./run_alert_app_conda.sh
   ```
 
-### 5. If You See "Port 8501 is already in use"
+### 5. If You See "Port 8501 is already in use", Or CHOOSE different port
 - Find the process using the port:
   ```bash
   netstat -tlnp | grep 8501
