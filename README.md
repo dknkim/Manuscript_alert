@@ -3,7 +3,7 @@
 A local web application that helps researchers stay updated with the latest papers in Alzheimer's disease and neuroimaging from PubMed, arXiv, bioRxiv, and medRxiv.
 
 ---
-##⚡ I've only tested Mac and Linux systems with Conda⚡##
+## ⚡ I've only tested Mac and Linux systems with Conda ⚡
 
 ## 🐍 Using with Conda Environment (Recommended)
 
@@ -20,13 +20,17 @@ pip install -r requirements.txt
 
 ### 3. Run the App
 
-```Mac⚡
+**For Mac users:**
+```bash
 streamlit run app.py
+```
 
-```Linux⚡
+**For Linux users:**
+```bash
 ./run_alert_app_conda.sh
 ```
-- This script will check your conda environment, install any missing dependencies, and launch the app.
+
+- The Linux script will check your conda environment, install any missing dependencies, and launch the app.
 - The app will open in your default browser at http://localhost:8501
 
 #### ⚡ Running Remotely ⚡ ###
@@ -73,7 +77,7 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
   ```
 - Then restart the app.
 
-### 6-A. Example Workflow (Full Session) - Linux
+### 6-(A). Example Workflow (Full Session) - Linux
 ```bash
 # 1. Activate your conda environment
 conda activate manuscript_alert
@@ -92,7 +96,7 @@ netstat -tlnp | grep 8501
 kill -9 <PID>
 ./run_alert_app_conda.sh
 ```
-### 6-B. Example Workflow (Full Session) - Mac
+### 6-(B). Example Workflow (Full Session) - Mac
 ```bash
 # 1. Activate your conda environment
 conda activate manuscript_alert
