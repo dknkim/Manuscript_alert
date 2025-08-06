@@ -5,6 +5,7 @@ A local web application that helps researchers stay updated with the latest pape
 ---
 ## ⚡ I've only tested Mac and Linux systems with Conda ⚡
 
+**📱 Mac Users:** See [MAC_SETUP.md](MAC_SETUP.md) for detailed setup instructions.
 ## 🐍 Using with Conda Environment (Recommended)
 
 ### 1. Create and Activate Your Conda Environment

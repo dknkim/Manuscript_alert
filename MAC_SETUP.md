@@ -43,6 +43,19 @@ uname -m
 - Internet connection
 - Web browser (Safari, Chrome, Firefox, etc.)
 
+### Mac Architecture Types
+
+**Apple Silicon Macs (M1/M2/M3):**
+- Use ARM64 architecture
+- Generally faster performance
+- More energy efficient
+- Use `Miniconda3-latest-MacOSX-arm64.sh`
+
+**Intel Macs:**
+- Use x86_64 architecture
+- Older Mac models (pre-2020)
+- Use `Miniconda3-latest-MacOSX-x86_64.sh`
+
 ## Quick Setup (Recommended)
 
 ### Step 1: Transfer Your Project
@@ -52,7 +65,41 @@ Copy your project folder to your Mac using:
 - Git repository
 - AirDrop
 
-### Step 2: Create Conda Environment
+### Step 2: Check Your Mac's Architecture
+First, determine if you have an Apple Silicon or Intel Mac:
+```bash
+uname -m
+```
+- If it shows `arm64` → You have an **Apple Silicon Mac** (M1/M2/M3)
+- If it shows `x86_64` → You have an **Intel Mac**
+
+### Step 3: Install Conda (if not already installed)
+
+**For Apple Silicon Macs (M1/M2/M3):**
+```bash
+# Download Miniconda for Apple Silicon (ARM64)
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+
+# Install Miniconda
+bash Miniconda3-latest-MacOSX-arm64.sh
+
+# Restart your terminal or run:
+source ~/.zshrc  # or source ~/.bash_profile if using bash
+```
+
+**For Intel Macs:**
+```bash
+# Download Miniconda for Intel Macs (x86_64)
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+
+# Install Miniconda
+bash Miniconda3-latest-MacOSX-x86_64.sh
+
+# Restart your terminal or run:
+source ~/.zshrc  # or source ~/.bash_profile if using bash
+```
+
+### Step 4: Create Conda Environment
 ```bash
 # Create a new conda environment
 conda create -n manuscript_alert python=3.11
@@ -61,7 +108,7 @@ conda create -n manuscript_alert python=3.11
 conda activate manuscript_alert
 ```
 
-### Step 3: Install the App
+### Step 5: Install the App
 ```bash
 # Navigate to your project directory
 cd /path/to/your/manuscript-alert-system
@@ -161,6 +208,14 @@ source ~/.zshrc
 # Download the correct version for Apple Silicon:
 curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
 bash Miniconda3-latest-MacOSX-arm64.sh
+```
+
+**"WARNING: Your operating system appears not to be arm64"**
+```bash
+# This means you're on Intel Mac but downloaded Apple Silicon version
+# Download the correct version for Intel:
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+bash Miniconda3-latest-MacOSX-x86_64.sh
 ```
 
 ### macOS-Specific Issues
