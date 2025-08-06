@@ -418,13 +418,13 @@ def fetch_and_rank_papers(keywords,
             #     relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
             if is_high_impact_journal(paper['journal']):
                 if len(matched_keywords) >= 5:
-                    relevance_score += 5.0
-                elif 5 > len(matched_keywords) >= 4:
                     relevance_score += 4.1
+                elif 5 > len(matched_keywords) >= 4:
+                    relevance_score += 3.4
                 elif 4 > len(matched_keywords) >= 3:
-                    relevance_score += 3.6
+                    relevance_score += 2.8
                 elif 3 > len(matched_keywords) >= 2:
-                    relevance_score += 3.1
+                    relevance_score += 1.3
 
         # Format authors list
         authors = paper.get('authors', [])
@@ -501,6 +501,8 @@ def get_exclusion_patterns():
             'oral surgery',  # This will exclude the long oral surgery journal name
             'korean journal of radiology',
             'the neuroradiology journal',
+            'interventional neuroradiology',
+            'japanese journal of radiology',
         ],
         # Brain subspecialties - exclude these specific patterns
         'brain_exclusions': [
@@ -639,14 +641,14 @@ def is_high_impact_journal(journal_name):
         if specific_journal in journal_lower:
             return True
 
-    # Special case for abbreviated forms
-    abbreviations = {
-        'ajnr': 'american journal of neuroradiology',
-        'jmri': 'journal of magnetic resonance imaging',
-    }
+    # # Special case for abbreviated forms
+    # abbreviations = {
+    #     'ajnr': 'american journal of neuroradiology',
+    #     'jmri': 'journal of magnetic resonance imaging',
+    # }
 
-    if journal_lower in abbreviations:
-        return True
+    # if journal_lower in abbreviations:
+    #     return True
 
     return False
 
