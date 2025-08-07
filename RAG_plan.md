@@ -85,7 +85,7 @@ For each PubMed article:
 Take top 20 new articles (similar to KB) and generate a summary with an LLM.
 
 ✅ Prompt Template:
-```python
+```text
 # usage
 article_list_str = "\n".join([
     f"{i+1}. \"{art['title']}\" — *{art['journal']}*"
