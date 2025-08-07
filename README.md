@@ -128,7 +128,7 @@ streamlit run app.py
 
 ## Installation
 
-### Quick Install
+### Quick Install⚡
 
 1. **Download or clone the project** to your local machine
 2. **Make the installer executable**:
