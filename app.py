@@ -37,7 +37,7 @@ DEFAULT_KEYWORDS = [
 def main():
     st.title("Manuscript Alert System for AD and Neuroimaging")
     st.markdown(
-        "Stay updated with the latest Pubmed, arXiv, biorXiv, and medrXiv papers in Donghoon's field of interest"
+        "Stay updated with the latest Pubmed, arXiv, biorXiv, and medrXiv papers in DK's field of interest"
     )
 
     # Sidebar for configuration
@@ -275,9 +275,9 @@ def main():
             if high_impact_count > 0:
                 st.subheader("🏆 Journal Quality")
                 st.metric("Relevant Journals", high_impact_count)
-                st.caption(
-                    "Papers from Nature/JAMA/NPJ/Science journals, Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
-                )
+                # st.caption(
+                #     "Papers from Nature/JAMA/NPJ/Science journals, Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
+                # )
 
             # Top keywords found
             st.subheader("Top Keywords Found")
