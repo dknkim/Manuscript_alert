@@ -86,13 +86,13 @@ Take top 20 new articles (similar to KB) and generate a summary with an LLM.
 
 ✅ Prompt Template:
 ```python
-
-article_list_str = "\\n".join([
-    f"{i+1}. \\"{art['title']}\\" — *{art['journal']}*"
+# usage
+article_list_str = "\n".join([
+    f"{i+1}. \"{art['title']}\" — *{art['journal']}*"
     for i, art in enumerate(top_k_articles)
 ])
 
-prompt = f\"\"\"
+prompt = f"""
 You are a research assistant monitoring new literature.
 
 Below are 20 recent PubMed articles similar to a known body of Alzheimer’s disease imaging literature.
@@ -103,7 +103,7 @@ Articles:
 {article_list_str}
 
 Summary:
-\"\"\"
+"""
 ```
 
 ✅ Tools: OpenAI, Anthropic, or any LLM we prefer
