@@ -30,7 +30,7 @@ Then we **summarize the similar new articles**.
 ### 🔹 Step 1: Prepare Our Knowledge Base
 
 - Manually collect 20–30 PDFs on Alzheimer’s disease, MRI, PET
-- Extract text from each PDF (title, abstract, full text optional)
+- Extract text from each PDF (title, abstract, full text)
 - Embed them using `sentence-transformers`
 - Store embeddings in a vector store (e.g., ChromaDB)
 
@@ -86,7 +86,7 @@ Take top 20 new articles (similar to KB) and generate a summary with an LLM.
 
 ✅ Prompt Template:
 ```text
-We are a research assistant monitoring new literature.
+You are a research assistant monitoring new literature.
 
 Below are 20 recent PubMed articles similar to a known body of Alzheimer’s disease imaging literature.
 
