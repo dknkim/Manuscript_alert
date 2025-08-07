@@ -418,9 +418,9 @@ def fetch_and_rank_papers(keywords,
             #     relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
             if is_high_impact_journal(paper['journal']):
                 if len(matched_keywords) >= 5:
-                    relevance_score += 4.1
+                    relevance_score += 5.1
                 elif 5 > len(matched_keywords) >= 4:
-                    relevance_score += 3.4
+                    relevance_score += 3.7
                 elif 4 > len(matched_keywords) >= 3:
                     relevance_score += 2.8
                 elif 3 > len(matched_keywords) >= 2:
