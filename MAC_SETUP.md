@@ -15,7 +15,7 @@ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
 bash Miniconda3-latest-MacOSX-arm64.sh
 
 # Restart your terminal or run:
-source ~/.zshrc  # or source ~/.bash_profile if using bash
+source ~/.zshrc  # or source ~/.bash_profile if using bash #try 'echo $SHELL' if unsure
 ```
 
 **For Intel Macs (x86_64):**
@@ -27,7 +27,7 @@ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 bash Miniconda3-latest-MacOSX-x86_64.sh
 
 # Restart your terminal or run:
-source ~/.zshrc  # or source ~/.bash_profile if using bash
+source ~/.zshrc  # or source ~/.bash_profile if using bash #try 'echo $SHELL' if unsure
 ```
 
 **To check your Mac's architecture:**
