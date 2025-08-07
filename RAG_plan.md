@@ -85,7 +85,14 @@ For each PubMed article:
 Take top 20 new articles (similar to KB) and generate a summary with an LLM.
 
 ✅ Prompt Template:
-```text
+```
+
+article_list_str = "\\n".join([
+    f"{i+1}. \\"{art['title']}\\" — *{art['journal']}*"
+    for i, art in enumerate(top_k_articles)
+])
+
+prompt = f\"\"\"
 You are a research assistant monitoring new literature.
 
 Below are 20 recent PubMed articles similar to a known body of Alzheimer’s disease imaging literature.
@@ -93,12 +100,10 @@ Below are 20 recent PubMed articles similar to a known body of Alzheimer’s dis
 List the articles (title + journal), and then summarize the key findings and trends.
 
 Articles:
-1. "Amyloid PET Imaging in MCI" — Neurobiology of Aging
-2. "MRI Subtypes of Alzheimer's Disease" — Brain Imaging and Behavior
-...
+{article_list_str}
 
 Summary:
-...
+\"\"\"
 ```
 
 ✅ Tools: OpenAI, Anthropic, or any LLM we prefer
