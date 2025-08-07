@@ -126,7 +126,7 @@ streamlit run app.py
 - Python 3.7 or higher
 - Internet connection for fetching papers
 
-## Installation
+## Installation using venv (not tested yet)
 
 ### Quick Install⚡
 
