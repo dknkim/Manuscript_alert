@@ -141,7 +141,29 @@ manuscript_alert/
 
 ---
 
-## 🚀 Want Help with Next Steps?
+## 🚀 Next Steps?
 
 - `find_similar_to_kb.py`: Compares new PubMed articles to our knowledge base
 - `summarize_new_articles.py`: Generates LLM-based summary of the top-k
+
+
+## 🚀 RAG vs. Reverse RAG
+
+### Typical RAG flow:
+
+User provides a question ➡️ System searches its knowledge base ➡️ Retrieves top-k documents ➡️ LLM generates answer based on retrieved context
+
+### What We're Doing 
+our Pipeline:
+System has a KB ➡️ New articles arrive (PubMed) ➡️ You ask:
+
+“Which of these new articles are similar to the existing KB?”
+
+We're not starting from a user query
+We're not retrieving from the KB to answer something
+Instead, we're treating the KB as a semantic reference filter, and asking:
+
+“What incoming information aligns with this reference set?”
+
+🔁 Reverse RAG uses knowledge to evaluate new information?
+
