@@ -1,33 +1,33 @@
 
-# ✅ Your Actual Goal (Corrected)
+# ✅ Our Goal
 
-🔍 You have a knowledge base (KB) of curated articles (e.g., on Alzheimer's disease, MRI/PET), and you want to:
+🔍 We have a knowledge base (KB) of curated articles (e.g., on Alzheimer's disease, MRI/PET), and we want to:
 
-- Search PubMed (already implemented in your GitHub)
-- For each new PubMed article, check similarity to your KB
+- Search PubMed (already implemented in our GitHub)
+- For each new PubMed article, check similarity to our KB
 - Select the top-k most similar new articles (e.g., top 20)
 - Use an LLM to generate a summary of those top-k new articles
 - The summary should include their titles, journals, and key findings
 
 This is not querying the KB for a new article. It is:
 
-> **Finding new content that is similar to what’s already in your KB**
+> **Finding new content that is similar to what’s already in our KB**
 
 ---
 
-## ✅ What You’re Building
+## ✅ What We're Building
 
-A **“Reverse RAG” monitor** — instead of retrieving from your KB for a new question, you're monitoring new documents (PubMed articles) and asking:
+A **“Reverse RAG” monitor** — instead of retrieving from our KB for a new question, we're monitoring new documents (PubMed articles) and asking:
 
 > “Which of these are similar to the knowledge base I already have?”
 
-Then you **summarize the similar new articles**.
+Then we **summarize the similar new articles**.
 
 ---
 
 ## 🧭 Implementation Plan (Step-by-Step)
 
-### 🔹 Step 1: Prepare Your Knowledge Base
+### 🔹 Step 1: Prepare Our Knowledge Base
 
 - Manually collect 20–30 PDFs on Alzheimer’s disease, MRI, PET
 - Extract text from each PDF (title, abstract, full text optional)
@@ -43,7 +43,7 @@ pip install sentence-transformers chromadb pymupdf
 
 ### 🔹 Step 2: Fetch Recent PubMed Articles
 
-This is already in your GitHub codebase:
+This is already in our GitHub codebase:
 
 - Pull recent PubMed papers on relevant keywords
 - Extract: title, abstract, journal name
@@ -66,7 +66,7 @@ This is already in your GitHub codebase:
 For each PubMed article:
 
 - Embed the article (title + abstract)
-- Run similarity search in your KB vector store
+- Run similarity search in our KB vector store
 - If any similarity > threshold, keep the article
 - Rank by similarity score to KB
 
@@ -86,7 +86,7 @@ Take top 20 new articles (similar to KB) and generate a summary with an LLM.
 
 ✅ Prompt Template:
 ```text
-You are a research assistant monitoring new literature.
+We are a research assistant monitoring new literature.
 
 Below are 20 recent PubMed articles similar to a known body of Alzheimer’s disease imaging literature.
 
@@ -101,7 +101,7 @@ Summary:
 ...
 ```
 
-✅ Tools: OpenAI, Anthropic, or any LLM you prefer
+✅ Tools: OpenAI, Anthropic, or any LLM we prefer
 
 ---
 
@@ -128,9 +128,9 @@ manuscript_alert/
 | Step     | Action                                                              |
 |----------|----------------------------------------------------------------------|
 | 1. KB Setup | Embed 20–30 curated Alzheimer’s articles and store in vector DB  |
-| 2. Fetch    | Pull recent PubMed articles (already in your system)             |
+| 2. Fetch    | Pull recent PubMed articles (already in our system)             |
 | 3. Embed    | Convert new articles to embeddings                                |
-| 4. Compare  | For each new article, compute similarity to your KB               |
+| 4. Compare  | For each new article, compute similarity to our KB               |
 | 5. Select   | Keep top 20 most similar new articles                             |
 | 6. Summarize| Use LLM to generate a bullet list of titles/journals + summary    |
 
@@ -138,5 +138,5 @@ manuscript_alert/
 
 ## 🚀 Want Help with Next Steps?
 
-- `find_similar_to_kb.py`: Compares new PubMed articles to your knowledge base
+- `find_similar_to_kb.py`: Compares new PubMed articles to our knowledge base
 - `summarize_new_articles.py`: Generates LLM-based summary of the top-k
