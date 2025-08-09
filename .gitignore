@@ -1,0 +1,9 @@
+venv/          # Python virtual environment directory
+__pycache__/   # Python bytecode cache directories
+*.pyc          # Compiled Python files
+.env           # Environment variables file
+
+# User data files
+user_preferences.json  # User-specific preferences and settings
+paper_cache.json       # Cached paper data
+*.csv                 # Exported data files
