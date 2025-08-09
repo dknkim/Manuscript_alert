@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Manuscript Alert System
 Comment=Stay updated with the latest papers in Alzheimer's disease and neuroimaging
-Exec=/usr/bin/bash /path/to/your/project/run_alert_app.sh
+Exec=/usr/bin/bash ./run_alert_app_conda.sh
 Type=Application
 Terminal=true
 Icon=applications-science
