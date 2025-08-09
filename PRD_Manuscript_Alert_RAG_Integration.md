@@ -167,10 +167,18 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
 
 **Tasks:**
 1. **Architecture Refactoring**
-   - **Separate Business Logic from UI**: Move core logic from `app.py` to dedicated business logic modules
-   - **Create Service Layer**: Implement `paper_service.py`, `scoring_service.py`, `export_service.py`
-   - **Extract Configuration**: Move hardcoded values to `config.py` or `settings.py`
-   - **Improve File Organization**: Group related functionality into logical modules
+   - Step A (non-breaking reorg, no behavior changes):
+     - Create packages: `fetchers/`, `services/`, `processors/`, `storage/`, `config/`, `utils/` (with `__init__.py`)
+     - Move fetcher modules to `fetchers/` and add root-level shims:
+       - `arxiv_fetcher.py` → `fetchers/arxiv_fetcher.py` (root shim re-exports)
+       - `biorxiv_fetcher.py` → `fetchers/biorxiv_fetcher.py` (root shim re-exports)
+       - `pubmed_fetcher.py` → `fetchers/pubmed_fetcher.py` (root shim re-exports)
+     - Acceptance: All imports continue to work; no code logic changed
+   - Step B (incremental moves):
+     - Begin extracting non-UI functions from `app.py` into `services/` and `processors/` in small PRs
+   - **Create Service Layer**: Implement `paper_service.py`, `scoring_service.py`, `export_service.py` (subsequent steps)
+   - **Extract Configuration**: Move hardcoded values to `config/settings.py` and `config/constants.py` (subsequent steps)
+   - **Improve File Organization**: Continue grouping related functionality
 
 2. **UI/UX Improvements**
    - **Fix CSV Export**: 
@@ -187,6 +195,12 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
    - **Add Type Hints**: Improve code maintainability with proper type annotations
 
 4. **File Structure Reorganization**
+5. **Script Cleanup (Consolidation)**
+   - Consolidate to a single entry point `run_alert_app_conda.sh` (Conda-only path)
+   - Add `scripts/bootstrap_conda_env.sh` to auto-create/activate the `manuscript_alert` env and install dependencies only when `requirements.txt` changes
+   - Enable Streamlit hot reload by default (`--server.runOnSave true`)
+   - Move legacy scripts to `scripts/legacy/` and remove platform-specific duplication
+   - Update `README.md` to a single-step run flow (`./run_alert_app_conda.sh`) with an optional advanced manual Conda section
    ```
    manuscript_alert/
    ├── app.py                    # UI-focused Streamlit application

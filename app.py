@@ -4,11 +4,11 @@ import json
 from datetime import datetime, timedelta
 import time
 import concurrent.futures
-from arxiv_fetcher import ArxivFetcher
-from biorxiv_fetcher import BioRxivFetcher
-from pubmed_fetcher import PubMedFetcher
-from keyword_matcher import KeywordMatcher
-from data_storage import DataStorage
+from fetchers.arxiv_fetcher import ArxivFetcher
+from fetchers.biorxiv_fetcher import BioRxivFetcher
+from fetchers.pubmed_fetcher import PubMedFetcher
+from processors.keyword_matcher import KeywordMatcher
+from storage.data_storage import DataStorage
 
 # Set page configuration
 st.set_page_config(

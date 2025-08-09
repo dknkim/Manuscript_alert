@@ -1,9 +1,17 @@
 venv/          # Python virtual environment directory
-__pycache__/   # Python bytecode cache directories
+**/__pycache__/ # Python bytecode cache directories (recursive)
 *.pyc          # Compiled Python files
+*.py[cod]      # More Python compiled files
 .env           # Environment variables file
 
 # User data files
 user_preferences.json  # User-specific preferences and settings
 paper_cache.json       # Cached paper data
 *.csv                 # Exported data files
+ 
+# macOS & tooling
+.DS_Store
+._.DS_Store
+
+# Requirements hash cache
+.requirements.sha256

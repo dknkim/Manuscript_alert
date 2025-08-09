@@ -5,34 +5,16 @@ A local web application that helps researchers stay updated with the latest pape
 ---
 ## ⚡ I've only tested Mac and Linux systems with Conda ⚡
 
-**📱 Mac Users:** See [MAC_SETUP.md](MAC_SETUP.md) for detailed setup instructions.
-## 🐍 Using with Conda Environment (Recommended)
+**📱 Setup Guide:** See [docs/setup_guide.md](docs/setup_guide.md) for detailed setup and troubleshooting.
+## 🐍 Run (Conda, Recommended)
 
-### 1. Create and Activate Your Conda Environment
-```bash
-conda create -n manuscript_alert python=3.11
-conda activate manuscript_alert
-```
-
-### 2. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Run the App
-
-**For Mac users:**
-```bash
-streamlit run app.py
-```
-
-**For Linux users:**
+Just run:
 ```bash
 ./run_alert_app_conda.sh
 ```
 
-- The Linux script will check your conda environment, install any missing dependencies, and launch the app.
-- The app will open in your default browser at http://localhost:8501
+- The script creates/activates the `manuscript_alert` Conda env if needed, installs dependencies only when `requirements.txt` changes, and launches the app with hot reload.
+- The app opens at http://localhost:8501
 
 #### ⚡ Running Remotely ⚡ ###
 If you are running the app on a remote server (e.g., via SSH), you will not be able to access http://localhost:8501 directly from your local browser. Use one of the following methods:
@@ -47,7 +29,7 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
 **Option 2: Access via Network/External URL**
 1. Launch the app with this command (or modify the script):
    ```bash
-   streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0
+   streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0 --server.runOnSave true
    ```
 2. Open the Network or External URL shown in the terminal (e.g., http://10.110.5.6:8501 or http://171.66.11.71:8501) from your local browser.
 3. Make sure your server's firewall allows inbound connections on port 8501:
@@ -61,7 +43,6 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
 - To stop: Press `Ctrl+C` in the terminal where the app is running.
 - To restart after making changes to `app.py`:
   ```bash
-  conda activate manuscript_alert
   ./run_alert_app_conda.sh
   ```
 
@@ -78,35 +59,18 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
   ```
 - Then restart the app.
 
-### 6-(A). Example Workflow (Full Session) - Linux
+### 6. Example Workflow (Full Session)
 ```bash
-# 1. Activate your conda environment
-conda activate manuscript_alert
-
-# 2. Install dependencies (first time only)
-pip install -r requirements.txt
-
-# 3. Start the app
+# 1. Start the app (first run bootstraps env and installs deps)
 ./run_alert_app_conda.sh
 
-# 4. If you update app.py, stop the app (Ctrl+C) and restart:
+# 2. After code changes, stop (Ctrl+C) and re-run
 ./run_alert_app_conda.sh
 
-# 5. If you get a port error, find and kill the process:
+# 3. If you get a port error, find and kill the process:
 netstat -tlnp | grep 8501
 kill -9 <PID>
 ./run_alert_app_conda.sh
-```
-### 6-(B). Example Workflow (Full Session) - Mac
-```bash
-# 1. Activate your conda environment
-conda activate manuscript_alert
-
-# 2. Install dependencies (first time only)
-pip install -r requirements.txt
-
-# 3. Start the app
-streamlit run app.py
 ```
 ---
 
@@ -126,7 +90,7 @@ streamlit run app.py
 - Python 3.7 or higher
 - Internet connection for fetching papers
 
-## Installation using venv (not tested yet)
+## Installation using venv (legacy, not recommended)
 
 ### Quick Install⚡
 
@@ -158,9 +122,9 @@ If you prefer to install manually:
    pip install -r requirements.txt
    ```
 
-2. **Make the launcher executable**:
+2. Launch via the legacy script:
    ```bash
-   chmod +x run_alert_app.sh
+   scripts/legacy/run_alert_app.sh
    ```
 
 3. **Create a desktop entry** (optional):
@@ -177,9 +141,9 @@ If you prefer to install manually:
 - Search for "Manuscript Alert System" in your application menu
 - Click to launch
 
-**Option 2: Command Line**
+**Option 2: Command Line (legacy venv path)**
 ```bash
-./run_alert_app.sh
+scripts/legacy/run_alert_app.sh
 ```
 
 **Option 3: Direct Streamlit Command**
