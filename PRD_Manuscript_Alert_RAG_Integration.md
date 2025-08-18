@@ -134,7 +134,7 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
    ```
 
 2. **Semantic Similarity**: Using embedding-based cosine similarity
-3. **Multi-Factor Scoring**:
+3. **Multi-Factor Scoring** (this was not very effective, let's use KB smilarity only when RAG option toggled (note by DK 08/18/2025)):
    ```python
    rag_score = (
        semantic_similarity * 0.4 +
