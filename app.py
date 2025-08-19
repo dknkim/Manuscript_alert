@@ -10,6 +10,18 @@ from fetchers.pubmed_fetcher import PubMedFetcher
 from processors.keyword_matcher import KeywordMatcher
 from storage.data_storage import DataStorage
 
+# RAG minimal imports
+try:
+	import chromadb  # type: ignore
+	rag_available = True
+except Exception:
+	rag_available = False
+try:
+	from sentence_transformers import SentenceTransformer  # type: ignore
+	st_available = True
+except Exception:
+	st_available = False
+
 # Set page configuration
 st.set_page_config(
     page_title="Manuscript Alert System for AD and Neuroimaging",
@@ -32,6 +44,15 @@ DEFAULT_KEYWORDS = [
     "Alzheimer's disease", "PET", "MRI", "dementia", "amyloid", "tau",
     "plasma", "brain"
 ]
+
+
+# Simple RAG helper (lazy init)
+@st.cache_resource
+def _get_rag(model_name: str, persist_dir: str, collection: str):
+	client = chromadb.PersistentClient(path=persist_dir)
+	collection_obj = client.get_or_create_collection(name=collection, metadata={"collection": collection})
+	model = SentenceTransformer(model_name)
+	return client, collection_obj, model
 
 
 def main():
@@ -105,6 +126,16 @@ def main():
                 "⚠️ Brief mode optimized for fastest results with recent papers."
             )
 
+        # RAG Options
+        st.subheader("RAG Options")
+        rag_enabled = st.checkbox("Enable RAG scoring (KB similarity only)", value=False)
+        rag_topk = st.slider("Top-k retrieval for RAG", min_value=3, max_value=20, value=5)
+        rag_collection = st.text_input("RAG collection name", value="kb_alz")
+        rag_model = st.text_input("Embedding model", value="sentence-transformers/all-mpnet-base-v2")
+        rag_persist = st.text_input("Vector DB path", value="data/vector_db/chroma")
+        if rag_enabled and (not rag_available or not st_available):
+            st.warning("RAG dependencies not available. Please install sentence-transformers and chromadb.")
+
         # Data sources selection
         st.subheader("Data Sources")
         col1, col2 = st.columns(2)
@@ -150,15 +181,17 @@ def main():
         st.header("Recent Papers")
 
         # Display current keywords
-        if keywords:
+        if not rag_enabled and keywords:
             st.info(f"**Active Keywords:** {', '.join(keywords[:5])}" +
                     (f" and {len(keywords)-5} more..." if len(keywords) >
                      5 else ""))
-        else:
+        elif not rag_enabled and not keywords:
             st.warning(
                 "No keywords configured. Please add some keywords in the sidebar."
             )
             return
+        elif rag_enabled:
+            st.info(f"RAG mode enabled • collection='{rag_collection}' • top-k={rag_topk}")
 
         # Create data sources dict
         data_sources = {
@@ -182,8 +215,18 @@ def main():
                                                          minute=0,
                                                          second=0,
                                                          microsecond=0)
-            papers = fetch_and_rank_papers(keywords, days_back, data_sources,
-                                           end_date_normalized, search_mode)
+            papers = fetch_and_rank_papers2(
+                [] if rag_enabled else keywords,
+                days_back,
+                data_sources,
+                end_date=end_date_normalized,
+                search_mode=search_mode,
+                use_rag=rag_enabled,
+                rag_topk=rag_topk,
+                rag_collection=rag_collection,
+                rag_model=rag_model,
+                rag_persist=rag_persist,
+            )
 
         if papers.empty:
             st.warning(
@@ -215,21 +258,24 @@ def main():
                 axis=1)
             filtered_papers = filtered_papers[high_impact_mask]
 
-        # Filter papers with at least 2 matched keywords
-        keyword_filter_mask = filtered_papers.apply(
-            lambda row: len(row.get('matched_keywords', [])) >= 2, axis=1)
-        filtered_papers = filtered_papers[keyword_filter_mask]
+        # Filter papers with at least 2 matched keywords (skip in RAG mode)
+        if not rag_enabled:
+            keyword_filter_mask = filtered_papers.apply(
+                lambda row: len(row.get('matched_keywords', [])) >= 2, axis=1)
+            filtered_papers = filtered_papers[keyword_filter_mask]
 
         # Display results count
         st.markdown(
             f"**Found {len(filtered_papers)} papers** (showing top {min(len(filtered_papers), 50)})"
         )
 
-        if len(filtered_papers) < len(papers):
+        if not rag_enabled and len(filtered_papers) < len(papers):
             excluded_count = len(papers) - len(filtered_papers)
             st.caption(
                 f"Note: {excluded_count} papers excluded (require minimum 2 matched keywords)"
             )
+        if rag_enabled:
+            st.caption("RAG mode: keyword filter disabled; results ranked by KB similarity.")
 
         # Warning for large date ranges
         if days_back > 14:
@@ -327,160 +373,157 @@ def main():
                     mime="text/csv")
 
 
-@st.cache_data(ttl=600)  # Cache for 10 minutes for faster updates
-def fetch_and_rank_papers(keywords,
-                          days_back,
-                          data_sources,
-                          end_date=None,
-                          search_mode="Standard"):
-    """Fetch papers from multiple sources and rank them by keyword relevance"""
+@st.cache_data(ttl=600)
+def fetch_and_rank_papers2(
+	keywords,
+	days_back,
+	data_sources,
+	end_date=None,
+	search_mode: str = "Standard",
+	use_rag: bool = False,
+	rag_topk: int = 5,
+	rag_collection: str = "kb_alz",
+	rag_model: str = "sentence-transformers/all-mpnet-base-v2",
+	rag_persist: str = "data/vector_db/chroma",
+):
+	"""Fetch papers and score them either by keyword relevance or KB similarity (RAG)."""
+	if end_date is None:
+		end_date = datetime.now()
+	start_date = end_date - timedelta(days=days_back)
 
-    # Calculate date range - use passed end_date or current time
-    if end_date is None:
-        end_date = datetime.now()
-    start_date = end_date - timedelta(days=days_back)
+	# Search mode limits
+	brief_mode = search_mode.startswith("Brief")
+	extended_mode = search_mode.startswith("Extended")
 
-    all_papers_data = []
+	# Fetchers
+	all_papers_data = []
 
-    # Set search limits based on mode
-    brief_mode = search_mode.startswith("Brief")
-    extended_mode = search_mode.startswith("Extended")
+	def fetch_arxiv():
+		if data_sources.get('arxiv', False):
+			try:
+				return ('arxiv', arxiv_fetcher.fetch_papers(start_date, end_date, keywords, brief_mode, extended_mode))
+			except Exception as e:
+				return ('arxiv_error', str(e))
+		return ('arxiv', [])
 
-    # Define fetching functions for parallel execution
-    def fetch_arxiv():
-        if data_sources.get('arxiv', False):
-            try:
-                return ('arxiv',
-                        arxiv_fetcher.fetch_papers(start_date, end_date,
-                                                   keywords, brief_mode, extended_mode))
-            except Exception as e:
-                return ('arxiv_error', str(e))
-        return ('arxiv', [])
+	def fetch_biorxiv():
+		if data_sources.get('biorxiv', False) or data_sources.get('medrxiv', False):
+			try:
+				biorxiv_papers = biorxiv_fetcher.fetch_papers(start_date, end_date, keywords, brief_mode, extended_mode)
+				filtered = []
+				for p in biorxiv_papers:
+					src = p.get('source', '')
+					if (src == 'biorxiv' and data_sources.get('biorxiv', False)) or (src == 'medrxiv' and data_sources.get('medrxiv', False)):
+						filtered.append(p)
+				return ('biorxiv', filtered)
+			except Exception as e:
+				return ('biorxiv_error', str(e))
+		return ('biorxiv', [])
 
-    def fetch_biorxiv():
-        if data_sources.get('biorxiv', False) or data_sources.get(
-                'medrxiv', False):
-            try:
-                biorxiv_papers = biorxiv_fetcher.fetch_papers(
-                    start_date, end_date, keywords, brief_mode, extended_mode)
-                # Filter by source selection
-                filtered_papers = []
-                for paper in biorxiv_papers:
-                    source = paper.get('source', '')
-                    if (source == 'biorxiv' and data_sources.get('biorxiv', False)) or \
-                       (source == 'medrxiv' and data_sources.get('medrxiv', False)):
-                        filtered_papers.append(paper)
-                return ('biorxiv', filtered_papers)
-            except Exception as e:
-                return ('biorxiv_error', str(e))
-        return ('biorxiv', [])
+	def fetch_pubmed():
+		if data_sources.get('pubmed', False):
+			try:
+				return ('pubmed', pubmed_fetcher.fetch_papers(start_date, end_date, keywords, brief_mode, extended_mode))
+			except Exception as e:
+				return ('pubmed_error', str(e))
+		return ('pubmed', [])
 
-    def fetch_pubmed():
-        if data_sources.get('pubmed', False):
-            try:
-                return ('pubmed',
-                        pubmed_fetcher.fetch_papers(start_date, end_date,
-                                                    keywords, brief_mode, extended_mode))
-            except Exception as e:
-                return ('pubmed_error', str(e))
-        return ('pubmed', [])
+	with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
+		for fut in concurrent.futures.as_completed([
+			ex.submit(fetch_arxiv), ex.submit(fetch_biorxiv), ex.submit(fetch_pubmed)
+		]):
+			name, data = fut.result()
+			if name.endswith('_error'):
+				st.error(f"Error fetching from {name.replace('_error','')}: {data}")
+			else:
+				all_papers_data.extend(data)
 
-    # Execute all API calls in parallel
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        futures = [
-            executor.submit(fetch_arxiv),
-            executor.submit(fetch_biorxiv),
-            executor.submit(fetch_pubmed)
-        ]
+	if not all_papers_data:
+		return pd.DataFrame()
 
-        # Collect results
-        for future in concurrent.futures.as_completed(futures):
-            result_type, result_data = future.result()
+	# RAG initialization if enabled
+	rag_collection_obj = None
+	model_obj = None
+	if use_rag and rag_available and st_available:
+		_, rag_collection_obj, model_obj = _get_rag(rag_model, rag_persist, rag_collection)
 
-            if result_type.endswith('_error'):
-                source_name = result_type.replace('_error', '')
-                st.error(f"Error fetching from {source_name}: {result_data}")
-            else:
-                all_papers_data.extend(result_data)
+	def score_paper(paper):
+		# RAG-only scoring path
+		if use_rag and rag_collection_obj is not None and model_obj is not None:
+			q = f"{paper.get('title','')}\n\n{paper.get('abstract','')}".strip()
+			if not q:
+				return 0.0, []
+			q_emb = model_obj.encode([q], batch_size=1, convert_to_numpy=True, normalize_embeddings=True)[0]
+			res = rag_collection_obj.query(query_embeddings=[q_emb.tolist()], n_results=rag_topk, include=["distances"])  # type: ignore
+			dists = (res.get('distances') or [[]])[0]
+			cos_sim = 0.0
+			if dists:
+				# Convert L2 distance between unit vectors to cosine: cos = 1 - (d^2)/2
+				d = float(min(dists))
+				cos_sim = 1.0 - (d * d) / 2.0
+				cos_sim = max(0.0, min(1.0, cos_sim))
+			# Fallback: brute-force cosine over stored embeddings if similarity is ~0
+			if cos_sim <= 1e-6:
+				try:
+					all_data = rag_collection_obj.get(include=["embeddings"])  # type: ignore
+					embs = all_data.get("embeddings") or []
+					import numpy as np
+					if embs:
+						kb = np.array(embs, dtype=float)
+						# Assume stored embeddings are normalized; q_emb is normalized
+						sims = kb @ q_emb
+						cos_sim = float(np.max(sims))
+						cos_sim = max(0.0, min(1.0, cos_sim))
+				except Exception:
+					pass
+			return cos_sim * 10.0, []
+		# Keyword relevance (original behavior)
+		rel, matched = keyword_matcher.calculate_relevance(paper, keywords)
+		# Restore journal boost logic (only for PubMed with sufficient matches)
+		try:
+			if paper.get('source') == 'PubMed' and paper.get('journal'):
+				if is_high_impact_journal(paper['journal']):
+					if len(matched) >= 5:
+						rel += 5.1
+					elif 5 > len(matched) >= 4:
+						rel += 3.7
+					elif 4 > len(matched) >= 3:
+						rel += 2.8
+					elif 3 > len(matched) >= 2:
+						rel += 1.3
+		except Exception:
+			pass
+		return rel, matched
 
-    if not all_papers_data:
-        return pd.DataFrame()
+	ranked = []
+	for paper in all_papers_data:
+		try:
+			score, matched_keywords = score_paper(paper)
+			source = paper.get('source', 'arXiv')
+			if source == 'PubMed':
+				source_display = 'PubMed'
+			elif source == 'arxiv':
+				source_display = 'arXiv'
+			else:
+				source_display = source.capitalize()
+			ranked.append({
+				'title': paper.get('title', ''),
+				'authors': ', '.join(paper.get('authors', [])[:3]) + ('...' if len(paper.get('authors', [])) > 3 else ''),
+				'abstract': paper.get('abstract', ''),
+				'published': paper.get('published', ''),
+				'arxiv_url': paper.get('arxiv_url', ''),
+				'source': source_display,
+				'relevance_score': score,
+				'matched_keywords': matched_keywords,
+				'journal': paper.get('journal', ''),
+				'volume': paper.get('volume', ''),
+				'issue': paper.get('issue', ''),
+			})
+		except Exception:
+			continue
 
-    # Define processing function for parallel execution
-    def process_paper(paper):
-        relevance_score, matched_keywords = keyword_matcher.calculate_relevance(
-            paper, keywords)
-
-        # Boost score for target journals (only if at least 2 keywords matched)
-        if paper.get('source') == 'PubMed' and paper.get('journal'):
-            # if is_high_impact_journal(
-            #         paper['journal']) and len(matched_keywords) >= 2:
-            #     relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
-            if is_high_impact_journal(paper['journal']):
-                if len(matched_keywords) >= 5:
-                    relevance_score += 5.1
-                elif 5 > len(matched_keywords) >= 4:
-                    relevance_score += 3.7
-                elif 4 > len(matched_keywords) >= 3:
-                    relevance_score += 2.8
-                elif 3 > len(matched_keywords) >= 2:
-                    relevance_score += 1.3
-
-        # Format authors list
-        authors = paper.get('authors', [])
-        if isinstance(authors, list):
-            authors_str = ', '.join(
-                authors[:3]) + ('...' if len(authors) > 3 else '')
-        else:
-            authors_str = str(authors)
-
-        return (paper, relevance_score, matched_keywords, authors_str)
-
-    # Process papers in parallel for faster ranking
-    ranked_papers = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-        future_to_paper = {
-            executor.submit(process_paper, paper): paper
-            for paper in all_papers_data
-        }
-
-        for future in concurrent.futures.as_completed(future_to_paper):
-            try:
-                paper, relevance_score, matched_keywords, authors_str = future.result(
-                )
-
-                # Get source information
-                source = paper.get('source', 'arXiv')
-                if source == 'PubMed':
-                    source_display = 'PubMed'
-                elif source == 'arxiv':
-                    source_display = 'arXiv'
-                else:
-                    source_display = source.capitalize()
-
-                paper_info = {
-                    'title': paper['title'],
-                    'authors': authors_str,
-                    'abstract': paper['abstract'],
-                    'published': paper['published'],
-                    'arxiv_url': paper.get('arxiv_url', ''),
-                    'source': source_display,
-                    'relevance_score': relevance_score,
-                    'matched_keywords': matched_keywords,
-                    'journal': paper.get('journal', ''),
-                    'volume': paper.get('volume', ''),
-                    'issue': paper.get('issue', '')
-                }
-
-                ranked_papers.append(paper_info)
-            except Exception as e:
-                continue  # Skip papers that fail processing
-
-    # Convert to DataFrame efficiently and sort by relevance
-    df = pd.DataFrame(ranked_papers)
-    df = df.sort_values('relevance_score', ascending=False)
-
-    return df
+	df = pd.DataFrame(ranked)
+	return df.sort_values('relevance_score', ascending=False)
 
 
 def get_exclusion_patterns():
@@ -503,6 +546,11 @@ def get_exclusion_patterns():
             'the neuroradiology journal',
             'interventional neuroradiology',
             'japanese journal of radiology',
+            'neuroradiology',
+            'clinical neuroradiology',
+            'the british journal of radiology',
+            'international journal of computer assisted radiology and surgery',
+
         ],
         # Brain subspecialties - exclude these specific patterns
         'brain_exclusions': [
