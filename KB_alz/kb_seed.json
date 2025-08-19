@@ -1,0 +1,39 @@
+{
+  "project": "KB_alz",
+  "created_at": "2025-08-19T00:55:39.508061Z",
+  "pmids": [
+    "40166530",
+    "40579043",
+    "37815445"
+  ],
+  "records_count": 3,
+  "records": [
+    {
+      "pmid": "40166530",
+      "title": "AI-driven fusion of neurological work-up for assessment of biological Alzheimer's disease.",
+      "abstract": "Alzheimer's disease (AD) diagnosis hinges on detecting amyloid beta (Aβ) plaques and neurofibrillary tau (τ) tangles. While amyloid PET imaging is now clinically approved, tau PET remains largely restricted to research settings. These imaging techniques, though valuable, are expensive and often difficult to access, limiting their widespread use in routine clinical practice. Here, we introduce a computational framework that leverages multimodal data from seven distinct cohorts comprising 12, 185 participants to estimate individual PET profiles, both global and regional, using more accessible data modalities, such as demographics, medical history, medication use, fluid measurements, functional and neuropsychological assessments, and structural MRIs. Our approach achieved an area under the receiver operating characteristic curve of 0.79 and 0.84 in classifying persons with positive Aβ and τ status, respectively. Model predictions were consistent with various biomarker and cognitive profiles, as well as with different degrees of protein abnormalities observed in post-mortem examinations. Furthermore, the regional volumes identified by the model as important aligned with the spatial distributions of the standardized uptake value ratio for regional τ labels. Our model offers a practical approach to identify potential candidates for newly approved anti-amyloid treatments and AD clinical trials for combined amyloid and tau therapies by utilizing standard neurological evaluation data.",
+      "journal": "medRxiv : the preprint server for health sciences",
+      "published": "2025-03-17",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40166530/",
+      "source": "PubMed"
+    },
+    {
+      "pmid": "40579043",
+      "title": "Deep Learning-Based Prediction of PET Amyloid Status Using MRI.",
+      "abstract": "Identifying amyloid-beta (Aβ)-positive patients is essential for Alzheimer's disease (AD) clinical trials and disease-modifying treatments but currently requires PET or cerebrospinal fluid sampling. Previous MRI-based deep learning models, using only T1-weighted (T1w) images, have shown moderate performance. Multi-contrast MRI and PET-based quantitative Aβ deposition were retrospectively obtained from three public datasets: ADNI, OASIS3, and A4. Aβ positivity was defined using each dataset's recommended centiloid threshold. Two EfficientNet models were trained to predict amyloid positivity: one using only T1w images and another incorporating both T1w and T2-FLAIR. Model performance was assessed using an internal held-out test set, evaluating AUC, accuracy, sensitivity, and specificity. External validation was conducted using an independent cohort from Stanford Alzheimer's Disease Research Center. DeLong's and McNemar's tests were used to compare AUC and accuracy, respectively. A total of 4,056 exams (mean [SD] age: 71.6 [6.3] years; 55% female; 55% amyloid-positive) were used for network development, and 149 exams were used for external testing (mean [SD] age: 72.1 [9.6] years; 58% female; 56% amyloid-positive). The multi-contrast model outperformed the single-modality model in the internal held-out test set (AUC: 0.67, 95% CI: 0.65-0.70, P < 0.001; accuracy: 0.63, 95% CI: 0.62-0.65, P < 0.001) compared to the T1w-only model (AUC: 0.61; accuracy: 0.59). Among cognitive subgroups, the highest performance (AUC: 0.71) was observed in mild cognitive impairment. The multi-contrast model also demonstrated consistent performance in the external test set (AUC: 0.65, 95% CI: 0.60-0.71, P = 0.014; accuracy: 0.62, 95% CI: 0.58- 0.65, P < 0.001). The use of multi-contrast MRI, specifically incorporating T2-FLAIR in addition to T1w images, significantly improved the predictive accuracy of PET-determined amyloid status from MRI scans using a deep learning approach. Aβ＝ amyloid-beta; AD＝ Alzheimer's disease; AUC＝ area under the receiver operating characteristic curve; CN＝ cognitively normal; MCI＝ mild cognitive impairment; T1w = T1-wegithed; T2-FLAIR = T2-weighted fluid attenuated inversion recovery; FBP＝18F-florbetapir; FBB＝18F-florbetaben; SUVR＝ standard uptake value ratio.",
+      "journal": "AJNR. American journal of neuroradiology",
+      "published": "2025-06-27",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40579043/",
+      "source": "PubMed"
+    },
+    {
+      "pmid": "37815445",
+      "title": "MRI-based Deep Learning Assessment of Amyloid, Tau, and Neurodegeneration Biomarker Status across the Alzheimer Disease Spectrum.",
+      "abstract": "Background PET can be used for amyloid-tau-neurodegeneration (ATN) classification in Alzheimer disease, but incurs considerable cost and exposure to ionizing radiation. MRI currently has limited use in characterizing ATN status. Deep learning techniques can detect complex patterns in MRI data and have potential for noninvasive characterization of ATN status. Purpose To use deep learning to predict PET-determined ATN biomarker status using MRI and readily available diagnostic data. Materials and Methods MRI and PET data were retrospectively collected from the Alzheimer's Disease Imaging Initiative. PET scans were paired with MRI scans acquired within 30 days, from August 2005 to September 2020. Pairs were randomly split into subsets as follows: 70% for training, 10% for validation, and 20% for final testing. A bimodal Gaussian mixture model was used to threshold PET scans into positive and negative labels. MRI data were fed into a convolutional neural network to generate imaging features. These features were combined in a logistic regression model with patient demographics, APOE gene status, cognitive scores, hippocampal volumes, and clinical diagnoses to classify each ATN biomarker component as positive or negative. Area under the receiver operating characteristic curve (AUC) analysis was used for model evaluation. Feature importance was derived from model coefficients and gradients. Results There were 2099 amyloid (mean patient age, 75 years ± 10 [SD]; 1110 male), 557 tau (mean patient age, 75 years ± 7; 280 male), and 2768 FDG PET (mean patient age, 75 years ± 7; 1645 male) and MRI pairs. Model AUCs for the test set were as follows: amyloid, 0.79 (95% CI: 0.74, 0.83); tau, 0.73 (95% CI: 0.58, 0.86); and neurodegeneration, 0.86 (95% CI: 0.83, 0.89). Within the networks, high gradients were present in key temporal, parietal, frontal, and occipital cortical regions. Model coefficients for cognitive scores, hippocampal volumes, and APOE status were highest. Conclusion A deep learning algorithm predicted each component of PET-determined ATN status with acceptable to excellent efficacy using MRI and other available diagnostic data. © RSNA, 2023 Supplemental material is available for this article.",
+      "journal": "Radiology",
+      "published": "2023-10-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37815445/",
+      "source": "PubMed"
+    }
+  ]
+}

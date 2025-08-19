@@ -29,8 +29,8 @@ Then we **summarize the similar new articles**.
 
 ### 🔹 Step 1: Prepare Our Knowledge Base
 
-- Manually collect 20–30 PDFs on Alzheimer’s disease, MRI, PET
-- Extract text from each PDF (title, abstract, full text)
+- Manually collect a few or more PDFs on Alzheimer’s disease, MRI, PET
+- Extract text from each PDF (title and abstract)
 - Embed them using `sentence-transformers`
 - Store embeddings in a vector store (e.g., ChromaDB)
 
