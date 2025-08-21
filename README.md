@@ -1,4 +1,4 @@
-# Manuscript Alert System for AD and Neuroimaging
+# Manuscript Alert System for AD and Neuroimaging (Reverse RAG enabled)
 
 A local web application that helps researchers stay updated with the latest papers in Alzheimer's disease and neuroimaging from PubMed, arXiv, bioRxiv, and medRxiv.
 
