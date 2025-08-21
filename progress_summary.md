@@ -27,6 +27,27 @@ streamlit run app.py
 - Similarity mapping fixed for L2 distances: `cos = 1 − (d^2)/2` → score = `10·cos` (clamped)
 - Added fallback cosine over stored KB embeddings if the distance path returns ~0
 
+### RAG scoring details (current implementation)
+- Embedding model
+  - Sentence-Transformers: `sentence-transformers/all-mpnet-base-v2`
+  - Embeddings are normalized (`normalize_embeddings=True`)
+- Query construction (per fetched paper)
+  - Text = `title + "\n\n" + abstract`
+  - Encode with the model to get `q_emb` (unit vector)
+- Vector store
+  - Chroma persistent client at `data/vector_db/chroma`
+  - Active collection (e.g., `kb_alz`) contains normalized embeddings for KB entries
+- Retrieval and similarity
+  - Call `collection.query(query_embeddings=[q_emb], n_results=top_k, include=['distances'])`
+  - Distances are treated as L2 between unit vectors
+  - Convert to cosine: `cos = 1 − (d^2)/2`, clamp to `[0,1]`
+  - Score = `10 * cos`
+  - Fallback: if similarity ~0, compute cosine directly against stored KB embeddings and take the max
+- Filtering and ordering in RAG mode
+  - No keyword gating; “min 2 matched keywords” filter is disabled
+  - Optional journal quality and the “Search within results” text filter still apply
+  - Ordering is by the RAG score only
+
 ### Troubleshooting
 - If scores are all 0 or the collection is empty:
   - Regenerate and ingest the seed
