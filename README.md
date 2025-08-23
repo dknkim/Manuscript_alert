@@ -15,7 +15,7 @@ Just run (linux):
 
 Just run (Mac):
 ```bash
-   streamlit run app.py 
+streamlit run app.py 
    
 ```
 - The script creates/activates the `manuscript_alert` Conda env if needed, installs dependencies only when `requirements.txt` changes, and launches the app with hot reload.
