@@ -8,11 +8,16 @@ A local web application that helps researchers stay updated with the latest pape
 **📱 Setup Guide:** See [docs/setup_guide.md](docs/setup_guide.md) for detailed setup and troubleshooting.
 ## 🐍 Run (Conda, Recommended)
 
-Just run:
+Just run (linux):
 ```bash
 ./run_alert_app_conda.sh
 ```
 
+Just run (Mac):
+```bash
+   streamlit run app.py 
+   
+```
 - The script creates/activates the `manuscript_alert` Conda env if needed, installs dependencies only when `requirements.txt` changes, and launches the app with hot reload.
 - The app opens at http://localhost:8501
 
@@ -29,12 +34,7 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
 **Option 2: Access via Network/External URL**
 1. Launch the app with this command (or modify the script):
    For local run,
-
-   ```bash
-   streamlit run app.py 
-   
-   ```
-or
+  
    ```bash
 
    streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0 --server.runOnSave true
