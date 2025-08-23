@@ -28,7 +28,15 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
 
 **Option 2: Access via Network/External URL**
 1. Launch the app with this command (or modify the script):
+   For local run,
+
    ```bash
+   streamlit run app.py 
+   
+   ```
+
+   ```bash
+
    streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0 --server.runOnSave true
    ```
 2. Open the Network or External URL shown in the terminal (e.g., http://10.110.5.6:8501 or http://171.66.11.71:8501) from your local browser.
