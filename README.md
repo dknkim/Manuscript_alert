@@ -34,7 +34,7 @@ If you are running the app on a remote server (e.g., via SSH), you will not be a
    streamlit run app.py 
    
    ```
-
+or
    ```bash
 
    streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0 --server.runOnSave true
