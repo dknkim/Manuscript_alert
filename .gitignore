@@ -15,3 +15,6 @@ paper_cache.json       # Cached paper data
 
 # Requirements hash cache
 .requirements.sha256
+
+# Claude Code settings
+.claude/
