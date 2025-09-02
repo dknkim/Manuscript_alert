@@ -13,6 +13,9 @@ cd "$SCRIPT_DIR"
 # installs deps only when requirements.txt changes)
 bash scripts/bootstrap_conda_env.sh
 
+# Setup git pre-commit hook (silent if already installed)
+bash scripts/setup-git-hook.sh
+
 echo "Launching Manuscript Alert System..."
 echo "The app will open in your default browser"
 echo "Press Ctrl+C to stop the app"

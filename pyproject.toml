@@ -1,0 +1,57 @@
+[tool.ruff]
+# Line length
+line-length = 88
+
+# Python version target
+target-version = "py311"
+
+# Enable auto-fixing
+fix = true
+
+[tool.ruff.lint]
+# Enable specific rules
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort (import sorting)
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "Q",    # flake8-quotes
+    "RUF",  # Ruff-specific rules
+]
+
+# Ignore specific rules
+ignore = []
+
+# Always fix these issues automatically
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.flake8-quotes]
+# Enforce double quotes
+inline-quotes = "double"
+docstring-quotes = "double"
+multiline-quotes = "double"
+
+[tool.ruff.lint.isort]
+# Import sorting configuration (PEP 8 style)
+known-first-party = ["fetchers", "processors", "storage", "utils", "services", "config"]
+force-single-line = false
+lines-after-imports = 2
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Indent with spaces
+indent-style = "space"
+
+# Add trailing commas where appropriate
+skip-magic-trailing-comma = false
+
+# Unix-style line endings with newline at end of file
+line-ending = "lf"
