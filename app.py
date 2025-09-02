@@ -25,7 +25,8 @@ def initialize_components():
     ), DataStorage()
 
 
-arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher, keyword_matcher, data_storage = initialize_components(
+(arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher,
+ keyword_matcher, data_storage) = initialize_components(
 )
 
 # Default keywords
@@ -38,7 +39,8 @@ DEFAULT_KEYWORDS = [
 def main():
     st.title("Manuscript Alert System for AD and Neuroimaging")
     st.markdown(
-        "Stay updated with the latest Pubmed, arXiv, biorXiv, and medrXiv papers in DK's field of interest"
+        "Stay updated with the latest Pubmed, arXiv, biorXiv, "
+        "and medrXiv papers in DK's field of interest"
     )
 
     # Sidebar for configuration
@@ -60,7 +62,8 @@ def main():
             value="\n".join(current_keywords),
             height=150,
             help=
-            "Enter research topics you're interested in, one per line. Papers must match at least 2 keywords to be displayed."
+            "Enter research topics you're interested in, one per line. "
+            "Papers must match at least 2 keywords to be displayed."
         )
 
         # Parse keywords from text area
@@ -79,7 +82,8 @@ def main():
             "🌟 Relevant Journals Only",
             value=False,
             help=
-            "Show only papers from: Nature/JAMA/NPJ/Science journals, Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
+            "Show only papers from: Nature/JAMA/NPJ/Science journals, "
+            "Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
         )
 
         # Search limit selection
@@ -95,7 +99,8 @@ def main():
 
         if search_mode.startswith("Extended"):
             st.caption(
-                "⚠️ Extended mode may take 2-3x longer but provides comprehensive results."
+                "⚠️ Extended mode may take 2-3x longer but provides "
+                "comprehensive results."
             )
         elif search_mode.startswith("Standard"):
             st.caption(
@@ -223,13 +228,15 @@ def main():
 
         # Display results count
         st.markdown(
-            f"**Found {len(filtered_papers)} papers** (showing top {min(len(filtered_papers), 50)})"
+            f"**Found {len(filtered_papers)} papers** "
+            f"(showing top {min(len(filtered_papers), 50)})"
         )
 
         if len(filtered_papers) < len(papers):
             excluded_count = len(papers) - len(filtered_papers)
             st.caption(
-                f"Note: {excluded_count} papers excluded (require minimum 2 matched keywords)"
+                f"Note: {excluded_count} papers excluded "
+                f"(require minimum 2 matched keywords)"
             )
 
         # Warning for large date ranges
@@ -313,7 +320,7 @@ def main():
                     st.write(f"• {journal}")
 
                 st.write("**All Journals (first 20):**")
-                for journal in sorted(list(all_journals))[:20]:
+                for journal in sorted(all_journals)[:20]:
                     st.write(f"• {journal}")
 
             # Export functionality
@@ -679,7 +686,8 @@ def display_papers(papers_df):
                 [class*="st-key-high-impact-"] {
                     border: 3px solid #B8860B !important;
                     border-radius: 12px !important;
-                    background: linear-gradient(135deg, rgba(184, 134, 11, 0.03), rgba(184, 134, 11, 0.08)) !important;
+                    background: linear-gradient(135deg, 
+                        rgba(184, 134, 11, 0.03), rgba(184, 134, 11, 0.08)) !important;
                     box-shadow: 0 4px 8px rgba(184, 134, 11, 0.2) !important;
                 }
                 </style>
@@ -712,7 +720,9 @@ def display_papers(papers_df):
                 if paper.get("source") == "PubMed" and paper.get("journal"):
                     journal_info = paper["journal"]
                     if paper.get("volume") and paper.get("issue"):
-                        journal_info += f", Vol. {paper['volume']}, Issue {paper['issue']}"
+                        journal_info += (
+                            f", Vol. {paper['volume']}, Issue {paper['issue']}"
+                        )
                     elif paper.get("volume"):
                         journal_info += f", Vol. {paper['volume']}"
 
@@ -720,7 +730,8 @@ def display_papers(papers_df):
                     if is_high_impact_journal(paper["journal"]):
                         st.markdown(f"**Journal:** {journal_info} ⭐")
                         st.markdown(
-                            '<div style="color: #B8860B; font-weight: bold; font-size: 0.9em;">🌟 Relevant Journal</div>',
+                            '<div style="color: #B8860B; font-weight: bold; '
+                            'font-size: 0.9em;">🌟 Relevant Journal</div>',
                             unsafe_allow_html=True)
                     else:
                         st.markdown(f"**Journal:** {journal_info}")
@@ -753,31 +764,53 @@ def display_papers(papers_df):
 
                 st.markdown(
                     f"<div style='text-align: center; margin-bottom: 10px;'>"
-                    f"<span style='background-color: {source_color}; color: white; padding: 4px 8px; "
-                    f"border-radius: 15px; font-size: 12px; font-weight: bold;'>{source}</span></div>",
-                    unsafe_allow_html=True)
+                    f"<span style='background-color: {source_color}; "
+                    f"color: white; padding: 4px 8px; border-radius: 15px; "
+                    f"font-size: 12px; font-weight: bold;'>{source}</span>"
+                    "</div>",
+                    unsafe_allow_html=True
+                )
 
                 # Relevance score
                 score = paper["relevance_score"]
                 color = "green" if score >= 3 else "orange" if score >= 2 else "red"
                 score_display = f"{score:.1f}" if isinstance(
-                    score, (int, float)) else str(score)
+                    score, int | float) else str(score)
                 # Create clickable relevance score that links to paper
+                base_style = (
+                    "display: flex; flex-direction: column; "
+                    "align-items: center; justify-content: center; "
+                    f"padding: 10px; border: 2px solid {color}; "
+                    "border-radius: 10px; text-align: center;"
+                )
+                score_div = (
+                    f"<div style='color: {color}; font-size: 24px; "
+                    f"font-weight: bold; line-height: 1; margin: 0;'>"
+                    f"{score_display}</div>"
+                )
+                label_div = (
+                    "<div style='font-size: 12px; margin: 2px 0 0 0; "
+                    "color: #666;'>Relevance Score</div>"
+                )
+
                 if url and url.startswith(("http://", "https://")):
+                    hover_style = (
+                        "cursor: pointer; transition: all 0.2s ease;' "
+                        "onmouseover='this.style.transform=\"scale(1.05)\"' "
+                        "onmouseout='this.style.transform=\"scale(1)\"'"
+                    )
                     st.markdown(
-                        f"""<a href="{url}" target="_blank" style='text-decoration: none;'>
-                        <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; border: 2px solid {color}; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease;' onmouseover='this.style.transform="scale(1.05)"' onmouseout='this.style.transform="scale(1)"'>
-                        <div style='color: {color}; font-size: 24px; font-weight: bold; line-height: 1; margin: 0;'>{score_display}</div>
-                        <div style='font-size: 12px; margin: 2px 0 0 0; color: #666;'>Relevance Score</div>
-                        </div></a>""",
-                        unsafe_allow_html=True)
+                        f"<a href='{url}' target='_blank' "
+                        f"style='text-decoration: none;'>"
+                        f"<div style='{base_style} {hover_style}>"
+                        f"{score_div}{label_div}</div></a>",
+                        unsafe_allow_html=True
+                    )
                 else:
                     st.markdown(
-                        f"""<div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; border: 2px solid {color}; border-radius: 10px; text-align: center;'>
-                        <div style='color: {color}; font-size: 24px; font-weight: bold; line-height: 1; margin: 0;'>{score_display}</div>
-                        <div style='font-size: 12px; margin: 2px 0 0 0; color: #666;'>Relevance Score</div>
-                        </div>""",
-                        unsafe_allow_html=True)
+                        f"<div style='{base_style}'>{score_div}{label_div}</div>",
+                        unsafe_allow_html=True
+                    )
 
 
 
