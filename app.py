@@ -193,16 +193,32 @@ def main():
             st.warning("Please select at least one data source in the sidebar.")
             return
 
-        # Fetch and process papers
+        # Fetch and process papers with progress indicators
         source_names = [k for k, v in data_sources.items() if v]
-        with st.spinner(f"Fetching papers from {', '.join(source_names)}..."):
-            # Normalize end_date to current day to make cache more predictable
-            end_date_normalized = datetime.now().replace(
-                hour=0, minute=0, second=0, microsecond=0
-            )
-            papers = fetch_and_rank_papers(
-                keywords, days_back, data_sources, end_date_normalized, search_mode
-            )
+
+        # Show compact loading indicator
+        if source_names:
+            with st.container():
+                loading_placeholder = st.empty()
+                loading_placeholder.info("🔄 Fetching papers from " + ", ".join([s.upper() for s in source_names]) + "...")
+
+                # Normalize end_date to current day to make cache more predictable
+                end_date_normalized = datetime.now().replace(
+                    hour=0, minute=0, second=0, microsecond=0
+                )
+
+                # Fetch papers (the actual fetching happens inside the cached function)
+                papers = fetch_and_rank_papers(
+                    keywords, days_back, data_sources, end_date_normalized, search_mode
+                )
+
+                # Clear loading and show compact success message
+                loading_placeholder.empty()
+                if not papers.empty:
+                    st.success(f"🎉 Found {len(papers)} papers from {len(source_names)} {'source' if len(source_names) == 1 else 'sources'}")
+        else:
+            # Fallback if no sources selected
+            papers = pd.DataFrame()
 
         if papers.empty:
             st.warning("No papers found for the specified keywords and date range.")

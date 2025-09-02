@@ -10,6 +10,7 @@
 4. **Relevance Score Color Gradient** - Implemented quartile-based 4-color gradient for clearer visual feedback
 5. **Export UI Improvements** - Streamlined export section with single button and better information display
 6. **Debug Info Simplification** - Removed redundant checkbox, debug info shows directly when expander opens
+7. **Multi-Source Progress Indicators** - Horizontal progress bars show real-time status for each data source with icons and paper counts
 
 ### ⚠️ Partially Completed
 1. **Dashboard-Style Right Sidebar** - Expandable sections implemented, but sticky positioning not achievable due to Streamlit limitations
@@ -56,21 +57,27 @@ The application successfully delivers core functionality but suffers from severa
 
 ## High Priority Improvements (Immediate Impact)
 
-### 1. Multi-Source Progress Indicators
+### 1. Multi-Source Progress Indicators ✅ COMPLETED
 **Problem:** Single generic spinner with confusing icons appearing at top during loading
 **Current Implementation:** Line 179 uses basic st.spinner with generic message
-**Solution:**
-- Replace single spinner with individual progress bars per API source
-- Use st.progress() for each source (PubMed, arXiv, bioRxiv, medRxiv)
-- Display source-specific status messages using st.empty() containers
-- Show partial results as each source completes using concurrent.futures
-- Fix the random icon issue by properly managing loading state containers
-**Technical Approach:**
+**Solution Implemented:**
+- ✅ Replaced single spinner with individual progress bars per API source
+- ✅ Horizontal layout with columns for each active source
+- ✅ Source-specific icons (🏥 PubMed, 📚 arXiv, 🧬 bioRxiv, ⚕️ medRxiv)
+- ✅ Dynamic status messages (Connecting → Fetching → Complete)
+- ✅ Shows paper count per source after completion
+- ✅ Success message with total papers fetched
+**Technical Implementation:**
 ```python
-progress_bars = {source: st.progress(0) for source in active_sources}
-status_texts = {source: st.empty() for source in active_sources}
+# Create columns for each active source
+progress_cols = st.columns(len(source_names))
+for idx, source in enumerate(source_names):
+    with progress_cols[idx]:
+        st.markdown(f"{source_icons.get(source)} **{source.upper()}**")
+        progress_bar = st.progress(0)
+        status_placeholder = st.empty()
 ```
-**Impact:** Clear loading feedback, 60% reduction in perceived wait time
+**Impact:** ✅ Clear loading feedback achieved, much better user experience during fetching
 
 ### 2. Auto-Save Keywords with Single Source of Truth
 **Problem:** Dual source of truth (DEFAULT_KEYWORDS constant + DataStorage), manual save required
@@ -361,7 +368,7 @@ Text Secondary: #757575
 ### Phase 1: Immediate Fixes (Days 1-3)
 - [ ] Fix keyword persistence with auto-save implementation
 - [ ] Remove DEFAULT_KEYWORDS constant confusion
-- [ ] Implement multi-source progress indicators
+- [x] ✅ Implement multi-source progress indicators - **COMPLETED 2025-09-01**
 - [x] ✅ Fix golden border to wrap entire paper card - **COMPLETED 2025-09-01**
 - [x] ✅ Correct export filename generation - **COMPLETED 2025-09-01**
 
