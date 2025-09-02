@@ -662,16 +662,36 @@ def display_papers(papers_df):
                           and paper.get('journal')
                           and is_high_impact_journal(paper['journal']))
 
-        # Add special styling for high-impact papers
+        # Add spacing between all paper cards
+        st.markdown("""
+            <style>
+            div[data-testid="stContainer"][data-border="true"] {
+                margin-bottom: 20px !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+        
+        # Style high-impact papers with CSS targeting their container key
         if is_high_impact:
-            st.markdown(
-                '<div style="border: 2px solid #FFD700; border-radius: 10px; padding: 15px; background-color: rgba(255, 215, 0, 0.1); margin-bottom: 20px;">',
-                unsafe_allow_html=True)
-
-        with st.container():
+            st.markdown("""
+                <style>
+                [class*="st-key-high-impact-"] {
+                    border: 3px solid #FFD700 !important;
+                    border-radius: 12px !important;
+                    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 215, 0, 0.15)) !important;
+                    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3) !important;
+                }
+                </style>
+            """, unsafe_allow_html=True)
+            container_key = f"high-impact-{idx}"
+        else:
+            container_key = None
+        
+        # All papers get a bordered container
+        with st.container(border=True, key=container_key):
             # Create columns for layout
             col1, col2 = st.columns([4, 1])
-
+            
             with col1:
                 # Title with link (only if URL exists and is valid)
                 title = paper['title']
@@ -747,11 +767,6 @@ def display_papers(papers_df):
                     f"<p style='margin: 0; font-size: 12px;'>Relevance Score</p></div>",
                     unsafe_allow_html=True)
 
-            st.divider()
-
-        # Close the special styling div for high-impact papers
-        if is_high_impact:
-            st.markdown('</div>', unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
