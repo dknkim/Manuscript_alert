@@ -14,25 +14,37 @@ from storage.data_storage import DataStorage
 # Set page configuration
 st.set_page_config(
     page_title="Manuscript Alert System for AD and Neuroimaging",
-    #page_icon="📚",
-    layout="wide")
+    # page_icon="📚",
+    layout="wide",
+)
 
 
 # Initialize components
 @st.cache_resource
 def initialize_components():
-    return ArxivFetcher(), BioRxivFetcher(), PubMedFetcher(), KeywordMatcher(
-    ), DataStorage()
+    return (
+        ArxivFetcher(),
+        BioRxivFetcher(),
+        PubMedFetcher(),
+        KeywordMatcher(),
+        DataStorage(),
+    )
 
 
-(arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher,
- keyword_matcher, data_storage) = initialize_components(
+(arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher, keyword_matcher, data_storage) = (
+    initialize_components()
 )
 
 # Default keywords
 DEFAULT_KEYWORDS = [
-    "Alzheimer's disease", "PET", "MRI", "dementia", "amyloid", "tau",
-    "plasma", "brain"
+    "Alzheimer's disease",
+    "PET",
+    "MRI",
+    "dementia",
+    "amyloid",
+    "tau",
+    "plasma",
+    "brain",
 ]
 
 
@@ -61,9 +73,8 @@ def main():
             "Enter keywords (one per line):",
             value="\n".join(current_keywords),
             height=150,
-            help=
-            "Enter research topics you're interested in, one per line. "
-            "Papers must match at least 2 keywords to be displayed."
+            help="Enter research topics you're interested in, one per line. "
+            "Papers must match at least 2 keywords to be displayed.",
         )
 
         # Parse keywords from text area
@@ -81,21 +92,22 @@ def main():
         show_high_impact_only = st.checkbox(
             "🌟 Relevant Journals Only",
             value=False,
-            help=
-            "Show only papers from: Nature/JAMA/NPJ/Science journals, "
-            "Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
+            help="Show only papers from: Nature/JAMA/NPJ/Science journals, "
+            "Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia",
         )
 
         # Search limit selection
         st.subheader("Search Limits")
         search_mode = st.radio(
-            "Article search limit:", [
+            "Article search limit:",
+            [
                 "Brief (PubMed: 1000, Others: 500)",
                 "Standard (PubMed: 2500, Others: 1000)",
-                "Extended (All sources: 5000)"
+                "Extended (All sources: 5000)",
             ],
             index=0,
-            help="Choose search depth vs speed trade-off")
+            help="Choose search depth vs speed trade-off",
+        )
 
         if search_mode.startswith("Extended"):
             st.caption(
@@ -103,32 +115,28 @@ def main():
                 "comprehensive results."
             )
         elif search_mode.startswith("Standard"):
-            st.caption(
-                "⚠️ Standard mode balanced for speed and coverage."
-            )
+            st.caption("⚠️ Standard mode balanced for speed and coverage.")
         else:
-            st.caption(
-                "⚠️ Brief mode optimized for fastest results with recent papers."
-            )
+            st.caption("⚠️ Brief mode optimized for fastest results with recent papers.")
 
         # Data sources selection
         st.subheader("Data Sources")
         col1, col2 = st.columns(2)
 
         with col1:
-            use_arxiv = st.checkbox("arXiv",
-                                    value=False,
-                                    help="Include papers from arXiv")
-            use_biorxiv = st.checkbox("bioRxiv",
-                                      value=False,
-                                      help="Include papers from bioRxiv")
+            use_arxiv = st.checkbox(
+                "arXiv", value=False, help="Include papers from arXiv"
+            )
+            use_biorxiv = st.checkbox(
+                "bioRxiv", value=False, help="Include papers from bioRxiv"
+            )
         with col2:
-            use_medrxiv = st.checkbox("medRxiv",
-                                      value=False,
-                                      help="Include papers from medRxiv")
-            use_pubmed = st.checkbox("PubMed",
-                                     value=True,
-                                     help="Include papers from PubMed")
+            use_medrxiv = st.checkbox(
+                "medRxiv", value=False, help="Include papers from medRxiv"
+            )
+            use_pubmed = st.checkbox(
+                "PubMed", value=True, help="Include papers from PubMed"
+            )
 
         # Refresh data
         st.subheader("Data Management")
@@ -136,6 +144,7 @@ def main():
             st.cache_data.clear()
             # Also clear any file-based cache
             import os
+
             if os.path.exists("paper_cache.json"):
                 os.remove("paper_cache.json")
             st.success("All caches cleared! Data will be refreshed.")
@@ -143,11 +152,13 @@ def main():
 
         # Date range selection (moved here)
         st.subheader("Date Range")
-        days_back = st.slider("Days to look back:",
-                              min_value=1,
-                              max_value=21,
-                              value=7,
-                              help="Number of days to search back from today")
+        days_back = st.slider(
+            "Days to look back:",
+            min_value=1,
+            max_value=21,
+            value=7,
+            help="Number of days to search back from today",
+        )
 
     # Main content area
     col1, col2 = st.columns([3, 1])
@@ -157,9 +168,10 @@ def main():
 
         # Display current keywords
         if keywords:
-            st.info(f"**Active Keywords:** {', '.join(keywords[:5])}" +
-                    (f" and {len(keywords)-5} more..." if len(keywords) >
-                     5 else ""))
+            st.info(
+                f"**Active Keywords:** {', '.join(keywords[:5])}"
+                + (f" and {len(keywords) - 5} more..." if len(keywords) > 5 else "")
+            )
         else:
             st.warning(
                 "No keywords configured. Please add some keywords in the sidebar."
@@ -171,34 +183,33 @@ def main():
             "arxiv": use_arxiv,
             "biorxiv": use_biorxiv,
             "medrxiv": use_medrxiv,
-            "pubmed": use_pubmed
+            "pubmed": use_pubmed,
         }
 
         # Check if at least one source is selected
         if not any(data_sources.values()):
-            st.warning(
-                "Please select at least one data source in the sidebar.")
+            st.warning("Please select at least one data source in the sidebar.")
             return
 
         # Fetch and process papers
         source_names = [k for k, v in data_sources.items() if v]
         with st.spinner(f"Fetching papers from {', '.join(source_names)}..."):
             # Normalize end_date to current day to make cache more predictable
-            end_date_normalized = datetime.now().replace(hour=0,
-                                                         minute=0,
-                                                         second=0,
-                                                         microsecond=0)
-            papers = fetch_and_rank_papers(keywords, days_back, data_sources,
-                                           end_date_normalized, search_mode)
+            end_date_normalized = datetime.now().replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+            papers = fetch_and_rank_papers(
+                keywords, days_back, data_sources, end_date_normalized, search_mode
+            )
 
         if papers.empty:
-            st.warning(
-                "No papers found for the specified keywords and date range.")
+            st.warning("No papers found for the specified keywords and date range.")
             return
 
         # Search within results
-        search_query = st.text_input("🔍 Search within results:",
-                                     placeholder="Enter search term...")
+        search_query = st.text_input(
+            "🔍 Search within results:", placeholder="Enter search term..."
+        )
 
         # Apply filters
         filtered_papers = papers.copy()
@@ -206,24 +217,33 @@ def main():
         # Search filter
         if search_query:
             filtered_papers = filtered_papers[
-                filtered_papers["title"].str.
-                contains(search_query, case=False, na=False)
-                | filtered_papers["abstract"].str.
-                contains(search_query, case=False, na=False)
-                | filtered_papers["authors"].str.
-                contains(search_query, case=False, na=False)]
+                filtered_papers["title"].str.contains(
+                    search_query, case=False, na=False
+                )
+                | filtered_papers["abstract"].str.contains(
+                    search_query, case=False, na=False
+                )
+                | filtered_papers["authors"].str.contains(
+                    search_query, case=False, na=False
+                )
+            ]
 
         # Relevant journal filter
         if show_high_impact_only:
             high_impact_mask = filtered_papers.apply(
-                lambda row: (row.get("source") == "PubMed" and row.get(
-                    "journal") and is_high_impact_journal(row["journal"])),
-                axis=1)
+                lambda row: (
+                    row.get("source") == "PubMed"
+                    and row.get("journal")
+                    and is_high_impact_journal(row["journal"])
+                ),
+                axis=1,
+            )
             filtered_papers = filtered_papers[high_impact_mask]
 
         # Filter papers with at least 2 matched keywords
         keyword_filter_mask = filtered_papers.apply(
-            lambda row: len(row.get("matched_keywords", [])) >= 2, axis=1)
+            lambda row: len(row.get("matched_keywords", [])) >= 2, axis=1
+        )
         filtered_papers = filtered_papers[keyword_filter_mask]
 
         # Display results count
@@ -244,7 +264,9 @@ def main():
             total_fetched = len(papers)
             if total_fetched >= 5000:  # Close to extended API limits
                 st.warning(
-                    f"⚠️ Large date range ({days_back} days) may hit API limits. Consider reducing the date range or using more specific keywords if you suspect missing papers."
+                    f"⚠️ Large date range ({days_back} days) may hit API limits. "
+                    "Consider reducing the date range or using more specific "
+                    "keywords if you suspect missing papers."
                 )
 
         # Display papers
@@ -284,7 +306,8 @@ def main():
                 st.subheader("🏆 Journal Quality")
                 st.metric("Relevant Journals", high_impact_count)
                 # st.caption(
-                #     "Papers from Nature/JAMA/NPJ/Science journals, Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
+                #     "Papers from Nature/JAMA/NPJ/Science journals, "
+                #     "Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
                 # )
 
             # Top keywords found
@@ -295,9 +318,9 @@ def main():
                     keyword_counts[kw] = keyword_counts.get(kw, 0) + 1
 
             if keyword_counts:
-                top_keywords = sorted(keyword_counts.items(),
-                                      key=lambda x: x[1],
-                                      reverse=True)[:10]
+                top_keywords = sorted(
+                    keyword_counts.items(), key=lambda x: x[1], reverse=True
+                )[:10]
                 for kw, count in top_keywords:
                     st.write(f"• **{kw}**: {count}")
 
@@ -308,8 +331,7 @@ def main():
                 target_journals_found = set()
 
                 for _, paper in papers.iterrows():
-                    if paper.get("source") == "PubMed" and paper.get(
-                            "journal"):
+                    if paper.get("source") == "PubMed" and paper.get("journal"):
                         journal = paper["journal"].lower()
                         all_journals.add(journal)
                         if is_high_impact_journal(paper["journal"]):
@@ -330,17 +352,15 @@ def main():
                 st.download_button(
                     label="Download CSV",
                     data=csv,
-                    file_name=
-                    f"arxiv_papers_{datetime.now().strftime('%Y%m%d')}.csv",
-                    mime="text/csv")
+                    file_name=f"arxiv_papers_{datetime.now().strftime('%Y%m%d')}.csv",
+                    mime="text/csv",
+                )
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes for faster updates
-def fetch_and_rank_papers(keywords,
-                          days_back,
-                          data_sources,
-                          end_date=None,
-                          search_mode="Standard"):
+def fetch_and_rank_papers(
+    keywords, days_back, data_sources, end_date=None, search_mode="Standard"
+):
     """Fetch papers from multiple sources and rank them by keyword relevance"""
 
     # Calculate date range - use passed end_date or current time
@@ -358,25 +378,29 @@ def fetch_and_rank_papers(keywords,
     def fetch_arxiv():
         if data_sources.get("arxiv", False):
             try:
-                return ("arxiv",
-                        arxiv_fetcher.fetch_papers(start_date, end_date,
-                                                   keywords, brief_mode, extended_mode))
+                return (
+                    "arxiv",
+                    arxiv_fetcher.fetch_papers(
+                        start_date, end_date, keywords, brief_mode, extended_mode
+                    ),
+                )
             except Exception as e:
                 return ("arxiv_error", str(e))
         return ("arxiv", [])
 
     def fetch_biorxiv():
-        if data_sources.get("biorxiv", False) or data_sources.get(
-                "medrxiv", False):
+        if data_sources.get("biorxiv", False) or data_sources.get("medrxiv", False):
             try:
                 biorxiv_papers = biorxiv_fetcher.fetch_papers(
-                    start_date, end_date, keywords, brief_mode, extended_mode)
+                    start_date, end_date, keywords, brief_mode, extended_mode
+                )
                 # Filter by source selection
                 filtered_papers = []
                 for paper in biorxiv_papers:
                     source = paper.get("source", "")
-                    if (source == "biorxiv" and data_sources.get("biorxiv", False)) or \
-                       (source == "medrxiv" and data_sources.get("medrxiv", False)):
+                    if (source == "biorxiv" and data_sources.get("biorxiv", False)) or (
+                        source == "medrxiv" and data_sources.get("medrxiv", False)
+                    ):
                         filtered_papers.append(paper)
                 return ("biorxiv", filtered_papers)
             except Exception as e:
@@ -386,9 +410,12 @@ def fetch_and_rank_papers(keywords,
     def fetch_pubmed():
         if data_sources.get("pubmed", False):
             try:
-                return ("pubmed",
-                        pubmed_fetcher.fetch_papers(start_date, end_date,
-                                                    keywords, brief_mode, extended_mode))
+                return (
+                    "pubmed",
+                    pubmed_fetcher.fetch_papers(
+                        start_date, end_date, keywords, brief_mode, extended_mode
+                    ),
+                )
             except Exception as e:
                 return ("pubmed_error", str(e))
         return ("pubmed", [])
@@ -398,7 +425,7 @@ def fetch_and_rank_papers(keywords,
         futures = [
             executor.submit(fetch_arxiv),
             executor.submit(fetch_biorxiv),
-            executor.submit(fetch_pubmed)
+            executor.submit(fetch_pubmed),
         ]
 
         # Collect results
@@ -417,13 +444,15 @@ def fetch_and_rank_papers(keywords,
     # Define processing function for parallel execution
     def process_paper(paper):
         relevance_score, matched_keywords = keyword_matcher.calculate_relevance(
-            paper, keywords)
+            paper, keywords
+        )
 
         # Boost score for target journals (only if at least 2 keywords matched)
         if paper.get("source") == "PubMed" and paper.get("journal"):
             # if is_high_impact_journal(
             #         paper['journal']) and len(matched_keywords) >= 2:
-            #     relevance_score += 3.0  # Boost target journal papers with sufficient keyword matches
+            #     relevance_score += 3.0  # Boost target journal papers
+            #     # with sufficient keyword matches
             if is_high_impact_journal(paper["journal"]):
                 if len(matched_keywords) >= 5:
                     relevance_score += 5.1
@@ -437,8 +466,7 @@ def fetch_and_rank_papers(keywords,
         # Format authors list
         authors = paper.get("authors", [])
         if isinstance(authors, list):
-            authors_str = ", ".join(
-                authors[:3]) + ("..." if len(authors) > 3 else "")
+            authors_str = ", ".join(authors[:3]) + ("..." if len(authors) > 3 else "")
         else:
             authors_str = str(authors)
 
@@ -448,14 +476,12 @@ def fetch_and_rank_papers(keywords,
     ranked_papers = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         future_to_paper = {
-            executor.submit(process_paper, paper): paper
-            for paper in all_papers_data
+            executor.submit(process_paper, paper): paper for paper in all_papers_data
         }
 
         for future in concurrent.futures.as_completed(future_to_paper):
             try:
-                paper, relevance_score, matched_keywords, authors_str = future.result(
-                )
+                paper, relevance_score, matched_keywords, authors_str = future.result()
 
                 # Get source information
                 source = paper.get("source", "arXiv")
@@ -477,7 +503,7 @@ def fetch_and_rank_papers(keywords,
                     "matched_keywords": matched_keywords,
                     "journal": paper.get("journal", ""),
                     "volume": paper.get("volume", ""),
-                    "issue": paper.get("issue", "")
+                    "issue": paper.get("issue", ""),
                 }
 
                 ranked_papers.append(paper_info)
@@ -545,7 +571,7 @@ def get_exclusion_patterns():
             "veterinary medical science",
             "philosophical transactions",
             "annals of the new york academy",
-        ]
+        ],
     }
 
 
@@ -616,7 +642,6 @@ def is_high_impact_journal(journal_name):
             "science ",  # Space ensures it's part of Science family
             "npj ",  # Nature Partner Journals
             "the lancet",
-
         ],
         # Specific important journals
         "specific_journals": [
@@ -631,7 +656,7 @@ def is_high_impact_journal(journal_name):
             "j magn reson imaging",
             #'brain',
             "brain : a journal of neurology",
-        ]
+        ],
     }
 
     # Check exact matches first (highest priority)
@@ -666,32 +691,40 @@ def display_papers(papers_df):
 
     for idx, paper in papers_df.iterrows():
         # Check if this is a high-impact journal paper
-        is_high_impact = (paper.get("source") == "PubMed"
-                          and paper.get("journal")
-                          and is_high_impact_journal(paper["journal"]))
+        is_high_impact = (
+            paper.get("source") == "PubMed"
+            and paper.get("journal")
+            and is_high_impact_journal(paper["journal"])
+        )
 
         # Add spacing between all paper cards
-        st.markdown("""
+        st.markdown(
+            """
             <style>
             div[data-testid="stContainer"][data-border="true"] {
                 margin-bottom: 20px !important;
             }
             </style>
-        """, unsafe_allow_html=True)
+        """,
+            unsafe_allow_html=True,
+        )
 
         # Style high-impact papers with CSS targeting their container key
         if is_high_impact:
-            st.markdown("""
+            st.markdown(
+                """
                 <style>
                 [class*="st-key-high-impact-"] {
                     border: 3px solid #B8860B !important;
                     border-radius: 12px !important;
-                    background: linear-gradient(135deg, 
+                    background: linear-gradient(135deg,
                         rgba(184, 134, 11, 0.03), rgba(184, 134, 11, 0.08)) !important;
                     box-shadow: 0 4px 8px rgba(184, 134, 11, 0.2) !important;
                 }
                 </style>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
             container_key = f"high-impact-{idx}"
         else:
             container_key = None
@@ -732,7 +765,8 @@ def display_papers(papers_df):
                         st.markdown(
                             '<div style="color: #B8860B; font-weight: bold; '
                             'font-size: 0.9em;">🌟 Relevant Journal</div>',
-                            unsafe_allow_html=True)
+                            unsafe_allow_html=True,
+                        )
                     else:
                         st.markdown(f"**Journal:** {journal_info}")
 
@@ -745,7 +779,8 @@ def display_papers(papers_df):
                 # Matched keywords
                 if paper["matched_keywords"]:
                     keywords_str = ", ".join(
-                        [f"**{kw}**" for kw in paper["matched_keywords"]])
+                        [f"**{kw}**" for kw in paper["matched_keywords"]]
+                    )
                     st.markdown(f"**Matched Keywords:** {keywords_str}")
 
                 # URL for debugging (can be removed later)
@@ -759,7 +794,7 @@ def display_papers(papers_df):
                     "arXiv": "#B31B1B",
                     "BioRxiv": "#00A86B",
                     "MedRxiv": "#0066CC",
-                    "PubMed": "#FF6B35"
+                    "PubMed": "#FF6B35",
                 }.get(source, "#666666")
 
                 st.markdown(
@@ -768,14 +803,15 @@ def display_papers(papers_df):
                     f"color: white; padding: 4px 8px; border-radius: 15px; "
                     f"font-size: 12px; font-weight: bold;'>{source}</span>"
                     "</div>",
-                    unsafe_allow_html=True
+                    unsafe_allow_html=True,
                 )
 
                 # Relevance score
                 score = paper["relevance_score"]
                 color = "green" if score >= 3 else "orange" if score >= 2 else "red"
-                score_display = f"{score:.1f}" if isinstance(
-                    score, int | float) else str(score)
+                score_display = (
+                    f"{score:.1f}" if isinstance(score, int | float) else str(score)
+                )
                 # Create clickable relevance score that links to paper
                 base_style = (
                     "display: flex; flex-direction: column; "
@@ -804,14 +840,13 @@ def display_papers(papers_df):
                         f"style='text-decoration: none;'>"
                         f"<div style='{base_style} {hover_style}>"
                         f"{score_div}{label_div}</div></a>",
-                        unsafe_allow_html=True
+                        unsafe_allow_html=True,
                     )
                 else:
                     st.markdown(
                         f"<div style='{base_style}'>{score_div}{label_div}</div>",
-                        unsafe_allow_html=True
+                        unsafe_allow_html=True,
                     )
-
 
 
 if __name__ == "__main__":
