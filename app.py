@@ -677,10 +677,10 @@ def display_papers(papers_df):
             st.markdown("""
                 <style>
                 [class*="st-key-high-impact-"] {
-                    border: 3px solid #FFD700 !important;
+                    border: 3px solid #B8860B !important;
                     border-radius: 12px !important;
-                    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 215, 0, 0.15)) !important;
-                    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3) !important;
+                    background: linear-gradient(135deg, rgba(184, 134, 11, 0.03), rgba(184, 134, 11, 0.08)) !important;
+                    box-shadow: 0 4px 8px rgba(184, 134, 11, 0.2) !important;
                 }
                 </style>
             """, unsafe_allow_html=True)
@@ -720,7 +720,7 @@ def display_papers(papers_df):
                     if is_high_impact_journal(paper["journal"]):
                         st.markdown(f"**Journal:** {journal_info} ⭐")
                         st.markdown(
-                            '<div style="color: #FFD700; font-weight: bold; font-size: 0.9em;">🌟 Relevant Journal</div>',
+                            '<div style="color: #B8860B; font-weight: bold; font-size: 0.9em;">🌟 Relevant Journal</div>',
                             unsafe_allow_html=True)
                     else:
                         st.markdown(f"**Journal:** {journal_info}")
@@ -762,12 +762,22 @@ def display_papers(papers_df):
                 color = "green" if score >= 3 else "orange" if score >= 2 else "red"
                 score_display = f"{score:.1f}" if isinstance(
                     score, (int, float)) else str(score)
-                st.markdown(
-                    f"""<div style='text-align: center; padding: 10px; border: 2px solid {color}; border-radius: 10px;'>
-                    <h3 style='color: {color}; margin: 0; display: inline-block; pointer-events: none; cursor: default;'>{score_display}</h3>
-                    <p style='margin: 0; font-size: 12px; pointer-events: none; cursor: default;'>Relevance Score</p>
-                    </div>""",
-                    unsafe_allow_html=True)
+                # Create clickable relevance score that links to paper
+                if url and url.startswith(("http://", "https://")):
+                    st.markdown(
+                        f"""<a href="{url}" target="_blank" style='text-decoration: none;'>
+                        <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; border: 2px solid {color}; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease;' onmouseover='this.style.transform="scale(1.05)"' onmouseout='this.style.transform="scale(1)"'>
+                        <div style='color: {color}; font-size: 24px; font-weight: bold; line-height: 1; margin: 0;'>{score_display}</div>
+                        <div style='font-size: 12px; margin: 2px 0 0 0; color: #666;'>Relevance Score</div>
+                        </div></a>""",
+                        unsafe_allow_html=True)
+                else:
+                    st.markdown(
+                        f"""<div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; border: 2px solid {color}; border-radius: 10px; text-align: center;'>
+                        <div style='color: {color}; font-size: 24px; font-weight: bold; line-height: 1; margin: 0;'>{score_display}</div>
+                        <div style='font-size: 12px; margin: 2px 0 0 0; color: #666;'>Relevance Score</div>
+                        </div>""",
+                        unsafe_allow_html=True)
 
 
 
