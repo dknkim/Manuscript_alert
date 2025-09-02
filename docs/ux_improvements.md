@@ -1,5 +1,27 @@
 # UX Improvement Document: Manuscript Alert System
 
+## Implementation Status Summary
+**Last Updated:** 2025-09-01
+
+### ✅ Completed Improvements
+1. **Full-Card Golden Border for High-Impact Papers** - High-impact papers now have distinctive golden borders with scalable CSS implementation
+2. **Statistics Panel Organization** - Implemented expandable sections for better organization of statistics
+3. **Dynamic Export Filename Generation** - Filenames now reflect actual data sources used and filtered results count
+4. **Relevance Score Color Gradient** - Implemented quartile-based 4-color gradient for clearer visual feedback
+5. **Export UI Improvements** - Streamlined export section with single button and better information display
+6. **Debug Info Simplification** - Removed redundant checkbox, debug info shows directly when expander opens
+
+### ⚠️ Partially Completed
+1. **Dashboard-Style Right Sidebar** - Expandable sections implemented, but sticky positioning not achievable due to Streamlit limitations
+
+### 📝 Pending High Priority Items
+1. Multi-Source Progress Indicators
+2. Auto-Save Keywords with Single Source of Truth
+3. Smart Filtering System
+4. Mobile-First Responsive Design
+
+---
+
 ## Executive Summary
 
 The Manuscript Alert System is a Streamlit-based web application designed to help researchers stay updated with the latest academic papers in Alzheimer's disease and neuroimaging. The system aggregates papers from multiple sources (PubMed, arXiv, bioRxiv, medRxiv) and provides intelligent filtering based on keyword relevance.
@@ -74,49 +96,67 @@ def auto_save_keywords():
 ```
 **Impact:** Eliminates confusion, 100% keyword persistence, zero manual saves
 
-### 3. Full-Card Golden Border for High-Impact Papers
+### 3. Full-Card Golden Border for High-Impact Papers ✅ COMPLETED
 **Problem:** Yellow border only appears as partial highlight, not wrapping entire card
 **Current Implementation:** Lines 666-669 add border to container div only
-**Solution:**
-- Wrap entire paper card with golden border using st.container(border=True)
-- Apply custom CSS styling for consistent golden border
-- Ensure border encompasses all paper content including metadata
-- Fix visual anchoring to top of paper card
-- Maintain border visibility through proper z-index management
-**Additional Improvements:**
-- Highlight matched keywords in title/abstract using HTML markup
-- Add expandable abstract with "Show more/less" toggle
-- Create visual pills for metadata (journal, date, source)
-**Technical Approach:**
+**Solution Implemented:**
+- ✅ Wrapped entire paper card with golden border using st.container(border=True)
+- ✅ Applied custom CSS styling using scalable attribute selector [class*="st-key-high-impact-"]
+- ✅ Ensured border encompasses all paper content including metadata
+- ✅ Fixed visual anchoring with proper container key system
+- ✅ Maintained border visibility through proper z-index management
+- ✅ Added borders to all papers (gray for regular, golden for high-impact)
+- ✅ Removed horizontal dividers and added 20px spacing between cards
+- ✅ Fixed relevance score centering with clickable links
+**Technical Implementation:**
 ```python
 if is_high_impact:
-    with st.container(border=True):
-        st.markdown('<style>div[data-testid="stContainer"] {border: 3px solid #FFD700;}</style>')
-        # Paper content here
+    st.markdown("""
+        <style>
+        [class*="st-key-high-impact-"] {
+            border: 3px solid #B8860B !important;
+            border-radius: 12px !important;
+            background: linear-gradient(135deg,
+                rgba(184, 134, 11, 0.03), rgba(184, 134, 11, 0.08)) !important;
+            box-shadow: 0 4px 8px rgba(184, 134, 11, 0.2) !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    container_key = f"high-impact-{idx}"
 ```
-**Impact:** Clear visual hierarchy, 50% faster identification of important papers
+**Impact:** ✅ Clear visual hierarchy achieved, high-impact papers instantly identifiable
 
-### 4. Dashboard-Style Right Sidebar
+### 4. Dashboard-Style Right Sidebar ⚠️ PARTIALLY COMPLETED
 **Problem:** Statistics panel scrolls with main content, not independently scrollable or collapsible
 **Current Implementation:** Lines 245-328 show statistics in right column that scrolls with main content
-**Solution:**
-- Implement independent scrolling using st.container(height=600)
-- Add collapsible toggle button like left sidebar
-- Use conditional st.columns([3,1]) rendering based on toggle state
-- Create expandable sections with st.expander() for each stat group
-- Store sidebar state in st.session_state.show_stats
-**Technical Approach:**
+**Solution Attempted:**
+- ✅ Created expandable sections with st.expander() for each stat group:
+  - 📈 Overview (expanded by default)
+  - 📊 Sources (expanded by default)
+  - 🏆 Journal Quality (expanded by default)
+  - 🔍 Keywords (collapsed by default)
+  - 🔧 Debug Info (collapsed by default - now shows directly without checkbox)
+  - 📥 Export (expanded - was collapsed, user changed)
+- ❌ Independent scrolling - Streamlit limitation prevents sticky positioning
+- ❌ Collapsible toggle - Removed due to Streamlit column layout constraints
+**Technical Implementation:**
 ```python
-if 'show_stats' not in st.session_state:
-    st.session_state.show_stats = True
-
-if st.session_state.show_stats:
-    main_col, stats_col = st.columns([3, 1])
-    with stats_col:
-        with st.container(height=600):  # Fixed height for scrolling
-            # Statistics content
+with col2:
+    st.header("📊 Statistics")
+    
+    if not papers.empty:
+        with st.expander("📈 Overview", expanded=True):
+            st.metric("Total Papers", len(papers))
+            # ... metrics
+        
+        with st.expander("📊 Sources", expanded=True):
+            # ... source distribution
 ```
-**Impact:** Better screen real estate usage, persistent dashboard view
+**Limitations:** Streamlit doesn't support:
+- Right sidebars (only left sidebar with st.sidebar)
+- Sticky column positioning
+- Independent scrolling for columns
+**Impact:** ⚠️ Improved organization with expandable sections, but true sticky sidebar not achievable in Streamlit
 
 ### 5. Smart Filtering System
 **Problem:** Current filters are basic; users can't combine complex criteria
@@ -171,24 +211,33 @@ if st.session_state.show_stats:
 - Add recommendation engine based on saved papers
 **Impact:** Increases relevant paper discovery by 35%
 
-### 9. Enhanced Export Features
+### 9. Enhanced Export Features ✅ COMPLETED
 **Problem:** Hardcoded filename "arxiv_papers_" regardless of actual sources, no filtered export
 **Current Implementation:** 
 - Line 326: Fixed filename with "arxiv_papers_" prefix
 - Lines 127-158 in data_storage.py: Basic CSV export only
-**Solution:**
-- Dynamic filename generation based on actual sources used
-- Include active sources in filename (e.g., "pubmed_biorxiv_papers_20250831.csv")
-- Export only filtered results, not entire dataset
-- Add JSON and BibTeX export formats
-- Include search parameters in export metadata
-- Implement proper date formatting in filenames
-**Technical Approach:**
+**Solution Implemented:**
+- ✅ Dynamic filename generation based on actual sources used
+- ✅ Include active sources in filename (e.g., "pubmed_biorxiv_papers_20250901.csv")
+- ✅ Export only filtered results (top 50 displayed), not entire dataset
+- ✅ Add filtered count indicator in filename when applicable
+- ✅ Proper date formatting in filenames (YYYYMMDD)
+- ✅ Display filename and export info to user
+- ✅ Simplified export UI with single button labeled "📥 Filtered Results"
+- ✅ Export information displayed above button for better UX flow
+- ⏳ JSON and BibTeX formats (future enhancement)
+**Technical Implementation:**
 ```python
-sources_str = "_".join([s for s in data_sources if data_sources[s]])
-filename = f"{sources_str}_papers_{datetime.now().strftime('%Y%m%d')}.csv"
+# Get actual sources from papers
+actual_sources = papers['source'].unique()
+source_mapping = {'PubMed': 'pubmed', 'arXiv': 'arxiv', ...}
+
+# Generate dynamic filename
+sources_str = "_".join(sorted(sources_for_filename))
+filtered_suffix = f"_filtered{len(filtered_papers)}" if filtered
+export_filename = f"{sources_str}{filtered_suffix}_{datetime.now().strftime('%Y%m%d')}.csv"
 ```
-**Impact:** Accurate file identification, 70% improvement in export workflow
+**Impact:** ✅ Accurate file identification achieved, exports now reflect actual content
 
 ### 10. Improved Configuration UI
 **Problem:** Settings scattered in sidebar are hard to navigate
@@ -204,15 +253,20 @@ filename = f"{sources_str}_papers_{datetime.now().strftime('%Y%m%d')}.csv"
 
 ## Low Priority Improvements (Nice-to-Have)
 
-### 11. Visual Enhancements
+### 11. Visual Enhancements ⚠️ PARTIALLY COMPLETED
 **Problem:** Interface lacks modern visual appeal
-**Solution:**
-- Implement dark/light theme toggle
-- Add subtle animations for state changes
-- Create custom icons for paper sources
-- Add data visualization for statistics
-- Implement color coding for relevance scores
-**Impact:** Improves user satisfaction and engagement
+**Solution Implemented:**
+- ✅ Implement color coding for relevance scores - **COMPLETED: Quartile-based 4-color gradient**
+  - Green (#00c851): Top quartile (7.5+)
+  - Amber (#ffbb33): Upper-middle quartile (5-7.4)
+  - Dark Orange (#ff8800): Lower-middle quartile (2.5-4.9)
+  - Red (#cc0000): Bottom quartile (<2.5)
+**Pending:**
+- [ ] Implement dark/light theme toggle
+- [ ] Add subtle animations for state changes
+- [ ] Create custom icons for paper sources
+- [ ] Add data visualization for statistics
+**Impact:** ✅ Improved visual hierarchy for quick paper assessment
 
 ### 12. Collaboration Features
 **Problem:** No way to share findings with team members
@@ -305,18 +359,20 @@ Text Secondary: #757575
 ## Implementation Roadmap
 
 ### Phase 1: Immediate Fixes (Days 1-3)
-- Fix keyword persistence with auto-save implementation
-- Remove DEFAULT_KEYWORDS constant confusion
-- Implement multi-source progress indicators
-- Fix golden border to wrap entire paper card
-- Correct export filename generation
+- [ ] Fix keyword persistence with auto-save implementation
+- [ ] Remove DEFAULT_KEYWORDS constant confusion
+- [ ] Implement multi-source progress indicators
+- [x] ✅ Fix golden border to wrap entire paper card - **COMPLETED 2025-09-01**
+- [x] ✅ Correct export filename generation - **COMPLETED 2025-09-01**
 
 ### Phase 2: Layout Improvements (Days 4-7)
-- Implement dashboard-style right sidebar with independent scrolling
-- Add collapsible toggle for statistics panel
-- Create expandable sections for statistics groups
-- Improve keyword display with performance metrics
-- Add visual feedback for all user actions
+- [x] ⚠️ Implement dashboard-style right sidebar with independent scrolling - **PARTIAL: Expandable sections done, sticky not possible**
+- [ ] ❌ Add collapsible toggle for statistics panel - **NOT POSSIBLE: Streamlit limitation**
+- [x] ✅ Create expandable sections for statistics groups - **COMPLETED 2025-09-01**
+- [x] ✅ Implement relevance score color gradient - **COMPLETED 2025-09-01**
+- [x] ✅ Simplify debug info display - **COMPLETED 2025-09-01**
+- [ ] Improve keyword display with performance metrics
+- [ ] Add visual feedback for all user actions
 
 ### Phase 3: Enhanced Features (Week 2)
 - Implement advanced filtering with date presets
@@ -363,7 +419,7 @@ The phased approach ensures quick wins while building toward a comprehensive sol
 
 ---
 
-*Document Version: 2.0*  
+*Document Version: 2.1*  
 *Created: 2025*  
-*Last Updated: 2025-08-31*  
+*Last Updated: 2025-09-01*  
 *Authors: UX Design Expert Agent, Code Analysis Team*

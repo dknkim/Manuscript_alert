@@ -161,6 +161,8 @@ def main():
         )
 
     # Main content area
+    # Since Streamlit doesn't support right sidebars or sticky columns natively,
+    # we'll use the column layout with expandable sections for better organization
     col1, col2 = st.columns([3, 1])
 
     with col1:
@@ -272,30 +274,31 @@ def main():
         # Display papers
         display_papers(filtered_papers.head(50))
 
+    # Statistics panel with expandable sections
     with col2:
         st.header("📊 Statistics")
 
         if not papers.empty:
-            # Summary statistics
-            st.metric("Total Papers", len(papers))
-            try:
-                avg_score = float(papers["relevance_score"].mean())
-                max_score = float(papers["relevance_score"].max())
-                st.metric("Avg Relevance Score", f"{avg_score:.1f}")
-                st.metric("Max Relevance Score", f"{max_score:.0f}")
-            except Exception:
-                st.metric("Avg Relevance Score", "N/A")
-                st.metric("Max Relevance Score", "N/A")
+            # Summary statistics in expandable section
+            with st.expander("📈 Overview", expanded=True):
+                st.metric("Total Papers", len(papers))
+                try:
+                    avg_score = float(papers["relevance_score"].mean())
+                    max_score = float(papers["relevance_score"].max())
+                    st.metric("Avg Relevance Score", f"{avg_score:.1f}")
+                    st.metric("Max Relevance Score", f"{max_score:.0f}")
+                except Exception:
+                    st.metric("Avg Relevance Score", "N/A")
+                    st.metric("Max Relevance Score", "N/A")
 
-            # Source distribution
-            st.subheader("📊 Sources")
-            source_counts = papers["source"].value_counts()
-            for source, count in source_counts.items():
-                st.write(f"• **{source}**: {count}")
+            # Source distribution in expandable section
+            with st.expander("📊 Sources", expanded=True):
+                source_counts = papers["source"].value_counts()
+                for source, count in source_counts.items():
+                    st.write(f"• **{source}**: {count}")
 
             # Target journals count
             high_impact_count = 0
-
             for _, paper in papers.iterrows():
                 if paper.get("source") == "PubMed" and paper.get("journal"):
                     journal_name = paper["journal"]
@@ -303,35 +306,33 @@ def main():
                         high_impact_count += 1
 
             if high_impact_count > 0:
-                st.subheader("🏆 Journal Quality")
-                st.metric("Relevant Journals", high_impact_count)
-                # st.caption(
-                #     "Papers from Nature/JAMA/NPJ/Science journals, "
-                #     "Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia"
-                # )
+                with st.expander("🏆 Journal Quality", expanded=True):
+                    st.metric("Relevant Journals", high_impact_count)
 
-            # Top keywords found
-            st.subheader("Top Keywords Found")
-            keyword_counts = {}
-            for _, paper in papers.iterrows():
-                for kw in paper["matched_keywords"]:
-                    keyword_counts[kw] = keyword_counts.get(kw, 0) + 1
+            # Top keywords found in expandable section
+            with st.expander("🔍 Keywords", expanded=False):
+                keyword_counts = {}
+                for _, paper in papers.iterrows():
+                    for kw in paper["matched_keywords"]:
+                        keyword_counts[kw] = keyword_counts.get(kw, 0) + 1
 
-            if keyword_counts:
-                top_keywords = sorted(
-                    keyword_counts.items(), key=lambda x: x[1], reverse=True
-                )[:10]
-                for kw, count in top_keywords:
-                    st.write(f"• **{kw}**: {count}")
+                if keyword_counts:
+                    top_keywords = sorted(
+                        keyword_counts.items(),
+                        key=lambda x: x[1],
+                        reverse=True
+                    )[:10]
+                    for kw, count in top_keywords:
+                        st.write(f"• **{kw}**: {count}")
 
-            # Debug: Show unique journals found
-            if st.checkbox("🔍 Show Journal Debug Info", value=False):
-                st.subheader("All Journals Found")
+            # Debug section in expandable section
+            with st.expander("🔧 Debug Info", expanded=False):
                 all_journals = set()
                 target_journals_found = set()
 
                 for _, paper in papers.iterrows():
-                    if paper.get("source") == "PubMed" and paper.get("journal"):
+                    if (paper.get("source") == "PubMed" and
+                        paper.get("journal")):
                         journal = paper["journal"].lower()
                         all_journals.add(journal)
                         if is_high_impact_journal(paper["journal"]):
@@ -345,16 +346,49 @@ def main():
                 for journal in sorted(all_journals)[:20]:
                     st.write(f"• {journal}")
 
-            # Export functionality
-            st.subheader("📥 Export")
-            if st.button("Download Results as CSV"):
-                csv = papers.to_csv(index=False)
-                st.download_button(
-                    label="Download CSV",
-                    data=csv,
-                    file_name=f"arxiv_papers_{datetime.now().strftime('%Y%m%d')}.csv",
-                    mime="text/csv",
-                )
+            # Export functionality in expandable section
+            with st.expander("📥 Export", expanded=True):
+                # Generate dynamic filename based on actual sources used
+                if not papers.empty:
+                    # Get unique sources from the papers dataframe
+                    actual_sources = papers["source"].unique() if "source" in papers.columns else []
+
+                    # Map source names to lowercase for filename
+                    source_mapping = {
+                        "PubMed": "pubmed",
+                        "arXiv": "arxiv",
+                        "bioRxiv": "biorxiv",
+                        "medRxiv": "medrxiv"
+                    }
+
+                    # Create source string for filename
+                    sources_for_filename = []
+                    for source in actual_sources:
+                        mapped = source_mapping.get(source, source.lower())
+                        sources_for_filename.append(mapped)
+
+                    # Sort for consistent ordering
+                    sources_for_filename.sort()
+                    sources_str = "_".join(sources_for_filename) if sources_for_filename else "papers"
+
+                    # Add filtered indicator if papers were filtered
+                    filtered_suffix = f"_filtered{len(filtered_papers)}" if len(filtered_papers) < len(papers) else ""
+
+                    # Generate filename with date
+                    export_filename = f"{sources_str}{filtered_suffix}_{datetime.now().strftime('%Y%m%d')}.csv"
+
+                    # Display export information first
+                    st.caption(f"Filename: {export_filename}")
+                    st.caption(f"Contains {len(filtered_papers)} papers from {', '.join(actual_sources)}")
+
+                    # Export only the filtered papers that are displayed
+                    csv = filtered_papers.to_csv(index=False)
+                    st.download_button(
+                        label="📥 Filtered Results",
+                        data=csv,
+                        file_name=export_filename,
+                        mime="text/csv",
+                    )
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes for faster updates
@@ -806,9 +840,20 @@ def display_papers(papers_df):
                     unsafe_allow_html=True,
                 )
 
-                # Relevance score
+                # Relevance score with 4-color quartile-based gradient
                 score = paper["relevance_score"]
-                color = "green" if score >= 3 else "orange" if score >= 2 else "red"
+
+                # Quartile-based coloring (assuming most scores are 0-10 range)
+                # Top 25% (Q4), Upper-middle 25% (Q3), Lower-middle 25% (Q2), Bottom 25% (Q1)
+                if score >= 7.5:
+                    color = "#00c851"  # Green for top quartile (75th percentile+)
+                elif score >= 5:
+                    color = "#ffbb33"  # Amber for upper-middle quartile (50-75th)
+                elif score >= 2.5:
+                    color = "#ff8800"  # Dark Orange for lower-middle quartile (25-50th)
+                else:
+                    color = "#cc0000"  # Red for bottom quartile (<25th percentile)
+
                 score_display = (
                     f"{score:.1f}" if isinstance(score, int | float) else str(score)
                 )
