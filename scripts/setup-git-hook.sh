@@ -34,6 +34,17 @@ NC='\033[0m' # No Color
 GIT_ROOT="$(git rev-parse --show-toplevel)"
 cd "$GIT_ROOT"
 
+# Activate conda environment if available
+ENV_NAME="manuscript_alert"
+if command -v conda >/dev/null 2>&1; then
+    # Initialize conda for bash (required for non-interactive shells)
+    eval "$(conda shell.bash hook)" 2>/dev/null || true
+    # Activate environment if it exists
+    if conda env list | awk '{print $1}' | grep -qx "$ENV_NAME" 2>/dev/null; then
+        conda activate "$ENV_NAME" 2>/dev/null || true
+    fi
+fi
+
 # Auto-remove __pycache__ and .pyc files from git index
 find . -type d -name '__pycache__' -print0 | xargs -0 git rm -r --cached --ignore-unmatch 2>/dev/null || true
 git rm -f --cached $(git ls-files '*.pyc' 2>/dev/null || echo) 2>/dev/null || true
