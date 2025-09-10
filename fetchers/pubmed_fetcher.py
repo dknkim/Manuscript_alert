@@ -15,6 +15,10 @@ class PubMedFetcher:
         self.fetch_url = f"{self.base_url}/efetch.fcgi"
         self.max_results = 2500
         self.rate_limit_delay = 0.34  # NCBI official limit: 3 requests per second max without API key
+        self.last_request_time = 0  # Track last request time for adaptive rate limiting
+        self.consecutive_rate_limits = 0  # Track consecutive 429 errors
+        self.last_rate_limit_time = 0  # When we last hit a rate limit
+        self.cooldown_period = 60  # Cooldown period after rate limits (seconds)
 
     def fetch_papers(self, start_date, end_date, keywords, brief_mode=False, extended_mode=False):
         try:
@@ -24,7 +28,6 @@ class PubMedFetcher:
                 print("❌ PubMed: No paper IDs found")
                 return []
             print(f"🆔 PubMed: Found {len(paper_ids)} paper IDs")
-            time.sleep(self.rate_limit_delay)
             papers = self._fetch_paper_details(paper_ids)
             return papers
         except Exception as e:
@@ -66,7 +69,10 @@ class PubMedFetcher:
             else:
                 actual_max = self.max_results
             print(f"📄 Using fallback limit: {actual_max}")
-        time.sleep(self.rate_limit_delay)
+
+        # Adaptive rate limiting - only delay if we made a recent request
+        self._apply_rate_limit()
+
         params = {
             "db": "pubmed",
             "term": search_query,
@@ -113,7 +119,7 @@ class PubMedFetcher:
 
         print(f"📄 Starting to fetch details for {len(paper_ids)} papers...")
         all_papers = []
-        batch_size = 50  # Reduced from 200 to avoid rate limits
+        batch_size = 100  # Increased from 50 for better performance
         total_batches = (len(paper_ids) + batch_size - 1) // batch_size
         print(f"📦 Will process {total_batches} batches of {batch_size} papers each")
 
@@ -132,18 +138,31 @@ class PubMedFetcher:
             max_retries = 3
             for retry in range(max_retries):
                 try:
-                    time.sleep(self.rate_limit_delay)
+                    # Adaptive rate limiting - only delay if needed
+                    self._apply_rate_limit()
                     response = requests.get(self.fetch_url, params=params, timeout=10)
                     response.raise_for_status()
                     batch_papers = self._parse_pubmed_response(response.content, batch_ids)
                     all_papers.extend(batch_papers)
+
+                    # Reset rate limiting on successful request
+                    if self.consecutive_rate_limits > 0:
+                        print("✅ Successful request - resetting rate limit counter")
+                        self.consecutive_rate_limits = max(0, self.consecutive_rate_limits - 1)
                     print(f"✅ Batch {batch_num}/{total_batches} completed - got {len(batch_papers)} papers (total: {len(all_papers)})")
                     break
                 except requests.exceptions.HTTPError as e:
                     if e.response.status_code == 429:
-                        # Rate limited, exponential backoff
-                        wait_time = self.rate_limit_delay * (2 ** retry) * 2
-                        print(f"Rate limited by PubMed. Waiting {wait_time:.1f}s...")
+                        # Rate limited - track consecutive limits and apply exponential backoff
+                        self.consecutive_rate_limits += 1
+                        self.last_rate_limit_time = time.time()
+
+                        # Exponential backoff with jitter (randomization)
+                        base_wait = self.rate_limit_delay * (2 ** retry) * 2
+                        jitter = base_wait * 0.1 * (0.5 + (hash(str(time.time())) % 100) / 100)
+                        wait_time = base_wait + jitter
+
+                        print(f"⏳ Rate limited by PubMed (#{self.consecutive_rate_limits}). Waiting {wait_time:.1f}s...")
                         time.sleep(wait_time)
                     else:
                         print(f"HTTP error fetching PubMed batch {i//batch_size + 1}: {e}")
@@ -299,6 +318,33 @@ class PubMedFetcher:
             return date_obj.strftime("%Y-%m-%d")
         except Exception:
             return datetime.now().strftime("%Y-%m-%d")
+
+    def _apply_rate_limit(self):
+        """Apply adaptive rate limiting with exponential backoff and cooldown."""
+        current_time = time.time()
+
+        # Check if we're in cooldown period after recent rate limits
+        if self.consecutive_rate_limits > 0:
+            time_since_rate_limit = current_time - self.last_rate_limit_time
+            if time_since_rate_limit < self.cooldown_period:
+                # Still in cooldown - use higher delay
+                adjusted_delay = self.rate_limit_delay * (1 + self.consecutive_rate_limits)
+                print(f"⏸️ In cooldown period ({time_since_rate_limit:.1f}s/{self.cooldown_period}s), using {adjusted_delay:.2f}s delay")
+            else:
+                # Cooldown expired - reset rate limit tracking
+                print("✅ Cooldown period expired, resuming normal rate limiting")
+                self.consecutive_rate_limits = 0
+                adjusted_delay = self.rate_limit_delay
+        else:
+            adjusted_delay = self.rate_limit_delay
+
+        # Apply the delay only if we made a recent request
+        time_since_last = current_time - self.last_request_time
+        if time_since_last < adjusted_delay:
+            sleep_time = adjusted_delay - time_since_last
+            time.sleep(sleep_time)
+
+        self.last_request_time = time.time()
 
     def get_api_status(self):
         try:

@@ -12,12 +12,17 @@ class BioRxivFetcher:
         self.medrxiv_base_url = "https://api.biorxiv.org/details/medrxiv"
         self.max_results = 1000
         self.rate_limit_delay = 0.5
+        self.last_request_time = 0  # Track last request time
+        self.consecutive_rate_limits = 0  # Track consecutive rate limit errors
 
     def fetch_papers(self, start_date, end_date, keywords, brief_mode=False, extended_mode=False):
         all_papers = []
         biorxiv_papers = self._fetch_from_server("biorxiv", start_date, end_date, keywords, brief_mode, extended_mode)
         all_papers.extend(biorxiv_papers)
-        time.sleep(self.rate_limit_delay)
+
+        # Adaptive rate limiting - only delay if we made a recent request
+        self._apply_rate_limit()
+
         medrxiv_papers = self._fetch_from_server("medrxiv", start_date, end_date, keywords, brief_mode, extended_mode)
         all_papers.extend(medrxiv_papers)
         return all_papers
@@ -48,7 +53,12 @@ class BioRxivFetcher:
                         processed_paper = self._process_paper(paper, server)
                         papers.append(processed_paper)
         except requests.RequestException as e:
-            print(f"Error fetching papers from {server}: {e}")
+            # Check if this is a rate limiting error
+            if hasattr(e, "response") and e.response is not None and e.response.status_code == 429:
+                self.consecutive_rate_limits += 1
+                print(f"⏳ Rate limited by {server} (#{self.consecutive_rate_limits}): {e}")
+            else:
+                print(f"Error fetching papers from {server}: {e}")
             if api_url:
                 print(f"URL attempted: {api_url}")
         except Exception as e:
@@ -112,6 +122,22 @@ class BioRxivFetcher:
             return datetime.now().strftime("%Y-%m-%d")
         except Exception:
             return datetime.now().strftime("%Y-%m-%d")
+
+    def _apply_rate_limit(self):
+        """Apply adaptive rate limiting - only delay if we made a recent request."""
+        current_time = time.time()
+        time_since_last = current_time - self.last_request_time
+
+        # Adjust delay based on recent rate limiting
+        adjusted_delay = self.rate_limit_delay * (1 + self.consecutive_rate_limits * 0.5)
+
+        if time_since_last < adjusted_delay:
+            sleep_time = adjusted_delay - time_since_last
+            if self.consecutive_rate_limits > 0:
+                print(f"⏸️ BioRxiv: Using adjusted delay {adjusted_delay:.2f}s after {self.consecutive_rate_limits} rate limits")
+            time.sleep(sleep_time)
+
+        self.last_request_time = time.time()
 
     def get_server_status(self):
         status = { "biorxiv": False, "medrxiv": False }
