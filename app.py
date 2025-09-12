@@ -571,22 +571,39 @@ def get_exclusion_patterns():
     """Get patterns for excluding journals from target journal matching"""
     return {
         # Radiology subspecialties - exclude if they contain these specific patterns
+        # "radiology_exclusions": [
+        #     "abdominal radiology",
+        #     "pediatric radiology",
+        #     "cardiovascular and interventional radiology",
+        #     "interventional radiology",
+        #     "emergency radiology",
+        #     "skeletal radiology",
+        #     "clinical radiology",
+        #     "academic radiology",
+        #     "investigative radiology",
+        #     "case reports",  # This will exclude "radiology case reports"
+        #     "oral surgery",  # This will exclude the long oral surgery journal name
+        #     "korean journal of radiology",
+        #     "the neuroradiology journal",
+        #     "interventional neuroradiology",
+        #     "japanese journal of radiology",
+        # ],
         "radiology_exclusions": [
-            "abdominal radiology",
-            "pediatric radiology",
-            "cardiovascular and interventional radiology",
-            "interventional radiology",
-            "emergency radiology",
-            "skeletal radiology",
-            "clinical radiology",
-            "academic radiology",
-            "investigative radiology",
+            "abdominal",
+            "pediatric",
+            "cardiovascular and interventional",
+            "interventional",
+            "emergency",
+            "skeletal",
+            "clinical",
+            "academic",
+            "investigative",
             "case reports",  # This will exclude "radiology case reports"
             "oral surgery",  # This will exclude the long oral surgery journal name
-            "korean journal of radiology",
-            "the neuroradiology journal",
-            "interventional neuroradiology",
-            "japanese journal of radiology",
+            "korean journal of",
+            "the neuroradiology",
+            "interventional",
+            "japanese journal of",
         ],
         # Brain subspecialties - exclude these specific patterns
         "brain_exclusions": [
