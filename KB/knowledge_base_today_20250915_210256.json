@@ -1,0 +1,529 @@
+{
+  "metadata": {
+    "created_at": "2025-09-15T21:02:56.926623",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "total_papers": 20,
+    "papers_per_week": 20,
+    "date_range": "2025-09-15 to 2025-09-15"
+  },
+  "weeks": {
+    "today": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-15T00:00:00",
+        "end_date": "2025-09-15T00:00:00",
+        "week_label": "Today (2025-09-15)"
+      },
+      "papers": [
+        {
+          "title": "Plasma Phosphorylated Tau 217 to Identify Preclinical Alzheimer Disease.",
+          "authors": "Gemma Salvadó, Shorena Janelidze, Divya Bali...",
+          "abstract": "Advances in Alzheimer disease (AD) have shifted research focus to earlier disease stages, necessitating more scalable approaches to identify cognitively unimpaired individuals with amyloid β (Aβ) pathology.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40952756/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "JAMA neurology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40952756",
+          "doi": "10.1001/jamaneurol.2025.3217",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Analytical considerations and clinical utility of plasma phosphorylated Tau217.",
+          "authors": "Hans Frykman",
+          "abstract": "Blood-based biomarkers are an easily available and practical tool for Alzheimer's disease (AD) screening and diagnosis. Plasma phosphorylated Tau217 (p-tau217) is the front-runner candidate for AD diagnosis due to its strong correlation with core AD pathology determined either by cerebrospinal fluid biomarker (CSF) and positron emission tomography (PET) or postmortem examination. While plasma p-tau217 is firmly associated with AD pathology, it is crucial to evaluate its performance in distinguishing AD from mixed pathologies, as brain autopsies have shown the coexisting of AD pathology with other related types of dementia. Moreover, the measurement of AD biomarkers will be a crucial element in defining eligibility for disease-modifying treatment in clinical practice. Moreover, plasma p-tau217 is a highly efficacious biomarker in the early detection of Aβ pathology, making it a feasible test for AD screening in clinical practice. Several assays, including the ALZpath p-tau217 assay and the Fujirebio plasma p-tau217 assay, have been made commercially available for research use. A few studies analytically and clinically have validated these immunoassays as laboratory diagnostic tests for AD diagnosis and differentiating from non-AD neurodegenerative disorders in clinical practice.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40952136/",
+          "source": "PubMed",
+          "relevance_score": 5.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Critical reviews in clinical laboratory sciences",
+          "volume": "",
+          "issue": "",
+          "pmid": "40952136",
+          "doi": "10.1080/10408363.2025.2551648",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Therapeutic and clinical potential of thiolutin microneedles on Alzheimer's disease mitigation.",
+          "authors": "Ghulam Jilany Khan, Aqsa Maimoona Malik",
+          "abstract": "The long-term malfunctioning of brain in older people neurons is known as Alzheimer's disease (Alz-D), the most prevalent form of dementia worldwide. Pathophysiology of Alz-D includes, amyloid plaque, cholinergic neuron loss, choline acetyltransferase reduction, and tau fibrillary tangle progression. Several theories were also developed mainly involving the cerebral cortex and hippocampus, but unfortunately, there is currently no medication that protects or regenerates neurons. Symptoms may include impairment in memory, speech, personality, verbal fluency, and progressive mental failure. Symptoms are managed with a variety of FDA-approved medications; however, researchers are still searching for new molecular targets to treat Alz-D in addition to working on drug development. Clinical trials for the treatment of Alz-D are among the various strategies being tried in the current scenario. Thus, the main purpose of this study was to provide an overview of the key developments in Alz-D, and novel pharmacological therapies. Extensive review of various database, journals, books and websites are explored to select and analyse data based on pathophysiology, aetiology and different medications either approved or undergoing clinical trials, along with special emphasis on novel therapeutic approach; 'thiolutin' safety, efficacy, therapeutic outcomes, mode of action, structure activity relationship and molecular targets. We also emphasized on preparation of microneedle formulation of thiolutin to address its toxicity and to improve its efficacy. By utilizing microneedles nanomedicines and numerous novel approaches, currents study also aims to elucidate recent advancements and treatment options in future medicines.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40582522/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "International journal of pharmaceutics",
+          "volume": "682",
+          "issue": "",
+          "pmid": "40582522",
+          "doi": "10.1016/j.ijpharm.2025.125898",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Humans",
+            "Animals",
+            "Needles",
+            "Drug Delivery Systems"
+          ]
+        },
+        {
+          "title": "Predictors of MRI-estimated brain iron deposition in dementia and Parkinson's disease-associated subcortical regions: Genetic and observational analysis in UK Biobank.",
+          "authors": "Francesco Casanova, Qu Tian, Daniel S Williamson...",
+          "abstract": "BackgroundBrain iron in specific subcortical regions increases risk of dementia and Parkinson's disease (PD). Genetic and environmental factors affect iron deposition, but underlying mechanisms are unclear.ObjectiveIdentify risk factors and diseases associated with brain iron; assess causality using genetics.Methods41,581 UK Biobank participants had MRI-estimated brain iron (QSM method) in five dementia or PD-associated subcortical regions (caudate, hippocampus, putamen, substantia nigra, thalamus). We investigated common risk factors (including adiposity, blood pressure, health behaviors, inflammation) and diseases observationally, using covariate-adjusted regression models, and genetically, with Mendelian randomization.ResultsParticipants diagnosed with Alzheimer's disease, PD, or other diseases had higher MRI-estimated brain iron. Anemia, osteoporosis, and hyperparathyroidism were associated with lower brain iron. Higher body mass index and blood pressure, smoking history, and self-reported meat consumption, increased brain iron. Hematological parameters, inflammatory and kidney biomarkers, and calcium, were also associated. Genetics support causal effects of depression, type-2 diabetes, and 7 other diseases with increased iron, but not Alzheimer's disease. Evidence supports a causal effect of osteoporosis on lower iron in the substantia nigra. We found causal associations between adiposity and proteins (including IL-6 receptor and transferrin receptor) on subcortical brain iron.ConclusionsWe identified causal effects for liability to type-2 diabetes, depression, and other conditions, on subcortical MRI-estimated brain iron, but not to Alzheimer's disease, supportive of dementia as a consequence of brain iron deposition, not a cause. The role of adiposity reducing interventions on brain iron should be investigated. Relationships between brain iron, osteoporosis, calcium, and hyperparathyroidism warrant further investigation.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40953027/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40953027",
+          "doi": "10.1177/13872877251375432",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Heightened effector immune cell infiltration of the hippocampus concurrently with brain ventricular volume expansion in aged APP/PS1 mice.",
+          "authors": "Mark A Maynes, Carley A Owens, Delaney M Anani-Wolf...",
+          "abstract": "Alzheimer's disease (AD) is the most common form of dementia for which the role of neuroinflammation is becoming more realized. Recent studies have shown that immune cells infiltrate the hippocampus and the cortex of AD patients as well as mouse models of the disease. In this study, we employed T2-weighted magnetic resonance imaging (MRI) to view changes in ventricular volume in addition to spectral flow cytometric assessment of the hippocampus infiltrating immune profile in the aged APP/PS1 mice. Aged APP/PS1 mice present with increased size of lateral, dorsal, and ventral ventricles plus increased numbers of hippocampus infiltrating effector immune cell subsets, including CD8 T cells expressing IFNγ, granzyme B, and perforin along with other cell types such as γδ T cells, neutrophils, and NK cells. The concurrent increase in effector cell types with ventricular enlargement expands the putative mechanism of brain atrophy in the APP/PS1 mouse model to include cytolytic functions of these aforementioned immune cell subsets.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40449343/",
+          "source": "PubMed",
+          "relevance_score": 4.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Journal of neuroimmunology",
+          "volume": "406",
+          "issue": "",
+          "pmid": "40449343",
+          "doi": "10.1016/j.jneuroim.2025.578646",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Mice",
+            "Hippocampus",
+            "Mice, Transgenic",
+            "Alzheimer Disease"
+          ]
+        },
+        {
+          "title": "Deciphering Alzheimer's disease: Molecular mechanisms, preclinical models and strategies to overcome Blood-Brain-Barrier.",
+          "authors": "Dar Junaid Bashir, Khursheed Ahmad Bhat, Masarat Bashir",
+          "abstract": "Neurodegenerative diseases involve a spectrum of diseases, with Alzheimer's being the most prevalent one. Alzheimer's disease (AD) is a progressive neurodegenerative disorder marked by cognitive decline, memory loss, and synaptic dysfunction. Despite extensive research, effective therapeutic interventions remain limited, largely due to the complex molecular underpinnings of the disease and the challenge posed by the blood-brain barrier (BBB). This review explores the critical molecular mechanisms implicated in AD pathogenesis, i.e. disruption of cholinergic neurotransmission, aggregation of β-amyloid fragments, tau protein phosphorylation, and oxidative stress. As the establishment of effective treatments remains a major research goal, the present review further gives an insight into the various preclinical in vivo models like chemical, lesion-induced, beta-amyloid, streptozotocin infusion, and transgenic models that have been instrumental in advancing our understanding of disease progression and testing potential treatments. A significant focus is given to emerging strategies designed to circumvent or modulate the BBB, including nanoparticle-based delivery systems, receptor-mediated transport, and focused ultrasound techniques. By integrating insights from molecular biology, experimental modeling, and drug delivery science, this work aims to highlight current challenges and propose comprehensive strategies for improving the diagnosis and treatment of Alzheimer's disease.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40645537/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain research",
+          "volume": "1863",
+          "issue": "",
+          "pmid": "40645537",
+          "doi": "10.1016/j.brainres.2025.149828",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Blood-Brain Barrier",
+            "Humans",
+            "Animals",
+            "Disease Models, Animal"
+          ]
+        },
+        {
+          "title": "Tumefactive demyelination as the first presentation of MOG ab-associated disease.",
+          "authors": "Lin-Jie Zhang, Yuan Qi, Cui-Yun Sun...",
+          "abstract": "Tumefactive demyelination is a rare but clinically significant manifestation of myelin oligodendrocyte glycoprotein antibody-associated disease (MOGAD), often posing diagnostic challenges due to its resemblance to neoplastic lesions. We report a case of a 45-year-old woman presenting with a 3-week history of limb weakness, slowed responsiveness, and aphasia. Neurological examination revealed confusion and sensory aphasia. Serum MOG antibody was positive at a titer of 1:320, while AQP4 and GFAP antibodies were negative. Cerebrospinal fluid (CSF) analysis showed a positive MOG antibody titer of 1:1. Brain MRI demonstrated a left frontal lobe mass with surrounding edema and patchy contrast enhancement. Brain biopsy revealed perivascular lymphocyte cuffing, focal myelin loss, and preserved axonal integrity, consistent with tumefactive demyelination. PET-CT revealed heterogeneous 11C-methionine (MET) and 18F-fluorodeoxyglucose (FDG) uptake, with an L/W",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40479755/",
+          "source": "PubMed",
+          "relevance_score": 4.0,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Journal of neuroimmunology",
+          "volume": "406",
+          "issue": "",
+          "pmid": "40479755",
+          "doi": "10.1016/j.jneuroim.2025.578653",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Female",
+            "Middle Aged",
+            "Myelin-Oligodendrocyte Glycoprotein",
+            "Autoantibodies"
+          ]
+        },
+        {
+          "title": "Impaired parasympathetic network function confers susceptibility to neurodegeneration and memory impairment in older adults with elevated beat-to-beat blood pressure variability.",
+          "authors": "Trevor Lohman, Isabel Sible, Arunima Kapoor...",
+          "abstract": "BackgroundBlood pressure variability (BPV) is associated with neurodegeneration and cognitive decline independent of average pressure. The effect of parasympathetic central autonomic network (CAN) impairment on this relationship has not been assessed.ObjectiveDetermine whether parasympathetic CAN network function affects the relationship between BPV and neurodegenerative markers.Methods100 independently living older adults (55-89 years) underwent continuous blood pressure monitoring, neuropsychological testing, venipuncture, and brain MRI. Hippocampal volumes and entorhinal cortex thicknesses were assessed. Functional connectivity within a parasympathetic cardiovascular control network was used as a measure of parasympathetic CAN function. Plasma glial fibrillary acidic protein (GFAP) and neurofilament light (NfL) were used as measures of glial and neuronal injury, respectively.ResultsElevated BPV was associated with left hippocampal atrophy (p",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40953110/",
+          "source": "PubMed",
+          "relevance_score": 3.5,
+          "matched_keywords": [
+            "MRI",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40953110",
+          "doi": "10.1177/13872877251376715",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Optimizing the structure of repurposed metformin can improve anti-cholinesterase and anti-amyloidogenic effects.",
+          "authors": "Magdalena Markowicz-Piasecka, Tuomo Laitinen, Kristiina M Huttunen",
+          "abstract": "Alzheimer's disease (AD) and diabetes mellitus (DM) share common pathological features, including insulin resistance, oxidative stress, and inflammation, suggesting AD may be considered a brain-specific form of DM. Metformin, a widely used antidiabetic drug, has shown neuroprotective effects potentially beneficial in AD by modulating insulin signaling, reducing inflammation, and inhibiting beta-amyloid (Aβ) aggregation. However, its hydrophilic nature limits brain permeability, prompting the synthesis of metformin derivatives to enhance pharmacokinetic properties. This study investigates a series of sulfonamide derivatives of metformin for their cholinesterase (ChE) inhibition using human acetylcholinesterase (AChE) and butyrylcholinesterase (BuChE), anti-Aβ aggregation using thioflavin T fluorescence assay in vitro, and antioxidative properties in human umbilical endothelial cells (HUVEC) and astrocytes. In vitro assays revealed that studied derivatives exhibit selective inhibitory activity against BChE over AChE. Additionally, certain derivatives demonstrated a synergistic effect with donepezil in AChE inhibition. The derivatives effectively inhibited also Aβ aggregation at both early and late stages, which may reduce Aβ plaque formation. Furthermore, the antioxidative properties of these derivatives were validated in cell-based assays, showing protective effects against oxidative stress in HUVEC and astrocytes. Thus, these findings suggest that metformin derivatives could serve as a dual-action therapy for AD by targeting both cholinergic and amyloidogenic pathways while providing antioxidative support. Future studies may focus on refining these compounds to optimize therapeutic potential in AD treatment, presenting a promising approach for repurposing antidiabetic drugs to address neurodegenerative disease mechanisms.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40602675/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "European journal of pharmacology",
+          "volume": "1003",
+          "issue": "",
+          "pmid": "40602675",
+          "doi": "10.1016/j.ejphar.2025.177886",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Metformin",
+            "Cholinesterase Inhibitors",
+            "Acetylcholinesterase",
+            "Butyrylcholinesterase"
+          ]
+        },
+        {
+          "title": "Therapeutic potential of dual HDAC6/SIRT2 inhibition in Alzheimer's disease.",
+          "authors": "Xingyu Wang, Cunjiang Li, Lei Chen...",
+          "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative disorder characterized by hallmark pathological changes such as amyloid β (Aβ) plaques, neurofibrillary tangles (NFTs) due to tau hyperphosphorylation, and neuroinflammation. Current therapeutic approaches focusing on single-target strategies exhibit limited efficacy, necessitating the exploration of novel multi-target approaches. Histone deacetylase 6 (HDAC6) and SIRT2, as two types of cytosolic histone deacetylases, have emerged as promising targets for AD treatment. HDAC6 plays a role in tau protein phosphorylation, while SIRT2 is involved in Aβ production. Both enzymes regulate microtubule proteins, impacting the formation of NFTs and Aβ plaques. Inhibition of HDAC6 reduces tau hyperphosphorylation, improves microtubule stability, and mitigates neuroinflammation, whereas SIRT2 inhibition attenuates Aβ accumulation and neuroinflammation. Recent studies indicate that dual-targeted inhibition of HDAC6 and SIRT2 may exhibit synergistic effects, suggesting it as a promising strategy for AD treatment. This review summarizes the biological roles of HDAC6 and SIRT2 in AD pathology and examines the development of dual-target inhibitors. It also discusses the challenges, including selectivity and toxicity, emphasizing that the development of combined HDAC6 and SIRT2 inhibitors represents a new direction for future AD treatment.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40381221/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "European journal of medicinal chemistry",
+          "volume": "294",
+          "issue": "",
+          "pmid": "40381221",
+          "doi": "10.1016/j.ejmech.2025.117733",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Humans",
+            "Histone Deacetylase 6",
+            "Sirtuin 2",
+            "Histone Deacetylase Inhibitors"
+          ]
+        },
+        {
+          "title": "Differences and overlaps in TDP-43 pathology of 'pure' LATE-NC compared to LATE-NC coexisting with Alzheimer's disease.",
+          "authors": "Sandra O Tomé, Klara Gawor, Simona Ospitalieri...",
+          "abstract": "Limbic-predominant age-related TDP-43 encephalopathy (LATE) is a common substrate of dementia in the elderly. LATE and Alzheimer's disease (AD) share similar clinical features, and their underlying neuropathological changes-LATE-NC and ADNC-commonly co-occur. However, the histomorphological and molecular features of TDP-43 pathology in LATE-NC with or without coexisting ADNC are not yet well understood. We performed immunohistochemistry in paraffin-embedded tissue from the hippocampus, amygdala, and temporal and frontal cortices of 108 human autopsy cases including 20 cognitively unimpaired controls, 20 AD dementia cases with moderate-high severity of ADNC without LATE-NC (ADNC group), 34 AD dementia cases with LATE-NC (ADNC + LATE-NC group), 17 dementia cases with LATE-NC but no/low ADNC (pure LATE-NC group), and 17 FTLD-TDP Type A cases. We assessed TDP-43 aggregate morphology and composition using antibodies against different TDP-43 epitopes: pS409/410, pS403/pS404, and C- and N-terminal TDP-43. We also investigated nuclear clearance of physiological TDP-43 and cytoplasmic colocalization of TDP-43 and tau proteins. Pure LATE-NC cases were on average 10 years older at death than ADNC + LATE-NC, had less cognitive impairment, higher prevalence of argyrophilic grain disease (AGD) pathology, aging-related tau astrogliopathy (ARTAG), and APOEε2 allele. They also tended to show lower APOEε4 frequencies, but similar frequencies of hippocampal sclerosis and LATE-NC stages. Importantly, LATE-NC predominantly displayed a mesh-like neuritic TDP-43 pattern in the hippocampus, extending from CA1/2 to subiculum. This mesh-like pattern was present in 81% of pure LATE-NC cases and only in 18% of ADNC + LATE-NC. This pattern was also observed in 53% of FTLD-TDP Type A cases. Moreover, the aggregate composition differed in pure LATE-NC and ADNC + LATE-NC, with LATE-NC cases exhibiting increased burdens of several phosphorylated and non-phosphorylated TDP-43 species, while only the pS409/pS410 epitope was significantly associated with ADNC + LATE-NC in the amygdala. Nuclear clearance patterns also tended to differ between pure LATE-NC and ADNC + LATE-NC. Similar to ADNC + LATE-NC, TDP-43 and tau proteinopathies colocalized in pure LATE-NC with comorbid primary age-related tauopathy (PART) or low ADNC. These data suggest that LATE-NC tends to be modified in the presence of moderate-high ADNC. These differences may reflect upstream influences (age, genetics, and environmental risk factors), direct protein-protein interactions, and/or other impacts of ADNC-related mechanisms on TDP-43 proteinopathy, potentially relevant for clinical trial design and future therapeutic applications.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40952471/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "tau"
+          ],
+          "journal": "Acta neuropathologica",
+          "volume": "150",
+          "issue": "1",
+          "pmid": "40952471",
+          "doi": "10.1007/s00401-025-02929-9",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "An orally administered quinolinium molecule mitigates neuropathology of Alzheimer's disease through modulation of mitochondrial dysfunction and neuroinflammation.",
+          "authors": "Junqiu He, Maoxin Ran, Kin Yip Tam",
+          "abstract": "Development of therapeutic options for Alzheimer's disease (AD) faces severe challenges. Only a few new anti-amyloid drugs based on monoclonal antibodies have been approved in recent years. Although the diversity of etiology and complexity of pathology make AD difficult to cure, these offer various molecular targets amenable for pharmaceutical interventions and disease modulation. In this study, we report an orally bioavailable quinolinium small molecule inhibitor, 88, to modulate neuropathologic changes in triple transgenic AD (3 × Tg-AD) mice. We have shown that 88 exhibited decent cerebral exposure, as compared with the forerunner quaternary isoquinolinium compound, 9Q, that we previously developed. In vivo studies revealed that 88 significantly mitigated cognitive deficits in 3 × Tg AD mice and decreased the amyloid burden as well as tau tangles in the hippocampus. Our data indicated that 88 treatments ameliorated the neuroinflammation via inhibiting glial activation and reducing cytokines IL-1β and IL-6. In vitro studies showed that 88 stabilized mitochondria membrane potential (MMP), decreased ROS generation, recovered respiratory function and ATP production in β-amyloid (Aβ)-induced PC12 cell model, suggesting mitigation of mitochondrial dysfunction. Such restored mitochondrial activity reduced the release of cytochrome c, which helped to prevent neuronal apoptosis both in vitro and in vivo. Our findings suggested that 88 could be useful in modulating AD, while the restoration of mitochondria functions and amelioration of neuroinflammation could be promising avenues for disease modulation.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40578415/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Brain research",
+          "volume": "1863",
+          "issue": "",
+          "pmid": "40578415",
+          "doi": "10.1016/j.brainres.2025.149804",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Alzheimer Disease",
+            "Mitochondria",
+            "Mice",
+            "Mice, Transgenic"
+          ]
+        },
+        {
+          "title": "A novel therapeutic prospect: a dual-acting tirzepatide for Alzheimer's disease.",
+          "authors": "Ghadah H Alshehri, Hayder M Al-Kuraishy, Ali I Al-Gareeb...",
+          "abstract": "Alzheimer's disease (AD), the leading cause of dementia, involves microglial activation, pro-inflammatory cytokine release, and impaired insulin signaling via insulin receptor substrate 1 (IRS-1) inhibition. Brain insulin resistance (BIR) is a key factor in AD progression, disrupting synaptic plasticity and neuronal function. Additionally, glucagon-like peptide 1 (GLP-1) and gastric inhibitory polypeptide (GIP) signaling, which regulate insulin pathways, are compromised in AD. GLP-1/GIP receptor activation or their analogs, such as tirzepatide, show potential in mitigating AD neuropathology. However, the precise neuroprotective mechanisms of tirzepatide remain unclear. This mini-review explores tirzepatide's potential therapeutic effects in AD, focusing on its role in restoring insulin signaling, reducing neuroinflammation, and improving cognitive function. Understanding these mechanisms could offer new insights into AD treatment strategies.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40706971/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "brain"
+          ],
+          "journal": "European journal of pharmacology",
+          "volume": "1003",
+          "issue": "",
+          "pmid": "40706971",
+          "doi": "10.1016/j.ejphar.2025.177979",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Humans",
+            "Animals",
+            "Glucagon-Like Peptide 1",
+            "Neuroprotective Agents"
+          ]
+        },
+        {
+          "title": "ACE1 does not influence cerebral Aβ degradation or amyloid plaque accumulation in 5XFAD mice.",
+          "authors": "Sohee Jeon, Alia O Alia, Jelena Popovic...",
+          "abstract": "Alzheimer's disease is the most common form of dementia, and multiple lines of evidence support the relevance of Aβ deposition and amyloid plaque accumulation in the neurotoxicity and cognitive decline in AD. Rare mutations in angiotensin-converting-enzyme-1 have been highly associated with late onset AD patients; however, the mechanism for ACE1 mutation in AD pathogenesis is unknown. While numerous studies have shown that ACE1 indeed catabolizes Aβ, majority of these studies were performed in vitro, and conflicting results have been reported in clinical and in vivo systems. Therefore, we further investigated this in vivo by generating and examining a novel mouse model. Specifically, we analyzed 6-month-old 5XFAD mice with ACE1 knockdown restricted to excitatory neurons, achieved by driving Cre recombinase expression under the CamKIIα promoter. These mice were generated by crossing 5XFAD mice to ACE1 conditional knockout mice expressing Cre specifically in excitatory neurons. Our analyses revealed that neuronal ACE1 knockdown does not significantly affect amyloid plaque load and neuroinflammation in the hippocampus and cortex of 5XFAD mice at 6-months of age.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40952998/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid"
+          ],
+          "journal": "PloS one",
+          "volume": "20",
+          "issue": "9",
+          "pmid": "40952998",
+          "doi": "10.1371/journal.pone.0330193",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Enriched Environment Alleviate AD Pathological Progression by Reducing Microglia Complement Signaling in Aged Male APP/PS1 Mice.",
+          "authors": "Hai-Chao Chen, Jia-Xin Cao, Yi-Shu Zhang...",
+          "abstract": "Alzheimer's disease (AD) is influenced by genetic and environmental factors. Previous studies showed that enriched environments improved memory and reduced amyloid plaques in AD mice, but the underlying mechanisms remain unclear. This study investigated the effects and mechanisms of enriched environments on AD pathology and cognitive function in aged APP/PS1 mice. Male APP/PS1 mice (15 months old) and wild-type littermates were divided into four groups: WT/SE, WT/EE, Tg/SE, and Tg/EE. Mice in EE groups were subjected to intervention with enriched environment for a period of 5 months. Results showed that enriched environments preserved cognitive function, reduced Aβ and p-Tau aggregation, and mitigated microglial inflammation (Tlr-4, NF-κB, iNOS). They also decreased C1q expression and slowed dendritic spine loss in hippocampal granule cells of APP/PS1 mice. These findings suggest that enriched environments can slow AD progression by regulating microglial inflammation and maintaining neuronal integrity, particularly in hippocampal dendritic spines.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40913429/",
+          "source": "PubMed",
+          "relevance_score": 3.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "FASEB journal : official publication of the Federation of American Societies for Experimental Biology",
+          "volume": "39",
+          "issue": "17",
+          "pmid": "40913429",
+          "doi": "10.1096/fj.202501545RR",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Microglia",
+            "Alzheimer Disease",
+            "Male",
+            "Mice"
+          ]
+        },
+        {
+          "title": "Gut microbiome signatures in iNPH: Insights from a shotgun metagenomics study.",
+          "authors": "Rahel Park, Claire Chevalier, Silas Kieser...",
+          "abstract": "Idiopathic normal pressure hydrocephalus (iNPH), a leading cause of reversible dementia in older adults, is marked by ventriculomegaly, gait disturbances, cognitive decline, and urinary incontinence. Emerging evidence suggests that gut dysbiosis (microbial imbalance) may influence neuroinflammation and cerebrospinal fluid dynamics, potentially contributing to glymphatic system dysfunction and ventricular enlargement. This study used shotgun metagenomics to analyze the gut microbiome in iNPH patients (n = 18) compared to healthy controls (n = 50), individuals with ventriculomegaly but no iNPH symptoms (n = 50), and Alzheimer's disease patients (n = 50). Microbiome analysis showed an enrichment of species previously linked to various disease states, such as Enterocloster bolteae and Ruminococcus gnavus, indicating general dysbiosis. In contrast, enrichment of specific taxa, including Evtepia gabavorous and Cuneatibacter sp., were specifically associated with iNPH clinical traits, pointing to possible disease-specific microbial markers. Functional analysis showed enrichment of pathways related to carbohydrate and amino acid metabolism, including the S-adenosyl-L-methionine superpathway, implicating inflammatory and immune processes. These findings suggest distinct gut microbiome signatures in iNPH, offering insights into potential gut-brain interactions that may contribute to the disorder's pathophysiology and highlighting possible targets for future therapeutic strategies.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40953029/",
+          "source": "PubMed",
+          "relevance_score": 3.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "brain"
+          ],
+          "journal": "PloS one",
+          "volume": "20",
+          "issue": "9",
+          "pmid": "40953029",
+          "doi": "10.1371/journal.pone.0330251",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Irregular temporal fluctuations in visual, cognitive and emotional brain regions in primary open-angle glaucoma patients.",
+          "authors": "Qian Wang, Bingbing Yang, Xiaoxia Qu...",
+          "abstract": "Primary open-angle glaucoma (POAG) is now seen as a progressively worsening neurodegenerative disorder. Previvors neuroimaging studies neglect dynamic brain activity, assuming static patterns in resting-state functional MRI (rs-fMRI), while intrinsic brain activity is dynamic and fluctuates over time. To test the time-varying brain activity in POAG patients, a temporal dynamic analysis of rs-fMRI data was conducted on 70 POAG patients and 45 healthy controls (HCs). The sliding-window method calculated dynamic amplitude of low-frequency fluctuations (dALFF) across the brain, and group differences and correlations with ophthalmological and neuropsychological measures were analyzed. Multivariate pattern analysis evaluated dALFF and static-ALFF's ability to differentiate POAG patients from HCs. POAG patients exhibited lower dALFF in visual network areas and higher dALFF in the default mode, ventral attention, and frontoparietal networks compared to HCs. Decreased dALFF in the cuneus correlated with visual field deficits. Visual network dALFF distinguished POAG patients from HCs with 79.13 % accuracy, 66.67 % sensitivity, and 87.14 % specificity (p = 0.001). The dALFF's area under the curve was significantly greater than that of static-ALFF (p = 0.026). POAG patients show irregular time-varying brain activity, especially in areas linked to vision, movement, and emotional/cognitive functions. This study suggests that dALFF offers a novel approach to capture the aberrant time-varying brain activity and its clinical relation, holding potential for enhancing the understanding of POAG mechanisms and improving its diagnosis.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40499882/",
+          "source": "PubMed",
+          "relevance_score": 2.7,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Brain research",
+          "volume": "1863",
+          "issue": "",
+          "pmid": "40499882",
+          "doi": "10.1016/j.brainres.2025.149775",
+          "categories": [
+            "PubMed",
+            "Glaucoma, Open-Angle",
+            "Neuroimaging",
+            "Magnetic Resonance Imaging",
+            "Time Factors",
+            "Case-Control Studies"
+          ]
+        },
+        {
+          "title": "Multimarker Cerebral Small Vessel Disease Score and Risk of Incident Dementia in the Framingham Heart Study.",
+          "authors": "Adlin Pinheiro, Oluchi Ekenze, Hugo J Aparicio...",
+          "abstract": "Individual MRI markers of cerebral small vessel disease (CSVD) are associated with impaired cognition and dementia but may not reflect the overall burden of CSVD. In addition, it is unclear whether these markers provide additional value in dementia risk assessment beyond vascular risk factors alone. Thus, we studied the association between the additive burden of multiple CSVD markers and incident dementia and determined whether this relationship remains independent of the Framingham Stroke Risk Profile (FSRP), a tool used commonly used for stroke risk prediction.",
+          "published": "2025-10-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40953349/",
+          "source": "PubMed",
+          "relevance_score": 2.7,
+          "matched_keywords": [
+            "MRI",
+            "dementia"
+          ],
+          "journal": "Neurology",
+          "volume": "105",
+          "issue": "7",
+          "pmid": "40953349",
+          "doi": "10.1212/WNL.0000000000214113",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Vertebral Artery Dissection Induced by Fitness Video Game Exercise: A Case Report.",
+          "authors": "Hiroyuki Tokue, Azusa Tokue, Yoshito Tsushima",
+          "abstract": "BACKGROUND Vertebral artery dissection (VAD) is an important cause of ischemic stroke in young adults and is often associated with mechanical stressors such as trauma, sudden neck movements, or intense physical activity. While video games are not traditionally recognized as a risk factor, the increasing popularity of interactive fitness games calls for attention to their potential health implications. CASE REPORT We present the case of a 25-year-old sedentary woman with no vascular risk factors who developed acute left-sided neck pain while performing repetitive overhead pushing and pulling movements using a resistance-based controller during gameplay with Ring Fit Adventure (Nintendo Co., Ltd.), a home fitness video game. Two days later, she experienced sudden-onset left-sided numbness and visual disturbance. Neurological examination revealed left homonymous hemianopia and hemisensory deficits. Brain MRI revealed an acute infarct in the right occipital lobe, and magnetic resonance angiography showed right posterior cerebral artery occlusion and dissection of the left vertebral artery with intramural thrombus. She underwent successful endovascular thrombectomy and intra-arterial thrombolysis, followed by dual antiplatelet therapy. Her symptoms improved markedly, and she was discharged with only mild visual field defect. Imaging at follow-up demonstrated vascular remodeling. No underlying vasculopathy or prothrombotic condition was identified. CONCLUSIONS This case highlights that even a seemingly benign fitness video game may exert sufficient mechanical stress to trigger VAD, particularly in untrained individuals. While the temporal association suggests a potential link, causality cannot be definitively established. As home fitness gaming becomes increasingly popular, it is important for both clinicians and the general public to be aware of rare but serious vascular complications that may arise from sudden, strenuous activity in previously sedentary individuals.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40947604/",
+          "source": "PubMed",
+          "relevance_score": 2.5,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "The American journal of case reports",
+          "volume": "26",
+          "issue": "",
+          "pmid": "40947604",
+          "doi": "10.12659/AJCR.950188",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Maternal Childhood Neglect is Linked to Greater Infant Cortisol Levels and Larger Infant Limbic Volumes.",
+          "authors": "Jennifer E Khoury, Miriam Chasson, Banu Ahtam...",
+          "abstract": "Studies have linked maternal childhood maltreatment to altered infant brain volumes, but none have examined infant hypothalamic-pituitary-adrenal (HPA) axis function as a mechanism linking the two domains. Further, studies among older children suggest that childhood abuse and neglect may be associated with different developmental outcomes and thus should be studied separately. Study participants were N = 57 mother-infant dyads, stratified for maternal childhood maltreatment. At 4 months, infant cortisol total output (AUCg) and change (AUCi) were assessed across the Still-Face Paradigm. Under natural sleep, infants completed T1-weighted MRI scans (",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40948350/",
+          "source": "PubMed",
+          "relevance_score": 2.5,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Child maltreatment",
+          "volume": "",
+          "issue": "",
+          "pmid": "40948350",
+          "doi": "10.1177/10775595251376623",
+          "categories": [
+            "PubMed"
+          ]
+        }
+      ],
+      "paper_count": 20
+    }
+  }
+}

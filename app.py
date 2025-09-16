@@ -1,4 +1,6 @@
 import concurrent.futures
+import json
+import os
 from datetime import datetime, timedelta
 
 import pandas as pd
@@ -143,12 +145,49 @@ def main():
         if st.button("🔄 Refresh Data"):
             st.cache_data.clear()
             # Also clear any file-based cache
-            import os
-
             if os.path.exists("paper_cache.json"):
                 os.remove("paper_cache.json")
             st.success("All caches cleared! Data will be refreshed.")
             st.rerun()
+        
+        # Knowledge Base Creation
+        st.subheader("🧠 Knowledge Base")
+        if st.button("📚 Create Today's KB", help="Create a knowledge base with today's top 20 articles"):
+            # Get current configuration
+            current_data_sources = {
+                "arxiv": use_arxiv,
+                "biorxiv": use_biorxiv,
+                "medrxiv": use_medrxiv,
+                "pubmed": use_pubmed,
+            }
+            
+            # Create the knowledge base
+            kb_filepath = create_todays_knowledge_base(
+                keywords=keywords,
+                data_sources=current_data_sources,
+                search_mode=search_mode
+            )
+            
+            if kb_filepath:
+                st.balloons()  # Celebration animation
+                st.success("🎉 Knowledge base created successfully!")
+            else:
+                st.error("❌ Failed to create knowledge base. Please try again.")
+        
+        # Show existing KB files
+        kb_dir = "./KB"
+        if os.path.exists(kb_dir):
+            kb_files = [f for f in os.listdir(kb_dir) if f.endswith('.json')]
+            if kb_files:
+                st.caption(f"📁 {len(kb_files)} KB file(s) in ./KB/")
+                # Show the most recent file
+                kb_files.sort(reverse=True)
+                latest_file = kb_files[0]
+                st.caption(f"Latest: {latest_file}")
+            else:
+                st.caption("📁 No KB files found in ./KB/")
+        else:
+            st.caption("📁 KB directory will be created when needed")
 
         # Date range selection (moved here)
         st.subheader("Date Range")
@@ -751,6 +790,255 @@ def is_high_impact_journal(journal_name):
     #     return True
 
     return False
+
+
+def create_todays_knowledge_base(keywords, data_sources, search_mode="Extended"):
+    """
+    Create a knowledge base for today's top 20 articles
+    
+    Args:
+        keywords (list): Keywords to search for
+        data_sources (dict): Data sources configuration
+        search_mode (str): Search mode (Brief/Standard/Extended)
+        
+    Returns:
+        str: Path to the created knowledge base file
+    """
+    # Create KB directory if it doesn't exist
+    kb_dir = "./KB"
+    os.makedirs(kb_dir, exist_ok=True)
+    
+    # Get today's date range
+    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    start_date = today
+    end_date = today
+    
+    st.info("🧠 Creating today's knowledge base...")
+    
+    # Create progress bar
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+    
+    # Step 1: Fetch papers
+    status_text.text("📚 Fetching papers from all sources...")
+    progress_bar.progress(20)
+    
+    all_papers_data = []
+    
+    # Define fetching functions for parallel execution
+    def fetch_arxiv():
+        if data_sources.get("arxiv", False):
+            try:
+                return (
+                    "arxiv",
+                    arxiv_fetcher.fetch_papers(
+                        start_date, end_date, keywords, False, True  # extended_mode=True
+                    ),
+                )
+            except Exception as e:
+                return ("arxiv_error", str(e))
+        return ("arxiv", [])
+    
+    def fetch_biorxiv():
+        if data_sources.get("biorxiv", False) or data_sources.get("medrxiv", False):
+            try:
+                papers = biorxiv_fetcher.fetch_papers(
+                    start_date, end_date, keywords, False, True  # extended_mode=True
+                )
+                # Filter by source selection
+                filtered_papers = []
+                for paper in papers:
+                    source = paper.get("source", "")
+                    if (source == "biorxiv" and data_sources.get("biorxiv", False)) or (
+                        source == "medrxiv" and data_sources.get("medrxiv", False)
+                    ):
+                        filtered_papers.append(paper)
+                return ("biorxiv", filtered_papers)
+            except Exception as e:
+                return ("biorxiv_error", str(e))
+        return ("biorxiv", [])
+    
+    def fetch_pubmed():
+        if data_sources.get("pubmed", False):
+            try:
+                return (
+                    "pubmed",
+                    pubmed_fetcher.fetch_papers(
+                        start_date, end_date, keywords, False, True  # extended_mode=True
+                    ),
+                )
+            except Exception as e:
+                return ("pubmed_error", str(e))
+        return ("pubmed", [])
+    
+    # Execute all API calls in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        futures = [
+            executor.submit(fetch_arxiv),
+            executor.submit(fetch_biorxiv),
+            executor.submit(fetch_pubmed),
+        ]
+        
+        # Collect results
+        for future in concurrent.futures.as_completed(futures):
+            result_type, result_data = future.result()
+            
+            if result_type.endswith("_error"):
+                source_name = result_type.replace("_error", "")
+                st.warning(f"⚠️ Error fetching from {source_name}: {result_data}")
+            else:
+                all_papers_data.extend(result_data)
+    
+    if not all_papers_data:
+        st.error("❌ No papers found for today!")
+        return None
+    
+    # Step 2: Process and rank papers
+    status_text.text("📊 Processing and ranking papers...")
+    progress_bar.progress(60)
+    
+    # Process papers using existing logic
+    ranked_papers = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        future_to_paper = {
+            executor.submit(process_paper_for_kb, paper, keywords): paper for paper in all_papers_data
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_paper):
+            try:
+                paper_info = future.result()
+                if paper_info:
+                    ranked_papers.append(paper_info)
+            except Exception as e:
+                st.warning(f"⚠️ Error processing paper: {e}")
+                continue
+    
+    # Convert to DataFrame and sort by relevance
+    df = pd.DataFrame(ranked_papers)
+    if not df.empty:
+        df = df.sort_values("relevance_score", ascending=False)
+        top_papers = df.head(20).to_dict('records')
+    else:
+        st.error("❌ No papers could be processed!")
+        return None
+    
+    # Step 3: Create knowledge base structure
+    status_text.text("💾 Creating knowledge base file...")
+    progress_bar.progress(80)
+    
+    # Create knowledge base structure similar to the existing format
+    knowledge_base = {
+        "metadata": {
+            "created_at": datetime.now().isoformat(),
+            "weeks_covered": 1,
+            "keywords_used": keywords,
+            "data_sources": {k: v for k, v in data_sources.items() if v},
+            "search_mode": search_mode,
+            "total_papers": len(top_papers),
+            "papers_per_week": 20,
+            "date_range": f"{start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}"
+        },
+        "weeks": {
+            "today": {
+                "week_info": {
+                    "week_number": 1,
+                    "start_date": start_date.isoformat(),
+                    "end_date": end_date.isoformat(),
+                    "week_label": f"Today ({start_date.strftime('%Y-%m-%d')})"
+                },
+                "papers": top_papers,
+                "paper_count": len(top_papers)
+            }
+        }
+    }
+    
+    # Step 4: Save to file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"knowledge_base_today_{timestamp}.json"
+    filepath = os.path.join(kb_dir, filename)
+    
+    try:
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(knowledge_base, f, indent=2, ensure_ascii=False, default=str)
+        
+        progress_bar.progress(100)
+        status_text.text("✅ Knowledge base created successfully!")
+        
+        st.success(f"🎉 Today's knowledge base created with {len(top_papers)} papers!")
+        st.info(f"📁 Saved to: {filepath}")
+        
+        return filepath
+        
+    except Exception as e:
+        st.error(f"❌ Error saving knowledge base: {e}")
+        return None
+
+
+def process_paper_for_kb(paper, keywords):
+    """
+    Process a single paper for knowledge base creation
+    
+    Args:
+        paper (dict): Paper data
+        keywords (list): Keywords for relevance calculation
+        
+    Returns:
+        dict: Processed paper info or None if processing fails
+    """
+    try:
+        relevance_score, matched_keywords = keyword_matcher.calculate_relevance(
+            paper, keywords
+        )
+        
+        # Boost score for target journals (using logic from app.py)
+        if paper.get("source") == "PubMed" and paper.get("journal"):
+            if is_high_impact_journal(paper["journal"]):
+                if len(matched_keywords) >= 5:
+                    relevance_score += 5.1
+                elif 5 > len(matched_keywords) >= 4:
+                    relevance_score += 3.7
+                elif 4 > len(matched_keywords) >= 3:
+                    relevance_score += 2.8
+                elif 3 > len(matched_keywords) >= 2:
+                    relevance_score += 1.3
+        
+        # Format authors list
+        authors = paper.get("authors", [])
+        if isinstance(authors, list):
+            authors_str = ", ".join(authors[:3]) + ("..." if len(authors) > 3 else "")
+        else:
+            authors_str = str(authors)
+        
+        # Get source information
+        source = paper.get("source", "arXiv")
+        if source == "PubMed":
+            source_display = "PubMed"
+        elif source == "arxiv":
+            source_display = "arXiv"
+        else:
+            source_display = source.capitalize()
+        
+        paper_info = {
+            "title": paper["title"],
+            "authors": authors_str,
+            "abstract": paper["abstract"],
+            "published": paper["published"],
+            "arxiv_url": paper.get("arxiv_url", ""),
+            "source": source_display,
+            "relevance_score": relevance_score,
+            "matched_keywords": matched_keywords,
+            "journal": paper.get("journal", ""),
+            "volume": paper.get("volume", ""),
+            "issue": paper.get("issue", ""),
+            "pmid": paper.get("pmid", ""),
+            "doi": paper.get("doi", ""),
+            "categories": paper.get("categories", []),
+        }
+        
+        return paper_info
+        
+    except Exception as e:
+        return None
 
 
 def display_papers(papers_df):
