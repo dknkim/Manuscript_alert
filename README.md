@@ -305,7 +305,7 @@ manuscript-alert-system/
 
 ## License
 
-This project is open source. Buy me a coffee when we meet.
+This project is open source, but not for commercial use. Buy me a coffee when we meet.
 
 ## Support
 

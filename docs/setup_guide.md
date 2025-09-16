@@ -1,6 +1,6 @@
 # Setup Guide (macOS/Linux)
 
-## Quick Start
+## Quick Start, or see Advanced (Manual Conda) below
 
 If Conda is already installed and available in your terminal, just run:
 ```bash
