@@ -1,0 +1,2090 @@
+{
+  "metadata": {
+    "created_at": "2025-09-15T20:39:45.346306",
+    "weeks_covered": 4,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "plasma",
+      "brain"
+    ],
+    "data_sources": {
+      "arxiv": true,
+      "biorxiv": true,
+      "medrxiv": true,
+      "pubmed": true
+    },
+    "search_mode": "Extended",
+    "total_papers": 80,
+    "papers_per_week": 20
+  },
+  "weeks": {
+    "week_1": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-09 00:00:00",
+        "end_date": "2025-09-15 00:00:00",
+        "week_label": "Week 1 (2025-09-09 to 2025-09-15)"
+      },
+      "papers": [
+        {
+          "title": "Plasma proteomic associations with Alzheimer's disease endophenotypes.",
+          "authors": "Shiva Afshar, Eric B Dammer, Shijia Bian...",
+          "abstract": "Clinical Alzheimer's disease is currently characterized by cerebral β-amyloidosis associated with cognitive impairment. However, most cases of Alzheimer's disease are associated with multiple neuropathologies at autopsy. The peripheral protein changes associated with these disease endophenotypes are poorly understood. In this study, we analyzed the plasma proteomes of individuals from four cohorts (n = 2,139 participants) to identify proteins and pathways associated with cerebral β-amyloidosis and other neuropathologies, including tau, Lewy bodies, TDP43, cerebral amyloid angiopathy, atherosclerosis, arteriolosclerosis and infarcts as well as cognitive function. Analyses in a cohort with paired brain data showed that known neuropathologies could account for only half of proteins associated with cognitive function and that many plasma proteins associated with these neuropathologies are not strongly correlated to levels in brain, suggesting a potential contribution of peripheral factors to the development of Alzheimer's disease endophenotypes. Targeting pathways represented by these peripheral proteins may modify Alzheimer's disease risk or disease progression.",
+          "published": "2025-09-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40931114/",
+          "source": "PubMed",
+          "relevance_score": 10.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Nature aging",
+          "volume": "",
+          "issue": "",
+          "pmid": "40931114",
+          "doi": "10.1038/s43587-025-00965-4",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Machine learning diagnosis of mild cognitive impairment using advanced diffusion MRI and CSF biomarkers.",
+          "authors": "Alexander Y Guo, John P Laporte, Kavita Singh...",
+          "abstract": "Machine learning applied to neuroimaging can help with medical diagnosis and early detection by identifying biomarkers of subtle changes in brain structure and function. The effectiveness of advanced diffusion MRI (dMRI) methods for pre-dementia classification remains largely unexplored, particularly when combined with CSF biomarkers.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40949843/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Alzheimer's & dementia (Amsterdam, Netherlands)",
+          "volume": "17",
+          "issue": "3",
+          "pmid": "40949843",
+          "doi": "10.1002/dad2.70182",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Plasma Phosphorylated Tau 217 to Identify Preclinical Alzheimer Disease.",
+          "authors": "Gemma Salvadó, Shorena Janelidze, Divya Bali...",
+          "abstract": "Advances in Alzheimer disease (AD) have shifted research focus to earlier disease stages, necessitating more scalable approaches to identify cognitively unimpaired individuals with amyloid β (Aβ) pathology.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40952756/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "JAMA neurology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40952756",
+          "doi": "10.1001/jamaneurol.2025.3217",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Social exposome and brain health outcomes of dementia across Latin America.",
+          "authors": "Joaquin Migeot, Stefanie D Pina-Escudero, Hernan Hernandez...",
+          "abstract": "A multidimensional social exposome (MSE)-the combined lifespan measures of education, food insecurity, financial status, access to healthcare, childhood experiences, and more-may shape dementia risk and brain health over the lifespan, particularly in underserved regions like Latin America. However, the MSE effects on brain health and dementia are unknown. We evaluated 2211 individuals (controls, Alzheimer's disease, and frontotemporal lobar degeneration) from a non-representative sample across six Latin American countries. Adverse exposomes associate with poorer cognition in healthy aging. In dementia, more complex exposomes correlate with lower cognitive and functional performance, higher neuropsychiatric symptoms, and brain structural and connectivity alterations in frontal-temporal-limbic and cerebellar regions. Food insecurity, financial resources, subjective socioeconomic status, and access to healthcare emerge as critical predictors. Cumulative exposome measures surpass isolated factors in predicting clinical-cognitive profiles. Multiple sensitivity analyses confirm our results. Findings highlight the need for personalized approaches integrating MSE across the lifespan, emphasizing prevention and interventions targeting social disparities.",
+          "published": "2025-09-11",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40935836/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Nature communications",
+          "volume": "16",
+          "issue": "1",
+          "pmid": "40935836",
+          "doi": "10.1038/s41467-025-63277-6",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "A unified 3D reconstruction of microscopy and MRI in a brain showing Alzheimer's disease-related neuropathology.",
+          "authors": "Anneke Alkemade, Pierre-Louis Bazin, Evgeniya Kirilina...",
+          "abstract": "To bridge between detailed post-mortem neuropathological assessments and Magnetic Resonance Imaging (MRI), we have created and share a three-dimensional (3D) account of an entire human brain with an intermediate Alzheimer's disease neuropathologic change. We combined multimodal imaging, using cryosectioning, histology, immunocytochemistry, and quantitative ultra-high field 7 Tesla (T) magnetic resonance imaging (MRI) at submillimeter resolution. Amyloid-β and phosphorylated-tau immunoreactivity, cell soma, and nerve fibers were visualized, together with quantitative MR parameters. All data were coaligned with at 200 μm resolution and are openly shared. The use of whole-brain sections allows for a detailed assessment of neuropathological alterations, revealing clear differences between the left and right hemispheres in terms of pathological load of amyloid-β and phosphorylated-tau in a single brain showing Alzheimer's disease neuropathologic change. This resource opens the door for a combination of detailed correlations between neuroimaging and neuropathological microscopy observations, as well as for detailed MRI validation.",
+          "published": "2025-09-11",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40935389/",
+          "source": "PubMed",
+          "relevance_score": 6.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain pathology (Zurich, Switzerland)",
+          "volume": "",
+          "issue": "",
+          "pmid": "40935389",
+          "doi": "10.1111/bpa.70039",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Linking silent pause locations in speech to amyloid and tau deposition in cognitively unimpaired individuals.",
+          "authors": "Madeline R Hale, Rebecca Langhough, Kristin E Basche...",
+          "abstract": "BackgroundConnected speech and language (CSL) analysis can differentiate typically aging individuals from those with dementia by identifying subtle changes in language-dependent measures, such as lexical diversity and fluency. Prior studies have linked features like slower speech rates and increased silent pauses with Alzheimer's disease (AD) neuropathology, but the pause patterns in preclinical AD and their syntactic locations remain unclear.ObjectiveTo investigate silent pauses as a potential early detection tool for AD in cognitively unimpaired individuals and compare their sensitivity to traditional neuropsychological tests in distinguishing biomarker-positive and biomarker-negative groups.MethodsCognitively unimpaired participants from the Wisconsin Registry for Alzheimer's Prevention with amyloid (A) and tau (T) PET imaging were included. Twenty-six participants with A+/T+ profiles were matched 1:1 with A-/T- individuals using propensity score matching for age, sex, literacy, and race (n = 52). Participants were majority female (75.6%) and non-Hispanic white (91%) with a mean (sd) age of 67.5 (6.2). CSL samples were derived from the Cookie Theft picture description task closest to PET scans. Pauses were annotated using ELAN at utterance-initial, clause-initial, and within-clause locations, with further categorization of within-clause pauses by part of speech (nouns, verbs, adjectives/adverbs). Pause rates and durations were analyzed using Mann-Whitney U tests, with effect sizes measured by Cliff's delta (δ).ResultsA+/T+ individuals had longer adjective/adverb-initial pauses than A-/T- (",
+          "published": "2025-09-11",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40934091/",
+          "source": "PubMed",
+          "relevance_score": 5.9,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40934091",
+          "doi": "10.1177/13872877251371720",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Senescent-like border-associated macrophages regulate cognitive aging via migrasome-mediated induction of paracrine senescence in microglia.",
+          "authors": "Mengyan Hu, Xinmei Kang, Zhiruo Liu...",
+          "abstract": "Aging is a major risk factor for various neurological disorders, including Alzheimer's disease, and is associated with the accumulation of senescent cells, which can themselves propagate the senescence process through paracrine signaling. Migrasomes are organelles that form during cellular migration, detach from parent cells and mediate intercellular communication. Here we demonstrate that border-associated macrophages (BAMs) acquire senescence-associated properties during early brain aging, possibly due to prolonged exposure to amyloid beta. Senescent-like BAMs show elevated production of migrasomes, which convey senescence-associated signals including the apoptosis inhibitor of macrophage to neighboring cells. We show that microglia are prominent recipients of senescent-like BAM-derived migrasomes, and that through activation of CD16 in recipient cells, the apoptosis inhibitor of macrophage inhibits apoptosis and promotes senescence induction. Blocking migrasome induction in senescent-like BAMs through treatment with Tspan4-targeting siRNA-encapsulated liposomes ameliorates cognitive deficits in aged mice. Our findings suggest that migrasomes are potent vehicles of senescence-regulatory signals and represent a promising target for senomorphic therapy.",
+          "published": "2025-09-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40931113/",
+          "source": "PubMed",
+          "relevance_score": 5.8,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Nature aging",
+          "volume": "",
+          "issue": "",
+          "pmid": "40931113",
+          "doi": "10.1038/s43587-025-00956-5",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Analytical considerations and clinical utility of plasma phosphorylated Tau217.",
+          "authors": "Hans Frykman",
+          "abstract": "Blood-based biomarkers are an easily available and practical tool for Alzheimer's disease (AD) screening and diagnosis. Plasma phosphorylated Tau217 (p-tau217) is the front-runner candidate for AD diagnosis due to its strong correlation with core AD pathology determined either by cerebrospinal fluid biomarker (CSF) and positron emission tomography (PET) or postmortem examination. While plasma p-tau217 is firmly associated with AD pathology, it is crucial to evaluate its performance in distinguishing AD from mixed pathologies, as brain autopsies have shown the coexisting of AD pathology with other related types of dementia. Moreover, the measurement of AD biomarkers will be a crucial element in defining eligibility for disease-modifying treatment in clinical practice. Moreover, plasma p-tau217 is a highly efficacious biomarker in the early detection of Aβ pathology, making it a feasible test for AD screening in clinical practice. Several assays, including the ALZpath p-tau217 assay and the Fujirebio plasma p-tau217 assay, have been made commercially available for research use. A few studies analytically and clinically have validated these immunoassays as laboratory diagnostic tests for AD diagnosis and differentiating from non-AD neurodegenerative disorders in clinical practice.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40952136/",
+          "source": "PubMed",
+          "relevance_score": 5.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Critical reviews in clinical laboratory sciences",
+          "volume": "",
+          "issue": "",
+          "pmid": "40952136",
+          "doi": "10.1080/10408363.2025.2551648",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Regional attention-enhanced vision transformer for accurate Alzheimer's disease classification using sMRI data.",
+          "authors": "Alireza Jomeiri, Ahmad Habibizad Navin, Mahboubeh Shamsi",
+          "abstract": "Alzheimer's disease (AD) poses a significant global health challenge, necessitating early and accurate diagnosis to enable timely intervention. Structural MRI (sMRI) is a key imaging modality for detecting AD-related brain atrophy, yet traditional deep learning models like convolutional neural networks (CNNs) struggle to capture complex spatial dependencies critical for AD diagnosis. This study introduces the Regional Attention-Enhanced Vision Transformer (RAE-ViT), a novel framework designed for AD classification using sMRI data from the Alzheimer's Disease Neuroimaging Initiative (ADNI) dataset. RAE-ViT leverages regional attention mechanisms to prioritize disease-critical brain regions, such as the hippocampus and ventricles, while integrating hierarchical self-attention and multi-scale feature extraction to model both localized and global structural patterns. Evaluated on 1152 sMRI scans (255 AD, 521 MCI, 376 NC), RAE-ViT achieved state-of-the-art performance with 94.2 % accuracy, 91.8 % sensitivity, 95.7 % specificity, and an AUC of 0.96, surpassing standard ViTs (89.5 %) and CNN-based models (e.g., ResNet-50: 87.8 %). The model's interpretable attention maps align closely with clinical biomarkers (Dice: 0.89 hippocampus, 0.85 ventricles), enhancing diagnostic reliability. Robustness to scanner variability (92.5 % accuracy on 1.5T scans) and noise (92.5 % accuracy under 10 % Gaussian noise) further supports its clinical applicability. A preliminary multimodal extension integrating sMRI and PET data improved accuracy to 95.8 %. Future work will focus on optimizing RAE-ViT for edge devices, incorporating multimodal data (e.g., PET, fMRI, genetic), and exploring self-supervised and federated learning to enhance generalizability and privacy. RAE-ViT represents a significant advancement in AI-driven AD diagnosis, offering potential for early detection and improved patient outcomes.",
+          "published": "2025-09-12",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40945221/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Computers in biology and medicine",
+          "volume": "197",
+          "issue": "Pt B",
+          "pmid": "40945221",
+          "doi": "10.1016/j.compbiomed.2025.111065",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Neuroinflammation and Alzheimer's disease: Unravelling the molecular mechanisms.",
+          "authors": "Aniket Kakkar, Harpreet Singh, Bhuvnesh Kumar Singh...",
+          "abstract": "Alzheimer's disease (AD), the most prevalent form of dementia, is pathologically defined by amyloid-β (Aβ) plaques, neurofibrillary tangles, synaptic loss, and progressive neuronal degeneration. Increasing evidence highlights neuroinflammation as a central and modifiable factor in AD pathogenesis. This review critically explores the roles of microglia and astrocytes in mediating neuroinflammatory cascades, emphasizing their dual protective and detrimental functions. Microglial activation and astrocytic polarization into A1 (neurotoxic) and A2 (neuroprotective) subtypes are discussed alongside their contributions to Aβ clearance, tau pathology propagation, and synaptic dysfunction. The disruption of the blood-brain barrier, activation of inflammasome pathways such as NLRP3, and release of cytokines and chemokines exacerbate chronic inflammation and neurodegeneration. Advances in single-cell transcriptomics and lipidomics have revealed glial heterogeneity and novel molecular targets, including disease-associated microglia. Genetic risk factors like apolipoprotein E (",
+          "published": "2025-09-12",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40938771/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40938771",
+          "doi": "10.1177/13872877251374353",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Therapeutic and clinical potential of thiolutin microneedles on Alzheimer's disease mitigation.",
+          "authors": "Ghulam Jilany Khan, Aqsa Maimoona Malik",
+          "abstract": "The long-term malfunctioning of brain in older people neurons is known as Alzheimer's disease (Alz-D), the most prevalent form of dementia worldwide. Pathophysiology of Alz-D includes, amyloid plaque, cholinergic neuron loss, choline acetyltransferase reduction, and tau fibrillary tangle progression. Several theories were also developed mainly involving the cerebral cortex and hippocampus, but unfortunately, there is currently no medication that protects or regenerates neurons. Symptoms may include impairment in memory, speech, personality, verbal fluency, and progressive mental failure. Symptoms are managed with a variety of FDA-approved medications; however, researchers are still searching for new molecular targets to treat Alz-D in addition to working on drug development. Clinical trials for the treatment of Alz-D are among the various strategies being tried in the current scenario. Thus, the main purpose of this study was to provide an overview of the key developments in Alz-D, and novel pharmacological therapies. Extensive review of various database, journals, books and websites are explored to select and analyse data based on pathophysiology, aetiology and different medications either approved or undergoing clinical trials, along with special emphasis on novel therapeutic approach; 'thiolutin' safety, efficacy, therapeutic outcomes, mode of action, structure activity relationship and molecular targets. We also emphasized on preparation of microneedle formulation of thiolutin to address its toxicity and to improve its efficacy. By utilizing microneedles nanomedicines and numerous novel approaches, currents study also aims to elucidate recent advancements and treatment options in future medicines.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40582522/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "International journal of pharmaceutics",
+          "volume": "682",
+          "issue": "",
+          "pmid": "40582522",
+          "doi": "10.1016/j.ijpharm.2025.125898",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Humans",
+            "Animals",
+            "Needles",
+            "Drug Delivery Systems"
+          ]
+        },
+        {
+          "title": "Predictors of MRI-estimated brain iron deposition in dementia and Parkinson's disease-associated subcortical regions: Genetic and observational analysis in UK Biobank.",
+          "authors": "Francesco Casanova, Qu Tian, Daniel S Williamson...",
+          "abstract": "BackgroundBrain iron in specific subcortical regions increases risk of dementia and Parkinson's disease (PD). Genetic and environmental factors affect iron deposition, but underlying mechanisms are unclear.ObjectiveIdentify risk factors and diseases associated with brain iron; assess causality using genetics.Methods41,581 UK Biobank participants had MRI-estimated brain iron (QSM method) in five dementia or PD-associated subcortical regions (caudate, hippocampus, putamen, substantia nigra, thalamus). We investigated common risk factors (including adiposity, blood pressure, health behaviors, inflammation) and diseases observationally, using covariate-adjusted regression models, and genetically, with Mendelian randomization.ResultsParticipants diagnosed with Alzheimer's disease, PD, or other diseases had higher MRI-estimated brain iron. Anemia, osteoporosis, and hyperparathyroidism were associated with lower brain iron. Higher body mass index and blood pressure, smoking history, and self-reported meat consumption, increased brain iron. Hematological parameters, inflammatory and kidney biomarkers, and calcium, were also associated. Genetics support causal effects of depression, type-2 diabetes, and 7 other diseases with increased iron, but not Alzheimer's disease. Evidence supports a causal effect of osteoporosis on lower iron in the substantia nigra. We found causal associations between adiposity and proteins (including IL-6 receptor and transferrin receptor) on subcortical brain iron.ConclusionsWe identified causal effects for liability to type-2 diabetes, depression, and other conditions, on subcortical MRI-estimated brain iron, but not to Alzheimer's disease, supportive of dementia as a consequence of brain iron deposition, not a cause. The role of adiposity reducing interventions on brain iron should be investigated. Relationships between brain iron, osteoporosis, calcium, and hyperparathyroidism warrant further investigation.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40953027/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40953027",
+          "doi": "10.1177/13872877251375432",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Predictive Value of Plasma Biomarkers in Tau-PET Transitions.",
+          "authors": "Jonathan Graff-Radford, Jeremy A Syrjanen, Prashanthi Vemuri...",
+          "abstract": "The objective of this study was to determine the predictive value of amyloid-positron emission tomography (PET) versus the plasma ratio of phosphorylated tau at threonine 217 (p-tau217) to non-phosphorylated tau217 (%p-tau217) for tau-PET transitions (T- to T+). The added value of combining plasma amyloid-β 42 and amyloid-β 40 (Aβ42/40) and %p-tau217 into an amyloid probability score (APS2) was also assessed.",
+          "published": "2025-09-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40927954/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Annals of neurology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40927954",
+          "doi": "10.1002/ana.78003",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Heightened effector immune cell infiltration of the hippocampus concurrently with brain ventricular volume expansion in aged APP/PS1 mice.",
+          "authors": "Mark A Maynes, Carley A Owens, Delaney M Anani-Wolf...",
+          "abstract": "Alzheimer's disease (AD) is the most common form of dementia for which the role of neuroinflammation is becoming more realized. Recent studies have shown that immune cells infiltrate the hippocampus and the cortex of AD patients as well as mouse models of the disease. In this study, we employed T2-weighted magnetic resonance imaging (MRI) to view changes in ventricular volume in addition to spectral flow cytometric assessment of the hippocampus infiltrating immune profile in the aged APP/PS1 mice. Aged APP/PS1 mice present with increased size of lateral, dorsal, and ventral ventricles plus increased numbers of hippocampus infiltrating effector immune cell subsets, including CD8 T cells expressing IFNγ, granzyme B, and perforin along with other cell types such as γδ T cells, neutrophils, and NK cells. The concurrent increase in effector cell types with ventricular enlargement expands the putative mechanism of brain atrophy in the APP/PS1 mouse model to include cytolytic functions of these aforementioned immune cell subsets.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40449343/",
+          "source": "PubMed",
+          "relevance_score": 4.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Journal of neuroimmunology",
+          "volume": "406",
+          "issue": "",
+          "pmid": "40449343",
+          "doi": "10.1016/j.jneuroim.2025.578646",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Mice",
+            "Hippocampus",
+            "Mice, Transgenic",
+            "Alzheimer Disease"
+          ]
+        },
+        {
+          "title": "FDG PET Findings in Rare Brain Sodium Channelopathy Associated with SCN2A Gene Mutation.",
+          "authors": "Nikhil Seniaray, Ritu Verma, Praveen Kumar...",
+          "abstract": "SCN2A gene mutations, which affect the function of the voltage-gated sodium channel NaV1.2, are associated with a spectrum of neurological disorders, including epileptic encephalopathies and autism spectrum disorders. Advanced imaging modalities such as magnetic resonance imaging (MRI) and positron emission tomography (PET) have been instrumental in elucidating the neuroanatomic and functional alterations associated with these mutations.",
+          "published": "2025-09-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40929566/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Clinical nuclear medicine",
+          "volume": "",
+          "issue": "",
+          "pmid": "40929566",
+          "doi": "10.1097/RLU.0000000000006110",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Deciphering Alzheimer's disease: Molecular mechanisms, preclinical models and strategies to overcome Blood-Brain-Barrier.",
+          "authors": "Dar Junaid Bashir, Khursheed Ahmad Bhat, Masarat Bashir",
+          "abstract": "Neurodegenerative diseases involve a spectrum of diseases, with Alzheimer's being the most prevalent one. Alzheimer's disease (AD) is a progressive neurodegenerative disorder marked by cognitive decline, memory loss, and synaptic dysfunction. Despite extensive research, effective therapeutic interventions remain limited, largely due to the complex molecular underpinnings of the disease and the challenge posed by the blood-brain barrier (BBB). This review explores the critical molecular mechanisms implicated in AD pathogenesis, i.e. disruption of cholinergic neurotransmission, aggregation of β-amyloid fragments, tau protein phosphorylation, and oxidative stress. As the establishment of effective treatments remains a major research goal, the present review further gives an insight into the various preclinical in vivo models like chemical, lesion-induced, beta-amyloid, streptozotocin infusion, and transgenic models that have been instrumental in advancing our understanding of disease progression and testing potential treatments. A significant focus is given to emerging strategies designed to circumvent or modulate the BBB, including nanoparticle-based delivery systems, receptor-mediated transport, and focused ultrasound techniques. By integrating insights from molecular biology, experimental modeling, and drug delivery science, this work aims to highlight current challenges and propose comprehensive strategies for improving the diagnosis and treatment of Alzheimer's disease.",
+          "published": "2025-09-15",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40645537/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain research",
+          "volume": "1863",
+          "issue": "",
+          "pmid": "40645537",
+          "doi": "10.1016/j.brainres.2025.149828",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Blood-Brain Barrier",
+            "Humans",
+            "Animals",
+            "Disease Models, Animal"
+          ]
+        },
+        {
+          "title": "Coupling CZE, Liquid-Phase Ion Mobility, to MS/MS for Quantitative Top-Down Proteomics: Revealing Significant Proteoform Differences Between Healthy and Alzheimer's Disease Brains.",
+          "authors": "Mehrdad Falamarzi Askarani, Fei Fang, Scott E Counts...",
+          "abstract": "Alzheimer's disease (AD) is a neurodegenerative disorder characterized by cognitive decline and pathological protein aggregation. Comprehensive quantitative proteomics of brain tissues from AD patients is critical for pursuing a better understanding of the molecular mechanisms that drive AD progression. Here, we present one of the first quantitative top-down proteomics (TDP) studies of postmortem cortex samples from AD patients and healthy controls to profile their proteoform differences by coupling capillary zone electrophoresis (CZE, liquid-phase ion mobility) to tandem mass spectrometry (MS/MS). We identified 3191 unique proteoforms and uncovered a drastic transformation in the proteoform profile in AD compared to healthy controls. Over 2200 proteoforms were exclusively identified in either AD or healthy control samples, and 157 proteoforms identified in both AD and control samples showed statistically significant abundance differences between the two conditions. Gene Ontology and pathway analysis of the genes associated with those proteoforms revealed broad changes in biological processes in AD brains, for example, telomere organization, substantia nigra development, amyloid fibril formation, microtubule cytoskeleton organization, progressive neurological disorders, long-term synaptic potentiation, and axogenesis. These biological processes are highly associated with the development of AD. Our study revealed a pool of potential novel proteoform biomarkers of AD in human brain samples for early diagnosis and therapy development. SUMMARY: Alzheimer's disease (AD) is a chronic neurodegenerative disease, destroying brain cells and causing thinking ability and memory to decline over time. Proteins (e.g., amyloid and tau) play key roles in the development of AD. Global and accurate protein measurement of human brains of AD patients and healthy controls will shed new light on the molecular mechanisms driving AD progression and discover new biomarkers for AD diagnosis and therapeutic development. Here, we performed the first CZE-MS/MS-based quantitative top-down proteomics (TDP) of a small cohort of AD human brain samples and healthy controls (5 AD and 5 control) to determine the differentially quantified proteoforms between the two health conditions. Over 3000 proteoforms were identified, and only about 700 proteoforms were detected in both conditions, indicating drastically different proteoform profiles between the two conditions. The differentially quantified proteoforms (e.g., tau, neurogranin, and calmodulin-1 proteoforms) are associated with biological processes relevant to AD development, for example, amyloid fibril formation, microtubule disruption, synaptic transmission, and axogenesis. The results offer a deep view of the proteoform transformation in the AD human brain compared to the healthy control, providing potential proteoform biomarkers for AD diagnosis and proteoform targets for therapeutic development.",
+          "published": "2025-09-14",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40947636/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Proteomics",
+          "volume": "",
+          "issue": "",
+          "pmid": "40947636",
+          "doi": "10.1002/pmic.70041",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "A Phase I, Randomized, Double-Blind, Placebo-Controlled Trial of Intracisternal Engineered Autologous Exosomes (NV-101) to Restore Neuronal Proteostasis in Early Alzheimer's Disease: The RESTORE Protocol",
+          "authors": "Iqbal, M.",
+          "abstract": "BackgroundThe current therapeutic landscape for Alzheimers disease (AD) offers limited efficacy. The failure of the neuronal proteostasis network a system critical for preventing toxic protein aggregation is a fundamental pathological process in AD. Molecular chaperones, which are deficient in the AD brain, represent a compelling therapeutic target. A major obstacle has been delivering large biologics like chaperones across the blood-brain barrier. Engineered exosomes offer a promising platform for neuron-specific delivery of nucleic acid cargo.\n\nObjectiveThe primary objective is to evaluate the safety and tolerability of a single intracisternal dose of NV-101, an autologous dendritic cell-derived exosome engineered with neuron-targeting peptides and DNAJB6 mRNA, compared to placebo in participants with early AD. Secondary objectives are to assess its biological activity through cerebrospinal fluid (CSF) biomarkers.\n\nMethodsThe RESTORE trial is a single-center, randomized, double-blind, placebo-controlled, dose-escalation study. Eighteen participants with biomarker-confirmed early AD will be enrolled across three sequential dose cohorts (Low, Medium, High). Participants will be randomized in a 2:1 ratio to receive either NV-101 or placebo (excipient buffer) via a single intracisternal magna injection. The primary outcome is the incidence of treatment-emergent adverse events over 52 weeks. Secondary outcomes include change from baseline in CSF levels of DNAJB6 protein, oligomeric amyloid-{beta}42, and phosphorylated tau (p-tau181). Exploratory outcomes include neuroimaging and cognitive measures.\n\nConclusionsThis first-in-human study will generate critical safety and initial proof-of-mechanism data for a novel therapeutic strategy aimed at correcting proteostatic failure in AD.",
+          "published": "2025-09-09",
+          "arxiv_url": "https://doi.org/10.1101/2025.09.04.25335118",
+          "source": "Medrxiv",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "",
+          "volume": "",
+          "issue": "",
+          "pmid": "",
+          "doi": "10.1101/2025.09.04.25335118",
+          "categories": [
+            "medRxiv",
+            "neurology"
+          ]
+        },
+        {
+          "title": "Ex vivo human brain volumetry: Validation of MRI measurements.",
+          "authors": "Amy Gérin-Lajoie, Walter Adame-Gonzalez, Eve-Marie Frigon...",
+          "abstract": "The volume of in vivo human brains is determined with various MRI measurement tools that have not been assessed against a gold standard. The purpose of this study was to validate the MRI brain volumes by scanning ex vivo, in situ specimens, which allows the extraction of the brain after the scan to compare its volume with the gold-standard water displacement method (WDM).",
+          "published": "2025-09-12",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40937565/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Magnetic resonance in medicine",
+          "volume": "",
+          "issue": "",
+          "pmid": "40937565",
+          "doi": "10.1002/mrm.70083",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Repeatability of diffusion-weighted arterial spin labeling MRI for mapping blood-brain barrier water exchange rate at different postlabel delays.",
+          "authors": "Yufei D Zhu, Quimby N Lee, Xingfeng Shao...",
+          "abstract": "This study sought to determine the intrasession repeatability of the diffusion-weighted (DW) arterial spin labeling (ASL) sequence at different postlabel delays (PLDs).",
+          "published": "2025-09-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40931544/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Magnetic resonance in medicine",
+          "volume": "",
+          "issue": "",
+          "pmid": "40931544",
+          "doi": "10.1002/mrm.70081",
+          "categories": [
+            "PubMed"
+          ]
+        }
+      ],
+      "paper_count": 20
+    },
+    "week_2": {
+      "week_info": {
+        "week_number": 2,
+        "start_date": "2025-09-02 00:00:00",
+        "end_date": "2025-09-08 00:00:00",
+        "week_label": "Week 2 (2025-09-02 to 2025-09-08)"
+      },
+      "papers": [
+        {
+          "title": "The role of brain MR and FDG-PET in the diagnosis of neurodegenerative disease.",
+          "authors": "Yoshimi Anzai, Satoshi Minoshima",
+          "abstract": "Alzheimer disease (AD) is the most common dementing disorder, affecting 55 million people worldwide. Brain MRI plays an integral role in the diagnostic evaluation of patients with cognitive symptoms. When interpreting brain MRI for cognitive impairment, radiologists should assess the following four key features: (1) white matter ischemic burden, (2) structural changes to suggest normal pressure hydrocephalus, (3) locoregional pattern of brain atrophy, and (4) presence of microhemorrhage or superficial siderosis, particularly for determining eligibility for anti-amyloid monoclonal antibody (MAB) treatment when appropriate. The recent approval and clinical adoption of anti-amyloid MAB expanded the role of neuroradiologists in evaluating eligibility and monitoring ARIA (amyloid-related imaging abnormality) among patients receiving anti-amyloid MAB. This advancement underscores the importance of standardized imaging protocols and effective communication between neuroradiologists and cognitive neurologists. Depending on the severity of ARIA and patients' symptoms, treatment may need to be suspended or discontinued. This review article explores brain MRI and FDG-PET/CT imaging abnormalities in patients with major cognitive and movement disorders associated with dementia. It aims to assist radiologists in providing differential diagnoses within a clinical context. Finally, the article emphasizes the importance of recognizing co-pathologies, since patients may have more than one neurodegenerative disease rather than viewing these neurodegenerative diseases as being mutually exclusive. KEY POINTS: Question Traditional regional patterns of brain atrophy on MRI by neuroradiologists may not be effective given the recent advances in understanding of neurodegenerative disease and recognition of co-pathologies. Findings The locoregional atrophy and the patterns of metabolic abnormality help in the differential diagnosis of neurodegenerative disease. Remember that brain MRI determines eligibility for anti-amyloid immunotherapy. Clinical relevance Understanding clinical history is vital for interpreting brain MRI for patients with cognitive impairment or memory loss. Newly recognized entities such as limbic-predominant age-related TDP43 encephalopathy (LATE) can mimic Alzheimer disease among extremely elderly patients with amnestic symptoms with mesial temporal lobe atrophy.",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40903623/",
+          "source": "PubMed",
+          "relevance_score": 11.5,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "European radiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40903623",
+          "doi": "10.1007/s00330-025-11940-3",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Hemispheric asymmetry of tau pathology is related to asymmetric amyloid deposition in Alzheimer's Disease.",
+          "authors": "Toomas Erik Anijärv, Rik Ossenkoppele, Ruben Smith...",
+          "abstract": "The distribution of tau pathology in Alzheimer's disease (AD) shows remarkable inter-individual heterogeneity, including hemispheric asymmetry. However, the factors driving this asymmetry remain poorly understood. Here we explore whether tau asymmetry is linked to i) reduced inter-hemispheric brain connectivity (potentially restricting tau spread), or ii) asymmetry in amyloid-beta (Aβ) distribution (indicating greater hemisphere-specific vulnerability to AD pathology). We include 452 participants from the Swedish BioFINDER-2 cohort with evidence of both Aβ pathology (CSF Aβ42/40 or neocortical Aβ-PET) and tau pathology (temporal tau-PET), categorising them as left asymmetric (n = 102), symmetric (n = 306), or right asymmetric (n = 44) based on temporal lobe tau-PET uptake distribution. We assess edge-wise inter-hemispheric functional (RSfMRI; n = 318) and structural connectivity (dMRI; n = 352) but find no association between tau asymmetry and connectivity. In contrast, we observe a strong association between tau and Aβ laterality patterns based on PET uptake (n = 233; β = 0.632, p < 0.001), which we replicate in three independent cohorts (n = 234; β = 0.535, p < 0.001). In a longitudinal Aβ-positive sample, we show that baseline Aβ asymmetry predicts progression of tau laterality over time (n = 289; β = 0.025, p = 0.028). These findings suggest that tau asymmetry is not associated with a weaker inter-hemispheric connectivity but might reflect hemispheric differences in vulnerability to Aβ pathology, underscoring the role of regional vulnerability in determining the distribution of AD pathology.",
+          "published": "2025-09-05",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40913038/",
+          "source": "PubMed",
+          "relevance_score": 11.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Nature communications",
+          "volume": "16",
+          "issue": "1",
+          "pmid": "40913038",
+          "doi": "10.1038/s41467-025-63564-2",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "tau Proteins",
+            "Male",
+            "Amyloid beta-Peptides"
+          ]
+        },
+        {
+          "title": "Structural covariance analysis for neurodegenerative and neuroinflammatory brain disorders.",
+          "authors": "Neus Mongay-Ochoa, Gabriel Gonzalez-Escamilla, Vinzenz Fleischer...",
+          "abstract": "Structural MRI can robustly assess brain tissue alterations related to neurological diseases and ageing. Traditional morphological MRI metrics, such as cortical volume and thickness, only partially relate to functional impairment and disease trajectories at the individual level. Emerging research has increasingly focused on reconstructing interregional meso- and macro-structural relationships in the brain by analysing covarying morphometric patterns. These patterns suggest that structural variations in specific brain regions tend to covary with deviations in other regions across individuals, a phenomenon termed structural covariance. This concept reflects the idea that physiological and pathological processes follow an anatomically defined spreading pattern. Advanced computational strategies, particularly those within the graph-theoretical framework, yield quantifiable properties at both the whole-brain and regional levels, which correlate more closely with the clinical state or cognitive performance than classical atrophy patterns. This review highlights cutting-edge methods for evaluating morphometric covariance networks on an individual basis, with a focus on their utility in characterizing ageing, central nervous system inflammation and neurodegeneration. Specifically, these methods hold significant potential for quantifying structural alterations in patients with Alzheimer's disease, Parkinson's disease, frontotemporal dementia and multiple sclerosis. By capturing the distinctive morphometric organization of each individual's brain, structural covariance network analyses allow the tracking and prediction of pathology progression and clinical outcomes, information that can be integrated into clinical decision-making and used as variables in clinical trials. Furthermore, by investigating distinct and cross-diagnostic patterns of structural covariance, these approaches offer insights into shared mechanistic processes critical to understanding severe neurological disorders and their therapeutic implications. Such advancements pave the way for more precise diagnostic tools and targeted therapeutic strategies.",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40376847/",
+          "source": "PubMed",
+          "relevance_score": 8.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "148",
+          "issue": "9",
+          "pmid": "40376847",
+          "doi": "10.1093/brain/awaf151",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Magnetic Resonance Imaging",
+            "Neurodegenerative Diseases",
+            "Neuroinflammatory Diseases",
+            "Brain"
+          ]
+        },
+        {
+          "title": "Preclinical dementia rating scores are associated with plasma phosphorylated tau-217.",
+          "authors": "Qi Huang, Erin M Jonaitis, Rachel L Studer...",
+          "abstract": "Simple screening tools are critical for assessing Alzheimer's disease (AD)-related pre-dementia changes. This study investigated longitudinal scores from the Quick Dementia Rating System (QDRS), a brief study partner-reported measure, in relation to baseline levels of the AD biomarker plasma pTau217 in individuals unimpaired at baseline.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40927740/",
+          "source": "PubMed",
+          "relevance_score": 8.3,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Alzheimer's & dementia (Amsterdam, Netherlands)",
+          "volume": "17",
+          "issue": "3",
+          "pmid": "40927740",
+          "doi": "10.1002/dad2.70179",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Neuropathologic correlates of distinct plasma biomarker profiles in community-living older adults.",
+          "authors": "Lei Yu, Lianlian Du, Tianhao Wang...",
+          "abstract": "There has been a rapid growth in research on peripheral fluid biomarkers for Alzheimer's disease (AD) and AD-related dementias, because they are non-invasive, relatively inexpensive and easily accessible. The most commonly used plasma biomarkers include amyloid-β (Aβ), phosphorylated tau (p-tau), neurofilament light chain (NfL) and glial fibrillary acidic protein (GFAP). The extent to which distinct profiles of multiple plasma biomarkers correlate with common neuropathologies is unclear. Using clinicopathologic data from 405 community-dwelling older adults, we applied latent profile analysis to four plasma biomarkers, i.e. Aβ42/40 ratio, p-tau217, NfL and GFAP, and examined the correlates of the latent profiles with four degeneration measures: AD, Lewy bodies, limbic-predominant age-related TDP-43 encephalopathy (LATE) and hippocampal sclerosis; and five vascular measures: chronic macroscopic infarcts, microinfarcts, cerebral amyloid angiopathy, atherosclerosis and arteriosclerosis. On average, participants died at the age of 89, and blood samples for plasma biomarkers were measured 3.9 years before death. Over 75% were female, and 24% were non-Latino Black. We observed three distinct biomarker profiles. Profile 1, characterized by low p-tau217, low GFAP, low NfL and high Aβ42/40, represented most participants (55.6%), with better than average biomarker levels. Both Profile 2 and Profile 3 showed worse than average biomarker levels. Profile 2, representing 34.8% of the participants, was high in p-tau217 and GFAP. In contrast, Profile 3, representing 9.6% of the participants, was high in NfL and GFAP. Examination of neuropathologic correlates of these plasma biomarker profiles revealed that Profile 2 exemplifies older adults with a high burden of neurodegeneration; almost all participants (92.9%) in Profile 2 had a diagnosis of pathologic AD, and the group also had the highest percentage of participants with Lewy bodies (41.1%). In comparison, Profile 3 exemplifies older adults with more severe vascular conditions; participants in this group had the highest percentage of macroscopic infarcts (31.6%) and moderate or severe atherosclerosis (42.1%). Together, these findings suggest that common plasma biomarkers may exhibit profiles reflective of distinct pathophysiologic processes.",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40465828/",
+          "source": "PubMed",
+          "relevance_score": 7.9,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "148",
+          "issue": "9",
+          "pmid": "40465828",
+          "doi": "10.1093/brain/awaf211",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Female",
+            "Male",
+            "Biomarkers",
+            "Aged, 80 and over"
+          ]
+        },
+        {
+          "title": "TauGenNet: Plasma-Driven Tau PET Image Synthesis via Text-Guided 3D Diffusion Models",
+          "authors": "Yuxin Gong, Se-in Jang, Wei Shao...",
+          "abstract": "Accurate quantification of tau pathology via tau positron emission tomography (PET) scan is crucial for diagnosing and monitoring Alzheimer's disease (AD). However, the high cost and limited availability of tau PET restrict its widespread use. In contrast, structural magnetic resonance imaging (MRI) and plasma-based biomarkers provide non-invasive and widely available complementary information related to brain anatomy and disease progression. In this work, we propose a text-guided 3D diffusion model for 3D tau PET image synthesis, leveraging multimodal conditions from both structural MRI and plasma measurement. Specifically, the textual prompt is from the plasma p-tau217 measurement, which is a key indicator of AD progression, while MRI provides anatomical structure constraints. The proposed framework is trained and evaluated using clinical AV1451 tau PET data from the Alzheimer's Disease Neuroimaging Initiative (ADNI) database. Experimental results demonstrate that our approach can generate realistic, clinically meaningful 3D tau PET across a range of disease stages. The proposed framework can help perform tau PET data augmentation under different settings, provide a non-invasive, cost-effective alternative for visualizing tau pathology, and support the simulation of disease progression under varying plasma biomarker levels and cognitive conditions.",
+          "published": "2025-09-04",
+          "arxiv_url": "https://arxiv.org/abs/2509.04269v1",
+          "source": "Arxiv",
+          "relevance_score": 7.6,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "",
+          "volume": "",
+          "issue": "",
+          "pmid": "",
+          "doi": "",
+          "categories": [
+            "cs.CV"
+          ]
+        },
+        {
+          "title": "The Role of Blood-Based Biomarkers in Transforming Alzheimer's Disease Research and Clinical Management: A Review.",
+          "authors": "Vera Pacoova Dal Maschio, Fausto Roveta, Lucrezia Bonino...",
+          "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative condition representing the most common cause of dementia and currently affects millions of people worldwide. The clinical presentation includes memory impairment, cognitive decline, and neuropsychiatric symptoms, reflecting pathological hallmarks such as β-amyloid (Aβ) plaques, neurofibrillary tangles, synaptic dysfunction, and neuroinflammation. Despite being the gold standard for detecting amyloid and tau pathologies in vivo, cerebrospinal fluid (CSF) biomarkers and positron emission tomography (PET) imaging are not widely used in the clinical setting because of invasiveness, high costs, and restricted accessibility. Recent advances in blood-based biomarkers offer a promising and minimally invasive tool for early detection, diagnosis, and monitoring of AD. Ultra-sensitive analytical platforms, including single-molecule arrays (Simoa) and immunoprecipitation-mass spectrometry, now enable reliable quantification of plasma Aβ isoforms, phosphorylated tau variants (p-Tau181, p-Tau217, p-Tau231), neurofilament light chain (NfL) and glial fibrillary acidic protein (GFAP). In addition, blood biomarkers reflecting oxidative stress, neuroinflammation, synaptic disruption and metabolic dysfunction are under active investigation. This narrative review synthesizes current evidence on blood-based biomarkers in AD, emphasizing their biological relevance, diagnostic accuracy, and clinical applications. Finally, we highlight forthcoming challenges, such as standardization, and future directions, including the use of artificial intelligence in precision medicine.",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40943483/",
+          "source": "PubMed",
+          "relevance_score": 6.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "International journal of molecular sciences",
+          "volume": "26",
+          "issue": "17",
+          "pmid": "40943483",
+          "doi": "10.3390/ijms26178564",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Potential diagnostic markers in Alzheimer's disease: current perspectives and future directions.",
+          "authors": "Menghan Zheng, Simiao Wang, Jianping Jia",
+          "abstract": "Alzheimer's disease (AD), the most common form of dementia, remains a leading neurodegenerative disorder that necessitates the development of diagnostic markers. While current cerebrospinal fluid (CSF) and positron emission tomography (PET) biomarkers facilitate diagnostic accuracy, their invasive and pricey nature limits widespread application. Blood-based biomarkers, such as plasma Aβ42/40 and phosphorylated tau isoforms, are emerging as accessible alternatives. Biomarkers reflecting neurodegeneration (e.g. neurofilament light chain, brain-derived tau) and neuroinflammation (e.g. glial fibrillary acidic protein, TSPO-PET) provide additional insights into disease progression. Novel approaches - including exosomal and Aβ seeds biomarkers, omics techniques, and retinal imaging - further broaden the diagnostic landscape. Despite the promising perspectives, challenges remain in validity and utility. This review highlights recent advances of AD diagnostic markers, evaluates their clinical potential and limitations, and outlines future directions guided by the Geneva five-phase roadmap. The ultimate aim is to facilitate earlier detection and timely intervention of this burdensome disorder.",
+          "published": "2025-09-05",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40911035/",
+          "source": "PubMed",
+          "relevance_score": 6.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Neurodegenerative disease management",
+          "volume": "",
+          "issue": "",
+          "pmid": "40911035",
+          "doi": "10.1080/17582024.2025.2554515",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Predicting White Matter Hyperintensity: Leveraging Portable MRI for Accessible Brain Health Screening.",
+          "authors": "Ian P Johnson, Hailey Brigger, Joel Smith...",
+          "abstract": "Portable MRI (pMRI) has emerged as a cost-effective and accessible tool for the identification of white matter hyperintensities (WMH), an independent risk factor for stroke and dementia. Our objective was to confirm that pMRI can produce accurate WMH measurements and to develop and validate a risk model to predict WMH on pMRI for the purpose of identifying patients who may benefit from pMRI screening.",
+          "published": "2025-09-02",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40081846/",
+          "source": "PubMed",
+          "relevance_score": 6.699999999999999,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "46",
+          "issue": "9",
+          "pmid": "40081846",
+          "doi": "10.3174/ajnr.A8734",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Female",
+            "Male",
+            "Magnetic Resonance Imaging",
+            "White Matter"
+          ]
+        },
+        {
+          "title": "Arteriosclerosis in the heart-brain axis and Alzheimer's disease plasma markers in the Rotterdam Study.",
+          "authors": "Anna M Streiber, Julia Neitzel, Amber Yaqub...",
+          "abstract": "BackgroundArteriosclerosis in the heart-brain axis has emerged as an important area of study in Alzheimer's disease (AD) dementia research. While previous research primarily focused on structural brain changes, the relationship between arteriosclerosis and blood-based markers for AD dementia remains understudied.ObjectiveTo comprehensively assess arteriosclerosis in the heart-brain axis and investigate its link to AD dementia plasma markers.MethodsAnalyses are based on 2238 community-dwelling elderly from the population-based Rotterdam Study (52% female, mean age 69.5 ± 6.8 years) who underwent a non-contrast CT scan to quantify arteriosclerosis in the heart-brain axis. Coronary artery calcification, aortic arch calcification, extracranial carotid artery calcification, intracranial carotid artery calcification, and vertebrobasilar artery calcification were measured as proxies for arteriosclerosis. Participants had available total tau, neurofilament light chain (NfL), and amyloid-β (Aβ",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40899946/",
+          "source": "PubMed",
+          "relevance_score": 6.6,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40899946",
+          "doi": "10.1177/13872877251372641",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Temporal Modeling of Amyloid and Tau Trajectories in Alzheimer's Disease using PET and Plasma Biomarkers.",
+          "authors": "Christopher A Brown, Katheryn A Q Cousins, Magdalena Korecka...",
+          "abstract": "To compare PET and plasma-based temporal modeling of amyloid and tau biomarkers in Alzheimer's disease.",
+          "published": "2025-09-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40950425/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "medRxiv : the preprint server for health sciences",
+          "volume": "",
+          "issue": "",
+          "pmid": "40950425",
+          "doi": "10.1101/2025.09.04.25334935",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Quantitative susceptibility mapping reveals differences between subtypes of Lewy body dementia.",
+          "authors": "Rohan Bhome, George E C Thomas, Naomi Hannaway...",
+          "abstract": "Dementia with Lewy bodies (DLB) and Parkinson's disease dementia (PDD) are subtypes of Lewy body dementia, and are considered two ends of a disease spectrum. However, conventional MRI neuroimaging, mainly focussed on grey matter volume and thickness, has failed to establish whether underlying processes differ between them. Understanding these differences could enable targeted and subtype-specific treatments to be developed. We applied quantitative susceptibility mapping (QSM), an advanced neuroimaging technique sensitive to tissue iron, to examine differences in tissue composition between these Lewy body dementia subtypes. We performed both voxel-wise and region of interest analyses to compare QSM values in 66 people with Lewy body dementia (45 DLB; 21 PDD); 86 people with Parkinson's disease with normal cognition (PD-NC) and 37 healthy controls. We also assessed relationships between QSM values and measures of both cognitive performance and overall disease severity in people with Lewy body dementia. We found that people with Lewy body dementia had higher QSM values in widespread brain regions, compared with cognitively-normal people with PD; and that people with PDD had higher QSM values across many brain regions, compared with people with DLB. Further, we showed a positive relationship between QSM values and overall disease severity, measured using the Movement Disorders Society Unified Parkinson's disease Rating Scale in people with Lewy body dementia, in right thalamus, left pallidum, bilateral substantia nigra, bilateral middle frontal, temporal and lateral occipital lobes, right precentral and superior frontal cortices. In a region of interest analysis, we showed that people with PDD had higher QSM values than cognitively-normal people with PD and controls in the substantia nigra pars reticulata. Our findings indicate neurobiological differences between subtypes of Lewy body dementia, that can be detected by exploiting QSM's sensitivity to tissue composition. Based on this, DLB and PDD could be considered as distinct conditions in the clinic and in clinical trials, and may respond to different treatments. Our finding that QSM values relate to real world measures of overall disease severity in Lewy body dementia indicates its potential as an imaging biomarker for clinical trials of Lewy body dementia interventions.",
+          "published": "2025-09-04",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40904193/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40904193",
+          "doi": "10.1093/brain/awaf325",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Sleep, pericyte subtypes and cognitive decline in adults with and without Alzheimer's disease.",
+          "authors": "Mahnoor Hamid, Trishna Saha Detroja, Shreejoy J Tripathy...",
+          "abstract": "Sleep fragmentation is common in older adults and is associated with cognitive impairment and dementia, as well as key histopathological correlates of dementia, including small vessel disease and cerebral infarcts. Vascular and blood-brain barrier dysfunction are thought to contribute to cognitive decline and dementia. Pericytes, a key vascular cell type, may play a key role. In model organisms, sleep disruption is associated with pericyte dysfunction and blood-brain barrier breakdown. Recent advances in single-nucleus RNA sequencing (snRNAseq) technology have identified two transcriptionally distinct subtypes of pericytes: extracellular matrix protein-expressing M-pericytes and solute carrier-expressing T-pericytes. However, the relationship between sleep, pericyte biology and cognition in humans remains unclear. We tested the hypothesis that differences in the composition of brain pericyte subpopulations, as inferred from marker gene expression, may link sleep fragmentation and cognitive decline. We leveraged two published human brain snRNAseq datasets to identify specific marker genes for M- and T-type pericytes. We then used post-mortem bulk RNAseq data from the dorsolateral prefrontal cortex (n = 1092) and lateral orbitofrontal cortex (n = 495) to quantify expression of these marker genes in older adults in two longitudinal cohort studies: the Religious Orders Study and Rush Memory and Aging Project. We derived trajectories of global cognitive function from participants' ante-mortem annual cognitive assessments, while sleep fragmentation was derived from ante-mortem wrist-actigraphy recordings from a subset of 572 participants. We used multivariate linear regression to relate pericyte marker gene expression to sleep fragmentation and cognitive decline in the decade preceding death. In the dorsolateral prefrontal cortex, greater average sleep fragmentation was associated with greater expression of M-pericyte marker genes [estimate = +3.65 × 10-1, standard error (SE) = 1.61 × 10-1, P = 0.024] but not T-pericyte marker genes. Dorsolateral prefrontal cortex expression of M-pericyte (estimate = -8.30 × 10-3, SE = 3.37 × 10-3, P = 0.014) but not T-pericyte marker genes was associated with more rapid cognitive decline in the 10 years prior to death. In the lateral orbitofrontal cortex, greater sleep fragmentation was also associated with greater composite M-pericyte gene expression (estimate = + 4.48 × 10-1, SE = 1.92 × 10-1, P = 0.02), which in turn was associated with faster cognitive decline in the decade preceding death (estimate = -1.30 × 10-2, SE = 4.55 × 10-3, P = 0.0044). These findings identify a potential role of M-pericytes in linking sleep fragmentation and cognitive trajectories in older adults. Additionally, our findings highlight the importance of vascular mechanisms in linking disrupted sleep to dementia.",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40657931/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "148",
+          "issue": "9",
+          "pmid": "40657931",
+          "doi": "10.1093/brain/awaf161",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Pericytes",
+            "Male",
+            "Cognitive Dysfunction",
+            "Aged"
+          ]
+        },
+        {
+          "title": "Structural Compression and Entorhinal Vulnerability: Linking Tentorial Adjacency to Tau Burden and Dementia Progression.",
+          "authors": "Luyue Zhang, Ana M Franceschi, John F Crary...",
+          "abstract": "Alzheimer's disease (AD) is a growing public health crisis. The disease is defined neuropathologically by accumulation of amyloid-β plaques and neurofibrillary tangles (NFTs) composed of abnormal tau protein in the brain. Early neurofibrillary degeneration in the entorhinal cortex (EC) is a hallmark of AD and a critical initiating event in the hierarchical pathoanatomical progression. However, the factors triggering initial tau deposition in the EC remain unclear. We propose a novel biomechanical cascade hypothesis, positing that the unique anatomical inferomedial positioning of the EC, including proximity to the tentorial incisura (TI) and other skull base structures, renders it susceptible to very mild yet persistent age-related mechanical stress, analogous to the effects of repetitive mild traumatic brain injury, triggering tau pathology. To test this hypothesis, we developed a method to quantify Entorhinal-Tentorial (EC-TI) proximity and applied it to multimodal imaging data from the Alzheimer's Disease Neuroimaging Initiative (ADNI;",
+          "published": "2025-09-04",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40950115/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "bioRxiv : the preprint server for biology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40950115",
+          "doi": "10.1101/2025.09.02.670249",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Exploring LRP-1 in the liver-brain axis: implications for Alzheimer's disease.",
+          "authors": "Vivek Kumar Sharma",
+          "abstract": "Alzheimer's disease (AD) is the most common, complex, and untreatable form of dementia which is characterized by severe cognitive, motor, neuropsychiatric, and behavioural impairments. These symptoms severely reduce the quality of life for patients and impose a significant burden on caregivers. The existing therapies offer only symptomatic relief without addressing the underlying silent pathological progression. This therapeutic gap has catalysed interest in alternative pathological pathways, particularly the dysregulation of amyloid-beta (Aβ) homeostasis and associated metabolic dysfunctions. Traditionally viewed as a central nervous system (CNS) disorder, AD is now increasingly understood to involve peripheral organs, notably the liver, which plays a pivotal role in the regulation of systemic and cerebral homeostasis. Emerging evidence highlights the liver's involvement in the clearance of Aβ, as well as in the modulation of oxidative stress, brain energy metabolism, insulin resistance, microtubule dynamics, and neuroinflammation, the key features of AD pathogenesis. Among the hepatic factors implicated, low-density lipoprotein receptor-related protein-1 (LRP-1) is of particular interest. LRP-1 facilitates peripheral Aβ clearance and is also expressed abundantly in key brain regions such as the entorhinal cortex, hippocampus, and cerebellum. Beyond neurons, LRP-1 is localized in activated astrocytes, microglia, and various elements of the neurovascular unit, including brain endothelial cells, vascular smooth muscle cells, pericytes, and the choroid plexus-highlighting its critical role at the blood-brain barrier (BBB). Activation of hepatic LRP-1 has been shown to attenuate key neuropathological processes in AD, including oxidative stress, insulin resistance, tau pathology, neuroinflammation, and apoptosis. These effects not only improve short-term neuronal resilience but also contribute to long-term neuroprotection. Taken together, these findings underscore the significance of the liver-brain axis, positioning hepatic LRP-1 as a central mediator of AD pathology. This review aims to explore the multifaceted role of hepatic LRP-1 in AD progression and proposes it as a novel therapeutic strategy to combat AD.",
+          "published": "2025-09-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40924220/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Molecular biology reports",
+          "volume": "52",
+          "issue": "1",
+          "pmid": "40924220",
+          "doi": "10.1007/s11033-025-10980-8",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Low Density Lipoprotein Receptor-Related Protein-1",
+            "Brain",
+            "Liver"
+          ]
+        },
+        {
+          "title": "Prediction of cognitive decline and Alzheimer's disease conversion by a plasma biomarker panel in non-demented individuals.",
+          "authors": "Min-Koo Park, Jinhyun Ahn, Jin-Muk Lim...",
+          "abstract": "Alzheimer's disease (AD) represents a growing global health burden, underscoring the urgent need for reliable diagnostic and prognostic biomarkers. Although several disease-modifying treatments have recently become available, their effects remain limited, as they primarily delay rather than halt disease progression. Thus, the early and accurate identification of individuals at elevated risk for conversion to AD dementia is crucial to maximize the effectiveness of these therapies and to facilitate timely intervention strategies. Baseline plasma concentrations of amyloid beta 40 (Aβ40), amyloid beta 42 (Aβ42), glial fibrillary acidic protein (GFAP), neurofilament light chain (NFL), and tau phosphorylated at residue 181 and 217 (pTau181, pTau217) were quantified in 233 non-demented participants from the Alzheimer's Disease Neuroimaging Initiative (ADNI) and followed for up to 11 years. Covariates included demographic variables and neuropsychological measures. Longitudinal cognitive trajectories were modelled with linear mixed-effects models (LMM), and the risk of progression to AD dementia was evaluated with logistic regression and Cox proportional-hazards analyses. Longitudinally, higher baseline plasma levels of GFAP, NFL, pTau181, and pTau217 independently predicted steeper cognitive decline. Cross-sectional analyses demonstrated significant associations of pTau217, pTau181, and Aβ42 with baseline memory impairment. A logistic regression model incorporating five plasma biomarkers-Aβ42, GFAP, NFL, pTau181, and pTau217-demonstrated robust predictive accuracy for discrimination of future converters to AD dementia. The addition of demographic variables and a baseline memory score further improved model specificity and positive predictive value. These findings support the utility of a concise plasma biomarker panel comprising Aβ42, GFAP, NFL, pTau181, and pTau217 for predicting both longitudinal cognitive deterioration and conversion to AD dementia. This less-invasive blood-based panel could serve as a practical triage tool to enrich clinical trials and facilitate timely therapeutic interventions with emerging disease-modifying treatments.",
+          "published": "2025-09-06",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40914747/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "GeroScience",
+          "volume": "",
+          "issue": "",
+          "pmid": "40914747",
+          "doi": "10.1007/s11357-025-01869-2",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "LRP1 at the crossroads of Parkinson's and Alzheimer's: Divergent roles in α-synuclein and amyloid pathology.",
+          "authors": "Sultan M Alshahrani, Hayder M Al-Kuraishy, Ali I Al-Gareeb...",
+          "abstract": "Parkinson's disease (PD) is the second most common neurodegenerative disease that represents the commonest movement disorder in the elderly population. PD neuropathology is due to the progressive deposition of mutant alpha synuclein (α-Syn) in the dopaminergic neurons (DNs) of the substantia nigra pars compacta (SNpc). Additionally, amyloid protein (Aβ) and tau protein, which are the hallmarks of Alzheimer's disease (AD), are also involved in PD and the development of PD-related dementia. Notably, α-Syn, Aβ, tau protein, and neuronal cholesterol metabolism are regulated by a transmembrane protein, low-density lipoprotein receptor-related protein 1 (LRP1), which is highly expressed in the SNpc and mediates the transmission and seeding of α-Syn in the brain. It has been reported that deletion of the LRP1 gene protects against the development and progression of PD. However, LRP1 has a neuroprotective effect against AD neuropathology by improving Aβ clearance across the blood-brain barrier (BBB) and enhancing tau protein proteolysis. Nevertheless, the exact role of LRP1 in PD neuropathology, mostly about α-Syn, is not completely explained. Therefore, this review aims to discuss and explain the role of LRP1 in PD and how targeting neuronal LRP1 may be helpful in the management of PD. In this review, online databases were involved by searching Scopus, Web of Science, and other search engine to detect the relationship between the expression of LRP1 and the pathogenesis of PD.",
+          "published": "2025-09-05",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40484331/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "European journal of pharmacology",
+          "volume": "1002",
+          "issue": "",
+          "pmid": "40484331",
+          "doi": "10.1016/j.ejphar.2025.177830",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Low Density Lipoprotein Receptor-Related Protein-1",
+            "Parkinson Disease",
+            "alpha-Synuclein"
+          ]
+        },
+        {
+          "title": "Optineurin deficiency disrupts phosphorylated tau proteostasis and clusterin expression in human neurons.",
+          "authors": "Zachary M Augur, Garrett M Fogo, Mason R Arbery...",
+          "abstract": "Optineurin (OPTN) is an autophagy adaptor protein involved in selective autophagy, including aggrephagy and mitophagy. Pathogenic mutations in OPTN have also been linked to amyotrophic lateral sclerosis, frontotemporal dementia, and glaucoma, supporting its role in the etiology of neurodegenerative diseases. Despite its established biological roles, knowledge about its potential contribution to Alzheimer's disease (AD) pathology and neuronal functioning is lacking. AD is characterized by the accumulation of extracellular amyloid-β plaques and intracellular phosphorylated tau (pTau) tangles, with dysfunction in the autophagy-lysosomal pathway exacerbating tau pathology and impairing proteostasis. To investigate the role of OPTN in neuronal proteostasis and AD, we utilized induced pluripotent stem cell-derived neuron (iN) and astrocyte (iA) models. Analyses revealed a significant negative correlation between OPTN and specific pTau epitopes in neurons, as well as a decrease in OPTN protein abundance in brain tissues of individuals with AD. Given these findings, we generated OPTN knockout (KO), heterozygous, and wildtype iNs and iAs using CRISPR/Cas9 editing of iPSCs in two genetic backgrounds. Loss of OPTN in iNs increased specific pTau proteoforms without substantially affecting autophagy processes or mitochondrial respiration. Despite no clear effect on mitochondrial function, several mitochondrial proteins, including OXCT1, were enriched in an unbiased analysis of the OPTN interactome in iNs, as well as proteins involved in intracellular trafficking. Proteomic analyses further identified intracellular clusterin, an AD risk gene, as significantly upregulated in OPTN KO iNs, suggesting OPTN may influence its intracellular processing. Our model system demonstrates modest roles for OPTN in certain neuronal biological processes and potential implications for AD pathogenesis. These findings also suggest that OPTN may exhibit functional redundancy with other autophagy adaptor proteins in human neurons, leading to relatively mild phenotypic changes with complete loss of OPTN.",
+          "published": "2025-09-02",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40898372/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Acta neuropathologica communications",
+          "volume": "13",
+          "issue": "1",
+          "pmid": "40898372",
+          "doi": "10.1186/s40478-025-02103-y",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Neurons",
+            "Membrane Transport Proteins",
+            "Cell Cycle Proteins",
+            "tau Proteins"
+          ]
+        },
+        {
+          "title": "Diagnostic performance of Alzheimer's disease blood and CSF biomarkers in a Brazilian cohort with low educational attainment.",
+          "authors": "Wyllians Vendramini Borelli, Pamela C L Ferreira, Wagner S Brum...",
+          "abstract": "Blood-based biomarkers (BBMs) have emerged as promising tools to enhance Alzheimer's disease (AD) diagnosis. Despite two-thirds of dementia cases occurring in the Global South, research on BBMs has predominantly focused on populations from the Global North. This geographical disparity hinders our understanding of BBM performance in diverse populations. To address this, we evaluated the diagnostic properties of AD BBMs in a real-world memory clinic from Brazil, one of the largest countries in the Global South. We measured blood and cerebrospinal fluid (CSF) biomarkers - amyloid-β (Aβ)40, Aβ42, phosphorylated tau (p-tau) 217, neurofilament light (NfL) chain, and glial fibrillary acidic protein (GFAP) - in 59 individuals. Sample comprised 20 cognitively unimpaired (CU) individuals, 22 with AD dementia, and 17 with vascular dementia (VaD). We compared BBM levels across diagnostic groups and assessed their discriminative ability for AD. Notably, individuals with VaD and AD had lower educational levels (6.8 ± 3.0) compared to CU individuals (17.3 ± 6.9). Among the BBMs tested, plasma p-tau217 demonstrated the best performance, exhibiting high accuracy in differentiating CU from AD (AUC 0.96) and Aβ pathology (AUC 0.98). However, the ability of AD BBMs to distinguish between AD and VaD was lower than expected (AUC from 0.52-0.79), particularly when compared to studies from the Global North. Our findings highlight the potential utility of BBMs for AD diagnosis in real-world settings within Brazil. However, they also underscore the need for proper implementation and validation of these biomarkers within these populations to ensure accurate and reliable results.",
+          "published": "2025-09-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40921793/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Molecular psychiatry",
+          "volume": "",
+          "issue": "",
+          "pmid": "40921793",
+          "doi": "10.1038/s41380-025-03192-w",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "A steep decline in diastolic blood pressure over early to mid-life is associated with tau-PET burden in dementia-free adults.",
+          "authors": "Martin Mulligan, Alexa S Beiser, Adrienne O'Donnell...",
+          "abstract": "BackgroundThe relationship between blood pressure (BP) trajectories across early (∼40 years) into mid-life (∼55 years) and preclinical dementia has not previously been well studied using positron emission tomography (PET) imaging outcomes.ObjectiveTo examine the association between BP trajectories across early mid-life into mid mid-life and amyloid- and tau-PET burden in adults without clinical dementia.MethodsThis prospective cohort study included dementia-free Framingham Heart Study 3",
+          "published": "2025-09-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40899927/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40899927",
+          "doi": "10.1177/13872877251372561",
+          "categories": [
+            "PubMed"
+          ]
+        }
+      ],
+      "paper_count": 20
+    },
+    "week_3": {
+      "week_info": {
+        "week_number": 3,
+        "start_date": "2025-08-26 00:00:00",
+        "end_date": "2025-09-01 00:00:00",
+        "week_label": "Week 3 (2025-08-26 to 2025-09-01)"
+      },
+      "papers": [
+        {
+          "title": "Boston University Alzheimer's Disease Research Center Clinical Core: Infrastructure to facilitate research on post-traumatic Alzheimer's disease and related dementias.",
+          "authors": "Michael L Alosco, Madeline Morrison, Rhoda Au...",
+          "abstract": "We describe the rationale, methodology, and design of the Boston University Alzheimer's Disease Research Center (BU ADRC) Clinical Core (CC). The CC characterizes a longitudinal cohort of participants with/without brain trauma to characterize the clinical presentation, biomarker profiles, and risk factors of post-traumatic Alzheimer's disease (AD) and AD-related dementias (ADRD), including chronic traumatic encephalopathy (CTE). Participants complete assessments of traumatic brain injury (TBI) and repetitive head impacts (RHIs); annual Uniform Data Set (UDS) and supplementary evaluations; digital phenotyping; annual blood draw; magnetic resonance imaging (MRI) and lumbar puncture every 3 years; electroencephalogram (EEG); and amyloid and/or tau positron emission tomography (PET) on a subset. As of 3/2025, the CC consists of 467 participants (mean age: 65.6, 50.1% female), including 163 RHI and 302 TBI who completed a UDS 3.0 baseline visit. Common sources of RHI included football (n = 95), soccer (n = 26), ice hockey (n = 17), and military service (n = 46). Most TBIs were mild (97.7%). Eighty-nine percent agreed to brain donation. The BU ADRC CC will facilitate research, education, and training on post-traumatic AD/ADRD. HIGHLIGHTS: The Boston University Alzheimer's Disease Research Center (ADRC) Clinical Core facilitates unique research, education, and training on Alzheimer's disease and Alzheimer's disease-related dementias (AD/ADRD) with a focus on post-traumatic AD/ADRD, including chronic traumatic encephalopathy (CTE). We summarize the rationale, mission, study design, and recent updates for the Clinical Core. As of March 2025, the Clinical Core includes a longitudinal cohort of 467 participants enriched for repetitive head impacts (∼1/3) and traumatic brain injury (∼1/3) exposure who span the cognitive continuum, with most having available fluid and neuroimaging biomarker data and agreeing to brain donation (89%).",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40923312/",
+          "source": "PubMed",
+          "relevance_score": 12.3,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40923312",
+          "doi": "10.1002/alz.70654",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Female",
+            "Male",
+            "Brain Injuries, Traumatic"
+          ]
+        },
+        {
+          "title": "Recent advances in neuroimaging of Alzheimer's disease and related dementias.",
+          "authors": "Julie Ottoy, Nicole Owsicki, Murat Bilgel...",
+          "abstract": "This review covers recent advances (2023-2024) in neuroimaging research into the pathophysiology, progression, and treatment of Alzheimer's disease (AD) and related dementias (ADRD). Despite the rapid emergence of blood-based biomarkers, neuroimaging continues to be a vital area of research in ADRD. Here, we discuss neuroimaging as a powerful tool to topographically visualize and quantify amyloid, tau, neurodegeneration, inflammation, and vascular disease in the brain. We examine the utility of neuroimaging for (1) tracking the spatiotemporal progression of pathology, (2) serving as the reference standard for validating novel fluid biomarkers, (3) characterizing disease heterogeneity, (4) exploring the role of brain networks in ADRD progression, and (5) evaluating biomarkers for better individualized estimates of treatment benefit. Finally, we discuss advances in radiotracer development and AD risk factors. By reviewing the most promising breakthroughs in the neuroimaging field, we hope to spark new ideas for future discoveries that will deepen our understanding of ADRD. HIGHLIGHTS: The diagnostic and staging criteria for Alzheimer's disease (AD) were updated in 2024. Despite robust harmonization methods for amyloid beta positron emission tomography (PET), parallel efforts for tau PET remain challenging. Larger anti-amyloid drug effects were seen at lower levels of amyloid and tau PET. Phosphorylated tau217 (p-tau217) is currently the most promising plasma biomarker to detect AD pathology. There are new tracer developments for alpha-synuclein, primary tauopathies, and inflammation.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40922096/",
+          "source": "PubMed",
+          "relevance_score": 11.8,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40922096",
+          "doi": "10.1002/alz.70648",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Neuroimaging",
+            "Biomarkers",
+            "Brain"
+          ]
+        },
+        {
+          "title": "Traumatic brain injury, changes in plasma amyloid, tau, and neurodegenerative biomarkers, and dementia risk.",
+          "authors": "Alexa E Walter, James R Pike, Josef Coresh...",
+          "abstract": "Long-term trajectories of plasma biomarkers in relation to incident traumatic brain injury (TBI) and whether TBI modifies associations of biomarkers with dementia risk are unknown.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40951938/",
+          "source": "PubMed",
+          "relevance_score": 11.1,
+          "matched_keywords": [
+            "dementia",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40951938",
+          "doi": "10.1002/alz.70611",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Retinal biomarkers in cognitive impairment and dementia: Structural, functional, and molecular insights.",
+          "authors": "Yan Min, Hongyu Zhou, Zixiao Li...",
+          "abstract": "Cognitive impairment and dementia, including Alzheimer's disease (AD), pose a global health crisis, necessitating non-invasive biomarkers for early detection. This review highlights the retina, an accessible extension of the central nervous system (CNS), as a window to cerebral pathology through structural, functional, and molecular alterations. By synthesizing interdisciplinary evidence, we identify retinal biomarkers as promising tools for early diagnosis and risk stratification. Nevertheless, translating biomarkers into clinical practice faces significant translational hurdles, including methodological heterogeneity, confounding variables, lack of standardized protocols, and insufficient longitudinal validation in diverse populations. Overcoming these challenges through rigorous standardization and robust validation studies is essential to establish the clinical utility of retinal biomarkers. HIGHLIGHTS: Stage-specific diagnostic potential: Retinal biomarkers (e.g., OCT/OCTA changes, eye movements, molecular deposits) show alterations correlating with cognitive impairment stages (preclinical AD to dementia), assisting stage differentiation. Reflecting cerebral pathology: Multimodal retinal alterations (structural, functional, molecular) correlate with key brain pathologies (amyloid/tau burden, atrophy, small vessel disease), indicating shared pathways. Translation gaps and future: Clinical adoption faces barriers (method heterogeneity, confounders, limited validation). Future requires rigorous screening of candidate retinal biomarkers, extensive multicenter validation, and artificial intelligence (AI)-facilitated clinical translation.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40927874/",
+          "source": "PubMed",
+          "relevance_score": 10.3,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40927874",
+          "doi": "10.1002/alz.70672",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Biomarkers",
+            "Cognitive Dysfunction",
+            "Retina",
+            "Dementia"
+          ]
+        },
+        {
+          "title": "Susceptibility MRI Helps Predict Mild Cognitive Impairment Onset and Cognitive Decline in Cognitively Unimpaired Older Adults.",
+          "authors": "Lin Chen, Anja Soldan, Andreia Faria...",
+          "abstract": "Background Elevated brain iron is a potential marker for neurodegeneration, but its role in predicting onset of mild cognitive impairment (MCI) and prospective cognitive trajectories remains unclear. Purpose To investigate how brain iron and amyloid-β (Aβ) levels, measured using quantitative susceptibility mapping (QSM) MRI and PET, help predict MCI onset and cognitive decline. Materials and Methods In this prospective study conducted between January 2015 and November 2022, cognitively unimpaired older adults underwent baseline QSM MRI. Among the majority with baseline PET data (PET subgroup), cortical Aβ burden was measured. Cox regression and linear mixed-effects models were used to examine associations between baseline tissue susceptibility and time to MCI onset and changes in cognitive scores over time. Results A total of 158 cognitively unimpaired older adults (mean age, 69.5 years ± 8.1 [SD]; 99 women), including 110 individuals (mean age, 68.5 years ± 8.5; 69 women) with data from a PET examination, were evaluated at baseline and followed for up to 7.7 years. Higher baseline susceptibility in the entorhinal cortex and putamen was associated with an increased risk for MCI onset in the overall group and in the PET subgroup (entorhinal cortex, overall group vs PET subgroup: hazard ratio, 2.00 [95% CI: 1.23, 3.23;",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40923890/",
+          "source": "PubMed",
+          "relevance_score": 8.9,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Radiology",
+          "volume": "316",
+          "issue": "3",
+          "pmid": "40923890",
+          "doi": "10.1148/radiol.250513",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Cognitive Dysfunction",
+            "Aged",
+            "Female",
+            "Male"
+          ]
+        },
+        {
+          "title": "Association of plasma Alzheimer's disease biomarkers with cognitive decline in cognitively unimpaired individuals.",
+          "authors": "Petrice M Cogswell, Heather J Wiste, Terry M Therneau...",
+          "abstract": "Plasma biomarkers' utility for predicting incident mild cognitive impairment (MCI) remains unclear. We evaluated associations of plasma Alzheimer's disease (AD) biomarkers and amyloid positron emission tomography (PET) with transitions from cognitively unimpaired (CU) to MCI in the Mayo Clinic Study of Aging (MCSA) and BioFINDER-2 studies.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40883967/",
+          "source": "PubMed",
+          "relevance_score": 8.600000000000001,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "plasma"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40883967",
+          "doi": "10.1002/alz.70625",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Cognitive Dysfunction",
+            "Biomarkers",
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "title": "Advances in PET imaging of protein aggregates associated with neurodegenerative disease.",
+          "authors": "Makoto Higuchi, Kenji Tagai, Keisuke Takahata...",
+          "abstract": "Neurodegenerative diseases such as Alzheimer disease (AD), Parkinson disease, frontotemporal lobar degeneration and multiple system atrophy (MSA) are characterized pathologically by deposition of specific proteins in the brain. Five major neurodegenerative disease-associated proteins - amyloid-β (Aβ), tau, α-synuclein, TAR DNA-binding protein 43 (TDP43) and fused in sarcoma (FUS) - are commonly encountered, and the disease specificity and neurotoxicity of the fibrillar protein assemblies are determined by factors such as the protein type, fibril structure, degree of multimerization and post-translational modifications. This article reviews the latest advances in PET technologies aimed at visualizing neurodegenerative proteinopathies, and highlights the importance of these technologies for emerging diagnostic and therapeutic approaches. PET allows Aβ deposition to be visualized throughout the natural history of AD and following anti-Aβ immunotherapies. However, whether this technology can visualize specific Aβ assembly subspecies primarily targeted by the treatment remains inconclusive. Various PET radiotracers can capture AD-type tau deposits, although only a few are known to react with non-AD tau pathologies, and cryo-electron microscopy has revealed the mode of binding of these compounds to different tau protofibrils. High-contrast PET imaging of α-synuclein lesions in MSA is a recent development in the field, and gradual progress is being made towards visualization of other, less abundant α-synuclein pathologies. Imaging of TDP43 and FUS deposits presents particular challenges, which might be overcome by establishing public-private partnerships focused on biomarker development.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40790282/",
+          "source": "PubMed",
+          "relevance_score": 8.4,
+          "matched_keywords": [
+            "PET",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Nature reviews. Neurology",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40790282",
+          "doi": "10.1038/s41582-025-01126-2",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Neurodegenerative Diseases",
+            "Positron-Emission Tomography",
+            "Protein Aggregates",
+            "tau Proteins"
+          ]
+        },
+        {
+          "title": "Visual Cognitive Assessment Test correlates with brain amyloid status in Alzheimer's disease-related mild cognitive impairment.",
+          "authors": "Feng-Juan Su, Yu-Cheng Li, Xin-Chong Shi...",
+          "abstract": "BackgroundAssessing amyloid-β (Aβ) deposition in individuals with mild cognitive impairment (MCI) is critical for early Alzheimer's disease (AD) intervention. The Visual Cognitive Assessment Test (VCAT), a language-neutral visual-based tool, effectively identifies MCI, but its correlation with Aβ pathology remains unverified.ObjectiveThis study aimed to evaluate the ability of VCAT to distinguish between amyloid-positive (Aβ+) and amyloid-negative (Aβ-) people with different cognitive status and compare its performance with the Montreal Cognitive Assessment (MoCA).MethodsIn this cross-sectional analysis conducted at the First Affiliated Hospital of Sun Yat-sen University, 139 cognitively normal (CN) individuals and 231 patients with MCI were enrolled. Participants underwent baseline data registration, VCAT, Montreal Cognitive Assessment (MoCA), Mini-Mental State Examination, Clinical Dementia Rating, amyloid PET assessments, and MRI scans. The main outcome measures considered the ability of the VCAT to distinguish between amyloid-positive and amyloid-negative MCI patients, as indicated by the area under the curve (AUC) values",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40888485/",
+          "source": "PubMed",
+          "relevance_score": 7.6,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40888485",
+          "doi": "10.1177/13872877251371718",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "A Case of Late-Onset Semantic Dementia With Right-Predominant Temporal Lobe Atrophy due to Primary Tauopathy.",
+          "authors": "Yuta Sudo, Masashi Tamura, Kenjiro Nakayama...",
+          "abstract": "Semantic dementia (SD) is a type of dementia characterized by a loss of semantic memory, typically presenting with left-predominant temporal lobe atrophy and a frontotemporal lobar degeneration with TDP-43 (FTLD-TDP) type C pathology. However, atypical variants, such as those with a late-onset or right-predominant atrophy, exhibit considerable pathological diversity. We report an 81-year-old woman with atypical SD who presented with impaired naming, mild word comprehension deficits, and prosopagnosia. Brain MRI revealed right-predominant atrophy in the amygdala, hippocampus, and anterior temporal lobes. Cerebrospinal fluid analysis showed a normal Aβ level, suggesting a non-Alzheimer's disease pathology. Tau PET imaging demonstrated a high signal in the right anterior temporal lobe, consistent with primary tauopathy. The patient's clinical presentation and imaging findings, particularly the atrophy in the amygdala and hippocampus, as well as the preserved communication ability, raised the possibility of argyrophilic grain disease (AGD) as the underlying pathology. This case highlights the importance of molecular imaging in diagnosing atypical SD. It suggests that AGD should be considered a possible underlying pathology for atypical SD cases, particularly those with late onset and right-sided predominance. A longer follow-up and eventual autopsy would be necessary to confirm the pathological diagnosis.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40946722/",
+          "source": "PubMed",
+          "relevance_score": 7.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "dementia",
+            "tau",
+            "brain"
+          ],
+          "journal": "Psychogeriatrics : the official journal of the Japanese Psychogeriatric Society",
+          "volume": "25",
+          "issue": "5",
+          "pmid": "40946722",
+          "doi": "10.1111/psyg.70094",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "A Safe MRI- and PET-guided Method for Increasing Osmotic Blood-Brain Barrier Permeability.",
+          "authors": "Guanda Qiao, Chengyan Chu, David Gulisashvili...",
+          "abstract": "Background Given the current lack of widely adopted strategies for facilitating drug penetration into the brain, developing new techniques to increase blood-brain barrier (BBB) permeability is essential to address the increasing burden of central nervous system disorders. Osmotic blood-brain barrier opening (OBBBO), achieved through intra-arterial delivery of 25% mannitol to the cerebral vasculature, is a pioneering strategy demonstrating both safety and partial efficacy. Purpose To investigate the potential of 25% mannitol with 4% NaCl, a combination that doubles the osmotic power, to safely increase OBBBO efficacy. Materials and Methods To visualize penetration into the brain, OBBBO with intra-arterial, intravenous, or intraperitoneal infusion of molecules was performed in mice (",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40891972/",
+          "source": "PubMed",
+          "relevance_score": 7.3999999999999995,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Radiology",
+          "volume": "316",
+          "issue": "3",
+          "pmid": "40891972",
+          "doi": "10.1148/radiol.243396",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Blood-Brain Barrier",
+            "Mannitol",
+            "Mice",
+            "Magnetic Resonance Imaging"
+          ]
+        },
+        {
+          "title": "Higher plasma soluble TREM2 correlates with reduced cerebral tau accumulation in Alzheimer's disease.",
+          "authors": "Guoyu Lan, Anqi Li, Fernando Gonzalez-Ortiz...",
+          "abstract": "Loss-of-function mutation of triggering receptor expressed on myeloid cell 2 (TREM2) is associated with increased risks for Alzheimer's disease (AD). Recent animal studies reveal that the activation of peripheral TREM2 signaling may affect cerebral β-amyloid (Aβ) and tau aggregates. However, the underlying relationship between peripheral TREM2 and brain AD pathology has not yet been well-elucidated in the aging population. In this study, we collected 318 Chinese older adults with Aβ PET and plasma biomarker measures, including soluble TREM2 (sTREM2) and glial fibrillary acidic protein (GFAP), a proxy for astrocyte reactivity. Additionally, 129 participants underwent tau PET scans. We explored the association between plasma sTREM2, GFAP, and primary AD pathology. Plasma sTREM2 was negatively associated with reduced temporal tau PET burden in participants with abnormal Aβ and tau pathology. Higher plasma sTREM2 was related to the weaker association of Aβ pathology and plasma phosphorylated tau with tau PET increases. In contrast, elevated plasma GFAP was related to greater Aβ and tau PET burden along with stronger Aβ-related tau accumulation. Finally, higher plasma sTREM2 was linked to attenuated strength of the association between plasma GFAP and tau PET increases at both pre-defined regions of interest and voxel levels. Altogether, our findings suggest distinct relationships between plasma sTREM2 and GFAP with cerebral tau pathology, providing novel insights into the roles of peripheral TREM2 signaling and astrocytic reactivity in AD neuropathological development. This study has important implications, such as targeting the peripheral TREM2 signature, which may be a potential strategy for future AD therapies.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40169800/",
+          "source": "PubMed",
+          "relevance_score": 7.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Molecular psychiatry",
+          "volume": "30",
+          "issue": "9",
+          "pmid": "40169800",
+          "doi": "10.1038/s41380-025-02976-4",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Receptors, Immunologic",
+            "Alzheimer Disease",
+            "Membrane Glycoproteins",
+            "Male"
+          ]
+        },
+        {
+          "title": "A modelling approach to derive population-specific cutoff for plasma p-Tau217.",
+          "authors": "Tau Ming Liew",
+          "abstract": "Plasma pTau-217 shows promise for detecting Alzheimer's disease, but needs population-specific cutoffs for effective use. Conventional cutoff determination relies on invasive or costly gold-standards, limiting scalability. This study evaluated Finite Mixture Modelling (FMM) for establishing cutoffs without gold-standards. FMM was applied to derive cutoffs for Lumipulse plasma p-Tau217 and p-Tau217/Aβ42 ratio among 1039 ADNI participants, with validation conducted in a subset with amyloid PET data (n = 711). Additionally, simulations were conducted to determine the minimum sample size for reliable FMM estimation. The results showed that FMM-derived cutoffs effectively classified participants into brain amyloid-negative, -positive, and -indeterminate groups, with an indeterminate proportion <20 %, negative and positive predictive values near or above 90 %, and with p-Tau217/Aβ42 outperforming p-Tau217. These FMM-derived cutoffs demonstrated test performance that surpassed several previously-established cutoffs, including the recent FDA-approved cutoff. At least 900 samples were needed for reliable cutoff estimation. In conclusion, this study demonstrated the effectiveness of a modelling approach for estimating plasma p-Tau217 cutoffs without reliance on gold-standards. This approach simplifies the determinating of population-specific cutoffs and facilitates adoption of plasma p-Tau217 in communities lacking access to gold-standards, including some LMICs.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40610281/",
+          "source": "PubMed",
+          "relevance_score": 6.9,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "The journal of prevention of Alzheimer's disease",
+          "volume": "12",
+          "issue": "8",
+          "pmid": "40610281",
+          "doi": "10.1016/j.tjpad.2025.100264",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "tau Proteins",
+            "Alzheimer Disease",
+            "Amyloid beta-Peptides",
+            "Male"
+          ]
+        },
+        {
+          "title": "Birth weight, incident dementia risk, and PET amyloid burden: The ARIC study.",
+          "authors": "Olivia M Emanuel, Mark Lee, Pamela L Lutsey...",
+          "abstract": "The relationships among birth weight (BW), incident dementia, and amyloid beta (Aβ) are unknown.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40891256/",
+          "source": "PubMed",
+          "relevance_score": 6.8999999999999995,
+          "matched_keywords": [
+            "PET",
+            "dementia",
+            "amyloid"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40891256",
+          "doi": "10.1002/alz.70609",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Female",
+            "Male",
+            "Dementia",
+            "Positron-Emission Tomography"
+          ]
+        },
+        {
+          "title": "CRISPR/Cas9-Engineered Triple-Fusion Reporter Gene Imaging System for Monitoring Transplanted Neural Progenitor Cells in Ischemic Stroke.",
+          "authors": "Xiaoyi Li, Yan Zhong, Chentao Jin...",
+          "abstract": "Background Neural progenitor cell therapy holds great potential for repairing brain damage induced by ischemic stroke, and molecular imaging plays a crucial role in evaluating the therapeutic efficacy of neural progenitor cell transplantation. However, the presence of the blood-brain barrier significantly limits the effectiveness of such imaging methods. Purpose To enable long-term monitoring of transplanted human neural progenitor cells (hNPCs) in a rat model of ischemic stroke by combining a clustered regularly interspaced short palindromic repeats/CRISPR-associated nuclease 9 (CRISPR/Cas9)-engineered triple-fusion (TF) reporter gene system with a noninvasive adenosine agonistic micelle (AM)-based probe delivery strategy. Materials and Methods Between January 2021 and May 2025, 60 male rats that were 2 months old were included. Thirty-seven rats with stroke were administered either TF human NPCs (hNPCs) or vehicle (culture media) and underwent MRI, bioluminescence imaging, PET/CT, and neurologic assessments at weeks 1, 2, 4, and 8 after transplantation. Comparisons between groups were determined by",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40891977/",
+          "source": "PubMed",
+          "relevance_score": 6.8,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Radiology",
+          "volume": "316",
+          "issue": "3",
+          "pmid": "40891977",
+          "doi": "10.1148/radiol.250305",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Neural Stem Cells",
+            "Rats",
+            "Male",
+            "Ischemic Stroke"
+          ]
+        },
+        {
+          "title": "Evaluation of amyloid PET positivity using machine learning on",
+          "authors": "Takahiro Yamada, Yuichi Kimura, Shogo Watanabe...",
+          "abstract": "Since the approval of disease-modifying drugs for Alzheimer's disease, the demand for amyloid positron emission tomography (PET) scans, which are crucial for determining treatment eligibility, is expected to increase significantly. We thus investigated the ability of an algorithm to predict amyloid accumulation from",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40314876/",
+          "source": "PubMed",
+          "relevance_score": 6.699999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid"
+          ],
+          "journal": "Japanese journal of radiology",
+          "volume": "43",
+          "issue": "9",
+          "pmid": "40314876",
+          "doi": "10.1007/s11604-025-01789-3",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Fluorodeoxyglucose F18",
+            "Positron-Emission Tomography",
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "title": "BrainAGE latent representation clustering is associated with longitudinal disease progression in early-onset Alzheimer's disease.",
+          "authors": "Dorian Manouvriez, Grégory Kuchcinski, Vincent Roca...",
+          "abstract": "Early-onset Alzheimer's disease (EOAD) population is a clinically, genetically and pathologically heterogeneous condition. Identifying biomarkers related to disease progression is crucial for advancing clinical trials and improving therapeutic strategies. This study aims to differentiate EOAD patients with varying rates of progression using Brain Age Gap Estimation (BrainAGE)-based clustering algorithm applied to structural magnetic resonance images (MRI).",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40614437/",
+          "source": "PubMed",
+          "relevance_score": 6.699999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Journal of neuroradiology = Journal de neuroradiologie",
+          "volume": "52",
+          "issue": "5",
+          "pmid": "40614437",
+          "doi": "10.1016/j.neurad.2025.101365",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Disease Progression",
+            "Female",
+            "Male"
+          ]
+        },
+        {
+          "title": "Timing of Changes in Alzheimer's Disease Plasma Biomarkers as Assessed by Amyloid and Tau PET Clocks.",
+          "authors": "Marta Milà-Alomà, Duygu Tosun, Suzanne E Schindler...",
+          "abstract": "The objective of this study was to evaluate the timing of change of Alzheimer's disease (AD) plasma biomarkers (Aβ42/Aβ40, p-tau217, p-tau181, GFAP, and NfL) from six different assay platforms, alongside established AD biomarkers, using amyloid and tau positron emission tomography (PET)-based AD progression timelines.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40539416/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Annals of neurology",
+          "volume": "98",
+          "issue": "3",
+          "pmid": "40539416",
+          "doi": "10.1002/ana.27285",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "tau Proteins",
+            "Alzheimer Disease",
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "title": "Cognitive and spatial patterns of amyloid-β burden in Alzheimer's disease with epilepsy.",
+          "authors": "Yilin Xia, Leihao Sha, Muchan Tao...",
+          "abstract": "BackgroundThe risk of unprovoked seizures in patients with Alzheimer's disease (AD) is three-fold higher than the general population. However, no studies to date have reported on amyloid-β (Aβ) deposition in patients with Alzheimer's disease with epilepsy (ADEP).ObjectiveThe aim of this study was to collect clinical and positron emission tomography (PET)/magnetic resonance imaging (MRI) data from ADEP patients to compare and present the clinical characteristics and Aβ deposition patterns in this patient population.MethodsFifteen patients with ADEP, thirty-five patients with AD, twenty-three with late-onset epilepsy (LOEP), and twelve healthy controls were recruited. PET/MRI detected intracranial Aβ deposition, and differences in the brain regions distribution were compared between groups at the region of interest and voxel levels. Demographic data and medical history were further collected, while clinical and cognitive assessments were performed.ResultsIn ADEP patients, the first seizure occurred in the early stages of AD, with focal-onset motor seizures accompanied by impaired consciousness being the predominant seizure type. Diagnosis and initiation of antiseizure medication (ASMs) were significantly delayed compared to LOEP patients. Additionally, the ADEP group showed less Aβ deposition in the middle cingulate gyrus than the AD group and had higher Mini-Mental State Exam and Montreal Cognitive Assessment scores.ConclusionsThis study reveals the clinical features and brain imaging differences between AD patients with and without EP, preliminarily confirming that the spatial deposition pattern of Aβ may be related to epilepsy and ASMs.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40760854/",
+          "source": "PubMed",
+          "relevance_score": 6.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "107",
+          "issue": "1",
+          "pmid": "40760854",
+          "doi": "10.1177/13872877251360425",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Male",
+            "Female",
+            "Positron-Emission Tomography"
+          ]
+        },
+        {
+          "title": "Plasma phosphorylated tau for Alzheimer's disease diagnosis.",
+          "authors": "Ashvini Keshavan, Alicia Algeciras-Schimnich",
+          "abstract": "",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40818464/",
+          "source": "PubMed",
+          "relevance_score": 6.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "tau",
+            "plasma"
+          ],
+          "journal": "The Lancet. Neurology",
+          "volume": "24",
+          "issue": "9",
+          "pmid": "40818464",
+          "doi": "10.1016/S1474-4422(25)00274-1",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Harmonizing genotype array data to understand genetic risk for brain amyloid burden in the AMYPAD PNHS Consortium.",
+          "authors": "Emma S Luckett, Yasmina Abakkouy, Luigi Lorenzini...",
+          "abstract": "We sought to harmonize genotype data from the predementia AMYPAD (Amyloid Imaging to Prevent Alzheimer's Disease) Consortium, compute polygenic risk scores (PRS), and determine their association with global amyloid deposition.",
+          "published": "2025-09-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40947441/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "9",
+          "pmid": "40947441",
+          "doi": "10.1002/alz.70376",
+          "categories": [
+            "PubMed"
+          ]
+        }
+      ],
+      "paper_count": 20
+    },
+    "week_4": {
+      "week_info": {
+        "week_number": 4,
+        "start_date": "2025-08-19 00:00:00",
+        "end_date": "2025-08-25 00:00:00",
+        "week_label": "Week 4 (2025-08-19 to 2025-08-25)"
+      },
+      "papers": [
+        {
+          "title": "Associations Between Hippocampal Transverse Relaxation Time and Amyloid PET in Cognitively Normal Aging Adults.",
+          "authors": "Yu Veronica Sui, Arjun V Masurkar, Timothy M Shepherd...",
+          "abstract": "Identifying early neuropathological changes in Alzheimer's disease (AD) is important for improving treatment efficacy. Among quantitative MRI measures, transverse relaxation time (T2) has been shown to reflect tissue microstructure relevant in aging and neurodegeneration; however, findings regarding T2 changes in both normal aging and AD have been inconsistent. The association between T2 and amyloid-beta (Aβ) accumulation, a hallmark of AD pathology, is also unclear, particularly in cognitively normal individuals who may be in preclinical stages of the disease.",
+          "published": "2025-08-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40844208/",
+          "source": "PubMed",
+          "relevance_score": 9.100000000000001,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "amyloid"
+          ],
+          "journal": "Journal of magnetic resonance imaging : JMRI",
+          "volume": "",
+          "issue": "",
+          "pmid": "40844208",
+          "doi": "10.1002/jmri.70097",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Mapping Alzheimer's disease pathology using free water through integrated analysis of plasma biomarkers, microstructural DTI metrics, and macrostructural MRI measures.",
+          "authors": "Bo-Hyun Kim, Daeun Shin, Sung Hoon Kang...",
+          "abstract": "Alzheimer's disease (AD) is characterized by amyloid-beta (Aβ) and tau pathologies that drive neuroinflammation and neurodegeneration. Free water (FW), a diffusion tensor imaging (DTI) metric reflecting extracellular fluid changes, has emerged as a sensitive marker of neuroinflammation. This study examined the role of FW in AD and its associations with plasma biomarkers, brain structural measures, and cognitive decline. We analyzed 968 participants across the AD continuum from Samsung Medical Center. Plasma biomarkers were measured using Single Molecule Array technology. DTI metrics (FW, fractional anisotropy (FA), and mean diffusivity (MD)) and structural MRI-derived hippocampal volume and cortical thickness were assessed. Plasma phosphorylated tau 217 (pTau217) significantly correlated with FW in both white matter (WM) and gray matter (GM), but not with FA or MD. All DTI metrics were associated with reduced hippocampal volume and lower cortical thickness. Mediation analyses revealed that FW in WM and GM had both direct and indirect associations with cognitive decline, while FA and MD were indirectly linked to cognitive outcomes through structural measures. These findings support FW as a sensitive marker of neuroinflammation, linking microstructural changes to macrostructural changes and cognitive outcomes. Integrating plasma biomarkers, DTI, and MRI may improve understanding of AD pathophysiology and support the development of targeted diagnostic and therapeutic approaches.",
+          "published": "2025-08-21",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40841382/",
+          "source": "PubMed",
+          "relevance_score": 7.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Scientific reports",
+          "volume": "15",
+          "issue": "1",
+          "pmid": "40841382",
+          "doi": "10.1038/s41598-025-14200-y",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Male",
+            "Female",
+            "Biomarkers"
+          ]
+        },
+        {
+          "title": "Concurrent Changes in Plasma Phosphorylated Tau 217, Tau PET, and Cognition in Preclinical Alzheimer Disease.",
+          "authors": "Philip S Insel, Niklas Mattsson-Carlgren, Oliver Langford...",
+          "abstract": "Developing disease-modifying treatments is a priority for Alzheimer disease research.",
+          "published": "2025-08-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40853684/",
+          "source": "PubMed",
+          "relevance_score": 6.8999999999999995,
+          "matched_keywords": [
+            "PET",
+            "tau",
+            "plasma"
+          ],
+          "journal": "JAMA neurology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40853684",
+          "doi": "10.1001/jamaneurol.2025.2974",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Integrating MRI Volume and Plasma p-Tau217 for Amyloid Risk Stratification in Early-Stage Alzheimer Disease.",
+          "authors": "Sohyun Yim, Seongbeom Park, Kyoungyoon Lim...",
+          "abstract": "Identifying β-amyloid (Aβ) positivity is crucial for selecting candidates for Aβ-targeted therapies in early-stage Alzheimer disease (AD). While Aβ PET is accurate, its high cost limits routine use. Plasma p-tau217 testing offers a less invasive option but also incurs additional costs. Structural brain MRI, routinely used in cognitive assessments, can identify features predictive of Aβ positivity without extra expense. We evaluated a 2-stage workflow integrating MRI-based features and plasma p-tau217 to efficiently predict Aβ PET positivity in early-stage AD.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40829110/",
+          "source": "PubMed",
+          "relevance_score": 6.6,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "amyloid",
+            "plasma",
+            "brain"
+          ],
+          "journal": "Neurology",
+          "volume": "105",
+          "issue": "6",
+          "pmid": "40829110",
+          "doi": "10.1212/WNL.0000000000213954",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Female",
+            "Male",
+            "Aged"
+          ]
+        },
+        {
+          "title": "ASNR Consensus Statement: Integrating Neuro-PET Interpretation into Neuroradiology Training and Practice.",
+          "authors": "Jana Ivanidze, Ana M Franceschi, Max Wintermark...",
+          "abstract": "Molecular imaging, particularly positron emission tomography (PET), has significantly advanced the diagnosis and management of disease by visualizing biological processes at a cellular and molecular level. PET imaging of the brain, spine, and head/neck, summarized under the umbrella term Neuro-PET, enables noninvasive diagnosis and monitoring of diseases such as dementia, epilepsy, cancer, movement, or autoimmune disorders. The rising prevalence of these conditions, as well as new treatment options necessitating response assessment, are expected to escalate Neuro-PET imaging volumes, with projections for a significant increase in the need for specialized imaging services. This increasing clinical need highlights existing workforce shortages and underscores the need for neuroradiologists to acquire proficiency in molecular imaging. This expanded role seeks to address the growing demand. To this end, we propose a rigorous, structured, patient-centered, and collaborative framework for expanding neuroradiologists' training and practice to include Neuro-PET interpretation.",
+          "published": "2025-08-21",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40780879/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "PET",
+            "dementia",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40780879",
+          "doi": "10.3174/ajnr.A8959",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Plasma tau biomarkers for biological staging of Alzheimer's disease.",
+          "authors": "Laia Montoliu-Gaya, Gemma Salvadó, Joseph Therriault...",
+          "abstract": "A blood biomarker-based staging system for Alzheimer's disease (AD) could improve the diagnosis, prognosis and identification of individuals most likely to benefit from specific therapies. Here, using targeted mass spectrometry, we measured six phosphorylated and six nonphosphorylated tau peptides in plasma from two independent cohorts: BioFINDER-2 and TRIAD (n = 689). We also analyzed the ratios of phosphorylated to nonphosphorylated peptides. Our results revealed that specific tau species became abnormal at different points along the disease continuum. Based on these findings, we developed a data-driven, blood-based staging model that demonstrated strong consistency across cohorts (>85% agreement in ≥90% initializations) and reflected changes in other AD biomarkers. These plasma-based stages were associated with clinical diagnoses, positron emission tomography-based stages and distinct patterns of longitudinal disease progression, including Aβ- and tau-positron emission tomography uptake, atrophy and cognitive decline. This study highlights the potential of tau blood-based biomarkers for biological staging in AD, offering a scalable tool for tracking disease progression and guiding clinical decisions.",
+          "published": "2025-08-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40847200/",
+          "source": "PubMed",
+          "relevance_score": 6.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Nature aging",
+          "volume": "",
+          "issue": "",
+          "pmid": "40847200",
+          "doi": "10.1038/s43587-025-00951-w",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Regional associations between cerebrovascular disease and cholinergic white matter pathways in the Lewy body continuum.",
+          "authors": "Anna Rennie, Milan Nemy, Cene Jerele...",
+          "abstract": "Cerebrovascular disease is common in patients on the Lewy body (LB) continuum (dementia with Lewy bodies (DLB) and prodromal-DLB). White matter signal abnormality (WMSA) volume is higher in patients with LB than controls, both globally and in cholinergic white matter. However, it remains unknown if the higher WMSA in cholinergic white matter reflects selective cholinergic vulnerability or results from higher global WMSA. We modelled cingulate and external capsule cholinergic white matter pathways using MRI and segmented WMSA overlapping cholinergic pathways and per brain lobe. We found that patients on the LB-continuum (n = 33) had higher volume and proportion of WMSA in the cholinergic white matter compared to controls (n = 36), independent of global WMSA. Cholinergic WMSA was associated with neurodegeneration in the basal forebrain, decreased integrity of cingulate and external capsule pathways and attention and memory performance. These findings may suggest a selective vulnerability of cholinergic pathways in patients with LB.",
+          "published": "2025-08-21",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40841717/",
+          "source": "PubMed",
+          "relevance_score": 6.3,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "NPJ Parkinson's disease",
+          "volume": "11",
+          "issue": "1",
+          "pmid": "40841717",
+          "doi": "10.1038/s41531-025-01118-5",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Interplay of genetic predisposition, plasma metabolome and Mediterranean diet in dementia risk and cognitive function.",
+          "authors": "Yuxi Liu, Xiao Gu, Yanping Li...",
+          "abstract": "Alzheimer's disease (AD) and AD-related dementias (AD/ADRD) have a substantial genetic basis, with APOE4 homozygotes increasingly recognized as a distinct genetic subtype. To identify genotype-specific metabolic pathways and modifiable risk factors, we integrated genetic, plasma metabolomic and dietary data from 4,215 women and 1,490 men in prospective cohorts. Here we show that the associations of 57 metabolites with dementia risk varied by APOE4 genotype or other AD/ADRD risk variants. For example, cholesteryl esters and sphingomyelins were most strongly associated with increased dementia risk in APOE4 homozygotes, whereas inverse associations with glycerides were specific to this genotype. Dimethylguanidino-valeric acid was more strongly associated with dementia risk among carriers of the rs2154481-C allele (APP). Adherence to the Mediterranean diet more effectively modulated dementia-related metabolites in APOE4 homozygotes, suggesting targeted prevention strategies. Incorporating metabolomic data modestly improved dementia risk prediction, particularly during early follow-up. Mendelian randomization analysis identified 19 putative causal relationships between metabolites and cognitive outcomes, including protective effects of 4-guanidinobutanoate, carotenoids and N",
+          "published": "2025-08-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40855194/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "plasma"
+          ],
+          "journal": "Nature medicine",
+          "volume": "",
+          "issue": "",
+          "pmid": "40855194",
+          "doi": "10.1038/s41591-025-03891-5",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Interactions with tau's microtubule-binding repeats modulate amyloid-β aggregation and toxicity.",
+          "authors": "Mingeun Kim, Yuxi Lin, Eunju Nam...",
+          "abstract": "The complicated pathogenesis of Alzheimer's disease (AD) is characterized by the accumulation of neurofibrillary tangles and senile plaques, primarily composed of tau and amyloid-β (Aβ) aggregates, respectively. While substantial efforts have focused on unraveling the individual roles of tau and Aβ in AD development, the intricate interplay between these components remains elusive. Here we report how the microtubule-binding repeats of tau engage with Aβ in a distinct manner. Crucially, this interaction notably modifies Aβ aggregation behavior, thereby altering Aβ-associated toxicity within both extracellular and intracellular milieus. Our mechanistic investigations at the molecular level manifest specific fragments within tau's microtubule-binding domain that possess a balance of hydrophobic and hydrophilic properties, promoting the formation of hetero-adducts with Aβ peptides. These findings offer avenues for understanding and treating AD by emphasizing the tau-Aβ interplay in the pathogenesis.",
+          "published": "2025-08-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40846995/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Nature chemical biology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40846995",
+          "doi": "10.1038/s41589-025-01987-0",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Enlarged choroid plexus is associated with reduced gray matter volumes and increased plasma amyloid-beta: a population-based study of older adults.",
+          "authors": "Qianqian Xie, Ziwei Chen, Jiafeng Wang...",
+          "abstract": "To characterize brain structures and plasma Alzheimer's-related biomarkers associated with enlarged choroid plexus (ChP) among rural older adults in China.",
+          "published": "2025-08-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40865254/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "amyloid",
+            "plasma",
+            "brain"
+          ],
+          "journal": "European journal of radiology",
+          "volume": "192",
+          "issue": "",
+          "pmid": "40865254",
+          "doi": "10.1016/j.ejrad.2025.112372",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Medial temporal lobe Tau-Neurodegeneration mismatch from MRI and plasma biomarkers identifies vulnerable and resilient phenotypes with AD",
+          "authors": "Lyu, X.; Mundada, N. S.; Brown...",
+          "abstract": "While tau pathology is closely associated with neurodegeneration in Alzheimers disease (AD), our prior work using multi-modality imaging revealed that mismatch between tau (T) and neurodegeneration (N) may reflect contributions from non-AD processes. The medial temporal lobe (MTL), an early site of AD pathology, is also a common target of co-pathologies such as limbic-predominant age-related TDP-43 encephalopathy neuropathologic change (LATE-NC), often following an anterior-posterior atrophy gradient. Given the susceptibility of MTL to co-pathologies, here we explored T-N mismatch specifically within MTL using plasma ptau217 and MTL morphometry for identifying vulnerabilities and resilience in cognitively impaired or unimpaired AD patients.\n\nWe parcellated the MTL into 100 spatially contiguous segments and calculated their T-N mismatch using plasma ptau217 as a measure for T and thickness as a marker of N. Based on these mismatch profiles, we clustered 447 amyloid-positive individuals from ADNI cohort into data-driven T-N phenotypes. We characterized the T-N phenotypes by examining their cross-sectional and longitudinal atrophy both within the MTL and across the whole brain, as well as cognitive trajectories. This framework was replicated in an independent cohort and finally translated to a real-world clinical sample of 50 patients undergoing anti-amyloid therapy.\n\nClustering identified three T-N phenotypes with different MTL T-N mismatch profiles, atrophy patterns, and cognitive outcomes, despite comparable AD severity. The \"canonical\" group, characterized by low T-N residuals (N [~] T), showed AD-like neurodegeneration patterns. The \"vulnerable\" group, characterized by disproportionately greater neurodegeneration than tau (N > T), showed atrophy primarily in the anterior MTL that extended into temporal-limbic regions, both in cross-sectional and longitudinal analyses. This group also exhibited neurodegeneration that preceded estimated tau onset and experienced faster cognitive decline across multiple domains, aligning with the typical characteristics of mixed LATE-NC with AD. In contrast, the \"resilient\" group (N < T) showed minimal atrophy and preserved cognitive function. These phenotypes were reproducible in an independent research cohort. Importantly, in a feasibility study applying the model developed from ADNI to a clinical cohort of patients receiving lecanemab, we identified vulnerable individuals with LATE-like atrophy patterns. This highlights its potential utility for identifying individuals with co-pathology in clinical settings.\n\nOur findings demonstrate that T-N mismatch within MTL using MRI and plasma biomarkers can reveal AD groups with varying vulnerability/resilience, with the vulnerable group displaying structural and cognitive outcomes suggestive of LATE-NC. This approach offers a cost-effective strategy for clinical trial stratification and precision medicine for AD therapeutics.",
+          "published": "2025-08-19",
+          "arxiv_url": "https://doi.org/10.1101/2025.08.17.25333859",
+          "source": "Medrxiv",
+          "relevance_score": 6.1,
+          "matched_keywords": [
+            "MRI",
+            "amyloid",
+            "tau",
+            "plasma",
+            "brain"
+          ],
+          "journal": "",
+          "volume": "",
+          "issue": "",
+          "pmid": "",
+          "doi": "10.1101/2025.08.17.25333859",
+          "categories": [
+            "medRxiv",
+            "neurology"
+          ]
+        },
+        {
+          "title": "Nasal Aβ42 mirrors brain amyloid dynamics and cognitive decline across the Alzheimer's disease continuum.",
+          "authors": "Da Hae Jung, Gowoon Son, Sheng Min Wang...",
+          "abstract": "Early, non-invasive assessment of Alzheimer's disease (AD) progression remains a key challenge. This study evaluated whether nasal amyloid-β42 (Aβ42) levels reflect brain amyloid dynamics and cognitive decline. Nasal discharge from 161 individuals, ranging from cognitively unimpaired to AD dementia, was analyzed using ELISA, alongside neuropsychological assessments and amyloid PET imaging. Moderate nasal Aβ42 levels (9.53-11.10 pg/mL) were positively associated with PET amyloid burden and cognitive decline, identifying a critical transitional disease stage. Conversely, the highest Aβ42 levels showed weaker correlations, suggesting a non-linear progression. The pattern of nasal Aβ42 mirrored brain amyloid accumulation, which peaks and stabilizes in later disease stages. These findings highlight nasal Aβ42 as a promising, scalable biomarker for tracking AD pathology and offer the first evidence linking it with brain amyloid PET. This supports its potential use in both clinical and longitudinal research settings.",
+          "published": "2025-08-19",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40830651/",
+          "source": "PubMed",
+          "relevance_score": 6.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Scientific reports",
+          "volume": "15",
+          "issue": "1",
+          "pmid": "40830651",
+          "doi": "10.1038/s41598-025-15230-2",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Amyloid beta-Peptides",
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "title": "The Mobile Toolbox for remote, self-administered cognitive assessment in older adults: associations with in-clinic cognitive testing and Alzheimer's disease biomarkers.",
+          "authors": "Roos J Jutten, Jessa E Burling, Elliott Slade...",
+          "abstract": "Remote, smartphone-based cognitive assessments such as the Mobile Toolbox (MTB) may increase the accessibility of Alzheimer's disease (AD) clinical trials. We examined the feasibility of the MTB among cognitively unimpaired (CU) older adults and investigated its associations with standardized in-clinic cognitive testing and amyloid and tau positron emission tomography imaging.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40836942/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Alzheimer's & dementia (Amsterdam, Netherlands)",
+          "volume": "17",
+          "issue": "3",
+          "pmid": "40836942",
+          "doi": "10.1002/dad2.70160",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Optimizing timing and cost-effective use of plasma biomarkers in Alzheimer's disease.",
+          "authors": "Hsin-I Chang, Mi-Chia Ma, Kuo-Lun Huang...",
+          "abstract": "Early and cost-effective identification of amyloid positivity is crucial for Alzheimer's disease (AD) diagnosis. While amyloid PET is the gold standard, plasma biomarkers such as phosphorylated tau 217 (pTau217) provide a potential alternative. This study evaluates the diagnostic accuracy of a combined-panel approach using machine learning models and evaluated the biomarker significance.",
+          "published": "2025-08-20",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40830505/",
+          "source": "PubMed",
+          "relevance_score": 5.9,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Alzheimer's research & therapy",
+          "volume": "17",
+          "issue": "1",
+          "pmid": "40830505",
+          "doi": "10.1186/s13195-025-01851-2",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Alzheimer Disease",
+            "Biomarkers",
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "title": "Decoding the Gut-Brain Axis in Alzheimer's Disease: Emerging Perspectives.",
+          "authors": "Vijay Singh, Amisha Yadav, Tahreen Taj...",
+          "abstract": "Alzheimer's disease (AD) is a leading source of dementia, evidenced by cognitive debility, tau neurofibrillary tangles, and amyloid-β plaques. Recent studies emphasize the gut-brain axis as a vital element in the pathogenesis of Alzheimer's disease, involving microbial, neuronal, immunological, and hormonal mechanisms. The composition of gut microbiota dysbiosis is determined by growth in intestinal barrier permeability and activation of immune cells, which causes impaired function of the blood-brain barrier that stimulates neural injury, neuronal loss, neuroinflammation, and eventually AD. Various studies have reported that the gut microbiota plays a crucial role in brain function and changes in individual behavior, as well as in bacterial amyloid formation. Growing experimental and clinical data specify the conspicuous role of intestinal dysbiosis and microbiota- host interactions in AD. The importance of this paper is the focus on the potential association of AD and gut microbiota and also a discussion of the therapeutic modalities of inhibiting gut dysbiosis.",
+          "published": "2025-08-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40873226/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "CNS & neurological disorders drug targets",
+          "volume": "",
+          "issue": "",
+          "pmid": "40873226",
+          "doi": "10.2174/0118715273390442250805174841",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Upconversion nanoparticle-FITC conjugate as a fluorescence switching probe for the sensitive detection of Tau: an Alzheimer's disease biomarker.",
+          "authors": "Merin K Abraham, Geneva Indongo, Greeshma Rajeevan...",
+          "abstract": "Neurodegenerative diseases are characterised by gradual loss of neuronal function and corresponding cognitive decline. Current detection methods include PET and MRI scanning, extraction of CSF fluid proteins which are invasive and painful. Hence, the development of a highly selective, cost effective and minimally invasive method for the detection of tau is clinically significant. In this work, we have fabricated an upconversion nanoparticle-FITC immunoprobe conjugate for the detection of tau from human serum. Initially, a blue-emitting Cit@NaYF",
+          "published": "2025-08-19",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40830276/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "tau"
+          ],
+          "journal": "Mikrochimica acta",
+          "volume": "192",
+          "issue": "9",
+          "pmid": "40830276",
+          "doi": "10.1007/s00604-025-07464-8",
+          "categories": [
+            "PubMed",
+            "tau Proteins",
+            "Humans",
+            "Alzheimer Disease",
+            "Fluorescent Dyes",
+            "Biomarkers"
+          ]
+        },
+        {
+          "title": "Electronic health records to test multimorbidity influences to plasma biomarker interpretation for Alzheimer's disease",
+          "authors": "Cousins, K. A. Q.; Boyle, R.; Morse...",
+          "abstract": "ObjectivePlasma biomarkers of Alzheimers disease (AD) pathology are frequently tested in specialized research settings, limiting generalizability of findings. Using electronic health records and banked plasma, we evaluated plasma biomarkers - phosphorylated tau 217 (p-tau217), {beta}-amyloid 1-42/1-40 (A{beta}42/A{beta}40) and p-tau217/A{beta}42 - in a real-world, diverse clinical population with multimorbidities.\n\nMethodsParticipants (n=617; 44% Black/African American; 41% female) were selected from the University of Pennsylvania Medicine BioBank with plasma assayed using Fujirebio Lumipulse. International Classification of Diseases (ICD) Ninth and Tenth Revision codes determined AD dementia (ADD; n=43), mild-cognitive impairment (MCI; n=140), unspecified/non-AD cognitive impairment (CI; n=106), and cognitively normal cases (n=328), and other medical histories. APOE {varepsilon}4, body mass index (BMI), metrics of kidney function (e.g., eGFR), and liver disease were derived from electronic health records. Multivariable models identified factors related to plasma levels. Previously established cutpoints classified AD status (\"AD+\", \"AD-\", or \"Intermediate\").\n\nResultsPlasma p-tau217/A{beta}42had the strongest association with known AD-related factors - MCI, ADD, future progression to MCI/ADD, age, and APOE {varepsilon}4 - compared to p-tau217 and A{beta}42/A{beta}40. Plasma p-tau217/A{beta}42 was also associated with eGFR, diabetes, and history of hearing loss. Importantly, AD-related factors were most frequent/severe for AD+ classification by p-tau217/A{beta}42, while medical morbidities were most frequent/severe for Intermediate classification. Exploratory analyses test p-tau217/A{beta}42 adjusted for eGFR to eliminate its influence on plamsa levels.\n\nInterpretationIn this real-world dataset, we identified effects of multimorbidities on plasma biomarkers, especially kidney function. The p-tau217/A{beta}42 ratio had low rates of Intermediate classification and may help to account for multimorbidity effects on plasma levels.",
+          "published": "2025-08-19",
+          "arxiv_url": "https://doi.org/10.1101/2025.08.16.25333799",
+          "source": "Medrxiv",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "",
+          "volume": "",
+          "issue": "",
+          "pmid": "",
+          "doi": "10.1101/2025.08.16.25333799",
+          "categories": [
+            "medRxiv",
+            "neurology"
+          ]
+        },
+        {
+          "title": "The impact of polygenic risk for alzheimer's disease on neurotransmitter-related grey matter atrophy in the alzheimer continuum.",
+          "authors": "Riccardo Manca, Micaela Mitolo, Maria Giulia Bacalini...",
+          "abstract": "Alzheimer's disease (AD) pathology has been recently shown to accumulate in multiple brainstem nuclei in pre-cortical disease stages. However, the impact of neurotransmission alterations on brain atrophy and their genetic correlates in AD remain unexplored. This study investigated (1) associations between grey matter (GM) loss and uptake values of PET/SPECT ligands tracing concentration of multiple neurotransmitter receptors/transporters and pathways; (2) the impact of AD polygenic risk scores (AD-PRSs) on such associations along the AD continuum. T1-weighted MRI scans, genetic and clinical data were selected for 800 ADNI participants: 203 cognitively unimpaired older adults (CU), 442 with mild cognitive impairment (MCI) and 155 with AD. JuSpace was used to calculate correlations between GM volume (GMV) and the concentration of several neurotransmitters. Two PRSs, with (AD-PRS) and without APOE (AD-PRS",
+          "published": "2025-08-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40851051/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "brain"
+          ],
+          "journal": "Neurological sciences : official journal of the Italian Neurological Society and of the Italian Society of Clinical Neurophysiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40851051",
+          "doi": "10.1007/s10072-025-08393-3",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Exosomal Non-Coding RNAs as Potential Biomarkers for Alzheimer's Disease: Advances and Perspectives in Translational Research.",
+          "authors": "Simoneide Souza Titze-de-Almeida, Clara Luna Marina, Milena Vieira Ramos...",
+          "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative disorder primarily characterized by memory loss and cognitive decline, which significantly impacts patients' quality of life and imposes substantial emotional, practical, and economic burdens on their families. As the most common cause of senile dementia, AD currently affects approximately 50 million people worldwide, with projections indicating a threefold increase by 2050 due to rising life expectancy and an aging global population. Diagnosis of AD remains challenging. Neuroimaging techniques reveal atrophy in critical brain regions, particularly in the cortex, hippocampus, and limbic system, which are essential substrates for memory, personality changes, and other cognitive functions. The hallmark molecular changes associated with AD include the accumulation of β-amyloid plaques and the formation of tau protein tangles. Several underlying mechanisms contribute to neuron loss, such as oxidative stress, neuroinflammation, microbial dysbiosis, and insulin resistance. In this context, exosomes-small extracellular vesicles that facilitate cell communication-transport proteins, DNA, mRNA, and non-coding RNA (ncRNA), all of which play a significant role in the neurobiology of AD. Furthermore, emerging research indicates that exosomal ncRNAs may serve as promising biomarkers for AD, offering the possibility of improved diagnostic precision. This review explores the potential of exosomal ncRNAs-specifically circular RNAs and microRNAS-as non-invasive biomarkers for AD, highlighting recent advances and future directions in translational studies.",
+          "published": "2025-08-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40943171/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "International journal of molecular sciences",
+          "volume": "26",
+          "issue": "17",
+          "pmid": "40943171",
+          "doi": "10.3390/ijms26178246",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "The Genetics of Amyloid Deposition: A Systematic Review of Genome-Wide Association Studies Using Amyloid PET Imaging in Alzheimer's Disease.",
+          "authors": "Amir A Amanullah, Melika Mirbod, Aarti Pandey...",
+          "abstract": "Positron emission tomography (PET) has become a powerful tool in Alzheimer's disease (AD) research by enabling in vivo visualization of pathological biomarkers. Recent efforts have aimed to integrate PET-derived imaging phenotypes with genome-wide association studies (GWASs) to better elucidate the genetic architecture underlying AD. This systematic review examines studies that leverage PET imaging in the context of GWASs (PET-GWASs) to identify genetic variants associated with disease risk, progression, and brain region-specific pathology. A comprehensive search of PubMed and Embase databases was performed on 18 February 2025, yielding 210 articles, of which 10 met pre-defined inclusion criteria and were included in the final synthesis. Studies were eligible if they included AD populations, employed PET imaging alongside GWASs, and reported original full-text findings in English. No formal protocol was registered, and the risk of bias was not independently assessed. The included studies consistently identified",
+          "published": "2025-08-19",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40863490/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Journal of imaging",
+          "volume": "11",
+          "issue": "8",
+          "pmid": "40863490",
+          "doi": "10.3390/jimaging11080280",
+          "categories": [
+            "PubMed"
+          ]
+        }
+      ],
+      "paper_count": 20
+    }
+  }
+}
