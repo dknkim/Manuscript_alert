@@ -288,7 +288,7 @@ class KnowledgeBaseLoader:
             "last_loaded": self.last_loaded.isoformat() if self.last_loaded else None
         }
     
-    def analyze_trends_for_query(self, query: str, top_k: int = 20) -> Dict[str, Any]:
+    def analyze_trends_for_query(self, query: str, top_k: int = 20, llm_client=None) -> Dict[str, Any]:
         """
         Analyze trends for a specific query
         
@@ -331,7 +331,7 @@ class KnowledgeBaseLoader:
         trends = self._analyze_paper_trends(top_papers)
         
         # Add comparative analysis
-        comparative_insights = self._generate_comparative_insights(query, top_papers, matching_papers)
+        comparative_insights = self._generate_comparative_insights(query, top_papers, matching_papers, llm_client=llm_client)
         
         return {
             "query": query,
@@ -423,7 +423,7 @@ class KnowledgeBaseLoader:
         else:
             return "Other Research Areas"
     
-    def _generate_comparative_insights(self, query: str, recent_papers: List[Dict[str, Any]], all_matching_papers: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _generate_comparative_insights(self, query: str, recent_papers: List[Dict[str, Any]], all_matching_papers: List[Dict[str, Any]], llm_client=None) -> Dict[str, Any]:
         """
         Generate comparative insights between recent papers and historical papers
         
@@ -573,7 +573,7 @@ class KnowledgeBaseLoader:
         recent_papers_summary = self._summarize_recent_papers(query, top_recent_papers)
 
         # Build historical context paragraphs comparing top recent to prior similar papers
-        historical_context_summary = self._build_historical_context(top_recent_papers, historical_papers)
+        historical_context_summary = self._build_historical_context(top_recent_papers, historical_papers, llm_client=llm_client)
 
         return {
             "insights": insights,
@@ -770,7 +770,7 @@ class KnowledgeBaseLoader:
         
         return trend_analysis
 
-    def _build_historical_context(self, recent_top: List[Dict[str, Any]], historical_papers: List[Dict[str, Any]]) -> str:
+    def _build_historical_context(self, recent_top: List[Dict[str, Any]], historical_papers: List[Dict[str, Any]], llm_client=None) -> str:
         """Create paragraphs that summarize prior similar papers in KB for each recent top paper.
         If no similar papers exist, state that explicitly.
         """
@@ -779,7 +779,7 @@ class KnowledgeBaseLoader:
         if not historical_papers:
             return "\n## Historical Context\n\nNo similar prior papers found in the knowledge base.\n"
 
-        # Very light-weight similarity via token overlap Jaccard on title+abstract text
+        # Use LLM-based similarity if available, otherwise fallback to Jaccard
         def to_text(p: Dict[str, Any]) -> str:
             title = p.get('title', '') or ''
             abstract = p.get('abstract', '') or ''
@@ -789,28 +789,55 @@ class KnowledgeBaseLoader:
         def tokenize(s: str) -> set:
             return set([t for t in (s.lower().replace('\n', ' ').split()) if t and t.isalpha()])
 
-        hist_text_tokens = [tokenize(to_text(p)) for p in historical_papers]
-
         sections: List[str] = ["\n## Historical Context\n"]
+        
+        # Check if LLM client is available for semantic similarity
+        use_llm_similarity = llm_client and llm_client.is_available()
+        
+        if use_llm_similarity:
+            print("🧠 Using LLM-based semantic similarity for historical context...")
+        else:
+            print("📊 Using Jaccard similarity for historical context (LLM not available)...")
+            # Pre-compute token sets for Jaccard similarity
+            hist_text_tokens = [tokenize(to_text(p)) for p in historical_papers]
+
         for idx, rp in enumerate(recent_top, 1):
             rp_text = to_text(rp)
-            rp_tokens = tokenize(rp_text)
-            if not rp_tokens:
-                sections.append(f"\n**{idx}. {rp.get('title','Untitled')}**\nNo similar prior papers found (insufficient text).\n")
-                continue
-
-            # Compute Jaccard similarity with all historical papers and pick top 2
-            sims = []
-            for i, ht in enumerate(hist_text_tokens):
-                if not ht:
+            
+            if use_llm_similarity:
+                # Use LLM-based semantic similarity
+                sims = []
+                rp_text_short = rp_text[:1000]  # Limit text length for LLM processing
+                
+                for i, hp in enumerate(historical_papers):
+                    hp_text = to_text(hp)[:1000]  # Limit text length
+                    if hp_text.strip():
+                        similarity_score = llm_client.calculate_similarity(rp_text_short, hp_text)
+                        if similarity_score > 0.0:  # Only include if similarity > 0
+                            sims.append((similarity_score, i))
+                
+                sims.sort(reverse=True)
+                top_matches = [(score, historical_papers[i]) for score, i in sims[:2] if score >= 0.1]  # LLM threshold
+                
+            else:
+                # Fallback to Jaccard similarity
+                rp_tokens = tokenize(rp_text)
+                if not rp_tokens:
+                    sections.append(f"\n**{idx}. {rp.get('title','Untitled')}**\nNo similar prior papers found (insufficient text).\n")
                     continue
-                inter = len(rp_tokens & ht)
-                union = len(rp_tokens | ht)
-                score = inter / union if union else 0.0
-                sims.append((score, i))
 
-            sims.sort(reverse=True)
-            top_matches = [(score, historical_papers[i]) for score, i in sims[:2] if score >= 0.08]  # small threshold
+                # Compute Jaccard similarity with all historical papers and pick top 2
+                sims = []
+                for i, ht in enumerate(hist_text_tokens):
+                    if not ht:
+                        continue
+                    inter = len(rp_tokens & ht)
+                    union = len(rp_tokens | ht)
+                    score = inter / union if union else 0.0
+                    sims.append((score, i))
+
+                sims.sort(reverse=True)
+                top_matches = [(score, historical_papers[i]) for score, i in sims[:2] if score >= 0.08]  # Jaccard threshold
 
             title = rp.get('title', 'Untitled')
             journal = rp.get('journal', 'Unknown Journal')

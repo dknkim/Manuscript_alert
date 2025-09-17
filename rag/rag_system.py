@@ -44,8 +44,8 @@ class RAGSystem:
         # Create cache directory
         os.makedirs(cache_dir, exist_ok=True)
     
-    def initialize(self, llm_client_type: str = "huggingface", 
-                   llm_model: str = "microsoft/DialoGPT-medium",
+    def initialize(self, llm_client_type: str = "local", 
+                   llm_model: str = "distilbert-base-uncased",
                    force_rebuild: bool = False) -> bool:
         """
         Initialize the RAG system

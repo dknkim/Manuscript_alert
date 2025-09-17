@@ -31,6 +31,10 @@ class LLMClient(ABC):
     def is_available(self) -> bool:
         """Check if the LLM service is available"""
         pass
+    
+    def calculate_similarity(self, text1: str, text2: str) -> float:
+        """Calculate similarity between two texts (optional implementation)"""
+        return 0.0
 
 
 class HuggingFaceClient(LLMClient):
@@ -213,7 +217,7 @@ class GroqClient(LLMClient):
 class SimpleLocalClient(LLMClient):
     """Simple local client using transformers library"""
     
-    def __init__(self, model_name: str = "microsoft/DialoGPT-small"):
+    def __init__(self, model_name: str = "distilbert-base-uncased"):
         """
         Initialize simple local client
         
@@ -228,12 +232,15 @@ class SimpleLocalClient(LLMClient):
     def _load_model(self):
         """Load the model and tokenizer"""
         try:
-            from transformers import AutoTokenizer, AutoModelForCausalLM
+            from transformers import AutoTokenizer, AutoModel
             
             @st.cache_resource
             def load_local_model(model_name):
                 tokenizer = AutoTokenizer.from_pretrained(model_name)
-                model = AutoModelForCausalLM.from_pretrained(model_name)
+                # Set padding token if not present
+                if tokenizer.pad_token is None:
+                    tokenizer.pad_token = tokenizer.eos_token
+                model = AutoModel.from_pretrained(model_name)
                 return tokenizer, model
             
             self.tokenizer, self.model = load_local_model(self.model_name)
@@ -275,6 +282,45 @@ class SimpleLocalClient(LLMClient):
     def is_available(self) -> bool:
         """Check if local model is available"""
         return self.model is not None and self.tokenizer is not None
+    
+    def calculate_similarity(self, text1: str, text2: str) -> float:
+        """
+        Calculate semantic similarity between two texts using embeddings
+        
+        Args:
+            text1 (str): First text
+            text2 (str): Second text
+            
+        Returns:
+            float: Similarity score between 0 and 1
+        """
+        if not self.is_available():
+            return 0.0
+        
+        try:
+            # Use DistilBERT for better semantic similarity
+            # Extract embeddings from the model and calculate cosine similarity
+            
+            # Tokenize both texts
+            inputs1 = self.tokenizer(text1, return_tensors="pt", padding=True, truncation=True, max_length=512)
+            inputs2 = self.tokenizer(text2, return_tensors="pt", padding=True, truncation=True, max_length=512)
+            
+            with torch.no_grad():
+                # Get the model outputs
+                outputs1 = self.model(**inputs1)
+                outputs2 = self.model(**inputs2)
+                
+                # Use the [CLS] token embedding (first token) for similarity
+                embeddings1 = outputs1.last_hidden_state[:, 0, :]  # [batch_size, hidden_size]
+                embeddings2 = outputs2.last_hidden_state[:, 0, :]  # [batch_size, hidden_size]
+                
+                # Calculate cosine similarity
+                similarity = torch.nn.functional.cosine_similarity(embeddings1, embeddings2, dim=1)
+                return similarity.item()
+                
+        except Exception as e:
+            print(f"❌ Error calculating similarity: {e}")
+            return 0.0
 
 
 class LLMFactory:

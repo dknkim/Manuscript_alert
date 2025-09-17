@@ -1280,8 +1280,8 @@ def render_rag_interface():
             if st.button("🚀 Initialize Search System"):
                 with st.spinner("Initializing search system..."):
                     success = rag_system.initialize(
-                        llm_client_type="huggingface",  # Dummy, won't be used
-                        llm_model="dummy",  # Dummy, won't be used
+                        llm_client_type="local",  # Use local LLM for similarity
+                        llm_model="distilbert-base-uncased",  # Better model for similarity
                         force_rebuild=force_rebuild
                     )
                     
@@ -1314,6 +1314,16 @@ def render_rag_interface():
                 if date_range:
                     st.write(f"- From: {date_range.get('earliest', 'N/A')}")
                     st.write(f"- To: {date_range.get('latest', 'N/A')}")
+                
+                # LLM Status
+                llm_status = status.get("llm_client", {})
+                if llm_status.get("available", False):
+                    st.write("**LLM Status:**")
+                    st.write(f"- Type: {llm_status.get('type', 'Unknown')}")
+                    st.write(f"- Status: 🧠 Semantic similarity enabled")
+                else:
+                    st.write("**LLM Status:**")
+                    st.write(f"- Status: 📊 Jaccard similarity (LLM unavailable)")
     
     # Search Interface
     st.subheader("🔍 Search Research Papers")
@@ -1380,7 +1390,7 @@ def render_rag_interface():
         
         with st.spinner("Analyzing research trends..."):
             # Analyze trends for the query
-            trend_analysis = rag_system.kb_loader.analyze_trends_for_query(query, top_k)
+            trend_analysis = rag_system.kb_loader.analyze_trends_for_query(query, top_k, llm_client=rag_system.llm_client)
             
             if "error" in trend_analysis:
                 st.warning(f"❌ {trend_analysis['error']}")
