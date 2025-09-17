@@ -1,0 +1,34 @@
+# RAG System Dependencies
+# Core RAG libraries
+sentence-transformers>=2.2.2
+transformers>=4.30.0
+torch>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Vector store and embeddings
+faiss-cpu>=1.7.4  # Alternative to sentence-transformers for vector search
+chromadb>=0.4.0   # Alternative vector database
+
+# LLM clients
+requests>=2.31.0
+openai>=1.0.0     # For OpenAI API (if using)
+groq>=0.4.0       # For Groq API
+
+# Text processing
+nltk>=3.8.1
+spacy>=3.6.0
+textstat>=0.7.3
+
+# Data handling
+pandas>=2.0.0
+python-dateutil>=2.8.2
+
+# Caching and performance
+diskcache>=5.6.0
+joblib>=1.3.0
+
+# Optional: For better text processing
+# Uncomment if you want more advanced NLP features
+# stanza>=1.6.0
+# flair>=0.12.0

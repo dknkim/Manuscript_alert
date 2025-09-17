@@ -12,6 +12,15 @@ from fetchers.pubmed_fetcher import PubMedFetcher
 from processors.keyword_matcher import KeywordMatcher
 from storage.data_storage import DataStorage
 
+# RAG imports
+try:
+    from rag.rag_system import RAGSystem
+    from rag.llm_client import LLMFactory
+    RAG_AVAILABLE = True
+except ImportError as e:
+    st.warning(f"⚠️ RAG system not available: {e}")
+    RAG_AVAILABLE = False
+
 
 # Set page configuration
 st.set_page_config(
@@ -31,6 +40,14 @@ def initialize_components():
         KeywordMatcher(),
         DataStorage(),
     )
+
+# Initialize RAG system
+@st.cache_resource
+def initialize_rag_system():
+    """Initialize RAG system if available"""
+    if RAG_AVAILABLE:
+        return RAGSystem()
+    return None
 
 
 (arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher, keyword_matcher, data_storage) = (
@@ -56,6 +73,13 @@ def main():
         "Stay updated with the latest Pubmed, arXiv, biorXiv, "
         "and medrXiv papers in DK's field of interest"
     )
+    
+    # Create tabs
+    if RAG_AVAILABLE:
+        tab1, tab2 = st.tabs(["📚 Paper Discovery", "🔍 Research Assistant"])
+    else:
+        tab1 = st.container()
+        tab2 = None
 
     # Sidebar for configuration
     with st.sidebar:
@@ -199,10 +223,12 @@ def main():
             help="Number of days to search back from today",
         )
 
-    # Main content area
-    # Since Streamlit doesn't support right sidebars or sticky columns natively,
-    # we'll use the column layout with expandable sections for better organization
-    col1, col2 = st.columns([3, 1])
+    # Paper Discovery Tab
+    with tab1:
+        # Main content area
+        # Since Streamlit doesn't support right sidebars or sticky columns natively,
+        # we'll use the column layout with expandable sections for better organization
+        col1, col2 = st.columns([3, 1])
 
     with col1:
         st.header("Recent Papers")
@@ -444,6 +470,11 @@ def main():
                         file_name=export_filename,
                         mime="text/csv",
                     )
+    
+    # RAG Assistant Tab
+    if RAG_AVAILABLE and tab2 is not None:
+        with tab2:
+            render_rag_interface()
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes for faster updates
@@ -1213,6 +1244,357 @@ def display_papers(papers_df):
                         f"<div style='{base_style}'>{score_div}{label_div}</div>",
                         unsafe_allow_html=True,
                     )
+
+
+def render_rag_interface():
+    """Render the RAG assistant interface - No API required"""
+    st.header("🧠 Research Assistant")
+    st.markdown("Search and analyze your research papers with structured summaries and trend analysis!")
+    
+    # Initialize RAG system
+    rag_system = initialize_rag_system()
+    
+    if rag_system is None:
+        st.error("❌ RAG system not available")
+        return
+    
+    # Simple Configuration
+    with st.expander("⚙️ Configuration", expanded=False):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            top_k = st.slider(
+                "Papers to retrieve",
+                min_value=3,
+                max_value=20,
+                value=10,
+                help="Number of relevant papers to retrieve for analysis"
+            )
+            
+            force_rebuild = st.checkbox(
+                "Force rebuild index",
+                help="Rebuild the search index from knowledge base"
+            )
+        
+        with col2:
+            if st.button("🚀 Initialize Search System"):
+                with st.spinner("Initializing search system..."):
+                    success = rag_system.initialize(
+                        llm_client_type="huggingface",  # Dummy, won't be used
+                        llm_model="dummy",  # Dummy, won't be used
+                        force_rebuild=force_rebuild
+                    )
+                    
+                    if success:
+                        st.success("✅ Search system initialized successfully!")
+                        st.rerun()
+                    else:
+                        st.error("❌ Failed to initialize search system")
+    
+    # System Status
+    if rag_system.is_initialized:
+        with st.expander("📊 System Status", expanded=False):
+            status = rag_system.get_system_status()
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("Total Papers", status.get("kb_statistics", {}).get("total_papers", 0))
+                st.metric("Searchable Docs", status.get("vector_store_statistics", {}).get("total_documents", 0))
+            
+            with col2:
+                sources = status.get("kb_statistics", {}).get("sources", {})
+                st.write("**Sources:**")
+                for source, count in sources.items():
+                    st.write(f"- {source}: {count}")
+            
+            with col3:
+                date_range = status.get("kb_statistics", {}).get("date_range", {})
+                st.write("**Date Range:**")
+                if date_range:
+                    st.write(f"- From: {date_range.get('earliest', 'N/A')}")
+                    st.write(f"- To: {date_range.get('latest', 'N/A')}")
+    
+    # Search Interface
+    st.subheader("🔍 Search Research Papers")
+    
+    # Quick trend analysis buttons
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("📅 Tau research trends"):
+            st.session_state.rag_query = "tau prediction Alzheimer's disease"
+    
+    with col2:
+        if st.button("🧠 AI in neuroimaging"):
+            st.session_state.rag_query = "deep learning machine learning neuroimaging"
+    
+    with col3:
+        if st.button("🔬 Biomarker advances"):
+            st.session_state.rag_query = "PET imaging amyloid tau biomarkers"
+    
+    # Search input
+    default_query = st.session_state.get("rag_query", "")
+    query = st.text_input(
+        "Analyze trends for:",
+        value=default_query,
+        placeholder="e.g., tau prediction, PET imaging, biomarkers, deep learning"
+    )
+    
+    # Advanced filtering
+    with st.expander("🔧 Advanced Filtering"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            filter_source = st.selectbox(
+                "Filter by source",
+                ["All", "PubMed", "arXiv", "bioRxiv", "medRxiv"]
+            )
+            
+            filter_journal = st.text_input(
+                "Filter by journal (partial match)",
+                placeholder="e.g., Nature, Science, JAMA"
+            )
+        
+        with col2:
+            weeks_back = st.slider(
+                "Papers from last N weeks",
+                min_value=1,
+                max_value=8,
+                value=4
+            )
+            
+            min_relevance = st.slider(
+                "Minimum relevance score",
+                min_value=0.0,
+                max_value=10.0,
+                value=0.0,
+                step=0.1
+            )
+    
+    # Process search
+    if st.button("🔍 Analyze Trends", type="primary") and query.strip():
+        if not rag_system.is_initialized:
+            st.error("❌ Please initialize the search system first")
+            return
+        
+        with st.spinner("Analyzing research trends..."):
+            # Analyze trends for the query
+            trend_analysis = rag_system.kb_loader.analyze_trends_for_query(query, top_k)
+            
+            if "error" in trend_analysis:
+                st.warning(f"❌ {trend_analysis['error']}")
+            else:
+                # Display trend analysis
+                st.subheader(f"📊 Research Trends: '{query}'")
+                
+                # Summary metrics
+                col1, col2, col3, col4 = st.columns(4)
+                
+                with col1:
+                    st.metric("Total Matching Papers", trend_analysis['total_matching_papers'])
+                
+                with col2:
+                    st.metric("Analyzed Papers", trend_analysis['analyzed_papers'])
+                
+                with col3:
+                    trends = trend_analysis['trends']
+                    avg_relevance = trends.get('relevance_stats', {}).get('avg_relevance', 0)
+                    st.metric("Avg Relevance", f"{avg_relevance:.1f}")
+                
+                with col4:
+                    date_range = trends.get('date_range', {})
+                    span_days = date_range.get('span_days', 0)
+                    st.metric("Time Span", f"{span_days} days")
+                
+                # Recent Papers Summary
+                comparative_insights = trend_analysis.get('comparative_insights', {})
+                if comparative_insights and 'recent_papers_summary' in comparative_insights:
+                    recent_summary = comparative_insights['recent_papers_summary']
+                    if recent_summary and "No recent papers found" not in recent_summary:
+                        st.subheader("📄 Recent Research Summary (Past 7 Days)")
+                        st.markdown(recent_summary)
+                    else:
+                        st.warning("⚠️ No recent papers found for this query in the past 7 days.")
+                
+                # Historical Context for Top Recent Papers
+                if comparative_insights and 'historical_context_summary' in comparative_insights:
+                    hist_summary = comparative_insights.get('historical_context_summary', '')
+                    if hist_summary:
+                        st.subheader("📚 Historical Context (Similar Prior Papers)")
+                        st.markdown(hist_summary)
+
+                # Comparative Insights
+                if comparative_insights and 'insights' in comparative_insights:
+                    st.subheader("🔍 Comparative Analysis: This Week vs. Historical Data")
+                    
+                    insights = comparative_insights['insights']
+                    if insights and insights != ["Insufficient data for comparative analysis"]:
+                        for insight in insights:
+                            st.markdown(f"• {insight}")
+                        
+                        # Show analysis summary
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.info(f"📊 **Analysis Period**: {comparative_insights.get('analysis_period', 'N/A')}")
+                        with col2:
+                            recent_count = comparative_insights.get('recent_papers_count', 0)
+                            historical_count = comparative_insights.get('historical_papers_count', 0)
+                            st.info(f"📈 **Data Points**: {recent_count} recent vs {historical_count} historical papers")
+                    else:
+                        st.warning("⚠️ Insufficient data for comparative analysis. Need more papers in the knowledge base.")
+                
+                # Research themes
+                st.subheader("🎯 Research Themes")
+                research_themes = trends.get('research_themes', {})
+                if research_themes:
+                    theme_cols = st.columns(len(research_themes))
+                    for i, (theme, count) in enumerate(research_themes.items()):
+                        with theme_cols[i]:
+                            st.metric(theme, count)
+                
+                # Source and journal distribution
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.subheader("📊 Source Distribution")
+                    sources = trends.get('source_distribution', {})
+                    for source, count in sources.items():
+                        percentage = (count / trend_analysis['analyzed_papers']) * 100
+                        st.write(f"**{source}**: {count} papers ({percentage:.1f}%)")
+                
+                with col2:
+                    st.subheader("📚 Top Journals")
+                    journals = trends.get('top_journals', {})
+                    for journal, count in journals.items():
+                        st.write(f"**{journal}**: {count} papers")
+                
+                # Top keywords
+                st.subheader("🏷️ Top Keywords")
+                keywords = trends.get('top_keywords', {})
+                if keywords:
+                    keyword_cols = st.columns(min(5, len(keywords)))
+                    for i, (keyword, count) in enumerate(list(keywords.items())[:5]):
+                        with keyword_cols[i]:
+                            st.metric(keyword, count)
+                
+                # Date range
+                date_range = trends.get('date_range', {})
+                if date_range.get('earliest') and date_range.get('latest'):
+                    st.subheader("📅 Publication Timeline")
+                    st.write(f"**Earliest**: {date_range['earliest']}")
+                    st.write(f"**Latest**: {date_range['latest']}")
+                    st.write(f"**Span**: {date_range['span_days']} days")
+                
+                # Top papers
+                st.subheader("📄 Top Papers")
+                top_papers = trend_analysis.get('top_papers', [])
+                
+                for i, paper in enumerate(top_papers, 1):
+                    with st.expander(f"📄 {i}. {paper['title'][:80]}..."):
+                        col1, col2 = st.columns([3, 1])
+                        
+                        with col1:
+                            st.write(f"**Authors:** {paper.get('authors', 'Unknown')}")
+                            st.write(f"**Journal:** {paper.get('journal', 'Unknown')}")
+                            st.write(f"**Published:** {paper.get('published', 'Unknown')}")
+                            st.write(f"**Source:** {paper.get('source', 'Unknown')}")
+                            
+                            if paper.get('url'):
+                                st.write(f"**Link:** [View Paper]({paper['url']})")
+                            
+                            st.write("**Abstract:**")
+                            st.write(paper.get('abstract', 'No abstract available')[:300] + "...")
+                        
+                        with col2:
+                            st.metric("Relevance", f"{paper.get('relevance_score', 0):.1f}")
+                            st.metric("Query Match", f"{paper.get('query_match_score', 0)}")
+                            
+                            if paper.get('matched_keywords'):
+                                st.write("**Keywords:**")
+                                for keyword in paper['matched_keywords'][:5]:  # Show top 5
+                                    st.write(f"- {keyword}")
+    
+    # Weekly Trend Analysis
+    st.subheader("📊 Weekly Research Trends")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        weeks_back = st.slider(
+            "Analyze last N weeks",
+            min_value=1,
+            max_value=4,
+            value=1,
+            key="trend_weeks"
+        )
+    
+    with col2:
+        if st.button("📈 Analyze Trends"):
+            if not rag_system.is_initialized:
+                st.error("❌ Please initialize the search system first")
+            else:
+                with st.spinner("Analyzing research trends..."):
+                    # Get papers from the specified period
+                    from datetime import datetime, timedelta
+                    start_date = datetime.now() - timedelta(weeks=weeks_back)
+                    end_date = datetime.now()
+                    
+                    papers = rag_system.kb_loader.get_papers_by_date_range(start_date, end_date)
+                    
+                    if not papers:
+                        st.warning(f"❌ No papers found for the last {weeks_back} week(s)")
+                    else:
+                        # Sort by relevance
+                        papers.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
+                        top_papers = papers[:20]
+                        
+                        st.subheader(f"📊 Research Trends - Last {weeks_back} Week(s)")
+                        
+                        # Source distribution
+                        sources = {}
+                        journals = {}
+                        keywords = {}
+                        
+                        for paper in top_papers:
+                            # Count sources
+                            source = paper.get('source', 'Unknown')
+                            sources[source] = sources.get(source, 0) + 1
+                            
+                            # Count journals
+                            journal = paper.get('journal', 'Unknown')
+                            if journal:
+                                journals[journal] = journals.get(journal, 0) + 1
+                            
+                            # Count keywords
+                            for keyword in paper.get('matched_keywords', []):
+                                keywords[keyword] = keywords.get(keyword, 0) + 1
+                        
+                        # Display trends
+                        col1, col2, col3 = st.columns(3)
+                        
+                        with col1:
+                            st.write("**📊 Source Distribution:**")
+                            for source, count in sorted(sources.items(), key=lambda x: x[1], reverse=True):
+                                st.write(f"- {source}: {count} papers")
+                        
+                        with col2:
+                            st.write("**📚 Top Journals:**")
+                            for journal, count in sorted(journals.items(), key=lambda x: x[1], reverse=True)[:5]:
+                                st.write(f"- {journal}: {count}")
+                        
+                        with col3:
+                            st.write("**🏷️ Top Keywords:**")
+                            for keyword, count in sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:5]:
+                                st.write(f"- {keyword}: {count}")
+                        
+                        # Show top papers
+                        st.write(f"**📄 Top {len(top_papers)} Papers:**")
+                        for i, paper in enumerate(top_papers[:10], 1):
+                            st.write(f"{i}. **{paper['title']}**")
+                            st.write(f"   - {paper['authors']} | {paper['journal']} | {paper['published']}")
+                            st.write(f"   - Relevance: {paper['relevance_score']:.1f}")
+                            st.write("")
 
 
 if __name__ == "__main__":
