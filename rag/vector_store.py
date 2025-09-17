@@ -49,6 +49,10 @@ class VectorStore:
         # Initialize model
         self._load_model()
     
+    def is_available(self) -> bool:
+        """Check if vector store is ready for use"""
+        return self.model is not None and self.embeddings is not None and len(self.documents) > 0
+    
     def _load_model(self):
         """Load the sentence transformer model"""
         try:

@@ -1390,7 +1390,11 @@ def render_rag_interface():
         
         with st.spinner("Analyzing research trends..."):
             # Analyze trends for the query
-            trend_analysis = rag_system.kb_loader.analyze_trends_for_query(query, top_k, llm_client=rag_system.llm_client)
+            trend_analysis = rag_system.kb_loader.analyze_trends_for_query(
+                query, top_k, 
+                llm_client=rag_system.llm_client, 
+                vector_store=rag_system.vector_store
+            )
             
             if "error" in trend_analysis:
                 st.warning(f"❌ {trend_analysis['error']}")

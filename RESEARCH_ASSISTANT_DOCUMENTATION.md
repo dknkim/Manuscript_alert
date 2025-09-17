@@ -38,11 +38,11 @@ The Research Assistant is an intelligent research analysis tool that helps resea
 - **Source Shifts**: Track changes in publication patterns across journals
 - **Quality Trends**: Monitor research relevance and impact over time
 
-### 🤖 AI-Enhanced Similarity
-- **LLM-Based Matching**: Uses DistilBERT for semantic similarity
-- **Automatic Fallback**: Falls back to Jaccard similarity if LLM unavailable
-- **Historical Context**: Shows how recent papers relate to prior work
-- **Shared Themes**: Identifies common research themes and keywords
+### 🤖 Dual AI Processing
+- **Query Processing**: Uses SentenceTransformer for semantic search and paper discovery
+- **Historical Similarity**: Uses DistilBERT for comparing recent vs historical papers
+- **Automatic Fallback**: Falls back to keyword search and Jaccard similarity if LLMs unavailable
+- **Context-Aware Analysis**: Shows how recent papers relate to prior work using AI
 
 ### 📊 Comprehensive Insights
 - **Research Themes**: Automatic categorization into research areas
@@ -142,19 +142,21 @@ User Query → Vector Search → Paper Retrieval → Analysis Pipeline → Insig
 
 ### Query Processing Pipeline
 1. **Query Input**: User enters research query (e.g., "tau prediction Alzheimer's")
-2. **Embedding Generation**: Converts query to vector using same model as papers
-3. **Similarity Search**: Finds most similar papers using cosine similarity
-4. **Filtering**: Applies user-specified filters (date, source, journal)
-5. **Ranking**: Combines semantic similarity with relevance scores
-6. **Result Preparation**: Formats results for display
+2. **AI Query Processing**: Converts query to vector using SentenceTransformer model
+3. **Semantic Search**: Finds most similar papers using cosine similarity in vector space
+4. **Fallback Handling**: Uses keyword matching if vector store unavailable
+5. **Filtering**: Applies user-specified filters (date, source, journal)
+6. **Ranking**: Combines semantic similarity with relevance scores
+7. **Result Preparation**: Formats results for display
 
 ### Trend Analysis Workflow
-1. **Paper Retrieval**: Gets all papers matching the query
-2. **Temporal Split**: Separates recent papers (≤7 days) from historical (>7 days)
-3. **Comparative Analysis**: Analyzes differences between recent and historical data
-4. **Pattern Detection**: Identifies emerging trends, source shifts, keyword evolution
-5. **Historical Context**: Uses LLM similarity to find related prior work
-6. **Insight Generation**: Creates comprehensive analysis report
+1. **AI Paper Retrieval**: Uses SentenceTransformer vector search to find semantically relevant papers
+2. **Fallback to Keywords**: Uses keyword matching if vector store unavailable
+3. **Temporal Split**: Separates recent papers (≤7 days) from historical (>7 days)
+4. **Comparative Analysis**: Analyzes differences between recent and historical data
+5. **Pattern Detection**: Identifies emerging trends, source shifts, keyword evolution
+6. **AI Historical Context**: Uses DistilBERT LLM similarity to find related prior work
+7. **Insight Generation**: Creates comprehensive analysis report
 
 ## User Interface
 
@@ -181,15 +183,34 @@ User Query → Vector Search → Paper Retrieval → Analysis Pipeline → Insig
 
 ## Technical Implementation
 
-### AI Models & Embeddings
+### Dual AI Architecture
 
-#### Vector Embeddings (Primary Search)
+The Research Assistant uses **two distinct AI models** working together:
+
+#### 🧠 AI Model #1: Query Processing (SentenceTransformer)
+- **Purpose**: Converts user queries into semantic vectors for paper discovery
+- **Model**: `all-MiniLM-L6-v2` (SentenceTransformers)
+- **Function**: When you type "machine learning neuroimaging", it understands the semantic meaning and finds papers about AI, deep learning, CNN, brain analysis, etc.
+- **Input**: User query text
+- **Output**: Vector embeddings for semantic search
+
+#### 🤖 AI Model #2: Historical Context (DistilBERT)
+- **Purpose**: Calculates semantic similarity between recent and historical papers
+- **Model**: `distilbert-base-uncased` (Hugging Face)
+- **Function**: When analyzing trends, it compares recent papers with historical ones to find related prior work
+- **Input**: Paper abstracts/titles (recent vs historical)
+- **Output**: Similarity scores for historical context analysis
+
+### Dual AI Models & Processing
+
+#### Query Processing AI (Paper Discovery)
 - **Model**: `all-MiniLM-L6-v2` (SentenceTransformers)
 - **Dimensions**: 384
-- **Purpose**: Semantic similarity search across papers
+- **Purpose**: Converts user queries to semantic vectors for paper discovery
 - **Performance**: ~1ms per query on modern hardware
+- **Fallback**: Keyword matching if vector store unavailable
 
-#### LLM Similarity (Historical Context)
+#### Historical Context AI (Similarity Calculation)
 - **Model**: `distilbert-base-uncased` (Hugging Face)
 - **Purpose**: Semantic similarity between recent and historical papers
 - **Method**: [CLS] token embeddings with cosine similarity
@@ -270,32 +291,41 @@ RAG_CONFIG = {
 ### Basic Research Discovery
 ```
 Query: "machine learning neuroimaging"
+Processing: 🧠 AI query processing + semantic search using vector embeddings
 Result: 
 - 15 papers found from last 4 weeks
 - 3 recent papers (past 7 days) vs 12 historical
 - Emerging trend: Increased AI/ML adoption (+40%)
 - Top themes: Deep learning, CNN, brain imaging
+- Query similarity scores: 0.85-0.95 range for top papers
+- Historical context: LLM-found 5 related prior studies (similarity: 0.82)
 ```
 
 ### Advanced Trend Analysis
 ```
 Query: "tau biomarkers Alzheimer's"
+Processing: 🧠 AI query processing + vector search + LLM historical similarity
 Filters: Source=PubMed, Last 6 weeks, Min relevance=5.0
 Result:
 - Recent Research Summary: 2 breakthrough papers on tau prediction
-- Historical Context: Related to 3 prior studies on tau imaging
+- Historical Context: LLM-found 3 prior studies on tau imaging (similarity: 0.89)
 - Comparative Analysis: 60% increase in biomarker research
 - Source Shift: More publications in Nature family journals
+- AI-discovered semantic matches: Papers on "amyloid", "neurodegeneration", "cognitive decline"
+- Query processing: AI understood "tau biomarkers" → found related concepts automatically
 ```
 
 ### Cross-Domain Exploration
 ```
 Query: "PET imaging dementia"
+Processing: 🧠 AI query processing + vector search + LLM historical analysis
 Result:
 - Research Themes: Neuroimaging (45%), Biomarkers (30%), Clinical (25%)
 - Source Distribution: PubMed (60%), arXiv (25%), bioRxiv (15%)
 - Quality Trends: Average relevance score increased from 4.2 to 6.8
 - Methodological Shift: 70% of recent papers use AI/ML methods
+- AI Query Understanding: "PET imaging" → finds "FDG-PET", "amyloid imaging", "brain scans"
+- Historical Context: LLM identifies 8 related prior studies across neuroimaging domains
 ```
 
 ## Benefits & Limitations
@@ -308,9 +338,13 @@ Result:
 - **Parallel Processing**: Efficient handling of large datasets
 
 #### Intelligence & Accuracy
+- **Dual AI Processing**: Uses LLMs for both query understanding and similarity calculation
 - **Semantic Understanding**: Finds papers by meaning, not just keywords
 - **Context Awareness**: Understands relationships between research areas
 - **Trend Detection**: Identifies emerging patterns and shifts
+- **AI-Powered Search**: Uses vector embeddings for intelligent query processing
+- **AI Historical Analysis**: Uses LLM similarity for comparing recent vs historical papers
+- **Automatic Fallback**: Gracefully handles system limitations
 
 #### Accessibility & Usability
 - **No API Keys**: Completely free to use

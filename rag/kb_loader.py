@@ -111,6 +111,88 @@ class KnowledgeBaseLoader:
         
         return unique_papers
     
+    def _semantic_search_papers(self, query: str, vector_store, max_papers: int = 60) -> List[Dict[str, Any]]:
+        """
+        Search for papers using semantic similarity via vector store
+        
+        Args:
+            query (str): Search query
+            vector_store: Vector store instance
+            max_papers (int): Maximum number of papers to return
+            
+        Returns:
+            List of papers with similarity scores
+        """
+        try:
+            # Perform semantic search
+            results = vector_store.search(query, top_k=max_papers, similarity_threshold=0.1)
+            
+            matching_papers = []
+            for doc, similarity_score in results:
+                # Find the paper in our cache by title (since vector store contains chunks)
+                paper_title = doc.metadata.get('title', '')
+                paper = self._find_paper_by_title(paper_title)
+                
+                if paper:
+                    # Add similarity score to paper
+                    paper['similarity_score'] = similarity_score
+                    paper['query_match_score'] = similarity_score * 10  # Convert to integer-like score
+                    matching_papers.append(paper)
+            
+            print(f"🔍 Semantic search found {len(matching_papers)} papers for query: '{query}'")
+            return matching_papers
+            
+        except Exception as e:
+            print(f"❌ Error in semantic search: {e}")
+            # Fallback to keyword search
+            return self._keyword_search_papers(query)
+    
+    def _keyword_search_papers(self, query: str) -> List[Dict[str, Any]]:
+        """
+        Search for papers using keyword matching (fallback method)
+        
+        Args:
+            query (str): Search query
+            
+        Returns:
+            List of papers with match scores
+        """
+        matching_papers = []
+        query_lower = query.lower()
+        
+        for paper in self.papers_cache:
+            # Check if query terms appear in title, abstract, or keywords
+            title = paper.get('title', '').lower()
+            abstract = paper.get('abstract', '').lower()
+            keywords = [kw.lower() for kw in paper.get('matched_keywords', [])]
+            
+            # Simple keyword matching
+            query_terms = query_lower.split()
+            matches = sum(1 for term in query_terms if term in title or term in abstract or any(term in kw for kw in keywords))
+            
+            if matches > 0:
+                paper['query_match_score'] = matches
+                paper['similarity_score'] = matches / len(query_terms)  # Normalize to 0-1 range
+                matching_papers.append(paper)
+        
+        print(f"🔍 Keyword search found {len(matching_papers)} papers for query: '{query}'")
+        return matching_papers
+    
+    def _find_paper_by_title(self, title: str) -> Dict[str, Any]:
+        """
+        Find a paper in the cache by title
+        
+        Args:
+            title (str): Paper title to search for
+            
+        Returns:
+            Paper dictionary or None if not found
+        """
+        for paper in self.papers_cache:
+            if paper.get('title', '').lower() == title.lower():
+                return paper
+        return None
+    
     def get_papers_by_date_range(self, start_date: datetime, end_date: datetime) -> List[Dict[str, Any]]:
         """
         Get papers within a specific date range
@@ -288,13 +370,15 @@ class KnowledgeBaseLoader:
             "last_loaded": self.last_loaded.isoformat() if self.last_loaded else None
         }
     
-    def analyze_trends_for_query(self, query: str, top_k: int = 20, llm_client=None) -> Dict[str, Any]:
+    def analyze_trends_for_query(self, query: str, top_k: int = 20, llm_client=None, vector_store=None) -> Dict[str, Any]:
         """
-        Analyze trends for a specific query
+        Analyze trends for a specific query using semantic search
         
         Args:
             query (str): Search query
             top_k (int): Number of top papers to analyze
+            llm_client: LLM client for similarity calculations
+            vector_store: Vector store for semantic search
             
         Returns:
             Dictionary with trend analysis
@@ -302,26 +386,16 @@ class KnowledgeBaseLoader:
         if not self.papers_cache:
             self.load_all_kb_files()
         
-        # Get papers that match the query (simple keyword matching for now)
-        matching_papers = []
-        query_lower = query.lower()
+        # Use semantic search if vector store is available, otherwise fallback to keyword matching
+        if vector_store and vector_store.is_available():
+            print(f"🧠 Using semantic search for query: '{query}'")
+            matching_papers = self._semantic_search_papers(query, vector_store, top_k * 3)  # Get more papers for better analysis
+        else:
+            print(f"📊 Using keyword search for query: '{query}' (vector store unavailable)")
+            matching_papers = self._keyword_search_papers(query)
         
-        for paper in self.papers_cache:
-            # Check if query terms appear in title, abstract, or keywords
-            title = paper.get('title', '').lower()
-            abstract = paper.get('abstract', '').lower()
-            keywords = [kw.lower() for kw in paper.get('matched_keywords', [])]
-            
-            # Simple keyword matching
-            query_terms = query_lower.split()
-            matches = sum(1 for term in query_terms if term in title or term in abstract or any(term in kw for kw in keywords))
-            
-            if matches > 0:
-                paper['query_match_score'] = matches
-                matching_papers.append(paper)
-        
-        # Sort by relevance score and query match
-        matching_papers.sort(key=lambda x: (x.get('relevance_score', 0), x.get('query_match_score', 0)), reverse=True)
+        # Sort by relevance score and similarity score
+        matching_papers.sort(key=lambda x: (x.get('relevance_score', 0), x.get('similarity_score', 0)), reverse=True)
         top_papers = matching_papers[:top_k]
         
         if not top_papers:
