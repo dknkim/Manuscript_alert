@@ -122,6 +122,16 @@ def main():
             "Radiology, AJNR, Brain, MRM, JMRI, and Alzheimer's & Dementia",
         )
 
+        # Date range selection (moved here before KB creation)
+        st.subheader("Date Range")
+        days_back = st.slider(
+            "Days to look back:",
+            min_value=1,
+            max_value=21,
+            value=7,
+            help="Number of days to search back from today",
+        )
+
         # Search limit selection
         st.subheader("Search Limits")
         search_mode = st.radio(
@@ -176,7 +186,7 @@ def main():
         
         # Knowledge Base Creation
         st.subheader("🧠 Knowledge Base")
-        if st.button("📚 Create Today's KB", help="Create a knowledge base with today's top 20 articles"):
+        if st.button("📚 Create Top 20 KB", help="Create a knowledge base with papers that have relevance score > 4.0 ONLY (up to 20 papers)"):
             # Get current configuration
             current_data_sources = {
                 "arxiv": use_arxiv,
@@ -185,11 +195,12 @@ def main():
                 "pubmed": use_pubmed,
             }
             
-            # Create the knowledge base
-            kb_filepath = create_todays_knowledge_base(
+            # Create the knowledge base using currently displayed papers
+            kb_filepath = create_top_papers_knowledge_base(
                 keywords=keywords,
                 data_sources=current_data_sources,
-                search_mode=search_mode
+                search_mode=search_mode,
+                days_back=days_back
             )
             
             if kb_filepath:
@@ -212,16 +223,6 @@ def main():
                 st.caption("📁 No KB files found in ./KB/")
         else:
             st.caption("📁 KB directory will be created when needed")
-
-        # Date range selection (moved here)
-        st.subheader("Date Range")
-        days_back = st.slider(
-            "Days to look back:",
-            min_value=1,
-            max_value=21,
-            value=7,
-            help="Number of days to search back from today",
-        )
 
     # Paper Discovery Tab
     with tab1:
@@ -997,6 +998,137 @@ def create_todays_knowledge_base(keywords, data_sources, search_mode="Extended")
         
         st.success(f"🎉 Today's knowledge base created with {len(top_papers)} papers!")
         st.info(f"📁 Saved to: {filepath}")
+        
+        return filepath
+        
+    except Exception as e:
+        st.error(f"❌ Error saving knowledge base: {e}")
+        return None
+
+
+def create_top_papers_knowledge_base(keywords, data_sources, search_mode="Extended", days_back=7):
+    """
+    Create a knowledge base with the top 20 most relevant papers currently displayed in the app
+    
+    Args:
+        keywords (list): Keywords to search for
+        data_sources (dict): Data sources configuration
+        search_mode (str): Search mode (Brief/Standard/Extended)
+        days_back (int): Number of days to look back for papers
+        
+    Returns:
+        str: Path to the created knowledge base file
+    """
+    # Create KB directory if it doesn't exist
+    kb_dir = "./KB"
+    os.makedirs(kb_dir, exist_ok=True)
+    
+    st.info("🧠 Creating knowledge base with top 20 most relevant papers...")
+    
+    # Create progress bar
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+    
+    # Step 1: Fetch papers using the same logic as the main app
+    status_text.text("📚 Fetching papers from all sources...")
+    progress_bar.progress(20)
+    
+    # Use the same fetching logic as the main app
+    end_date_normalized = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    papers_df = fetch_and_rank_papers(
+        keywords, days_back, data_sources, end_date_normalized, search_mode
+    )
+    
+    if papers_df.empty:
+        st.error("❌ No papers found for the specified criteria!")
+        return None
+    
+    # Step 2: Get top 20 papers
+    status_text.text("📊 Selecting top 20 most relevant papers...")
+    progress_bar.progress(60)
+    
+    # Filter papers with at least 2 matched keywords (same as main app)
+    keyword_filter_mask = papers_df.apply(
+        lambda row: len(row.get("matched_keywords", [])) >= 2, axis=1
+    )
+    filtered_papers = papers_df[keyword_filter_mask]
+    
+    # Filter papers with relevance score > 4.0 ONLY
+    high_relevance_papers = filtered_papers[filtered_papers["relevance_score"] > 4.0]
+    
+    # Only use papers with relevance score > 4.0
+    if len(high_relevance_papers) > 0:
+        # Take up to 20 papers, but only those with score > 4.0
+        top_papers = high_relevance_papers.head(20).to_dict('records')
+        if len(high_relevance_papers) >= 20:
+            selection_note = f"Selected top 20 papers, all with relevance score > 4.0"
+        else:
+            selection_note = f"Selected {len(high_relevance_papers)} papers with relevance score > 4.0 (fewer than 20 available)"
+    else:
+        # No papers with score > 4.0, don't create KB
+        st.warning("❌ No papers found with relevance score > 4.0. Cannot create knowledge base.")
+        st.info("💡 Try adjusting your search criteria or date range to find more relevant papers.")
+        return None
+    
+    if not top_papers:
+        st.error("❌ No papers meet the minimum keyword requirements!")
+        return None
+    
+    # Step 3: Create knowledge base structure
+    status_text.text("💾 Creating knowledge base file...")
+    progress_bar.progress(80)
+    
+    # Get date range for metadata
+    start_date = end_date_normalized - timedelta(days=days_back)
+    
+    # Create knowledge base structure
+    knowledge_base = {
+        "metadata": {
+            "created_at": datetime.now().isoformat(),
+            "weeks_covered": 1,
+            "keywords_used": keywords,
+            "data_sources": {k: v for k, v in data_sources.items() if v},
+            "search_mode": search_mode,
+            "days_back": days_back,
+            "total_papers_found": len(papers_df),
+            "filtered_papers": len(filtered_papers),
+            "high_relevance_papers": len(high_relevance_papers),
+            "top_papers_selected": len(top_papers),
+            "papers_per_week": len(top_papers),
+            "date_range": f"{start_date.strftime('%Y-%m-%d')} to {end_date_normalized.strftime('%Y-%m-%d')}",
+            "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+            "selection_details": selection_note
+        },
+        "weeks": {
+            "top_papers": {
+                "week_info": {
+                    "week_number": 1,
+                    "start_date": start_date.isoformat(),
+                    "end_date": end_date_normalized.isoformat(),
+                    "week_label": f"Top 20 Papers ({start_date.strftime('%Y-%m-%d')} to {end_date_normalized.strftime('%Y-%m-%d')})"
+                },
+                "papers": top_papers,
+                "paper_count": len(top_papers)
+            }
+        }
+    }
+    
+    # Step 4: Save to file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"knowledge_base_top20_{timestamp}.json"
+    filepath = os.path.join(kb_dir, filename)
+    
+    try:
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(knowledge_base, f, indent=2, ensure_ascii=False, default=str)
+        
+        progress_bar.progress(100)
+        status_text.text("✅ Knowledge base created successfully!")
+        
+        st.success(f"🎉 Knowledge base created with top {len(top_papers)} papers!")
+        st.info(f"📁 Saved to: {filepath}")
+        st.info(f"📊 Selected from {len(filtered_papers)} filtered papers out of {len(papers_df)} total papers")
+        st.info(f"⭐ Selection: {selection_note}")
         
         return filepath
         

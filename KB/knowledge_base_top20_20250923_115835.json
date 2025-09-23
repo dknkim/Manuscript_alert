@@ -1,0 +1,116 @@
+{
+  "metadata": {
+    "created_at": "2025-09-23T11:58:35.259166",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 886,
+    "filtered_papers": 80,
+    "high_relevance_papers": 4,
+    "top_papers_selected": 4,
+    "papers_per_week": 4,
+    "date_range": "2025-09-16 to 2025-09-23",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 4 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-16T00:00:00",
+        "end_date": "2025-09-23T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-16 to 2025-09-23)"
+      },
+      "papers": [
+        {
+          "title": "Staging Alzheimer's disease through amyloid and tau PET.",
+          "authors": "Derek R Johnson, Heather J Wiste, Val Lowe...",
+          "abstract": "A workgroup assembled by the Alzheimer's Association recently described a conceptual framework for Alzheimer's disease biological staging based on amyloid and tau positron emission tomography (PET) imaging. However, specific tau PET cut points were left to be determined, a step necessary prior to clinical application. We sought to operationalize and evaluate Alzheimer's disease biological staging by identifying meaningful tau PET cut points to define the four biological stages in a well-characterized participant cohort and describe the features of individuals placed into the different biological stages. The primary analysis included 896 participants in the Mayo Clinic Study of Aging or the Mayo Clinic Alzheimer's Disease Research Center longitudinal cohorts. A validation cohort consisted of 328 participants in the Alzheimer's Disease Neuroimaging Initiative. Both cognitively normal and impaired individuals with positive amyloid PET and evaluable tau PET imaging were included. Tau PET cut points were identified with Gaussian Mixture Models to characterize Alzheimer's disease biological stage in study participants with different clinical diagnoses and objective degrees of cognitive impairment as measured by Mini-Mental State Examination. A tau PET cut point in the medial temporal region and two cut points in the temporoparietal region were identified to collectively produce the four Alzheimer's disease biological stages described in the revised criteria. Increasing stage was associated with greater likelihood of mild cognitive impairment and dementia diagnosis and worsening cognitive performance on Mini-Mental State Examination and Clinical Dementia Rating Sum of Boxes, a result that was reproduced in the independent Alzheimer's Disease Neuroimaging Initiative cohort. This study provided empiric validation for the concept of using amyloid PET and tau PET to separate subjects with biomarker-proven Alzheimer's disease into four biological stages with distinct characteristics.",
+          "published": "2025-09-19",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40974012/",
+          "source": "PubMed",
+          "relevance_score": 11.399999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Integrating MRI Volume and Plasma p-Tau217 for Amyloid Risk Stratification in Early-Stage Alzheimer Disease.",
+          "authors": "Sohyun Yim, Seongbeom Park, Kyoungyoon Lim...",
+          "abstract": "Identifying β-amyloid (Aβ) positivity is crucial for selecting candidates for Aβ-targeted therapies in early-stage Alzheimer disease (AD). While Aβ PET is accurate, its high cost limits routine use. Plasma p-tau217 testing offers a less invasive option but also incurs additional costs. Structural brain MRI, routinely used in cognitive assessments, can identify features predictive of Aβ positivity without extra expense. We evaluated a 2-stage workflow integrating MRI-based features and plasma p-tau217 to efficiently predict Aβ PET positivity in early-stage AD.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40829110/",
+          "source": "PubMed",
+          "relevance_score": 6.6,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "amyloid",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Neurology",
+          "volume": "105",
+          "issue": "6"
+        },
+        {
+          "title": "CQ-CNN: A lightweight hybrid classical-quantum convolutional neural network for Alzheimer's disease detection using 3D structural brain MRI.",
+          "authors": "Mominul Islam, Mohammad Junayed Hasan, M R C Mahdy",
+          "abstract": "The automatic detection of Alzheimer's disease (AD) using 3D volumetric MRI data is a complex, multi-domain challenge that has traditionally been addressed by training classical convolutional neural networks (CNNs). With the rise of quantum computing and its potential to replace classical systems in the future, there is a growing need to: (i) develop automated systems for AD detection that run on quantum computers, (ii) explore the capabilities of current-generation classical-quantum architectures, and (iii) identify their potential limitations and advantages. To reduce the complexity of multi-domain expertise while addressing the emerging demands of quantum-based automated systems, our contribution in this paper is twofold. First, we introduce a simple preprocessing framework that converts 3D MRI volumetric data into 2D slices. Second, we propose CQ-CNN, a parameterized quantum circuit (PQC)-based lightweight hybrid classical-quantum convolutional neural network that leverages the computational capabilities of both classical and quantum systems. Our experiments on the OASIS-2 dataset reveal a significant limitation in current hybrid classical-quantum architectures, as they face difficulties converging when class images are highly similar, such as between moderate dementia and non-dementia classes of AD, which leads to gradient failure and optimization stagnation. However, when convergence is achieved, the quantum model demonstrates a promising quantum advantage by attaining state-of-the-art accuracy with far fewer parameters than classical models. For instance, our [Formula: see text]-3-qubit model achieves 97.5% accuracy using only 13.7K parameters (0.05 MB), which is 5.67% higher than a classical model with the same parameter count. Nevertheless, our results highlight the need for improved quantum optimization methods to support the practical deployment of hybrid classical-quantum models in AD detection and related medical imaging tasks.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982572/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "PloS one",
+          "volume": "20",
+          "issue": "9"
+        },
+        {
+          "title": "Biomarkers for Alzheimer's disease are upregulated in patients with diabetic retinopathy.",
+          "authors": "Manju L Subramanian, Konstantina Sampani, Steven Ness...",
+          "abstract": "BackgroundDiabetes has been linked to increased prevalence of dementia, but the link between diabetic retinopathy (DR) and Alzheimer's disease (AD) remains unclear.ObjectiveThis study aimed to evaluate potential associations between DR and AD-related protein biomarkers in plasma and ocular fluid.MethodsA prospective, cross-sectional study collected human blood, vitreous, aqueous, and tear samples and measured amyloid-β (Aβ",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982223/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "plasma"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": ""
+        }
+      ],
+      "paper_count": 4
+    }
+  }
+}
