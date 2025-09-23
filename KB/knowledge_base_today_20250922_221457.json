@@ -1,0 +1,482 @@
+{
+  "metadata": {
+    "created_at": "2025-09-22T22:14:57.701139",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "total_papers": 20,
+    "papers_per_week": 20,
+    "date_range": "2025-09-22 to 2025-09-22"
+  },
+  "weeks": {
+    "today": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-22T00:00:00",
+        "end_date": "2025-09-22T00:00:00",
+        "week_label": "Today (2025-09-22)"
+      },
+      "papers": [
+        {
+          "title": "CQ-CNN: A lightweight hybrid classical-quantum convolutional neural network for Alzheimer's disease detection using 3D structural brain MRI.",
+          "authors": "Mominul Islam, Mohammad Junayed Hasan, M R C Mahdy",
+          "abstract": "The automatic detection of Alzheimer's disease (AD) using 3D volumetric MRI data is a complex, multi-domain challenge that has traditionally been addressed by training classical convolutional neural networks (CNNs). With the rise of quantum computing and its potential to replace classical systems in the future, there is a growing need to: (i) develop automated systems for AD detection that run on quantum computers, (ii) explore the capabilities of current-generation classical-quantum architectures, and (iii) identify their potential limitations and advantages. To reduce the complexity of multi-domain expertise while addressing the emerging demands of quantum-based automated systems, our contribution in this paper is twofold. First, we introduce a simple preprocessing framework that converts 3D MRI volumetric data into 2D slices. Second, we propose CQ-CNN, a parameterized quantum circuit (PQC)-based lightweight hybrid classical-quantum convolutional neural network that leverages the computational capabilities of both classical and quantum systems. Our experiments on the OASIS-2 dataset reveal a significant limitation in current hybrid classical-quantum architectures, as they face difficulties converging when class images are highly similar, such as between moderate dementia and non-dementia classes of AD, which leads to gradient failure and optimization stagnation. However, when convergence is achieved, the quantum model demonstrates a promising quantum advantage by attaining state-of-the-art accuracy with far fewer parameters than classical models. For instance, our [Formula: see text]-3-qubit model achieves 97.5% accuracy using only 13.7K parameters (0.05 MB), which is 5.67% higher than a classical model with the same parameter count. Nevertheless, our results highlight the need for improved quantum optimization methods to support the practical deployment of hybrid classical-quantum models in AD detection and related medical imaging tasks.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982572/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "PloS one",
+          "volume": "20",
+          "issue": "9",
+          "pmid": "40982572",
+          "doi": "10.1371/journal.pone.0331870",
+          "categories": [
+            "PubMed",
+            "Alzheimer Disease",
+            "Humans",
+            "Neural Networks, Computer",
+            "Magnetic Resonance Imaging",
+            "Brain"
+          ]
+        },
+        {
+          "title": "Biomarkers for Alzheimer's disease are upregulated in patients with diabetic retinopathy.",
+          "authors": "Manju L Subramanian, Konstantina Sampani, Steven Ness...",
+          "abstract": "BackgroundDiabetes has been linked to increased prevalence of dementia, but the link between diabetic retinopathy (DR) and Alzheimer's disease (AD) remains unclear.ObjectiveThis study aimed to evaluate potential associations between DR and AD-related protein biomarkers in plasma and ocular fluid.MethodsA prospective, cross-sectional study collected human blood, vitreous, aqueous, and tear samples and measured amyloid-β (Aβ",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982223/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "plasma"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982223",
+          "doi": "10.1177/13872877251378759",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Cross-Sectional FDG in Down Syndrome and Autosomal Dominant Alzheimer's Disease.",
+          "authors": "Omar Abdelmoity, Julie K Wisch, James T Kennedy...",
+          "abstract": "Directly compare the brain glucose patterns seen with [F-18] fluorodeoxyglucose (FDG) positron emission tomography (PET) between 2 genetically determined forms of Alzheimer's disease: Down syndrome (DS) and autosomal dominant Alzheimer's disease (ADAD).",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40977577/",
+          "source": "PubMed",
+          "relevance_score": 3.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "brain"
+          ],
+          "journal": "Annals of neurology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40977577",
+          "doi": "10.1002/ana.78002",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Initial Manic Presentation in Creutzfeldt-Jakob Disease: A Case Report.",
+          "authors": "Fatima Ghazi Alotaibi, Rakan Bahammam, Khalid M Alqarni...",
+          "abstract": "BACKGROUND Creutzfeldt-Jakob disease (CJD) is a rare and fatal neurodegenerative condition caused by misfolded prion proteins. It most commonly presents with rapidly progressive dementia and neurological deterioration. While psychiatric symptoms are not unusual in the early stages of CJD, it is very uncommon for the disease to begin with manic features as the primary presentation. CASE REPORT We describe the case of a 65-year-old woman who initially developed symptoms consistent with mania. These included an elevated mood, emotional instability, and insomnia. Over time, her clinical condition worsened, and she began to experience hallucinations, along with a noticeable motor decline. Due to the atypical nature of her initial symptoms, she was first treated for viral encephalitis, which contributed to a delay in establishing the correct diagnosis. Subsequent investigations played a key role in clarifying the underlying pathology. Brain magnetic resonance imaging (MRI) revealed characteristic findings of CJD, including cortical ribboning and changes in the basal ganglia. Electroencephalography (EEG) showed periodic sharp-wave complexes, further supporting the diagnosis. Cerebrospinal fluid analysis tested positive for prion protein using real-time quaking-induced conversion (RT-QuIC), confirming a final diagnosis of sporadic CJD (sCJD). CONCLUSIONS Although rare, mania can be an early sign of CJD. This case illustrates the diagnostic challenges that arise when psychiatric symptoms dominate the initial clinical picture. It emphasizes the importance of maintaining a broad differential diagnosis when evaluating new-onset psychiatric symptoms in older adults, especially when these symptoms are accompanied by a rapid decline in cognition or motor function. Early consideration of CJD in such scenarios may help expedite diagnosis, avoid unnecessary treatments, and provide clarity for patients and families facing a progressive and life-limiting illness.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982408/",
+          "source": "PubMed",
+          "relevance_score": 3.5,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "The American journal of case reports",
+          "volume": "26",
+          "issue": "",
+          "pmid": "40982408",
+          "doi": "10.12659/AJCR.949905",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Creutzfeldt-Jakob Syndrome",
+            "Female",
+            "Aged",
+            "Mania"
+          ]
+        },
+        {
+          "title": "Advancing Alzheimer's disease treatment: A literature review on senolytic intervention.",
+          "authors": "Victor C Onuh",
+          "abstract": "Alzheimer's disease (AD) is a leading cause of dementia, currently affecting over 50 million people globally. Despite decades of research, therapeutic development has continued to face high failure rates due to an incomplete understanding of the underlying disease mechanisms. Current drugs like rivastigmine focus on managing cognitive symptoms since there is no known cure to halt the disease's progression. However, recent research has suggested that advanced biological age, particularly the accumulation of senescent cells, is the most significant risk factor for AD pathology, and targeting these aging mechanisms may prove more effective in altering the disease progression. Senescent cells accumulate with age, contributing to inflammatory states and neurodegenerative diseases such as AD. Senolytic drugs, such as dasatinib and quercetin (D + Q), have shown promise in animal models by clearing senescent cells, delaying aging-related decline, and improving AD-related outcomes. This literature review aims to provide a comprehensive overview of the therapeutic potential of senolytic interventions for AD by examining the mechanisms of cellular senescence based on evidence of its accumulation in the human brain, critically analyzing the preclinical and clinical trials involving senolytic compounds, and discussing the implications and limitations of this approach. The findings from recent studies indicate that senolytics may pave the way for effective AD treatments, though further clinical validation is needed.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982213/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982213",
+          "doi": "10.1177/13872877251376540",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Non-coding RNA-mediated gene regulation in Alzheimer's disease pathogenesis: molecular insights and emerging innovations.",
+          "authors": "Sami I Alzarea",
+          "abstract": "The accumulation of pathological markers, such as tau tangles and amyloid-beta (Aβ) plaques, and progressive cognitive dysfunction are the markers of Alzheimer's disease (AD). The development of successful therapeutic plans requires exposure to the molecular mechanisms underlying AD development. The importance of non-coding RNAs (ncRNAs), such as circular RNAs (circRNAs), microRNAs (miRNAs), long ncRNAs (lncRNAs), and PIWI-interacting RNAs (piRNAs), in controlling gene expression and influencing the pathophysiology of disease has been brought to light by recent studies. With a focus on their role in important processes such tau hyperphosphorylation, neuroinflammation, and amyloid-beta formation, this study attempts to give a thorough overview of the several types of ncRNAs and their dysregulation in AD. The genetic variants that are associated with the function of ncRNA including single nucleotide polymorphisms (SNPs) may influence ncRNA expression and activity, thereby impacting the susceptibility of individual towards AD. Furthermore, the impact of biomarkers of ncRNAs for early diagnosis and therapeutic option for intervention, highlighting most recent advancement in high-throughput technologies and bioinformatics facilitating ncRNA profiling has also being discussed. The integration of multi-omics approaches and artificial intelligence, new advancement for the complex relationship among ncRNAs and AD pathology are also discussed. The enhancement and understanding of ncRNAs could lead to the door for novel therapeutic concepts for the mitigation of AD progression, offering effective interventions in a disease that currently starves the curative treatments.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982080/",
+          "source": "PubMed",
+          "relevance_score": 3.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Saudi pharmaceutical journal : SPJ : the official publication of the Saudi Pharmaceutical Society",
+          "volume": "33",
+          "issue": "5",
+          "pmid": "40982080",
+          "doi": "10.1007/s44446-025-00026-2",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Optimizing MRI Protocols for Brain Radiosurgery: The Role of Sequence and Contrast Agent Timing.",
+          "authors": "Julian Mangesius, Christian Kremser, Christoph Birkl...",
+          "abstract": "Accurate target volume delineation is critical for effective stereotactic radiotherapy (SRT) of brain metastases. This study systematically investigates how MRI sequence selection and the time elapsed after contrast agent (CA) administration affect the apparent metastases volumes, with the goal of optimizing MRI protocols for radiation therapy planning.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40980938/",
+          "source": "PubMed",
+          "relevance_score": 2.9,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Investigative radiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40980938",
+          "doi": "10.1097/RLI.0000000000001238",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Iatrogenic superficial siderosis with the Pseudomeningocele after spinal surgery: a report of four cases and literature review.",
+          "authors": "Motonori Hashimoto, Satoru Egawa, Takashi Hirai...",
+          "abstract": "Superficial siderosis (SS) is an uncommon condition resulting from chronic bleeding into the subarachnoid space. The hemosiderin deposition on the brain surface and spinal cord causes the progression of neurological symptoms. Although some reports have described the occurrence of SS following iatrogenic dural injury during spinal surgery, the pathophysiology of hemorrhage remains unclear. Here we describe in detail four cases of SS that resulted from pseudomeningocele formation at the surgical site due to iatrogenic dural injury during previous spinal surgery. MRI revealed pseudomeningocele eroding the vertebral bodies in each case. Out of the four patients, two underwent surgery. A significant dural defect was detected in both patients, exposing the bone marrow in the vertebrae within the pseudomeningocele. Additionally, microscopic examination revealed bleeding from the bone marrow in the pseudomeningocele. We employed fat or muscle fascia to surgically repair the dural defect, and applied bone wax directly to the exposed bone marrow of vertebrae. These findings indicated that the inadvertent occurrence of a dural tear during spinal surgery have caused pseudomeningocele formation that erodes the vertebral body, resulting in persistent bleeding from the exposed bone marrow into the subarachnoid space. In these cases, the iatrogenic dural defect should be surgically repaired during the initial surgery to prevent ongoing CSF leak and the development of iatrogenic SS. In iatrogenic SS patients with pseudomeningocele, duralplasty is effective in halting or delaying the progression of hemosiderin deposition on the brain surface and spine by mitigating hemorrhage from the bone marrow into the subarachnoid space.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982039/",
+          "source": "PubMed",
+          "relevance_score": 2.5,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "European spine journal : official publication of the European Spine Society, the European Spinal Deformity Society, and the European Section of the Cervical Spine Research Society",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982039",
+          "doi": "10.1007/s00586-025-09288-9",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Postconcussive Sleep Problems and Glymphatic Dysfunction Predict Persistent Working Memory Decline.",
+          "authors": "Yi-Tien Li, David Yen-Ting Chen, Duen-Pang Kuo...",
+          "abstract": "Persistent working memory decline (PWMD) is a common sequela of mild traumatic brain injury (mTBI), yet reliable biomarkers for predicting long-term working memory outcomes remain lacking. The glymphatic system, a brain-wide waste clearance network, plays a crucial role in cognitive recovery. The diffusion tensor imaging analysis along the perivascular space (DTI-ALPS) index, a noninvasive magnetic resonance imaging (MRI)-based technique, offers a promising approach to evaluate perivascular fluid dynamics-a key component of glymphatic function. However, its role in long-term working memory dysfunction remains underexplored, particularly in the presence of traumatic cerebral microbleeds (CMBs) and poor sleep quality-as measured by Pittsburgh Sleep Quality Index (PSQI)-both of which have been suggested to disrupt glymphatic clearance, exacerbate neurovascular impairment, and contribute to cognitive decline. This study aims to investigate the interplay between CMBs, sleep quality, and perivascular fluid dynamics in predicting PWMD after mTBI. We further assess the feasibility of a machine learning-based approach to enhance individualized working memory outcome prediction. Between September 2015 and October 2022, 3,068 patients presenting with concussion were screened, and 471 met the inclusion criteria for mTBI. A total of 184 patients provided informed consent, and 61 completed both baseline and 1-year follow-up assessments. In addition, 61 demographically matched healthy controls were recruited. Susceptibility-weighted imaging was used to detect CMBs, while perivascular fluid dynamics was assessed using the DTI-ALPS index. Sleep quality was evaluated using the PSQI, and working memory was measured with the Digit Span test at baseline and 1-year post-injury. Mediation analysis was conducted to examine the indirect effects of perivascular fluid dynamics on cognitive outcomes, and a machine learning model incorporating DTI-ALPS, CMBs, sleep quality, and baseline cognitive scores was developed for individualized prediction. CMBs were present in 29.5% of mTBI patients and were associated with significantly lower DTI-ALPS index values (",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982305/",
+          "source": "PubMed",
+          "relevance_score": 2.5,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Journal of neurotrauma",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982305",
+          "doi": "10.1177/08977151251380701",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Diffusion tensor imaging and MR spectroscopy in the evaluation of neonatal encephalopathies.",
+          "authors": "Adya Mehra, Priya Pattath Sankaran, Sheila S Mathai...",
+          "abstract": "BackgroundNeonatal encephalopathy is a broad term encompassing many underlying pathologies, most commonly hypoxic-ischemic encephalopathy. Though this diagnosis has long been derived from relevant history, examination and lab parameters, this study aims to illustrate the diagnostic power of advanced radiological techniques such as MR Spectroscopy and Diffusion Tensor Imaging to objectively classify subjects based on disease severity and predict adverse outcomes.Methods41 cases of neonatal encephalopathy with MRI Brain were included in the study. NAA/Cr, NAA/Cho, Cho/Cr and Lac/Cr ratios in basal ganglia and white matter, and DTI parameters of FA, ADC and MD in five major tracts were recorded. Developmental milestones were assessed on follow up of the child at 6 months. Correlation of the MRS and DTI values with disease severity and status at follow up was done.ResultsThe ratios of NAA/Cr and Lac/Cr in basal ganglia and white matter showed strong positive correlation with the disease severity at onset. Lac/Cr also positively correlated with the abnormal outcome group. FA values in the posterior limbs of internal capsule, thalami and corpus callosum were seen to most consistently correlate with the abnormal outcome group, substantiating these objective and reproducible metrics that can be employed for neuro-prognostication across all etiologies of neonatal encephalopathy.ConclusionNeonatal encephalopathy is an umbrella term for conditions that can cause devastating neurological sequelae, which necessitates radiological pattern recognition for identification of etiology, and use of supplementary quantitative techniques such as MRS and DTI is endorsed for objective evaluation of clinical outcomes.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982670/",
+          "source": "PubMed",
+          "relevance_score": 2.5,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Journal of neonatal-perinatal medicine",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982670",
+          "doi": "10.1177/19345798251380181",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "High brain network dynamics mediate audiovisual integration deficits and cognitive impairment in Alzheimer's disease.",
+          "authors": "Jieying Li, Yang Yi, Xin Gao...",
+          "abstract": "BackgroundAudiovisual integration deficits are frequent in patients with Alzheimer's disease (AD). In addition, patients with AD have altered functional brain networks, such as those supporting auditory and visual processing. However, the mechanisms driving this association remain unclear.ObjectiveTo investigate whether dynamic functional network disruptions underlie audiovisual integration and cognitive deficits in AD.MethodsSeventy-nine participants (41 AD, 38 controls) completed audiovisual stimuli tasks. A multilayer modularity algorithm was utilized to assess the resting-state fMRI-based brain dynamics of the primary sensory and higher-order functional networks. Mediation analysis was conducted to test our hypothesis.ResultsAD patients showed delayed response time and reduced peak benefit of audiovisual integration. Dynamic switching rates of primary sensory and higher-order networks were significantly increased in AD, particularly in the dynamic integration between the default mode network (DMN) and visual network (VN). The peak benefit of audiovisual integration negatively correlated with DMN-VN dynamic integration and positively with Mini-Mental State Examination, Montreal Cognitive Assessment, and Auditory Verbal Learning Test delayed scores. Notably, excessive integration between the DMN and VN mediated the relationship between audiovisual integration deficits and cognitive impairment in patients with AD.ConclusionsThese findings suggest that audiovisual integration impairment may disturb the dynamic integration between the DMN and VN, contributing to cognitive impairment in AD. The neural mechanisms underlying audiovisual integration deficit and cognitive decline might help with early diagnosis and intervention for AD.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982226/",
+          "source": "PubMed",
+          "relevance_score": 2.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "brain"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982226",
+          "doi": "10.1177/13872877251376717",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Physical activity and reduced risk of Alzheimer's disease: potential role of soluble amyloid-β42.",
+          "authors": "Timothy Daly, Alberto J Espay, Bruno P Imbimbo",
+          "abstract": "",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982719/",
+          "source": "PubMed",
+          "relevance_score": 2.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid"
+          ],
+          "journal": "The Journal of physiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982719",
+          "doi": "10.1113/JP290033",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Review of anti-amyloid-beta (Aβ) monoclonal antibodies for the treatment of Alzheimer's disease.",
+          "authors": "Emily Francis, Samantha Paylor, Cindy Van...",
+          "abstract": "Alzheimer's disease (AD) remains a major public health challenge, with growing prevalence and limited treatment options that modify disease progression. Recent advances have led to the development and approval of Anti-amyloid-β (Aβ) monoclonal antibodies, which represent a paradigm shift from symptomatic management to targeted disease modification.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40940304/",
+          "source": "PubMed",
+          "relevance_score": 2.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid"
+          ],
+          "journal": "Expert review of clinical pharmacology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40940304",
+          "doi": "10.1080/17512433.2025.2556122",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Machine learning model for predicting the conversion to dementia using the Cube Copying Test.",
+          "authors": "Mio Shinozaki, Hiroyuki Hishida, Yasuyuki Gondo...",
+          "abstract": "BackgroundEarly detection of dementia requires highly accurate and efficient screening tests that minimize patient burden.ObjectiveTo develop a machine learning model predicting dementia conversion within 3-5 years using Cube Copying Test (CCT) drawings at baseline.MethodsThis retrospective study analyzed CCT drawing data from 767 patients at the Center for Comprehensive Care and Research on Memory Disorders (2011-2020). Of the 2303 patients who met the inclusion criteria, 534 were excluded due to mild cognitive impairment (MCI) persistence, pending diagnoses, or new neurovascular diseases, while 1002 were lost to follow-up. Eligibility criteria included a baseline Mini-Mental State Examination (MMSE) score ≥24, absence of dementia diagnosis or anti-dementia medication intake, and completion of a 3-5-year follow-up without meeting exclusion criteria.ResultsOf 767 patients, 457 converted to dementia (318 with Alzheimer's disease, 116 with dementia with Lewy bodies, and 23 with frontotemporal dementia) within 3-5 years, while 310 did not. The model achieved an area under the curve of 0.85 for predicting dementia conversion. Shapley Additive exPlanations analysis identified PatchCore-derived features as the strongest predictors, distinguishing drawing patterns of converters and non-converters.ConclusionsIn patients who convert to Alzheimer's disease, dementia with Lewy bodies, or frontotemporal dementia, the very early stages of constructional apraxia-like symptoms already exist at the preclinical stage or MCI stage. Applying deep learning-based anomaly-detection models can detect these early drawing distortions that differ from normal aging and contribute to improving the performance of dementia-conversion prediction.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982217/",
+          "source": "PubMed",
+          "relevance_score": 2.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982217",
+          "doi": "10.1177/13872877251376939",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Risk of Acute Kidney Injury Following Gadolinium-based Contrast Agent-enhanced MRI: Propensity-matched 7-year Cohort Study.",
+          "authors": "Min Woo Han, Pyeong Hwa Kim, Chong Hyun Suh...",
+          "abstract": "The kidney plays a vital role in eliminating gadolinium-based contrast agents (GBCAs), and renal function may contribute to various GBCA-associated adverse drug reactions (ADRs), particularly acute kidney injury (AKI). The objective of the study is to investigate whether GBCA administration elevates AKI risk and explore the correlation between renal function and the incidence of GBCA-associated acute ADRs.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40977576/",
+          "source": "PubMed",
+          "relevance_score": 1.7,
+          "matched_keywords": [
+            "MRI"
+          ],
+          "journal": "Investigative radiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40977576",
+          "doi": "10.1097/RLI.0000000000001239",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "Postoperative speech impairment and cranial nerve deficits in children undergoing posterior fossa tumor surgery with intraoperative MRI - a prospective multinational study.",
+          "authors": "Aske Foldbjerg Laustsen, Jonathan Kjær Grønbæk, Radek Frič...",
+          "abstract": "Postoperative speech impairment (POSI) and cranial nerve deficits (CND) are common complications of pediatric posterior fossa (PF) tumor surgery. Intraoperative MRI (ioMRI) has proven a useful tool in achieving gross total resection. The risk of POSI and CND with ioMRI remains unclear, making it the primary scope of this study. Additionally, we assessed whether POSI was associated with CND.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982141/",
+          "source": "PubMed",
+          "relevance_score": 1.7,
+          "matched_keywords": [
+            "MRI"
+          ],
+          "journal": "Acta neurochirurgica",
+          "volume": "167",
+          "issue": "1",
+          "pmid": "40982141",
+          "doi": "10.1007/s00701-025-06669-3",
+          "categories": [
+            "PubMed",
+            "Humans",
+            "Male",
+            "Female",
+            "Child",
+            "Infratentorial Neoplasms"
+          ]
+        },
+        {
+          "title": "The diagnostic value of 18 F-FAPI-04 PET/CT in unresectable hepatocellular carcinoma: a head-to-head comparison with 18 F-FDG PET/CT.",
+          "authors": "Huanyu Gong, Yong Cheng, Qiang Li...",
+          "abstract": "This study aimed to evaluate the diagnostic value of",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982020/",
+          "source": "PubMed",
+          "relevance_score": 1.7,
+          "matched_keywords": [
+            "PET"
+          ],
+          "journal": "European journal of nuclear medicine and molecular imaging",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982020",
+          "doi": "10.1007/s00259-025-07548-w",
+          "categories": [
+            "PubMed"
+          ]
+        },
+        {
+          "title": "A transferrin-targeted nanoplatform for MRI-guided visualization and potent suppression of tumors and pulmonary metastatic lesions.",
+          "authors": "Liya Tian, Pengju Ma, Wenxiu Zhuang...",
+          "abstract": "While targeted theranostics for cancer remains a pivotal research frontier, conventional ligand conjugation strategies exhibit persistent limitations in off-target accumulation and suboptimal tumor specificity, ultimately failing to achieve reliable detection of early-stage lesions or metastatic nodules while demonstrating insufficient therapeutic payload delivery. In this study, the manganese sulfide (MnS) nanoplatform was synthesized using transferrin (Tf) with tumor-targeting properties as a carrier by a simple fabrication method. Notably, compared to clinically prevalent Gd-based contrast agents, Tf-MnS exhibited superior",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40704978/",
+          "source": "PubMed",
+          "relevance_score": 1.7,
+          "matched_keywords": [
+            "MRI"
+          ],
+          "journal": "Nanoscale horizons",
+          "volume": "10",
+          "issue": "10",
+          "pmid": "40704978",
+          "doi": "10.1039/d5nh00325c",
+          "categories": [
+            "PubMed",
+            "Animals",
+            "Lung Neoplasms",
+            "Magnetic Resonance Imaging",
+            "Mice",
+            "Transferrin"
+          ]
+        },
+        {
+          "title": "Polyethylene terephthalate (PET) biodeterioration by microalgae: preliminary insights from the screening of indigenous species.",
+          "authors": "Dinesh Parida, Kanika Kiran, Rimjhim Sangtani...",
+          "abstract": "Polyethylene terephthalate (PET) is a huge part of consumer products such as beverage bottles, packaging materials, and textile fibres. It contributes significantly to persistent plastic pollution in freshwater ecosystems. This study explores the biodeterioration potential of seven indigenous freshwater microalgae isolated from water bodies near Indore, India, for sustainable PET degradation without chemical pre-treatment. Algal strains were incubated with PET granules for 20 days under controlled laboratory conditions (pH-7.2, temp. 27 ± 3 °C, light intensity of 40.5 µmol/m",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982066/",
+          "source": "PubMed",
+          "relevance_score": 1.7,
+          "matched_keywords": [
+            "PET"
+          ],
+          "journal": "Biodegradation",
+          "volume": "36",
+          "issue": "5",
+          "pmid": "40982066",
+          "doi": "10.1007/s10532-025-10187-5",
+          "categories": [
+            "PubMed",
+            "Polyethylene Terephthalates",
+            "Microalgae",
+            "Biodegradation, Environmental",
+            "India"
+          ]
+        },
+        {
+          "title": "Diagnostic accuracy of Dual-Energy CT in detecting traumatic vertebral bone marrow edema: a prospective comparative study with MRI in the context of a level I trauma center.",
+          "authors": "Thomas Beyer, Erik Volmer, Patrick Gahr...",
+          "abstract": "Traumatic vertebral fractures present a significant diagnostic challenge in emergency settings. Magnetic resonance imaging (MRI) excels in detecting bone marrow edema but faces practical limitations in acute trauma care. This prospective study evaluates the diagnostic accuracy of Dual-Energy Computed Tomography (DECT) in detecting traumatic vertebral bone marrow edema within a Level I trauma center environment.",
+          "published": "2025-09-22",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982062/",
+          "source": "PubMed",
+          "relevance_score": 1.7,
+          "matched_keywords": [
+            "MRI"
+          ],
+          "journal": "Neuroradiology",
+          "volume": "",
+          "issue": "",
+          "pmid": "40982062",
+          "doi": "10.1007/s00234-025-03763-2",
+          "categories": [
+            "PubMed"
+          ]
+        }
+      ],
+      "paper_count": 20
+    }
+  }
+}
