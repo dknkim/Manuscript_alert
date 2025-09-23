@@ -661,7 +661,7 @@ class KnowledgeBaseLoader:
     
     def _get_top_recent_papers(self, recent_papers: List[Dict[str, Any]], query: str, top_n: int = 3) -> List[Dict[str, Any]]:
         """
-        Get the top N most relevant recent papers for a query
+        Get the top N most relevant recent papers for a query, ensuring no duplicates
         
         Args:
             recent_papers (List[Dict]): List of recent papers
@@ -669,14 +669,48 @@ class KnowledgeBaseLoader:
             top_n (int): Number of top papers to return
             
         Returns:
-            List of top papers sorted by relevance
+            List of unique top papers sorted by relevance
         """
         if not recent_papers:
             return []
         
+        # Remove duplicates based on title, DOI, or PMID (case-insensitive)
+        seen_papers = set()
+        unique_papers = []
+        
+        for paper in recent_papers:
+            title = paper.get('title', '').strip().lower()
+            doi = paper.get('doi', '').strip().lower()
+            pmid = paper.get('pmid', '').strip()
+            arxiv_url = paper.get('arxiv_url', '').strip().lower()
+            
+            # Create a unique identifier for this paper
+            identifiers = []
+            if title:
+                identifiers.append(('title', title))
+            if doi:
+                identifiers.append(('doi', doi))
+            if pmid:
+                identifiers.append(('pmid', pmid))
+            if arxiv_url:
+                identifiers.append(('arxiv', arxiv_url))
+            
+            # Check if we've seen this paper before using any of its identifiers
+            is_duplicate = False
+            for id_type, identifier in identifiers:
+                if identifier in seen_papers:
+                    is_duplicate = True
+                    break
+            
+            if not is_duplicate and identifiers:
+                # Add all identifiers to seen set
+                for id_type, identifier in identifiers:
+                    seen_papers.add(identifier)
+                unique_papers.append(paper)
+        
         # Sort by relevance score and query match score
         sorted_papers = sorted(
-            recent_papers, 
+            unique_papers, 
             key=lambda x: (x.get('relevance_score', 0), x.get('query_match_score', 0)), 
             reverse=True
         )
@@ -736,9 +770,6 @@ class KnowledgeBaseLoader:
         
         summary += "\n".join(paper_summaries)
         
-        # Add overall trend analysis
-        summary += self._add_trend_analysis(query, top_papers)
-        
         return summary
     
     def _extract_relevant_sentences(self, abstract: str, query_terms: List[str]) -> str:
@@ -775,74 +806,6 @@ class KnowledgeBaseLoader:
         
         return ". ".join(top_sentences) + "." if top_sentences else ""
     
-    def _add_trend_analysis(self, query: str, top_papers: List[Dict[str, Any]]) -> str:
-        """
-        Add trend analysis to the summary
-        
-        Args:
-            query (str): The search query
-            top_papers (List[Dict]): Top recent papers
-            
-        Returns:
-            String with trend analysis
-        """
-        if not top_papers:
-            return ""
-        
-        # Analyze common themes
-        all_keywords = []
-        all_abstracts = []
-        
-        for paper in top_papers:
-            all_keywords.extend(paper.get('matched_keywords', []))
-            all_abstracts.append(paper.get('abstract', ''))
-        
-        # Find most common keywords
-        keyword_counts = {}
-        for keyword in all_keywords:
-            keyword_counts[keyword] = keyword_counts.get(keyword, 0) + 1
-        
-        common_keywords = sorted(keyword_counts.items(), key=lambda x: x[1], reverse=True)[:3]
-        
-        # Analyze methodological approaches
-        method_keywords = ['machine learning', 'deep learning', 'ai', 'neural network', 'transformer', 'cnn', 'rnn']
-        clinical_keywords = ['clinical', 'patient', 'trial', 'therapy', 'treatment', 'diagnosis']
-        
-        method_papers = 0
-        clinical_papers = 0
-        
-        for paper in top_papers:
-            abstract = paper.get('abstract', '').lower()
-            title = paper.get('title', '').lower()
-            
-            if any(method in abstract or method in title for method in method_keywords):
-                method_papers += 1
-            
-            if any(clinical in abstract or clinical in title for clinical in clinical_keywords):
-                clinical_papers += 1
-        
-        # Generate trend analysis
-        trend_analysis = "\n## Key Trends in Recent Research\n\n"
-        
-        if common_keywords:
-            trend_analysis += f"**Focus Areas:** The most prominent research themes include {', '.join([kw[0] for kw in common_keywords])}.\n\n"
-        
-        if method_papers > 0:
-            method_pct = (method_papers / len(top_papers)) * 100
-            trend_analysis += f"**Methodological Approach:** {method_pct:.0f}% of recent papers employ AI/ML methods, indicating a strong computational focus.\n\n"
-        
-        if clinical_papers > 0:
-            clinical_pct = (clinical_papers / len(top_papers)) * 100
-            trend_analysis += f"**Clinical Relevance:** {clinical_pct:.0f}% of recent papers have direct clinical applications, showing translational research activity.\n\n"
-        
-        # Add relevance quality note
-        avg_relevance = sum(p.get('relevance_score', 0) for p in top_papers) / len(top_papers)
-        if avg_relevance > 7:
-            trend_analysis += f"**Research Quality:** Recent papers show high relevance scores (avg: {avg_relevance:.1f}), indicating strong alignment with current research priorities.\n\n"
-        elif avg_relevance > 5:
-            trend_analysis += f"**Research Quality:** Recent papers show moderate relevance scores (avg: {avg_relevance:.1f}), with good potential for impact.\n\n"
-        
-        return trend_analysis
 
     def _build_historical_context(self, recent_top: List[Dict[str, Any]], historical_papers: List[Dict[str, Any]], llm_client=None) -> str:
         """Create paragraphs that summarize prior similar papers in KB for each recent top paper.
