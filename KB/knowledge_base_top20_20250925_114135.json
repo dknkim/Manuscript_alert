@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "created_at": "2025-09-25T11:41:35.136565",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 998,
+    "filtered_papers": 100,
+    "high_relevance_papers": 7,
+    "top_papers_selected": 7,
+    "papers_per_week": 7,
+    "date_range": "2025-09-18 to 2025-09-25",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 7 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-18T00:00:00",
+        "end_date": "2025-09-25T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-18 to 2025-09-25)"
+      },
+      "papers": [
+        {
+          "title": "The presymptomatic and early manifestations of semantic dementia.",
+          "authors": "David J Whiteside, Matthew A Rouse, P Simon Jones...",
+          "abstract": "People with semantic dementia (SD) or semantic variant primary progressive aphasia typically present with marked atrophy of the anterior temporal lobe, and thereafter progress more slowly than other forms of frontotemporal dementia. This suggests a prolonged prodromal phase with accumulation of neuropathology and minimal symptoms, about which little is known. To study early and presymptomatic SD, we first examine a well-characterised cohort of people with SD recruited from the Cambridge Centre for Frontotemporal Dementia. Five people with early SD had coincidental MRI prior to the onset of symptoms, or were healthy volunteers in research with anterior temporal lobe atrophy as an incidental finding. We model longitudinal imaging changes in left- and right-lateralised SD to predict atrophy at symptom onset. We then assess 61,203 participants with structural brain MRI in the UK Biobank to find individuals with imaging changes in keeping with SD but with no neurodegenerative diagnosis. To identify these individuals in UK Biobank, we design an ensemble-based classifier, differentiating baseline structural MRI in SD from healthy controls and patients with other neurodegenerative diseases, including other causes of frontotemporal lobar degeneration. We train the classifier on a Cambridge-based cohort (SD n=47, other neurodegenerative diseases n=498, healthy controls n=88) and test it on a combined cohort from the Neuroimaging in Frontotemporal Dementia study and the Alzheimer's Disease Neuroimaging Initiative (SD n=42, other neurodegenerative n=449, healthy control n=127). From our case series, we find people with marked atrophy three to five years before recognition of symptom onset in left- or right-predominant SD. We present right-lateralised cases with subtle multimodal semantic impairment, found concurrently with only mild behavioural disturbance. We show that imaging measures can be used to reliably and accurately differentiate clinical SD from other neurodegenerative diseases (recall 0.88, precision 0.95, F1 score 0.91). We find individuals with no neurodegenerative diagnosis in the UK Biobank with striking left-lateralised (prevalence ages 45-85 4.8/100,000) or right-lateralised (5.9/100,000) anterior temporal lobe atrophy, with deficits on cognitive testing suggestive of semantic impairment. These individuals show progressive involvement of other cognitive domains in longitudinal follow-up. Together, our findings suggest that (i) there is a burden of incipient early anterior temporal lobe atrophy in older populations, with comparable prevalence of left- and right-sided cases from this prospective unbiased approach to identification, (ii) substantial atrophy is required for manifest symptoms, particularly in right-lateralised cases, and (iii) semantic deficits across multiple domains can be detected in the early symptomatic phase.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40986416/",
+          "source": "PubMed",
+          "relevance_score": 8.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Integrating MRI Volume and Plasma p-Tau217 for Amyloid Risk Stratification in Early-Stage Alzheimer Disease.",
+          "authors": "Sohyun Yim, Seongbeom Park, Kyoungyoon Lim...",
+          "abstract": "Identifying β-amyloid (Aβ) positivity is crucial for selecting candidates for Aβ-targeted therapies in early-stage Alzheimer disease (AD). While Aβ PET is accurate, its high cost limits routine use. Plasma p-tau217 testing offers a less invasive option but also incurs additional costs. Structural brain MRI, routinely used in cognitive assessments, can identify features predictive of Aβ positivity without extra expense. We evaluated a 2-stage workflow integrating MRI-based features and plasma p-tau217 to efficiently predict Aβ PET positivity in early-stage AD.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40829110/",
+          "source": "PubMed",
+          "relevance_score": 6.6,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "amyloid",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Neurology",
+          "volume": "105",
+          "issue": "6"
+        },
+        {
+          "title": "CQ-CNN: A lightweight hybrid classical-quantum convolutional neural network for Alzheimer's disease detection using 3D structural brain MRI.",
+          "authors": "Mominul Islam, Mohammad Junayed Hasan, M R C Mahdy",
+          "abstract": "The automatic detection of Alzheimer's disease (AD) using 3D volumetric MRI data is a complex, multi-domain challenge that has traditionally been addressed by training classical convolutional neural networks (CNNs). With the rise of quantum computing and its potential to replace classical systems in the future, there is a growing need to: (i) develop automated systems for AD detection that run on quantum computers, (ii) explore the capabilities of current-generation classical-quantum architectures, and (iii) identify their potential limitations and advantages. To reduce the complexity of multi-domain expertise while addressing the emerging demands of quantum-based automated systems, our contribution in this paper is twofold. First, we introduce a simple preprocessing framework that converts 3D MRI volumetric data into 2D slices. Second, we propose CQ-CNN, a parameterized quantum circuit (PQC)-based lightweight hybrid classical-quantum convolutional neural network that leverages the computational capabilities of both classical and quantum systems. Our experiments on the OASIS-2 dataset reveal a significant limitation in current hybrid classical-quantum architectures, as they face difficulties converging when class images are highly similar, such as between moderate dementia and non-dementia classes of AD, which leads to gradient failure and optimization stagnation. However, when convergence is achieved, the quantum model demonstrates a promising quantum advantage by attaining state-of-the-art accuracy with far fewer parameters than classical models. For instance, our [Formula: see text]-3-qubit model achieves 97.5% accuracy using only 13.7K parameters (0.05 MB), which is 5.67% higher than a classical model with the same parameter count. Nevertheless, our results highlight the need for improved quantum optimization methods to support the practical deployment of hybrid classical-quantum models in AD detection and related medical imaging tasks.",
+          "published": "2025-01-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40982572/",
+          "source": "PubMed",
+          "relevance_score": 5.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "PloS one",
+          "volume": "20",
+          "issue": "9"
+        },
+        {
+          "title": "Detecting Beta-amyloid Plaque via Low Rank Based Orthogonal Projection and Spatial-spectrum Detector Using High-resolution Quantitative Susceptibility Mapping for Preclinical Studies.",
+          "authors": "Jie Chen, Xinyue Han, Zhuoheng Liu...",
+          "abstract": "Detecting beta-amyloid (Aβ) plaques at different stages is crucial for accurate assessment and effective intervention in Alzheimer's disease (AD). In this study, we developed a novel method for reliably identifying Aβ plaques, characterized by sparse negative susceptibility values, in preclinical studies using high-resolution quantitative susceptibility mapping (QSM), named QSM-PLAQUE Aβ Detector. This approach decomposes a high-resolution QSM MRI image into three components: L (representing the background subspace), S (representing the signals subspace), and N (representing the noise). Subsequently, we established an orthogonal subspace based on L to eliminate the background from the sum of L and S. Finally, a plaque detection process was conducted, where Aβ plaques were identified based on the neighbor spectrum (NS) of a voxel being tested rather than just analyzing the voxel itself alone. Experiments demonstrated that the proposed method effectively detects Aβ plaques of varying shapes and intensities across the entire mouse brain. It shows robust performance across histology, highresolution QSM MRI, and synthesized datasets, without requiring training samples. The QSM-PLAQUE Aβ Detector provides a practical framework for identifying and visualizing Aβ plaques in preclinical studies, offering a new strategy for quantitative assessment of Aβ plaques and may guide the development of advanced techniques for preclinical AD research.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40991598/",
+          "source": "PubMed",
+          "relevance_score": 4.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "IEEE transactions on bio-medical engineering",
+          "volume": "PP",
+          "issue": ""
+        },
+        {
+          "title": "Reduced synaptic vesicle protein 2A in extracellular vesicles and brains of Alzheimer's disease: associations with Aβ, tau, synaptic proteins and APOE ε4.",
+          "authors": "Jana Nussbaumer, Aatmika Barve, Valentin Zufferey...",
+          "abstract": "Alzheimer's disease (AD) is characterized by accumulation of amyloid-β (Aβ) plaques, tau neurofibrillary Tangles and synaptic dysfunction. The aim of this study was to map the distributions of synaptic vesicle protein 2A (SV2A) and other synaptic proteins in the brain and the brain-derived extracellular vesicles (BDEVs) of AD patients, analyze their associations with Aβ, tau, and the apolipoprotein E (APOE) ε4 allele, and investigate the biological role of SV2A.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40993829/",
+          "source": "PubMed",
+          "relevance_score": 4.6,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Translational neurodegeneration",
+          "volume": "14",
+          "issue": "1"
+        },
+        {
+          "title": "Therapeutic Potential of products derived from Pluchea lanceolata for Alzheimer's Disease Treatment.",
+          "authors": "Asad Syed, Abdallah M Elgorban, Ali H Bahkali...",
+          "abstract": "AD is a neurodegenerative disorder and is associated with the presence of amyloid-β plaques and neurofibrillary tangles leading to net loss of neurons, which demonstrates an urgent unmet need to develop new human health therapies based on the fundamental mechanisms of oxidative stress and neuroinflammation. This work is a computational assessment of the potential use of neolupenol, a triterpenoid produced in Pluchea lanceolata, as a pharmacologically active compound that exerted its beneficial effect through the modulation of the Keap1-Nrf2 axis, one of the central regulators of the antioxidant response. Using an integrated approach that combined network pharmacology, molecular docking, and molecular dynamics (MD) simulations, we identified neolupenol as a high-affinity Keap1-binding molecule capable of activating the Nrf2-mediated neuroprotective pathway. Virtual screening of 25 phytochemicals from Pluchea lanceolata (retrieved from the PubChem database) with customized filters revealed neolupenol as the top candidate, showing strong binding affinity (- 8.22 kcal/mol; Ki = 1.45 µM) toward the Keap1 Kelch domain (PDB ID: 2FLU). The docked complex demonstrated hydrogen bonds with VAL463 (2.17 Å), THR560, and ILE559, along with hydrophobic interactions involving CYS513, ALA366, and VAL514, which collectively stabilized the ligand at the Neh2-binding interface. Network pharmacology yielded 30 of such common targets of AD-neolupenol (e.g., GSK3B, CASP3, TNF, and BACE1), enriched in pathways such as amyloid processing, tau phosphorylation, oxidative stress response, and lipid metabolism (FDR-adjusted p 70%, providing a basis of dynamic stability. The triterpenoid cavity appeared in neolupenol contributing to pleasant PK, the ability to herald the blood-brain barrier, and suboptimal toxicity. These results position neolupenol as a potent, multi-target neuroprotective agent that disrupts Keap1-Nrf2 interaction, promoting Nrf2 nuclear translocation and antioxidant gene activation. Future work warrants in vivo validation of its efficacy in mitigating AD pathology and clinical translation.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40986212/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Journal of molecular neuroscience : MN",
+          "volume": "75",
+          "issue": "4"
+        },
+        {
+          "title": "Synbiotics in Alzheimer's disease: mechanisms, clinical evidence, and therapeutic prospects.",
+          "authors": "Yuhua Lin, Rongping Weng, Huayang Pan...",
+          "abstract": "Growing evidence implicates gut microbiota (GM) dysbiosis in Alzheimer's disease (AD) pathogenesis via the gut-brain axis. Dysbiosis contributes to neuroinflammation, amyloid-β deposition, tau hyperphosphorylation, blood-brain barrier disruption, and cognitive decline. Synbiotics (combinations of probiotics and prebiotics) offer a promising strategy to modulate GM, potentially ameliorating these AD hallmarks through multiple mechanisms including enhanced production of neuroprotective short-chain fatty acids (SCFAs), reduced inflammation, improved gut barrier integrity, and immunomodulation.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40993787/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Journal of translational medicine",
+          "volume": "23",
+          "issue": "1"
+        }
+      ],
+      "paper_count": 7
+    }
+  }
+}

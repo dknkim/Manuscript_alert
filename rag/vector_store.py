@@ -215,8 +215,16 @@ class VectorStore:
                 if value.lower() not in str(metadata_value).lower():
                     return False
             else:
-                if metadata_value != value:
-                    return False
+                # Handle numpy arrays and other complex types
+                if isinstance(metadata_value, np.ndarray):
+                    if not isinstance(value, np.ndarray) or not np.array_equal(metadata_value, value):
+                        return False
+                elif isinstance(value, np.ndarray):
+                    if not np.array_equal(metadata_value, value):
+                        return False
+                else:
+                    if metadata_value != value:
+                        return False
         
         return True
     
@@ -315,7 +323,7 @@ class VectorStore:
                     chunk_type=doc_data["chunk_type"],
                     metadata=doc_data["metadata"],
                     chunk_index=doc_data["chunk_index"],
-                    embedding=np.array(doc_data["embedding"]) if doc_data["embedding"] else None
+                    embedding=np.array(doc_data["embedding"]) if doc_data["embedding"] is not None else None
                 )
                 self.documents.append(doc)
             
