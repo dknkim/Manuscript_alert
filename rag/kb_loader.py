@@ -860,7 +860,7 @@ class KnowledgeBaseLoader:
                 # Fallback to Jaccard similarity
                 rp_tokens = tokenize(rp_text)
                 if not rp_tokens:
-                    sections.append(f"\n**{idx}. {rp.get('title','Untitled')}**\nNo similar prior papers found (insufficient text).\n")
+                    sections.append(f"\n{idx}. {rp.get('title','Untitled')}\nNo similar prior papers found (insufficient text).\n")
                     continue
 
                 # Compute Jaccard similarity with all historical papers and pick top 2
@@ -881,14 +881,14 @@ class KnowledgeBaseLoader:
             published = rp.get('published', 'N/A')
 
             if not top_matches:
-                sections.append(f"\n**{idx}. {title}** ({journal}, {published})\nNo similar prior papers found in the KB.\n")
+                sections.append(f"\n{idx}. {title} ({journal}, {published})\nNo similar prior papers found in the KB.\n")
                 continue
 
-            para_lines = [f"\n**{idx}. {title}** ({journal}, {published})"]
+            para_lines = [f"\n{idx}. {title} ({journal}, {published})"]
             mentions = []
             for score, hp in top_matches:
                 mentions.append(
-                    f"'{hp.get('title','Untitled')}' ({hp.get('journal','Unknown Journal')}, {hp.get('published','N/A')}; similarity {score:.2f})"
+                    f"**{hp.get('title','Untitled')}** ({hp.get('journal','Unknown Journal')}, {hp.get('published','N/A')}; similarity {score:.2f})"
                 )
             if len(mentions) == 1:
                 para_lines.append(f"Related prior work: {mentions[0]}.")

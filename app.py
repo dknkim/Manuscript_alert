@@ -1382,6 +1382,36 @@ def render_rag_interface():
     """Render the RAG assistant interface - No API required"""
     st.header("🧠 Research Assistant")
     st.markdown("Search and analyze your research papers with structured summaries and trend analysis!")
+    # Minimal card styles for better readability of RAG outputs
+    st.markdown(
+        """
+        <style>
+        .rag-card { 
+            background: #ffffff; 
+            border: 1px solid #eaecf0; 
+            border-radius: 12px; 
+            padding: 16px 18px; 
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+        }
+        .rag-card h3 { 
+            margin: 0 0 8px 0; 
+            font-size: 1rem; 
+            color: #1f2937;
+            font-weight: 600;
+        }
+        .rag-card .rag-muted { 
+            color: #6b7280; 
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        .rag-card div {
+            color: #374151;
+            line-height: 1.5;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     
     # Initialize RAG system
     rag_system = initialize_rag_system()
@@ -1553,22 +1583,39 @@ def render_rag_interface():
                     span_days = date_range.get('span_days', 0)
                     st.metric("Time Span", f"{span_days} days")
                 
-                # Recent Papers Summary
+                # Recent vs Historical summaries in side-by-side cards
                 comparative_insights = trend_analysis.get('comparative_insights', {})
-                if comparative_insights and 'recent_papers_summary' in comparative_insights:
-                    recent_summary = comparative_insights['recent_papers_summary']
+                left_col, right_col = st.columns(2)
+                # Left: Recent Research Summary
+                with left_col:
+                    recent_summary = comparative_insights.get('recent_papers_summary', '')
                     if recent_summary and "No recent papers found" not in recent_summary:
-                        st.subheader("📄 Recent Research Summary (Past 7 Days)")
-                        st.markdown(recent_summary)
+                        st.markdown(
+                            f"""
+                            <div class='rag-card'>
+                              <h3>📄 Recent Research Summary (Past 7 Days)</h3>
+                              <div class='rag-muted'>Auto-generated from most similar recent papers</div>
+                              <div>{recent_summary}</div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
                     else:
                         st.warning("⚠️ No recent papers found for this query in the past 7 days.")
-                
-                # Historical Context for Top Recent Papers
-                if comparative_insights and 'historical_context_summary' in comparative_insights:
+                # Right: Historical Context
+                with right_col:
                     hist_summary = comparative_insights.get('historical_context_summary', '')
                     if hist_summary:
-                        st.subheader("📚 Historical Context (Similar Prior Papers)")
-                        st.markdown(hist_summary)
+                        st.markdown(
+                            f"""
+                            <div class='rag-card'>
+                              <h3>📚 Historical Context (Similar Prior Papers)</h3>
+                              <div class='rag-muted'>Context from semantically related earlier work</div>
+                              <div>{hist_summary}</div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
 
                 # Comparative Insights
                 if comparative_insights and 'insights' in comparative_insights:
