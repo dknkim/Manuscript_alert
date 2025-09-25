@@ -1441,7 +1441,7 @@ def display_papers(papers_df):
                         color = "#cc0000"  # Red for bottom quartile (<25th percentile)
 
                 score_display = (
-                    f"{score:.3f}" if isinstance(score, int | float) else str(score)
+                    f"{score:.1f}" if isinstance(score, int | float) else str(score)
                 )
                 # Create clickable score that links to paper
                 base_style = (
