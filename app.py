@@ -291,26 +291,104 @@ def main():
             return
 
         # Search within results
-        search_query = st.text_input(
-            "🔍 Search within results:", placeholder="Enter search term..."
-        )
+        search_col1, search_col2 = st.columns([3, 1])
+        
+        with search_col1:
+            search_query = st.text_input(
+                "🔍 Search within results:", placeholder="Enter search term..."
+            )
+        
+        with search_col2:
+            use_semantic = st.checkbox(
+                "🧠 Semantic Search", 
+                value=False,
+                help="Use AI-powered semantic search instead of keyword matching"
+            )
+            
+            if use_semantic:
+                with st.expander("ℹ️ About Semantic Search", expanded=False):
+                    st.markdown("""
+                    **🧠 Semantic Search** uses AI to understand the meaning of your query and find papers 
+                    that are conceptually similar, even if they don't contain the exact same words.
+                    
+                    **How it works**:
+                    1. Converts your query and paper content into numerical representations (embeddings)
+                    2. Calculates similarity based on meaning, not just keyword matching  
+                    3. Ranks results by semantic relevance
+                    
+                    **Example**: Search for "machine learning" and find papers about "AI", "neural networks", 
+                    or "deep learning" even if they don't mention "machine learning" explicitly.
+                    """)
 
         # Apply filters
         filtered_papers = papers.copy()
 
         # Search filter
         if search_query:
-            filtered_papers = filtered_papers[
-                filtered_papers["title"].str.contains(
-                    search_query, case=False, na=False
-                )
-                | filtered_papers["abstract"].str.contains(
-                    search_query, case=False, na=False
-                )
-                | filtered_papers["authors"].str.contains(
-                    search_query, case=False, na=False
-                )
-            ]
+            if use_semantic:
+                # Use semantic search
+                try:
+                    from processors.semantic_search import get_semantic_searcher
+                    searcher = get_semantic_searcher()
+                    
+                    if searcher.is_available():
+                        st.info("🧠 Using semantic search to re-rank papers by conceptual similarity...")
+                        original_count = len(filtered_papers)
+                        filtered_papers = searcher.search_papers(filtered_papers, search_query, top_k=50)
+                        
+                        # Show semantic similarity scores and re-ranking info
+                        if 'semantic_similarity' in filtered_papers.columns:
+                            st.success(f"✅ Re-ranked {original_count} papers by semantic similarity")
+                            st.caption(f"📊 Similarity scores: {filtered_papers['semantic_similarity'].min():.3f} - {filtered_papers['semantic_similarity'].max():.3f}")
+                            
+                            # Show top 3 most similar papers
+                            if len(filtered_papers) >= 3:
+                                st.caption("🎯 Top 3 most semantically similar papers:")
+                                for i in range(min(3, len(filtered_papers))):
+                                    title = filtered_papers.iloc[i]['title'][:60] + "..." if len(filtered_papers.iloc[i]['title']) > 60 else filtered_papers.iloc[i]['title']
+                                    score = filtered_papers.iloc[i]['semantic_similarity']
+                                    st.caption(f"  {i+1}. {title} (similarity: {score:.3f})")
+                    else:
+                        st.warning("⚠️ Semantic search not available, falling back to keyword search")
+                        # Fallback to keyword search
+                        filtered_papers = filtered_papers[
+                            filtered_papers["title"].str.contains(
+                                search_query, case=False, na=False
+                            )
+                            | filtered_papers["abstract"].str.contains(
+                                search_query, case=False, na=False
+                            )
+                            | filtered_papers["authors"].str.contains(
+                                search_query, case=False, na=False
+                            )
+                        ]
+                except ImportError:
+                    st.warning("⚠️ Semantic search module not available, using keyword search")
+                    # Fallback to keyword search
+                    filtered_papers = filtered_papers[
+                        filtered_papers["title"].str.contains(
+                            search_query, case=False, na=False
+                        )
+                        | filtered_papers["abstract"].str.contains(
+                            search_query, case=False, na=False
+                        )
+                        | filtered_papers["authors"].str.contains(
+                            search_query, case=False, na=False
+                        )
+                    ]
+            else:
+                # Use traditional keyword search
+                filtered_papers = filtered_papers[
+                    filtered_papers["title"].str.contains(
+                        search_query, case=False, na=False
+                    )
+                    | filtered_papers["abstract"].str.contains(
+                        search_query, case=False, na=False
+                    )
+                    | filtered_papers["authors"].str.contains(
+                        search_query, case=False, na=False
+                    )
+                ]
 
         # Relevant journal filter
         if show_high_impact_only:
