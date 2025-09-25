@@ -332,22 +332,30 @@ def main():
                     searcher = get_semantic_searcher()
                     
                     if searcher.is_available():
-                        st.info("🧠 Using semantic search to re-rank papers by conceptual similarity...")
-                        original_count = len(filtered_papers)
-                        filtered_papers = searcher.search_papers(filtered_papers, search_query, top_k=50)
+                        # First filter by relevance score > 3.3
+                        high_relevance_papers = filtered_papers[filtered_papers["relevance_score"] > 3.3]
                         
-                        # Show semantic similarity scores and re-ranking info
-                        if 'semantic_similarity' in filtered_papers.columns:
-                            st.success(f"✅ Re-ranked {original_count} papers by semantic similarity")
-                            st.caption(f"📊 Similarity scores: {filtered_papers['semantic_similarity'].min():.3f} - {filtered_papers['semantic_similarity'].max():.3f}")
+                        if len(high_relevance_papers) == 0:
+                            st.warning("⚠️ No papers found with relevance score > 3.3 for semantic search")
+                            filtered_papers = pd.DataFrame()  # Empty dataframe
+                        else:
+                            st.info(f"🧠 Found {len(high_relevance_papers)} papers with relevance > 3.3, re-ranking by semantic similarity...")
                             
-                            # Show top 3 most similar papers
-                            if len(filtered_papers) >= 3:
-                                st.caption("🎯 Top 3 most semantically similar papers:")
-                                for i in range(min(3, len(filtered_papers))):
-                                    title = filtered_papers.iloc[i]['title'][:60] + "..." if len(filtered_papers.iloc[i]['title']) > 60 else filtered_papers.iloc[i]['title']
-                                    score = filtered_papers.iloc[i]['semantic_similarity']
-                                    st.caption(f"  {i+1}. {title} (similarity: {score:.3f})")
+                            # Apply semantic search to re-rank
+                            filtered_papers = searcher.search_papers(high_relevance_papers, search_query, top_k=50)
+                            
+                            # Show semantic similarity scores and re-ranking info
+                            if 'semantic_similarity' in filtered_papers.columns:
+                                st.success(f"✅ Re-ranked {len(high_relevance_papers)} papers by semantic similarity")
+                                st.caption(f"📊 Similarity scores: {filtered_papers['semantic_similarity'].min():.3f} - {filtered_papers['semantic_similarity'].max():.3f}")
+                                
+                                # Show top 3 most similar papers
+                                if len(filtered_papers) >= 3:
+                                    st.caption("🎯 Top 3 most semantically similar papers:")
+                                    for i in range(min(3, len(filtered_papers))):
+                                        title = filtered_papers.iloc[i]['title'][:60] + "..." if len(filtered_papers.iloc[i]['title']) > 60 else filtered_papers.iloc[i]['title']
+                                        score = filtered_papers.iloc[i]['semantic_similarity']
+                                        st.caption(f"  {i+1}. {title} (similarity: {score:.3f})")
                     else:
                         st.warning("⚠️ Semantic search not available, falling back to keyword search")
                         # Fallback to keyword search
@@ -1402,24 +1410,40 @@ def display_papers(papers_df):
                     unsafe_allow_html=True,
                 )
 
-                # Relevance score with 4-color quartile-based gradient
-                score = paper["relevance_score"]
-
-                # Quartile-based coloring (assuming most scores are 0-10 range)
-                # Top 25% (Q4), Upper-middle 25% (Q3), Lower-middle 25% (Q2), Bottom 25% (Q1)
-                if score >= 7.5:
-                    color = "#00c851"  # Green for top quartile (75th percentile+)
-                elif score >= 5:
-                    color = "#ffbb33"  # Amber for upper-middle quartile (50-75th)
-                elif score >= 2.5:
-                    color = "#ff8800"  # Dark Orange for lower-middle quartile (25-50th)
+                # Check if semantic similarity is available (semantic search was used)
+                if 'semantic_similarity' in paper and not pd.isna(paper['semantic_similarity']):
+                    # Use semantic similarity score
+                    score = paper["semantic_similarity"]
+                    score_label = "Similarity"
+                    
+                    # Color coding for similarity scores (0-1 range)
+                    if score >= 0.8:
+                        color = "#00c851"  # Green for high similarity
+                    elif score >= 0.6:
+                        color = "#ffbb33"  # Amber for medium-high similarity
+                    elif score >= 0.4:
+                        color = "#ff8800"  # Orange for medium similarity
+                    else:
+                        color = "#cc0000"  # Red for low similarity
                 else:
-                    color = "#cc0000"  # Red for bottom quartile (<25th percentile)
+                    # Use relevance score (traditional search)
+                    score = paper["relevance_score"]
+                    score_label = "Relevance"
+                    
+                    # Quartile-based coloring (assuming most scores are 0-10 range)
+                    if score >= 7.5:
+                        color = "#00c851"  # Green for top quartile (75th percentile+)
+                    elif score >= 5:
+                        color = "#ffbb33"  # Amber for upper-middle quartile (50-75th)
+                    elif score >= 2.5:
+                        color = "#ff8800"  # Dark Orange for lower-middle quartile (25-50th)
+                    else:
+                        color = "#cc0000"  # Red for bottom quartile (<25th percentile)
 
                 score_display = (
-                    f"{score:.1f}" if isinstance(score, int | float) else str(score)
+                    f"{score:.3f}" if isinstance(score, int | float) else str(score)
                 )
-                # Create clickable relevance score that links to paper
+                # Create clickable score that links to paper
                 base_style = (
                     "display: flex; flex-direction: column; "
                     "align-items: center; justify-content: center; "
@@ -1432,8 +1456,8 @@ def display_papers(papers_df):
                     f"{score_display}</div>"
                 )
                 label_div = (
-                    "<div style='font-size: 12px; margin: 2px 0 0 0; "
-                    "color: #666;'>Relevance Score</div>"
+                    f"<div style='font-size: 12px; margin: 2px 0 0 0; "
+                    f"color: #666;'>{score_label} Score</div>"
                 )
 
                 if url and url.startswith(("http://", "https://")):

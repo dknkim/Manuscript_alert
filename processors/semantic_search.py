@@ -39,8 +39,8 @@ class SemanticSearcher:
         """
 
         candidates = [
-            ("HuggingFaceTB/SmolLM2-135M", "causal"),
             ("sentence-transformers/all-MiniLM-L6-v2", "encoder"),
+            ("sentence-transformers/all-mpnet-base-v2", "encoder"),
             ("distilbert-base-uncased", "encoder"),
         ]
 
@@ -137,16 +137,35 @@ class SemanticSearcher:
         return self._encode_texts(texts)
 
     def _cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        if a.ndim == 1:
-            a = a.reshape(1, -1)
-        if b.ndim == 1:
-            b = b.reshape(1, -1)
-        a = a.astype(np.float32)
-        b = b.astype(np.float32)
-        a_norm = a / (np.linalg.norm(a, axis=1, keepdims=True) + 1e-8)
-        b_norm = b / (np.linalg.norm(b, axis=1, keepdims=True) + 1e-8)
-        sim = np.dot(a_norm, b_norm.T)
-        return sim[0]
+        """Calculate cosine similarity between query and papers"""
+        try:
+            # Ensure proper shapes
+            if a.ndim == 1:
+                a = a.reshape(1, -1)
+            if b.ndim == 1:
+                b = b.reshape(1, -1)
+            
+            # Convert to float32 for stability
+            a = a.astype(np.float32)
+            b = b.astype(np.float32)
+            
+            # Normalize vectors to unit length
+            a_norm = a / (np.linalg.norm(a, axis=1, keepdims=True) + 1e-8)
+            b_norm = b / (np.linalg.norm(b, axis=1, keepdims=True) + 1e-8)
+            
+            # Calculate cosine similarity: dot product of normalized vectors
+            similarity = np.dot(a_norm, b_norm.T)
+            
+            # Return 1D array of similarities
+            if similarity.shape[0] == 1:
+                return similarity[0]
+            else:
+                return similarity.flatten()
+                
+        except Exception as e:
+            print(f"❌ Error in cosine similarity calculation: {e}")
+            # Return zeros if calculation fails
+            return np.zeros(b.shape[0] if b.ndim > 1 else 1)
 
     def search_papers(self, papers_df: pd.DataFrame, query: str, top_k: int = 50) -> pd.DataFrame:
         if not self.is_available() or papers_df.empty:
@@ -157,8 +176,8 @@ class SemanticSearcher:
             for _, row in papers_df.iterrows():
                 title = str(row.get("title", ""))
                 abstract = str(row.get("abstract", ""))
-                authors = str(row.get("authors", ""))
-                texts.append(f"{title}. {abstract}. {authors}")
+                # Only use title and abstract for semantic search (no authors)
+                texts.append(f"{title}. {abstract}")
 
             paper_emb = self.get_embeddings(texts)
             if paper_emb.size == 0:
@@ -171,9 +190,11 @@ class SemanticSearcher:
                 return papers_df
 
             sims = self._cosine_similarity(query_emb, paper_emb)
+            
             ranked = papers_df.copy()
             ranked["semantic_similarity"] = sims
             ranked = ranked.sort_values("semantic_similarity", ascending=False).reset_index(drop=True)
+            
             return ranked.head(top_k)
         except Exception as e:
             print(f"❌ Error in semantic search: {e}")
