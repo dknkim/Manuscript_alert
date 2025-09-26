@@ -886,23 +886,41 @@ class KnowledgeBaseLoader:
 
             para_lines = [f"\n{idx}. {title} ({journal}, {published})"]
             mentions = []
+            seen_titles = set()  # Track seen paper titles to avoid duplicates
+            
             for score, hp in top_matches:
+                hp_title = hp.get('title', 'Untitled')
+                # Skip if we've already seen this paper title
+                if hp_title.lower().strip() in seen_titles:
+                    continue
+                seen_titles.add(hp_title.lower().strip())
+                
                 mentions.append(
-                    f"**{hp.get('title','Untitled')}** ({hp.get('journal','Unknown Journal')}, {hp.get('published','N/A')}; similarity {score:.2f})"
+                    f"**{hp_title}** ({hp.get('journal','Unknown Journal')}, {hp.get('published','N/A')}; similarity {score:.2f})"
                 )
+                
+                # Limit to 2 unique papers
+                if len(mentions) >= 2:
+                    break
+            
             if len(mentions) == 1:
                 para_lines.append(f"Related prior work: {mentions[0]}.")
-            else:
+            elif len(mentions) == 2:
                 para_lines.append(f"Related prior works include {mentions[0]} and {mentions[1]}.")
+            else:
+                para_lines.append("No unique related prior works found.")
 
             # Add brief overlap via shared keywords if available
             rp_kws = set(rp.get('matched_keywords', []) or [])
             kw_overlaps = []
-            for _, hp in top_matches:
-                hp_kws = set(hp.get('matched_keywords', []) or [])
-                ov = rp_kws & hp_kws
-                if ov:
-                    kw_overlaps.append(', '.join(list(ov)[:3]))
+            # Use the deduplicated matches for keyword analysis
+            for score, hp in top_matches:
+                hp_title = hp.get('title', 'Untitled')
+                if hp_title.lower().strip() in seen_titles:
+                    hp_kws = set(hp.get('matched_keywords', []) or [])
+                    ov = rp_kws & hp_kws
+                    if ov:
+                        kw_overlaps.append(', '.join(list(ov)[:3]))
             if kw_overlaps:
                 para_lines.append(f"Shared themes: {', '.join(kw_overlaps)}.")
 

@@ -1,0 +1,216 @@
+{
+  "metadata": {
+    "created_at": "2025-09-26T12:35:21.672084",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 998,
+    "filtered_papers": 95,
+    "high_relevance_papers": 10,
+    "top_papers_selected": 10,
+    "papers_per_week": 10,
+    "date_range": "2025-09-19 to 2025-09-26",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 10 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-19T00:00:00",
+        "end_date": "2025-09-26T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-19 to 2025-09-26)"
+      },
+      "papers": [
+        {
+          "title": "The presymptomatic and early manifestations of semantic dementia.",
+          "authors": "David J Whiteside, Matthew A Rouse, P Simon Jones...",
+          "abstract": "People with semantic dementia (SD) or semantic variant primary progressive aphasia typically present with marked atrophy of the anterior temporal lobe, and thereafter progress more slowly than other forms of frontotemporal dementia. This suggests a prolonged prodromal phase with accumulation of neuropathology and minimal symptoms, about which little is known. To study early and presymptomatic SD, we first examine a well-characterised cohort of people with SD recruited from the Cambridge Centre for Frontotemporal Dementia. Five people with early SD had coincidental MRI prior to the onset of symptoms, or were healthy volunteers in research with anterior temporal lobe atrophy as an incidental finding. We model longitudinal imaging changes in left- and right-lateralised SD to predict atrophy at symptom onset. We then assess 61,203 participants with structural brain MRI in the UK Biobank to find individuals with imaging changes in keeping with SD but with no neurodegenerative diagnosis. To identify these individuals in UK Biobank, we design an ensemble-based classifier, differentiating baseline structural MRI in SD from healthy controls and patients with other neurodegenerative diseases, including other causes of frontotemporal lobar degeneration. We train the classifier on a Cambridge-based cohort (SD n=47, other neurodegenerative diseases n=498, healthy controls n=88) and test it on a combined cohort from the Neuroimaging in Frontotemporal Dementia study and the Alzheimer's Disease Neuroimaging Initiative (SD n=42, other neurodegenerative n=449, healthy control n=127). From our case series, we find people with marked atrophy three to five years before recognition of symptom onset in left- or right-predominant SD. We present right-lateralised cases with subtle multimodal semantic impairment, found concurrently with only mild behavioural disturbance. We show that imaging measures can be used to reliably and accurately differentiate clinical SD from other neurodegenerative diseases (recall 0.88, precision 0.95, F1 score 0.91). We find individuals with no neurodegenerative diagnosis in the UK Biobank with striking left-lateralised (prevalence ages 45-85 4.8/100,000) or right-lateralised (5.9/100,000) anterior temporal lobe atrophy, with deficits on cognitive testing suggestive of semantic impairment. These individuals show progressive involvement of other cognitive domains in longitudinal follow-up. Together, our findings suggest that (i) there is a burden of incipient early anterior temporal lobe atrophy in older populations, with comparable prevalence of left- and right-sided cases from this prospective unbiased approach to identification, (ii) substantial atrophy is required for manifest symptoms, particularly in right-lateralised cases, and (iii) semantic deficits across multiple domains can be detected in the early symptomatic phase.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40986416/",
+          "source": "PubMed",
+          "relevance_score": 8.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Association of MRI-Visible Perivascular Spaces with Early White Matter Injury.",
+          "authors": "Arturo Toro, Frances Rodriguez Lara, Adlin Pinheiro...",
+          "abstract": "MRI-visible perivascular spaces (PVS) are considered markers of cerebral small vessel disease (CSVD) and may reflect dysfunction of brain perivascular drainage. WM integrity assessed with DTI provides a sensitive assessment of early brain injury, related vascular risk factors, and risk of stroke and dementia. We investigated the relationship between PVS and WM integrity in community-dwelling participants.",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40461258/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Detecting Beta-amyloid Plaque via Low Rank Based Orthogonal Projection and Spatial-spectrum Detector Using High-resolution Quantitative Susceptibility Mapping for Preclinical Studies.",
+          "authors": "Jie Chen, Xinyue Han, Zhuoheng Liu...",
+          "abstract": "Detecting beta-amyloid (Aβ) plaques at different stages is crucial for accurate assessment and effective intervention in Alzheimer's disease (AD). In this study, we developed a novel method for reliably identifying Aβ plaques, characterized by sparse negative susceptibility values, in preclinical studies using high-resolution quantitative susceptibility mapping (QSM), named QSM-PLAQUE Aβ Detector. This approach decomposes a high-resolution QSM MRI image into three components: L (representing the background subspace), S (representing the signals subspace), and N (representing the noise). Subsequently, we established an orthogonal subspace based on L to eliminate the background from the sum of L and S. Finally, a plaque detection process was conducted, where Aβ plaques were identified based on the neighbor spectrum (NS) of a voxel being tested rather than just analyzing the voxel itself alone. Experiments demonstrated that the proposed method effectively detects Aβ plaques of varying shapes and intensities across the entire mouse brain. It shows robust performance across histology, highresolution QSM MRI, and synthesized datasets, without requiring training samples. The QSM-PLAQUE Aβ Detector provides a practical framework for identifying and visualizing Aβ plaques in preclinical studies, offering a new strategy for quantitative assessment of Aβ plaques and may guide the development of advanced techniques for preclinical AD research.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40991598/",
+          "source": "PubMed",
+          "relevance_score": 4.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "IEEE transactions on bio-medical engineering",
+          "volume": "PP",
+          "issue": ""
+        },
+        {
+          "title": "Reduced synaptic vesicle protein 2A in extracellular vesicles and brains of Alzheimer's disease: associations with Aβ, tau, synaptic proteins and APOE ε4.",
+          "authors": "Jana Nussbaumer, Aatmika Barve, Valentin Zufferey...",
+          "abstract": "Alzheimer's disease (AD) is characterized by accumulation of amyloid-β (Aβ) plaques, tau neurofibrillary Tangles and synaptic dysfunction. The aim of this study was to map the distributions of synaptic vesicle protein 2A (SV2A) and other synaptic proteins in the brain and the brain-derived extracellular vesicles (BDEVs) of AD patients, analyze their associations with Aβ, tau, and the apolipoprotein E (APOE) ε4 allele, and investigate the biological role of SV2A.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40993829/",
+          "source": "PubMed",
+          "relevance_score": 4.6,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Translational neurodegeneration",
+          "volume": "14",
+          "issue": "1"
+        },
+        {
+          "title": "Animal models of tau propagation in Alzheimer's disease.",
+          "authors": "Masami Masuda-Suzukake, Shotaro Shimonaka, Takashi Nonaka...",
+          "abstract": "Alzheimer's disease (AD) is characterized by extracellular amyloid plaques composed of amyloid-β and intracellular neurofibrillary tangles composed of aggregated tau protein. In sporadic AD, the distribution of pathological tau progresses in a stereotypical manner and correlates with clinical staging, whereas the distribution of amyloid-β plaques does not. This suggests that the spread of tau pathology is a critical process that plays a key role in neurodegeneration and disease progression. Accurate models of tau propagation are therefore necessary to develop disease-modifying drugs for AD. The prion-like propagation hypothesis is a potential mechanism for the progressive distribution of tau pathology in the brain. In 2009, it was experimentally demonstrated that the intracerebral injection of brain extracts from transgenic mice that overexpress a mutated form of human tau protein into other tau transgenic mice induced the spread of pathological tau in vivo. Since then, this approach has been widely used to model tau propagation. More recently, newer models that more closely replicate the pathology of AD have been developed. This review summarizes the latest developments in animal models of tau propagation in sporadic AD.",
+          "published": "2025-09-23",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40998177/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Neuroscience research",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Optineurin mutation-associated language variant frontotemporal dementia.",
+          "authors": "Ashley Park, Kirsty West, David Darby...",
+          "abstract": "A right-handed woman in her early 50s presented with progressive language difficulties with visual and auditory hallucinations. Upper motor neuron signs were present without lower motor neuron signs, insufficient to make a diagnosis of amyotrophic lateral sclerosis (ALS). MRI showed bilateral superior temporal atrophy (right>left) and F-18 fluorodeoxyglucose-positron emmission tomography (FDG-PET) scan showed right temporal hypometabolism. Her clinical diagnosis was atypical or mixed language variant frontotemporal dementia (FTD) given the presence of agrammatism and phonemic intrusions. There was a family history of FTD and ALS. Genetic testing revealed a homozygous optineurin (",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40998540/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "dementia"
+          ],
+          "journal": "BMJ case reports",
+          "volume": "18",
+          "issue": "9"
+        },
+        {
+          "title": "Accuracy of Tumor Surveillance of Pediatric Adamantinomatous Craniopharyngioma Using Noncontrast Brain MRI.",
+          "authors": "Keanu Chee, David M Mirsky, Ilana Neuberger...",
+          "abstract": "Adamantinomatous craniopharyngioma (ACP) is a benign but histologically complex brain tumor that arises in the sellar or suprasellar region. Contrast-enhanced MRI of the brain is the standard of care for radiologic follow-up. Numerous studies have demonstrated gadolinium retention in the brain and body as a result of gadolinium-based contrast agent (GBCA) usage in MRI. While the clinical consequences of GBCA retention remain unknown, the concern for potential injury combined with advances in noncontrast imaging has promoted efforts to determine the necessity for contrast enhancement in the care of pediatric patients, particularly those with brain tumors. This study aims to evaluate the agreement and interrater reliability between noncontrast and contrast-enhanced MRI in the routine surveillance of children with ACP.",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40998563/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Synbiotics in Alzheimer's disease: mechanisms, clinical evidence, and therapeutic prospects.",
+          "authors": "Yuhua Lin, Rongping Weng, Huayang Pan...",
+          "abstract": "Growing evidence implicates gut microbiota (GM) dysbiosis in Alzheimer's disease (AD) pathogenesis via the gut-brain axis. Dysbiosis contributes to neuroinflammation, amyloid-β deposition, tau hyperphosphorylation, blood-brain barrier disruption, and cognitive decline. Synbiotics (combinations of probiotics and prebiotics) offer a promising strategy to modulate GM, potentially ameliorating these AD hallmarks through multiple mechanisms including enhanced production of neuroprotective short-chain fatty acids (SCFAs), reduced inflammation, improved gut barrier integrity, and immunomodulation.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40993787/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Journal of translational medicine",
+          "volume": "23",
+          "issue": "1"
+        },
+        {
+          "title": "Structured assessment of brain MRI in Covid-19-related neurological disease: an international multicentre study.",
+          "authors": "Stéphane Kremer, Tarek A Yousry, Rafael Rehwald...",
+          "abstract": "Neuroradiological findings associated with neurological presentations in acute SARS-CoV-2 infection are very heterogeneous. We aimed to develop a standardized framework for describing MR neuroimaging patterns in Covid-19, to test this in an international multicentre study and to determine the prevalence of observed MRI patterns and their association with clinical presentation and outcome.",
+          "published": "2025-09-26",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40999201/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Brain patterns and risk factors in the FINGER RCT multimodal lifestyle intervention.",
+          "authors": "Giulia Lorenzon, Anna Marseglia, Rosaleena Mohanty...",
+          "abstract": "Despite the emergence of anti-amyloid therapies for Alzheimer's disease, targeting modifiable risk factors remains the most effective primary prevention strategy for dementia. While cognitive benefits of multimodal lifestyle interventions have been demonstrated, the underlying effects on brain structure remain unclear, likely due to heterogeneity in brain structure among at-risk individuals.",
+          "published": "2025-09-24",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40998691/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "The journal of prevention of Alzheimer's disease",
+          "volume": "",
+          "issue": ""
+        }
+      ],
+      "paper_count": 10
+    }
+  }
+}
