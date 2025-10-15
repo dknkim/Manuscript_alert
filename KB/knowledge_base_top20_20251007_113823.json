@@ -1,0 +1,297 @@
+{
+  "metadata": {
+    "created_at": "2025-10-07T11:38:23.375785",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 1000,
+    "filtered_papers": 116,
+    "high_relevance_papers": 14,
+    "top_papers_selected": 14,
+    "papers_per_week": 14,
+    "date_range": "2025-09-30 to 2025-10-07",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 14 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-30T00:00:00",
+        "end_date": "2025-10-07T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-30 to 2025-10-07)"
+      },
+      "papers": [
+        {
+          "title": "Reference proteins to improve Core 1 and Core 2 Alzheimer's disease CSF and plasma biomarkers.",
+          "authors": "Linda Karlsson, Shorena Janelidze, Nicolas R Barthélemy...",
+          "abstract": "Concentration-based fluid biomarkers represent an informative and cost-effective way to detect and monitor Alzheimer's disease (AD) pathology. However, non-AD-related inter-individual variation in biofluids can also affect biomarker concentrations. Here, we investigated whether normalization of cerebrospinal fluid (CSF) and plasma biomarkers to reference proteins, such as amyloid-β40 (Aβ40) and non-phosphorylated mid-region tau (np-tau), improves their robustness and reliability of representing AD pathology load. Using the Swedish BioFINDER-2 cohort (n=1702, 50.7% male, mean [SD] age 68.4 [12.2] years), we compared the associations between tau/Aβ-PET load and fluid biomarkers alone versus in a ratio with a reference protein (Aβ40 or np-tau) in univariate linear regression models. Fluid biomarkers included CSF and plasma measures of p-tau217, p-tau181, p-tau205, np-tau181-190, np-tau195-210, np-tau212-221, Aβ42, Aβ40, and CSF MTBR-tau243, SNAP-25, neurogranin, YKL-40, sTREM2, and plasma eMTBR-tau243. Biomarkers were measured with mass spectrometry assays and/or immunoassays. In addition, we performed validation and extended analyses, comparing for example group-level diagnostic differences and longitudinal biomarker trajectories, in three independent prospective cohorts: BioFINDER-1, Knight Alzheimer Disease Research Center (ADRC), and Translational Biomarkers in Aging and Dementia (TRIAD), as well as in an Italian multiple sclerosis cohort. CSF Aβ40 normalization significantly strengthened the associations of several core CSF AD biomarkers, including CSF MTBR-tau243, p-tau isoforms and synaptic biomarkers, with tau-PET (ΔR²=0.064-0.24) and Aβ-PET (ΔR² = 0.016-0.28). Normalization to CSF np-tau mainly improved concordance with Aβ-PET (ΔR² = -0.0059-0.19). The strongest association with tau-PET was observed for MTBR-tau243/Aβ40 (R² = 0.78, compared to 0.65 for non-normalized MTBR-tau243), and with Aβ-PET for p-tau217/np-tau (R² = 0.65, compared to 0.46 for non-normalized p-tau217). Plasma biomarker associations with tau-PET improved when using normalization to plasma Aβ40 or np-tau (ΔR² = 0.004-0.14), with the strongest effect for eMTBR-tau243/np-tau (R² = 0.72 versus 0.60). Associations with Aβ-PET were enhanced with np-tau normalization (ΔR² = 0.018-0.16, strongest for p-tau217/np-tau: R² = 0.62 versus 0.53). The results were replicated in Knight ADRC and TRIAD. Furthermore, longitudinal analyses showed that Aβ40 normalization typically reduced inter-individual rather than intra-individual variability over time. Normalization did not enhance group-level differences in inflammatory CSF biomarkers in AD, nor did it improve biomarker associations in the multiple sclerosis cohort. In conclusion, normalization of CSF and plasma biomarkers to reference proteins, such as Aβ40 or np-tau, enhances their association with brain tau and Aβ pathology, making already high-performing AD fluid biomarkers even more accurate.",
+          "published": "2025-10-06",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41051312/",
+          "source": "PubMed",
+          "relevance_score": 13.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Neuronal activity and amyloid-β promote tau seeding in the entorhinal cortex in Alzheimer's disease.",
+          "authors": "Christoffer G Alexandersen, Dani S Bassett, Alain Goriely...",
+          "abstract": "The entorhinal cortex is the first region to develop tau pathology in Alzheimer's disease and primary age-related tauopathy, yet the reasons for this selective vulnerability remain unclear. We developed a computational model in which neuronal activity and amyloid-β (Aβ) modulate tau transport, hypothesizing that this mechanism explains entorhinal vulnerability to early tau pathology. The model combines structural connectivity with either neuronal activity (measured by heading hierarchy okayfluorodeoxyglucose, FDG PET) or amyloid-β burden (measured by Aβ PET). We analyzed Alzheimer's Disease Neuroimaging Initiative (ADNI) data comprising 527 FDG PET scans (mean age 71.8 years; 174 cognitively normal, 293 mild cognitive impairment, 60 Alzheimer's disease) and 1,244 Aβ PET scans (mean age 72.4 years; 501 cognitively normal, 588 mild cognitive impairment, 155 Alzheimer's disease). From these, 253 FDG-tau and 453 Aβ-tau PET pairs were used in regression analyses. Key results were replicated in the Harvard Aging Brain Study (HABS; 300 FDG, 348 Aβ, 116 FDG-tau, and 255 Aβ-tau pairs). Both FDG- and Aβ-based models consistently identified the entorhinal cortex as a primary tau seeding region in ADNI (FDG: z ≈ 4.6-4.9, p < 0.0066; Aβ: z ≈ 4.0-8.7, p ≤ 0.011) and in HABS (FDG: z = 5.7, p = 0.030; Aβ: z = 6.0, p = 0.0018). Simple linear regression showed modest associations between model-derived seeding and empirical entorhinal tau in ADNI (FDG: β = 6.7, p = 0.0039; Aβ: β = 11.3, p < 0.001), which remained significant after adjustment for age, sex, and APOE4 status (FDG: β = 7.1, p < 0.001; Aβ: β = 9.7, p < 0.001). Aβ-based associations replicated in HABS (β = 3.3, p < 0.001), while FDG-based correlations were not detectable in this predominantly cognitively normal cohort (β = -0.43, p = 0.80; power = 49%). These findings support a mechanistic role for neuronal activity and amyloid-β in initiating tau pathology, with the entorhinal cortex consistently emerging as highly vulnerable. Our computational model reliably identifies this region as the epicenter of pathology, supporting the idea that brain-wide patterns of neuronal activity and amyloid burden determine where tau pathology begins.",
+          "published": "2025-10-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41055040/",
+          "source": "PubMed",
+          "relevance_score": 11.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Selective vulnerability and resilience to Alzheimer's disease tauopathy as a function of genes and the connectome.",
+          "authors": "Chaitali Anand, Farras Abdelnour, Benjamin Sipes...",
+          "abstract": "Brain regions in Alzheimer's disease exhibit distinct vulnerability to its hallmark pathology with the entorhinal cortex and hippocampus succumbing early to tau tangles while others like the primary sensory cortices remain resilient. The quest to understand how local/regional genetic factors, pathogenesis and network-mediated pathology spread, together govern this selective vulnerability (SV) or resilience (SR) is ongoing. Although many Alzheimer's risk genes are known from gene association and transgenic studies, it is still unclear whether and how their baseline expression confers SV/SR to pathology. Prior analyses have yielded conflicting results, pointing to a disconnect between the location of genetic risk factors and downstream tau pathology. The spatial distribution of vulnerability doesn't always align with genetic factors, suggesting a role for non-cell-autonomous mechanisms like transneuronal tau transmission. We hypothesize that a full accounting of the role of genes in mediating SV/SR would require modelling of network-based vulnerability, whereby tau misfolds, aggregates and propagates along fibre projections. We employed an extended network diffusion model (eNDM) and fitted it on tau PET data from 196 patients from the Alzheimer's Disease Neuroimaging Initiative. The fitted eNDM then becomes a reference from which to assess the role of innate genetic factors. Using the residual (observed - model-predicted) tau as a novel target outcome, we obtained its association with 100 Alzheimer's risk genes, whose baseline spatial transcriptional profiles were obtained from the Allen Human Brain Atlas. Our eNDM was successful in capturing tau pathology distribution in patients. After regressing out the model, we found that while many risk genes have spatial expression patterns that correlate with regional tau, many others showed a stronger association with residual tau. This suggests that direct vulnerability aligned with the network, as well as network-independent vulnerability, are conferred by risk genes. We report four classes of risk genes: network-aligned SV (SV-NA), network-independent SV (SV-NI), network-aligned SR (SR-NA) and network-independent SR (SR-NI), each with a distinct spatial signature and associated vulnerability to tau. Remarkably, using gene ontology analysis, we found that the identified gene classes have distinct and sometimes surprising functional enrichment patterns. Network-aligned genes broadly participate in cell death, stress response and metabolic processing; network-independent genes in amyloid-β processing and immune response. These previously unreported segregated roles point to multiple distinct pathways by which risk genes confer vulnerability or resilience in Alzheimer's disease. Our findings offer new insights into vulnerability signatures in Alzheimer's disease and may prove helpful in identifying potential intervention targets.",
+          "published": "2025-10-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40631882/",
+          "source": "PubMed",
+          "relevance_score": 11.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "148",
+          "issue": "10"
+        },
+        {
+          "title": "Midlife plasma proteomic profiles indicate altered amyloid and tau processing in former elite rugby players.",
+          "authors": "Neil Graham, Karl Zimmerman, Jessica Hain...",
+          "abstract": "Contact sports, including rugby union, are associated with higher rates of neurodegenerative dementia, due to various underlying pathologies such as Alzheimer's disease (AD) and chronic traumatic encephalopathy (CTE). New ultrasensitive multiplexed immunoassays may clarify disease mechanisms after repetitive head impacts (RHI) and traumatic brain injury, potentially aiding risk-stratification, early diagnosis and dementia treatment.",
+          "published": "2025-10-05",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41047224/",
+          "source": "PubMed",
+          "relevance_score": 6.6,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Journal of neurology, neurosurgery, and psychiatry",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Genome-wide analysis of brain age identifies 59 associated loci and unveils relationships with mental and physical health.",
+          "authors": "Philippe Jawinski, Helena Forstbach, Holger Kirsten...",
+          "abstract": "Neuroimaging and machine learning are advancing research into the mechanisms of biological aging. In this field, 'brain age gap' has emerged as a promising magnetic resonance imaging-based biomarker that quantifies the deviation between an individual's biological and chronological age of the brain. Here we conducted an in-depth genomic analysis of the brain age gap and its relationships with over 1,000 health traits. Genome-wide analyses in up to 56,348 individuals unveiled a heritability of 23-29% attributable to common genetic variants and highlighted 59 associated loci (39 novel). The leading locus encompasses MAPT, encoding the tau protein central to Alzheimer's disease. Genetic correlations revealed relationships with mental health, physical health, lifestyle and socioeconomic traits, including depressed mood, diabetes, alcohol intake and income. Mendelian randomization indicated a causal role of high blood pressure and type 2 diabetes in accelerated brain aging. Our study highlights key genes and pathways related to neurogenesis, immune-system-related processes and small GTPase binding, laying the foundation for further mechanistic exploration.",
+          "published": "2025-10-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41044200/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "tau",
+            "brain"
+          ],
+          "journal": "Nature aging",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Anle138b binds predominantly to the central cavity in lipidic Aβ₄₀ fibrils and modulates fibril formation.",
+          "authors": "Mookyoung Han, Benedikt Frieg, Dirk Matthes...",
+          "abstract": "Alzheimer's disease is a specific neurodegenerative disorder, distinct from normal aging, with a growing unmet medical need. It is characterized by the accumulation of amyloid plaques in the brain, primarily consisting of amyloid beta (Aβ) fibrils. Therapeutic antibodies can slow down the disease, but are associated with potential severe side effects, motivating the development of small molecules to halt disease progression. This study investigates the interaction between the clinical drug candidate small molecule anle138b and lipidic Aβ₄₀ fibrils of type 1 (L1). L1 fibrils were previously shown to closely resemble fibrils from Alzheimer's patients. Using high-resolution structural biology techniques, including cryo-electron microscopy (cryo-EM), nuclear magnetic resonance (NMR) spectroscopy enhanced by dynamic nuclear polarization (DNP), and molecular dynamics (MD) simulations, we find that anle138b selectively binds to a cavity within the fibril. This structural insight provides a deeper understanding of a potential drug-binding mechanism at the atomic level and may inform the development of therapies and diagnostic approaches. In addition, anle138b reduces fibril formation in the presence of lipids by approximately 75%. This may suggest a mechanistic connection to its previously reported activity in animal models of Alzheimer's disease.",
+          "published": "2025-10-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41044155/",
+          "source": "PubMed",
+          "relevance_score": 5.8,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Nature communications",
+          "volume": "16",
+          "issue": "1"
+        },
+        {
+          "title": "Salivary mitochondrial DNA is associated with biomarkers of Alzheimer's disease in cognitively normal older adults.",
+          "authors": "Jose L Cantero, Mercedes Atienza, Petar Podlesniy...",
+          "abstract": "A significant body of evidence suggests that mitochondrial dysfunction plays a key role in the development and progression of Alzheimer's disease (AD). However, the absence of peripheral biomarkers for mitochondrial dysfunction limits its clinical applicability. Mitochondrial DNA (mtDNA) copy number, a proxy for mitochondrial function, has shown promise in detecting early stages of AD and predicting AD risk in cerebrospinal fluid (CSF) and blood, respectively. Surprisingly, recent studies have identified mtDNA molecules in human saliva, but their relationship with AD remains unexplored. Here, we investigated potential associations between salivary mtDNA copy number and cortical amyloid-β (Aβ) load measured with PET, and blood AD markers measured with ultrasensitive single molecule array (SIMOA) assays, in cognitively normal older adults. We found that salivary mtDNA copy number was positively correlated with cortical Aβ burden and plasma levels of tau phosphorylated at threonine 181 (pTau-181), and negatively correlated with general cognitive ability. It is worth noting that salivary mtDNA was not significantly associated with other blood-based AD biomarkers, including Aβ",
+          "published": "2025-10-06",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41052979/",
+          "source": "PubMed",
+          "relevance_score": 5.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Translational psychiatry",
+          "volume": "15",
+          "issue": "1"
+        },
+        {
+          "title": "ApoE-calypse tau: ApoE-tau synergy in Alzheimer's disease.",
+          "authors": "Matthew Paul Lennol, Chiara Bordier, Léana Kamelher...",
+          "abstract": "Alzheimer's disease (AD), the most common cause of dementia, is characterized by the accumulation of amyloid-β (Aβ) in senile plaques and abnormally hyperphosphorylated tau proteins in neurofibrillary tangles. While much of the research has focused on Aβ, tau-mediated neurodegeneration is more closely associated with synaptic loss and cognitive decline in AD, emphasizing the need for a deeper understanding of tau pathology. In this context, the interaction between tau and APOE, particularly the main genetic risk factor for AD APOE ε4, remains underexplored. APOE encodes apolipoprotein E (apoE), a protein important in lipid metabolism. In addition to promoting Aβ deposition, emerging evidence suggests that APOE ε4 exacerbates tau-mediated neurodegeneration and tau-related pathology. This review consolidates current knowledge on the interplay between apoE and tau, highlighting its potential as a key factor in disease progression. Targeting the apoE-tau axis may offer promising therapeutic strategies to address the molecular mechanisms driving AD and primary tauopathies.",
+          "published": "2025-10-06",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40856646/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "The Journal of experimental medicine",
+          "volume": "222",
+          "issue": "10"
+        },
+        {
+          "title": "Rapid amyloid-β clearance and cognitive recovery through multivalent modulation of blood-brain barrier transport.",
+          "authors": "Junyang Chen, Pan Xiang, Aroa Duro-Castano...",
+          "abstract": "The blood‒brain barrier (BBB) is a highly selective permeability barrier that safeguards the central nervous system (CNS) from potentially harmful substances while regulating the transport of essential molecules. Its dysfunction is increasingly recognized as a pivotal factor in the pathogenesis of Alzheimer's disease (AD), contributing to the accumulation of amyloid-β (Aβ) plaques. We present a novel therapeutic strategy that targets low-density lipoprotein receptor-related protein 1 (LRP1) on the BBB. Our design leverages the multivalent nature and precise size of LRP1-targeted polymersomes to modulate receptor-mediated transport, biasing LRP1 trafficking toward transcytosis and thereby upregulating its expression to promote efficient Aβ removal. In AD model mice, this intervention significantly reduced brain Aβ levels by nearly 45% and increased plasma Aβ levels by 8-fold within 2 h, as measured by ELISA. Multiple imaging techniques confirmed the reduction in brain Aβ signals after treatment. Cognitive assessments revealed that treated AD mice exhibited significant improvements in spatial learning and memory, with performance levels comparable to those of wild-type mice. These cognitive benefits persisted for up to 6 months post-treatment. This work pioneers a new paradigm in drug design, where function arises from the supramolecular nature of the nanomedicine, harnessing multivalency to elicit biological action at the membrane trafficking level. Our findings also reaffirm the critical role of the BBB in AD pathogenesis and demonstrate that targeting the BBB can make therapeutic interventions significantly more effective. We establish a compelling case for BBB modulation and LRP1-mediated Aβ clearance as a transformative foundation for future AD therapies.",
+          "published": "2025-10-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41052971/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Signal transduction and targeted therapy",
+          "volume": "10",
+          "issue": "1"
+        },
+        {
+          "title": "Amyloid-related Imaging Abnormalities (ARIA) in the Context of Alzheimer's Disease and Amyloid-targeting Therapies: An Introduction for Advanced Practice Providers.",
+          "authors": "Curtis P Schreiber, Amy Kovacik, James Bishop...",
+          "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative disorder pathologically characterized by the accumulation of amyloid-beta (Aβ) and neurofibrillary tangles of hyperphosphorylated tau in the brain. Amyloid-targeting therapies (ATTs) are the first available disease-modifying treatments shown to slow cognitive and functional decline for patients with mild cognitive impairment owing to AD and early symptomatic AD. Currently two ATTs are commercially available, donanemab (Kisunla™) and lecanemab (Leqembi",
+          "published": "2025-10-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41042497/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Drugs & aging",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "MRI R2* captures inflammation in disconnected brain structures after stroke: a translational study.",
+          "authors": "Ismail Koubiyr, Takayuki Yamamoto, Laurent Petit...",
+          "abstract": "Ischaemic strokes disrupt brain networks, leading to remote effects in key regions like the thalamus, a critical hub for brain functions. However, non-invasive methods to quantify these remote consequences still need to be explored. This study aimed to demonstrate that MRI-derived R2* changes can capture iron accumulation linked with inflammation secondary to stroke-induced disconnection. To link remote R2* changes to stroke-induced disconnection, we first conducted a secondary analysis of 156 prospectively included stroke patients who underwent MRI at baseline and 1-year follow-up. We mapped fibres disconnected by baseline infarcts to compare the R2* changes over 1 year according to the disconnectivity status in specific thalamic nuclei groups. We also identified the variables associated with elevated R2* at 1 year in a multivariate context through linear regressions. In parallel, to understand the biological underpinning of the remote R2* changes, we set up a translational mouse model through photothrombotic induction of focal cortical infarcts or sham procedures in 110 C57BL/6J mice. We explored the mice through combinations of in vivo MRI at 72 h, 2-, 4- and 8-weeks, histology, qPCR for gene expression, mass spectrometry for iron concentration quantification and additional ex vivo high-resolution diffusion tensor imaging. In stroke patients, we found a significant increase of R2* within severely disconnected medial and lateral thalamic nuclei groups from baseline to 1 year. At the same time, no change occurred if these structures were not disconnected. We also showed that the disconnectivity status at baseline was significantly associated with R2* at follow-up, independently from confounders, establishing a direct and independent relationship between baseline disconnection and the subsequent R2* increase within the associated locations. In mice, we recapitulated the patients' conditions by observing increased R2* in the stroke groups, specifically within the disconnected thalamic nuclei. Such remote and focal R2* changes peaked at 2 weeks, preceding and correlating with longer-term atrophy at 8 weeks. We established that the remote R2* increase was spatially and temporally correlated with a significant increase of chemically determined iron load bound to ferritin within activated microglial cells. This study provides critical evidence that R2* is a sensitive marker of inflammation secondary to network disconnection, potentially informing future neuroprotective strategies targeting remote brain regions after stroke.",
+          "published": "2025-10-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40070356/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "148",
+          "issue": "10"
+        },
+        {
+          "title": "Uncovering Necroptosis in Alzheimer's Disease: A Systematic Review of Evidence Across Experimental Models.",
+          "authors": "Nishi Shah, Gopal Natesan, Richa Gupta",
+          "abstract": "Alzheimer's disease (AD), one of the most challenging neurodegenerative disorders, with high prevalence worldwide, is characterized by progressive cognitive decline and accumulation of amyloid-β plaques and neurofibrillary tau tangles. Despite significant research, the limited efficacy of current treatments underscores the critical need to identify novel pathogenic mechanisms and therapeutic targets. Necroptosis, a regulated and highly inflammatory form of programmed cell death, has emerged as one of the key contributors to AD pathogenesis. This systematic review comprises 25 high-quality in vivo, in vitro, and autopsy studies, published between 2015 and 2025, extracted from PubMed, Scopus, and Science Direct databases. The keywords include \"necroptosis\", \"RIPK1\", \"RIPK3\", \"MLKL\", \"pMLKL\", \"necroptosis inhibitors\", \"Alzheimer's disease\", and \"neurodegeneration\". The review summarizes the multiple molecular mechanisms, including TNF-α/TNFR1 signaling, TRIF-mediated RIPK3 activation, and RHIM-dependent MLKL phosphorylation, associated with necroptosis in the pathogenesis of AD. All the studies converge on necroptosis as a central pathogenic pathway linking key molecular and cellular abnormalities observed in AD. The accumulated evidence strongly supports prioritizing the development of brain-penetrant necroptosis inhibitors and clinical validation of associated biomarkers. These insights signal a significant shift in AD therapeutics, moving from symptomatic treatment to mechanistically targeted interventions that can alter disease progression.",
+          "published": "2025-10-03",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41042431/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Cellular and molecular neurobiology",
+          "volume": "45",
+          "issue": "1"
+        },
+        {
+          "title": "[Disease-modifying therapy with lecanemab for early Alzheimer's dementia].",
+          "authors": "Niels Hansen, Jens Wiltfang",
+          "abstract": "Alzheimer's disease (AD) is a severe and progressive neurodegenerative disease of the brain that has so far been treated with symptomatic drug and non-drug therapies as standard treatment. Following the approval of the monoclonal anti-amyloid antibody by the FDA, AD therapy has changed, as this therapy has made it possible to attenuate the biological disease process of AD. Lecanemab has been recommended by the Committee for Medicinal Products for Human Use (CHMP) of the European Medicines Agency (EMA) for approval in patients with early AD under two conditions. Firstly, homozygous ApoE4 carriers and secondly, patients receiving oral anticoagulants should not receive lecanemab. The following narrative review explains the mechanism of action, safety and side effects of lecanemab. Furthermore, risk factors for side effects are described. Finally, the first experiences with lecanemab are reported and the efficacy and financial aspects are discussed. Lecanemab leads to a temporary reduction in amyloid-ß deposits and to a benefit that can be reflected in everyday competence, cognition and quality of life and can be described as a breakthrough in AD's therapy due to its demonstrable biological and clinical efficacy.",
+          "published": "2025-10-06",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41052542/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Fortschritte der Neurologie-Psychiatrie",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Regional tau PET patterns predict prospective domain-specific cognitive decline in early symptomatic Alzheimer's disease.",
+          "authors": "Maura Malpetti, Saima Rathore, Leonardo Iaccarino...",
+          "abstract": "Tau-PET binding patterns are heterogenous, with regional binding showing strong cross-sectional correlations with domain-specific cognitive performance and longitudinal correlations with prospective neurodegeneration. Here we evaluated whether regional patterns of baseline tau-PET predict prospective longitudinal decline in specific cognitive domains in early symptomatic Alzheimer's disease (AD), including participants from clinical trial cohorts.",
+          "published": "2025-10-06",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41053874/",
+          "source": "PubMed",
+          "relevance_score": 4.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "tau"
+          ],
+          "journal": "Alzheimer's research & therapy",
+          "volume": "17",
+          "issue": "1"
+        }
+      ],
+      "paper_count": 14
+    }
+  }
+}

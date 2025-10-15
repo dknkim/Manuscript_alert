@@ -1,0 +1,215 @@
+{
+  "metadata": {
+    "created_at": "2025-09-29T09:26:54.326545",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 1000,
+    "filtered_papers": 90,
+    "high_relevance_papers": 10,
+    "top_papers_selected": 10,
+    "papers_per_week": 10,
+    "date_range": "2025-09-22 to 2025-09-29",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 10 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-22T00:00:00",
+        "end_date": "2025-09-29T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-22 to 2025-09-29)"
+      },
+      "papers": [
+        {
+          "title": "Cognitive profiles among dementia-free older adults and their associations with neuroimaging markers.",
+          "authors": "Alice Hahn, Heather Volk, Corinne Pettigrew...",
+          "abstract": "Prior studies have demonstrated the existence of cognitively-defined subgroups among dementia free older adults, however, it is unclear whether such subgroups are characterized by distinct neuroimaging measures of brain function and structure. To address this gap, the current study used latent profile analysis (LPA) to identify cognitively-defined subgroups in a sample of 167 (mean age = 69 years) dementia-free older adults with cognitive testing, amyloid PET, and multimodal brain MRI scans. The cognitive test scores covered the domains of episodic memory, executive function, language, and visuospatial processing. Linear regression models tested the associations between subgroup membership and neuroimaging measures, adjusting for age, sex, and years of education. Based on the LPA, three cognitive subgroups were identified: (1) high-average cognition (n = 61, 36%), (2) average cognition (n = 88, 53%), and low-average cognition (n = 18, 11%). Compared to the high-average group, the low-average group had lower volumes in cortical regions sensitive to Alzheimer's disease, lower global white matter microstructural integrity measured by diffusion tensor imaging, and higher global white matter hyperintensity burden. There were no group differences in global PET amyloid burden. Additionally, the high-average group tended to have higher resting-state functional connectivity within large-scale cognitive networks than the other two groups. These results suggest that cognitively-defined subgroups among older adults without dementia are associated with several measures of brain structure and function. Evaluating brain structure/function differences among dementia-free older adults may help identify individuals at greatest risk for future cognitive decline.",
+          "published": "2025-09-29",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41017012/",
+          "source": "PubMed",
+          "relevance_score": 7.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Brain imaging and behavior",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Bridging the barrier: insights into blood biomarkers and therapeutic strategies targeting choroid plexus and BBB dysfunction in alzheimer's disease.",
+          "authors": "Niti Sharma, Danyeong Kim, Himadri Sharma...",
+          "abstract": "Alzheimer's disease (AD) is the most common cause of dementia and accounts for approximately 60-80% of total dementia patients. Currently, accurate diagnosis for AD relies on cerebrospinal fluid (CSF) sampling or a positron emission tomography (PET) scan, methods that cannot be done in primary care centers where most people go with cognitive complaints. This Limitation calls for the urgent need to develop blood-related diagnostic tests that could facilitate early detection and enable timely treatment. Recent CSF proteomic research categorized AD into five molecular subtypes with discrete Genetic risk profiles. Subtypes 1-3, namely neuronal hyperplasticity, innate immune activation, and RNA dysregulation, were characterized by more classical AD-related changes, like accumulation of amyloid/tau and synaptic and immune dysfunction, respectively. On the contrary, non-traditional AD mechanisms in subtypes 4-5 were choroid plexus (CP) dysfunction and blood-brain barrier (BBB) dysfunction, emphasizing clearance deficits in association with brain barrier dysfunction. The unchanged tau levels later may be explained by an alternate disease mechanism (clearance dysfunction). These subtypes included BBB and CP dysfunction. Biomarker identification based on the mechanism of disease progression would increase the precision of diagnoses, allowing for tailored interventions and aiding in the creation of novel therapies for subtypes that might not react favorably to conventional amyloid/tau-targeting strategies. Finding biomarkers specific to each subtype would aid in patient classification, resulting in more individualized therapy as opposed to a \"one-size-fits-all\" strategy. The present review emphasized the importance of identifying blood-based biomarkers (BBMs) related to brain barrier dysfunction from CSF studies and personalized treatment strategies to streamline the diagnostic workup, and may be utilized in standard clinical practice for the early detection of AD.",
+          "published": "2025-09-26",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41013670/",
+          "source": "PubMed",
+          "relevance_score": 6.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Biomarker research",
+          "volume": "13",
+          "issue": "1"
+        },
+        {
+          "title": "Association of MRI-Visible Perivascular Spaces with Early White Matter Injury.",
+          "authors": "Arturo Toro, Frances Rodriguez Lara, Adlin Pinheiro...",
+          "abstract": "MRI-visible perivascular spaces (PVS) are considered markers of cerebral small vessel disease (CSVD) and may reflect dysfunction of brain perivascular drainage. WM integrity assessed with DTI provides a sensitive assessment of early brain injury, related vascular risk factors, and risk of stroke and dementia. We investigated the relationship between PVS and WM integrity in community-dwelling participants.",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40461258/",
+          "source": "PubMed",
+          "relevance_score": 6.5,
+          "matched_keywords": [
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "New landscape of the diagnosis of Alzheimer's disease.",
+          "authors": "Giovanni B Frisoni, Oskar Hansson, Emma Nichols...",
+          "abstract": "Alzheimer's disease involves a drastic departure from the cognitive, functional, and behavioural trajectory of normal ageing, and is both a dreaded and highly prevalent cause of disability to individuals, and a leading source of health and social care expenditure for society. Before the advent of biomarkers, post-mortem examination was the only method available to establish a definitive diagnosis. In this first paper of the Series, we review state-of-the-art diagnostic practices and the typical patient journey in specialist settings, where clinicians engage in a differential diagnosis to establish whether Alzheimer's pathology (cerebral deposition of β-amyloid and hyperphosphorylated tau) is a contributor to cognitive impairment. Biomarkers indicating dysregulation of β-amyloid and tau homeostasis, measured with PET and cerebrospinal fluid analysis, allow a molecular-level diagnosis-a mandatory step in defining eligibility for the recently approved anti-amyloid treatments. We anticipate that easily accessible blood biomarkers, already available in some countries, will lead to a new diagnostic revolution and bring about major changes in health-care systems worldwide.",
+          "published": "2025-09-27",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40997838/",
+          "source": "PubMed",
+          "relevance_score": 4.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Lancet (London, England)",
+          "volume": "406",
+          "issue": "10510"
+        },
+        {
+          "title": "Feasibility of MR-Guided PET Reconstruction in Detection of Focal Cortical Dysplasia.",
+          "authors": "Erik H Middlebrooks, Chen Lin, Robert A Pooley...",
+          "abstract": "Focal cortical dysplasia (FCD) is one of the most prevalent and difficult to detect structural etiologies of epilepsy. Recent advancements in MRI technology have enhanced detectability of FCD, yet many remain undiagnosed by MRI. FDG-PET may increase detection rates when utilized alongside MRI, yet PET continues to be underutilized beyond temporal lobe epilepsy, likely due to challenges in identifying subtle cortical lesions. Hybrid PET/MR systems present an opportunity to improve image quality and lesion detection, but benefits of hybrid PET/MR in epilepsy beyond workflow advantages are not well established. This feasibility study assesses the potential of a prototype MR-guided PET reconstruction that integrates event-by-event motion correction, enhanced point spread function modeling, regularization techniques, and MR-guided reconstruction algorithm. We demonstrate enhancements in cortical definition and increased conspicuity of FCD in FDG-PET. The combined reconstruction approach provides a distinct advantage for PET/MR, thereby helping to realize the full potential of hybrid PET/MR systems.ABBREVIATIONS: FCD = focal cortical dysplasia; FWHM = full width at half maximum; OSEM = ordered subset expectation maximization; BSREM = block sequential regularized expectation maximization.",
+          "published": "2025-09-27",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41015541/",
+          "source": "PubMed",
+          "relevance_score": 4.5,
+          "matched_keywords": [
+            "PET",
+            "MRI"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Leptomeningeal vascularity in Gadopiclenol Enhanced Pediatric Brain MRI.",
+          "authors": "Sergio Valencia, Harry Griffin, Maria C Cortes-Albornoz...",
+          "abstract": "Gadolinium-based contrast agents (GBCAs) are essential in pediatric neuroimaging, enabling visualization of pathology that disrupts the blood-brain barrier. Gadopiclenol is a new macrocyclic GBCA with higher T1 relaxivity, permitting a 50% dose reduction while maintaining diagnostic quality. However, it is unknown whether this higher relaxivity alters background extra-axial vascular enhancement. We hypothesized that gadopiclenol, despite its lower dose, would increase background enhancement on post-contrast pediatric brain MRI compared to gadoterate meglumine (Gd-DOTA).",
+          "published": "2025-09-27",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41015540/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Structured assessment of brain MRI in Covid-19-related neurological disease: an international multicentre study.",
+          "authors": "Stéphane Kremer, Tarek A Yousry, Rafael Rehwald...",
+          "abstract": "Neuroradiological findings associated with neurological presentations in acute SARS-CoV-2 infection are very heterogeneous. We aimed to develop a standardized framework for describing MR neuroimaging patterns in Covid-19, to test this in an international multicentre study and to determine the prevalence of observed MRI patterns and their association with clinical presentation and outcome.",
+          "published": "2025-09-26",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40999201/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Accuracy of Tumor Surveillance of Pediatric Adamantinomatous Craniopharyngioma Using Noncontrast Brain MRI.",
+          "authors": "Keanu Chee, David M Mirsky, Ilana Neuberger...",
+          "abstract": "Adamantinomatous craniopharyngioma (ACP) is a benign but histologically complex brain tumor that arises in the sellar or suprasellar region. Contrast-enhanced MRI of the brain is the standard of care for radiologic follow-up. Numerous studies have demonstrated gadolinium retention in the brain and body as a result of gadolinium-based contrast agent (GBCA) usage in MRI. While the clinical consequences of GBCA retention remain unknown, the concern for potential injury combined with advances in noncontrast imaging has promoted efforts to determine the necessity for contrast enhancement in the care of pediatric patients, particularly those with brain tumors. This study aims to evaluate the agreement and interrater reliability between noncontrast and contrast-enhanced MRI in the routine surveillance of children with ACP.",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40998563/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Optineurin mutation-associated language variant frontotemporal dementia.",
+          "authors": "Ashley Park, Kirsty West, David Darby...",
+          "abstract": "A right-handed woman in her early 50s presented with progressive language difficulties with visual and auditory hallucinations. Upper motor neuron signs were present without lower motor neuron signs, insufficient to make a diagnosis of amyotrophic lateral sclerosis (ALS). MRI showed bilateral superior temporal atrophy (right>left) and F-18 fluorodeoxyglucose-positron emmission tomography (FDG-PET) scan showed right temporal hypometabolism. Her clinical diagnosis was atypical or mixed language variant frontotemporal dementia (FTD) given the presence of agrammatism and phonemic intrusions. There was a family history of FTD and ALS. Genetic testing revealed a homozygous optineurin (",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40998540/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "dementia"
+          ],
+          "journal": "BMJ case reports",
+          "volume": "18",
+          "issue": "9"
+        },
+        {
+          "title": "Corrigendum to '18F-FDG PET for Dementia Evaluation: Co-pathologies, New Diseases, and Its Roles in The Era of Anti-Amyloid Treatment' [Seminar in Nuclear Medicine volume 55 (2025):526 -537/Article number YSNUC_51208].",
+          "authors": "Tanyaluck Thientunyakit, Weerasak Muangpaisan, Satoshi Minoshima",
+          "abstract": "",
+          "published": "2025-09-25",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41006109/",
+          "source": "PubMed",
+          "relevance_score": 4.1,
+          "matched_keywords": [
+            "PET",
+            "dementia",
+            "amyloid"
+          ],
+          "journal": "Seminars in nuclear medicine",
+          "volume": "",
+          "issue": ""
+        }
+      ],
+      "paper_count": 10
+    }
+  }
+}

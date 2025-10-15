@@ -1,0 +1,241 @@
+{
+  "metadata": {
+    "created_at": "2025-09-30T21:30:41.056686",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 1000,
+    "filtered_papers": 109,
+    "high_relevance_papers": 11,
+    "top_papers_selected": 11,
+    "papers_per_week": 11,
+    "date_range": "2025-09-23 to 2025-09-30",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 11 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-23T00:00:00",
+        "end_date": "2025-09-30T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-23 to 2025-09-30)"
+      },
+      "papers": [
+        {
+          "title": "Cognitive profiles among dementia-free older adults and their associations with neuroimaging markers.",
+          "authors": "Alice Hahn, Heather Volk, Corinne Pettigrew...",
+          "abstract": "Prior studies have demonstrated the existence of cognitively-defined subgroups among dementia free older adults, however, it is unclear whether such subgroups are characterized by distinct neuroimaging measures of brain function and structure. To address this gap, the current study used latent profile analysis (LPA) to identify cognitively-defined subgroups in a sample of 167 (mean age = 69 years) dementia-free older adults with cognitive testing, amyloid PET, and multimodal brain MRI scans. The cognitive test scores covered the domains of episodic memory, executive function, language, and visuospatial processing. Linear regression models tested the associations between subgroup membership and neuroimaging measures, adjusting for age, sex, and years of education. Based on the LPA, three cognitive subgroups were identified: (1) high-average cognition (n = 61, 36%), (2) average cognition (n = 88, 53%), and low-average cognition (n = 18, 11%). Compared to the high-average group, the low-average group had lower volumes in cortical regions sensitive to Alzheimer's disease, lower global white matter microstructural integrity measured by diffusion tensor imaging, and higher global white matter hyperintensity burden. There were no group differences in global PET amyloid burden. Additionally, the high-average group tended to have higher resting-state functional connectivity within large-scale cognitive networks than the other two groups. These results suggest that cognitively-defined subgroups among older adults without dementia are associated with several measures of brain structure and function. Evaluating brain structure/function differences among dementia-free older adults may help identify individuals at greatest risk for future cognitive decline.",
+          "published": "2025-09-29",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41017012/",
+          "source": "PubMed",
+          "relevance_score": 7.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Brain imaging and behavior",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Bridging the barrier: insights into blood biomarkers and therapeutic strategies targeting choroid plexus and BBB dysfunction in alzheimer's disease.",
+          "authors": "Niti Sharma, Danyeong Kim, Himadri Sharma...",
+          "abstract": "Alzheimer's disease (AD) is the most common cause of dementia and accounts for approximately 60-80% of total dementia patients. Currently, accurate diagnosis for AD relies on cerebrospinal fluid (CSF) sampling or a positron emission tomography (PET) scan, methods that cannot be done in primary care centers where most people go with cognitive complaints. This Limitation calls for the urgent need to develop blood-related diagnostic tests that could facilitate early detection and enable timely treatment. Recent CSF proteomic research categorized AD into five molecular subtypes with discrete Genetic risk profiles. Subtypes 1-3, namely neuronal hyperplasticity, innate immune activation, and RNA dysregulation, were characterized by more classical AD-related changes, like accumulation of amyloid/tau and synaptic and immune dysfunction, respectively. On the contrary, non-traditional AD mechanisms in subtypes 4-5 were choroid plexus (CP) dysfunction and blood-brain barrier (BBB) dysfunction, emphasizing clearance deficits in association with brain barrier dysfunction. The unchanged tau levels later may be explained by an alternate disease mechanism (clearance dysfunction). These subtypes included BBB and CP dysfunction. Biomarker identification based on the mechanism of disease progression would increase the precision of diagnoses, allowing for tailored interventions and aiding in the creation of novel therapies for subtypes that might not react favorably to conventional amyloid/tau-targeting strategies. Finding biomarkers specific to each subtype would aid in patient classification, resulting in more individualized therapy as opposed to a \"one-size-fits-all\" strategy. The present review emphasized the importance of identifying blood-based biomarkers (BBMs) related to brain barrier dysfunction from CSF studies and personalized treatment strategies to streamline the diagnostic workup, and may be utilized in standard clinical practice for the early detection of AD.",
+          "published": "2025-09-26",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41013670/",
+          "source": "PubMed",
+          "relevance_score": 6.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Biomarker research",
+          "volume": "13",
+          "issue": "1"
+        },
+        {
+          "title": "Multimodal MRI combined with RNA sequencing reveals pathological signatures in the 9-month-old 3×Tg-AD mouse brain.",
+          "authors": "Yongxin Li, Ziling Tang, Maohua Yao...",
+          "abstract": "The triple transgenic mouse model of Alzheimer's disease (3×Tg-AD) is a widely used model that exhibits region-dependent patterns of progressive amyloid-β and tau pathology. Although structural brain abnormalities on magnetic resonance imaging have been observed in 3×Tg-AD mice at later disease stages (> 12 months) and as early as 2 months, few studies have investigated changes in these mice during the stage with extensive amyloid-β deposition and onset of tau pathology (around 9 months). This study aimed to assess brain morphometry and microstructure alterations in 9 month-old 3×Tg-AD mice to better understand the neural mechanisms underlying these specific pathological features. Voxel-based analyses were employed on T2-weighted and diffusion tensor imaging to identify differences between 3×Tg-AD and control mice. Compared with controls, 3×Tg-AD mice exhibited lower gray matter volume in several regions including both hippocampal regions, the right thalamus, the left caudoputamen, and the cortex. Reduced white matter volume was observed in fiber tracts including the corpus callosum, internal capsule, stria terminalis, and olfactory tract. Whole-brain diffusion tensor imaging analysis revealed a significant decrease in fractional anisotropy and an increase in both radial and mean diffusivity within the left dentate gyrus of the hippocampal region and right striatumlike amygdala nuclei, with no significant difference in axial diffusivity. Correlation analyses demonstrated significant associations between behavioral performance measures, with both gray and white matter volumes within regions showing significant morphometric differences. Notably, behavioral performance also exhibited significant correlations with diffusion tensor imaging measures particularly within the left dentate gyrus of the hippocampal region and right striatumlike amygdala nuclei. Immunofluorescence analysis confirmed increased amyloid-β plaques and p-Tau protein expression in the hippocampal regions of 3×Tg- AD mice, which corroborated the magnetic resonance imaging findings. Transcriptome analysis in hippocampus tissue identified 1389 differentially expressed genes. Gene Ontology and Kyoto Encyclopedia of Genes and Genomes pathway analyses revealed that numerous differentially expressed genes were enriched in biological processes relevant to synapse structure, cognition, learning, and memory, with particular emphasis on Wnt and mitogen-activated protein kinase signaling pathways. Collectively, these findings suggest that intricate anatomical and microstructural alterations occur in 3×Tg-AD model mice at the onset of pathology around 9 months, potentially driven by gene expression alterations. Moreover, our results support the potential utility of brain volume and diffusion metrics as biomarkers for Alzheimer's disease pathology, which could have significant implications for clinical diagnosis of AD patients.",
+          "published": "2025-09-29",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41017658/",
+          "source": "PubMed",
+          "relevance_score": 5.9,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Neural regeneration research",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "New landscape of the diagnosis of Alzheimer's disease.",
+          "authors": "Giovanni B Frisoni, Oskar Hansson, Emma Nichols...",
+          "abstract": "Alzheimer's disease involves a drastic departure from the cognitive, functional, and behavioural trajectory of normal ageing, and is both a dreaded and highly prevalent cause of disability to individuals, and a leading source of health and social care expenditure for society. Before the advent of biomarkers, post-mortem examination was the only method available to establish a definitive diagnosis. In this first paper of the Series, we review state-of-the-art diagnostic practices and the typical patient journey in specialist settings, where clinicians engage in a differential diagnosis to establish whether Alzheimer's pathology (cerebral deposition of β-amyloid and hyperphosphorylated tau) is a contributor to cognitive impairment. Biomarkers indicating dysregulation of β-amyloid and tau homeostasis, measured with PET and cerebrospinal fluid analysis, allow a molecular-level diagnosis-a mandatory step in defining eligibility for the recently approved anti-amyloid treatments. We anticipate that easily accessible blood biomarkers, already available in some countries, will lead to a new diagnostic revolution and bring about major changes in health-care systems worldwide.",
+          "published": "2025-09-27",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40997838/",
+          "source": "PubMed",
+          "relevance_score": 4.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Lancet (London, England)",
+          "volume": "406",
+          "issue": "10510"
+        },
+        {
+          "title": "Feasibility of MR-Guided PET Reconstruction in Detection of Focal Cortical Dysplasia.",
+          "authors": "Erik H Middlebrooks, Chen Lin, Robert A Pooley...",
+          "abstract": "Focal cortical dysplasia (FCD) is one of the most prevalent and difficult to detect structural etiologies of epilepsy. Recent advancements in MRI technology have enhanced detectability of FCD, yet many remain undiagnosed by MRI. FDG-PET may increase detection rates when utilized alongside MRI, yet PET continues to be underutilized beyond temporal lobe epilepsy, likely due to challenges in identifying subtle cortical lesions. Hybrid PET/MR systems present an opportunity to improve image quality and lesion detection, but benefits of hybrid PET/MR in epilepsy beyond workflow advantages are not well established. This feasibility study assesses the potential of a prototype MR-guided PET reconstruction that integrates event-by-event motion correction, enhanced point spread function modeling, regularization techniques, and MR-guided reconstruction algorithm. We demonstrate enhancements in cortical definition and increased conspicuity of FCD in FDG-PET. The combined reconstruction approach provides a distinct advantage for PET/MR, thereby helping to realize the full potential of hybrid PET/MR systems.ABBREVIATIONS: FCD = focal cortical dysplasia; FWHM = full width at half maximum; OSEM = ordered subset expectation maximization; BSREM = block sequential regularized expectation maximization.",
+          "published": "2025-09-27",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41015541/",
+          "source": "PubMed",
+          "relevance_score": 4.5,
+          "matched_keywords": [
+            "PET",
+            "MRI"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Serial amplification of tau filaments using Alzheimer's brain homogenates and C322A or C322S recombinant tau.",
+          "authors": "Alessia Santambrogio, Sofia Lövestam, Michael A Metrick...",
+          "abstract": "The assembly of tau into amyloid filaments is a hallmark of Alzheimer's disease (AD) and other tauopathies. Cryo-EM revealed the existence of disease-specific tau folds, which are challenging to replicate in vitro. We studied three full-length recombinant 0N3R tau forms (the wild-type and the C322A and C322S variants) using an RT-QuIC assay with brain homogenate seeding. C322A tau formed filaments resembling AD paired helical filaments (PHFs) but with a more open C-shaped core. C322S tau yielded structurally distinct filaments with an ordered C-terminal region. Both mutants seeded further aggregation, whereas the wild-type showed poor reproducibility and mainly unfolded aggregates. These results highlight the importance of optimised conditions to produce disease-relevant tau filaments and aid the development of targeted therapies. Impact statement We investigated the seeded assembly of 0N3R tau and its two mutational variants C322A and C322S, using Alzheimer's disease brain homogenates in a real-time quaking-induced conversion (RT-QuIC) assay. The C322A variant formed filaments partially resembling the AD PHF structure, showing the importance of optimised conditions to produce disease-relevant tau filaments.",
+          "published": "2025-09-30",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41026859/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "FEBS letters",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Reversible tau hyperphosphorylation in hibernation: a blood biomarker and brain tissue study.",
+          "authors": "Wagner S Brum, Laia Montoliu-Gaya, Gunnar Brinkmalm...",
+          "abstract": "Tau hyperphosphorylation, a key neuropathological feature of tauopathies such as Alzheimer's disease (AD), also occurs physiologically during mammalian hibernation and is fully reversed upon arousal, offering a unique translational model to study tau metabolism. However, limited data exist on insoluble and soluble tau alterations during hibernation and on patterns of tau fragment concentrations in the hibernating mammalian brain. We quantified tau biomarkers in plasma samples from ten free-ranging brown bears (Ursus arctos), captured during both their active summer period and hibernation in the winter, using clinically validated immunoassays and immunoprecipitation mass spectrometry (IP-MS) techniques. We also analyzed brain tissue from ten golden Syrian hamsters (Mesocricetus auratus) subjected to induced torpor (hibernation) versus euthermic (non-hibernating) states by quantifying multiple phosphorylated and non-phosphorylated tau peptides with an IP-MS method previously applied in human brain tissue. In brown bears, plasma levels of phosphorylated tau (p-tau) biomarkers p-tau181 and p-tau217 significantly increased during hibernation compared to summer (median increases of 362% and 294% by IP-MS, respectively), with similar increases found with immunoassays. Additional plasma p-tau biomarkers associated with AD pathology, including p-tau205 and p-tau231, were also increased during bear hibernation. In hamster brains, p-tau217, and p-tau231 were similarly elevated during torpor, while tau fragments from the microtubule-binding region (MTBR), associated with tangle aggregation, were not increased. In contrast, brain tissue from n = 10 AD patients, analyzed with the same IP-MS method, exhibited striking increases in p-tau (~ 50,000% for p-tau217) and MTBR fragments (~ 20,000% for MTBR tau354-369) compared with n = 10 human controls. We show that hibernation-linked tau hyperphosphorylation involves some of the same phospho-sites altered in AD, but occurs without MTBR tau aggregation. This highlights hibernation as a reversible, non-pathological model to study tau biology and mechanisms underlying AD due to its reversibility and lack of tau aggregation despite hyperphosphorylation in key AD tau phospho-sites.",
+          "published": "2025-09-29",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41023457/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "tau",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Acta neuropathologica",
+          "volume": "150",
+          "issue": "1"
+        },
+        {
+          "title": "TMTCrunch: A Proteomic Atlas of Alternative Splicing for Predicting Splicing-Induced Implications in Aging and Alzheimer's Disease.",
+          "authors": "Max Brazhnikov, Tomiris Kusainova, Anna S Kopeykina...",
+          "abstract": "Alzheimer's disease (AD) is the most prevalent form of dementia with incompletely understood pathogenesis. A major gap arises from the lack of proteomics tools capable of characterizing alternative splicing (AS)-derived proteoforms and their contributions to neurodegeneration. We developed a novel bioinformatics pipeline, TMTCrunch, tailored for rigorous quantitative meta-analysis of big proteomics data at the splice-proteoform level. TMTCrunch characterizes each proteoform by unique peptides, assessing similarity to canonical peptides and unique peptide coverage, employing SMD-based quantitation, and predicting proteoform-specific alterations of protein-protein interactions (PPIs) and novel post-translational modifications (PTMs) on spliced peptides. Applying TMTCrunch to 420 brain samples, we constructed the first atlas of splicing translatomes in AD, reproducibly identifying 870 noncanonical proteoforms. Differential analysis suggests splicing affecting proteoforms implicated in cytoskeletal regulation (e.g., MAPT, CLU, DPYSL3, ACTN2, SORBS1, FHL1), glutamatergic transmission (GRIA3), pre-mRNA splicing regulation (ARL6IP4), potassium channel modulation (DPP6), and cAMP signaling (PDE4D). Our analysis predicts disruption of PPIs within the Rho GTPase and EGFR signaling pathways and PTMs (deamidation, oxidation, phosphorylation) within AS regions, regardless of disease state. This approach implicates specific proteoforms in neurodegeneration: DPP6 (P42658-2), GRIA3 (P42263-2), the three-repeat isoforms of tau (3R-MAPT), and ASPH (Q12797-7). This study provides new insights into linking splicing to neurodegeneration.",
+          "published": "2025-09-30",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41024644/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "tau",
+            "brain"
+          ],
+          "journal": "Journal of proteome research",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Leptomeningeal vascularity in Gadopiclenol Enhanced Pediatric Brain MRI.",
+          "authors": "Sergio Valencia, Harry Griffin, Maria C Cortes-Albornoz...",
+          "abstract": "Gadolinium-based contrast agents (GBCAs) are essential in pediatric neuroimaging, enabling visualization of pathology that disrupts the blood-brain barrier. Gadopiclenol is a new macrocyclic GBCA with higher T1 relaxivity, permitting a 50% dose reduction while maintaining diagnostic quality. However, it is unknown whether this higher relaxivity alters background extra-axial vascular enhancement. We hypothesized that gadopiclenol, despite its lower dose, would increase background enhancement on post-contrast pediatric brain MRI compared to gadoterate meglumine (Gd-DOTA).",
+          "published": "2025-09-27",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41015540/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "AJNR. American journal of neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Impaired Synaptic Plasticity Mechanisms in Alzheimer's Disease.",
+          "authors": "Rasoul Ebrahimi, Zahra Golzari, Mahsa Heidari-Foroozan...",
+          "abstract": "Alzheimer's disease (AD) is the most common form of dementia, characterized by progressive cognitive decline driven by a complex interplay of genetic, environmental, and lifestyle factors. Increasing evidence highlights impaired synaptic plasticity as a major contributor to early cognitive deficits, often preceding neuronal loss. In particular, disruption of long-term potentiation (LTP) within the hippocampus, a region essential for learning and memory, plays a central role. Accumulation of amyloid β (Aβ) plaques and hyperphosphorylated tau proteins compromises synaptic integrity, leading to reduced synaptic density and altered protein expression critical for excitatory signaling. Additional mechanisms, including microglial activation and mitochondrial dysfunction, further aggravate synaptic impairment through inflammation and oxidative stress. Understanding these interconnected molecular and cellular disruptions offers crucial insight into the pathways underlying synaptic dysfunction in AD. By elucidating these mechanisms, future research can inform novel therapeutic strategies aimed at preserving synaptic function and slowing disease progression.",
+          "published": "2025-09-29",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41021123/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Metabolic brain disease",
+          "volume": "40",
+          "issue": "7"
+        },
+        {
+          "title": "Microglia networks within the tapestry of alzheimer's disease through spatial transcriptomics.",
+          "authors": "Yi Zhou, Christopher K Glass",
+          "abstract": "Understanding Alzheimer's disease (AD) at the cellular level requires insights into how diverse cell types respond to hallmark pathologies, including amyloid plaques and tau aggregates. Although single-cell transcriptomic approaches have illuminated the trajectories of AD progression in both animal models and human brains, they often lack the spatial context necessary to fully comprehend cell-cell interactions and microenvironmental influences. In this review, we discuss recent advances in spatial transcriptomics-integrating both imaging- and sequencing-based methods-that map gene expression within intact brain tissues. We highlight how these technologies have revealed regional heterogeneity and functional diversity among microglia, and their dynamic interactions with astrocytes, neurons, and oligodendrocytes in both aging and AD. Emphasis is placed on the interactions of microglia within the amyloid plaque niche, their contribution to synaptic degeneration, and how aging accelerates microglial and glial activation. By synthesizing findings from AD mouse models and physiologically characterized human tissues, we provide a comprehensive view of the cellular interplay driving AD pathogenesis and offer insights into potential therapeutic avenues.",
+          "published": "2025-09-29",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41024223/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Molecular neurodegeneration",
+          "volume": "20",
+          "issue": "1"
+        }
+      ],
+      "paper_count": 11
+    }
+  }
+}

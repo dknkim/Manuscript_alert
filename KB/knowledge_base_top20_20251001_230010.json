@@ -1,0 +1,291 @@
+{
+  "metadata": {
+    "created_at": "2025-10-01T23:00:10.227609",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 1000,
+    "filtered_papers": 130,
+    "high_relevance_papers": 14,
+    "top_papers_selected": 14,
+    "papers_per_week": 14,
+    "date_range": "2025-09-24 to 2025-10-01",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 14 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-09-24T00:00:00",
+        "end_date": "2025-10-01T00:00:00",
+        "week_label": "Top 20 Papers (2025-09-24 to 2025-10-01)"
+      },
+      "papers": [
+        {
+          "title": "The PREVENT-AD cohort: Accelerating Alzheimer's disease research and treatment in Canada and beyond.",
+          "authors": "Sylvia Villeneuve, Judes Poirier, John C S Breitner...",
+          "abstract": "The PResymptomatic EValuation of Experimental or Novel Treatments for Alzheimer's Disease (PREVENT-AD) is an investigator-driven study that was created in 2011 and enrolled cognitively normal older adults with a family history of sporadic AD. Participants are deeply phenotyped and have now been followed annually for more than 12 years (median follow-up 8.0 years, SD 3.1). Multimodal magnetic resonance imaging (MRI), genetic, neurosensory, clinical, cerebrospinal fluid, and cognitive data collected until 2017 on 348 participants who agreed to open sharing with the neuroscience community were already available. We now share a new release including 6 years of additional follow-up cognitive data, and additional MRI follow-ups, clinical progression, new longitudinal behavioral and lifestyle measures (questionnaires, actigraphy), longitudinal AD plasma biomarkers, amyloid-beta and tau positron emission tomography (PET), magnetoencephalography, as well as neuroimaging analytic measures from all MRI modalities. We describe the PREVENT-AD study, the data shared with the global research community, as well as the model we created to sustain longitudinal follow-ups while also allowing new innovative data collection. HIGHLIGHTS: The PResymptomatic EValuation of Experimental or Novel Treatments for Alzheimer's Disease (PREVENT-AD) is a single-site longitudinal study that started in 2011 with annual follow-up data collection on individuals at risk of Alzheimer's disease who were all cognitively normal at enrolment. All 387 participants were enrolled between 2011 and 2017 and 306 (79%) of these participants were still in the study as of December 2023. While the PREVENT-AD dataset was not originally planned to be shared with the global research community, 348 participants retrospectively consented for their data to be shared with researchers worldwide. The first release of data was in 2019. We now share a second release that includes 6 years of additional follow-up visits, information on clinical progression and novel cognitive, behavioral, genetic, plasma and neuroimaging (amyloid and tau positron emission tomography [PET], magnetoencephalography [MEG], and new magnetic resonance imaging [MRI] sequences) data. It also includes analytic outputs for neuroimaging modalities.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41020412/",
+          "source": "PubMed",
+          "relevance_score": 12.3,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "amyloid",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "10"
+        },
+        {
+          "title": "Plasma p-tau217, NfL, GFAP diagnostic performance and biomarker profiles in Alzheimer's disease, frontotemporal dementia, and psychiatric disorders, in a prospective unselected neuropsychiatry memory clinic.",
+          "authors": "Dhamidhu Eratne, Matthew Kang, Charles B Malpas...",
+          "abstract": "Plasma biomarkers offer promise for improving the diagnosis of Alzheimer's disease (AD) and differentiating AD and other neurodegenerative disorders (NDs) like frontotemporal dementia (FTD) from primary psychiatric disorders (PPDs), particularly in younger patients.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41025379/",
+          "source": "PubMed",
+          "relevance_score": 8.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "tau",
+            "plasma"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "10"
+        },
+        {
+          "title": "Editorial: Real-World Outcomes of Disease-Modifying Therapies Highlight the Need for Diagnostic Biomarkers in Early Alzheimer's Disease.",
+          "authors": "Dinah V Parums",
+          "abstract": "The promise of targeted humanized monoclonal antibody therapies to amyloid ß and tau protein in Alzheimer's disease from clinical trial data has not been realized when put to the test in real-world studies and practice. There have been regulatory approvals for diagnostic blood tests in China, Japan (HISCL Aß42/40), and the United Kingdom (UK) (PrecivityAD2). On May 16, 2025, the US FDA approved the Lumipulse G blood test, which utilizes the plasma pTau217/Aß1-42 ratio, for the diagnosis of cerebral amyloid plaques in symptomatic patients of 55 years or more. Biological biomarkers and targets are currently being evaluated in phase 1 to phase 3 clinical trials, to rapidly implement less invasive blood-based assays to detect tau species and neurofilament light (NfL). However, clinical validation of the diagnostic value of identifying blood biomarkers still requires support from amyloid positron emission tomography (PET) brain scans and/or the results of cerebrospinal fluid (CSF) analysis. This editorial aims to identify how real-world outcomes of new disease-modifying therapies highlight the need for diagnostic biomarkers for early Alzheimer's disease and the current status of biomarkers identified by blood plasma, CSF, and imaging.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41030020/",
+          "source": "PubMed",
+          "relevance_score": 6.7,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Medical science monitor : international medical journal of experimental and clinical research",
+          "volume": "31",
+          "issue": ""
+        },
+        {
+          "title": "Calibration of multisite raters for prospective visual reads of amyloid PET scans.",
+          "authors": "David N Soleimani-Meigooni, Stefania Pezzoli, Ganna Blazhenets...",
+          "abstract": "In multicenter Alzheimer's disease studies, amyloid positron emission tomography (PET) visual reads are typically performed centrally by a few experts. Incorporating a broader reader network enhances scalability and generalizability.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41030129/",
+          "source": "PubMed",
+          "relevance_score": 6.699999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "10"
+        },
+        {
+          "title": "The relationship between choroid plexus volume, DTI-ALPS index, kidney function, and amyloid pathology in alzheimer's disease.",
+          "authors": "Lefan Yu, Mengmeng Feng, Yi Shang...",
+          "abstract": "To explore the effect of the choroid plexus volume (CPV) changes on paravascular drainage function, Alzheimer's disease (AD) pathology, and the kidney-brain axis in AD.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41032100/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Neuroradiology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Amyloid beta and tau are associated with the dual effect of neuroinflammation on neurodegeneration.",
+          "authors": "Guilherme Povala, Bruna Bellaver, Marco Antônio De Bastiani...",
+          "abstract": "Current literature presents conflicting results regarding the impact of neuroinflammation on Alzheimer's disease (AD)-related neurodegeneration. While some studies suggest that neuroinflammation potentiates neurodegeneration, others indicate a protective effect.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41020416/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "10"
+        },
+        {
+          "title": "Targeted clearance of extracellular Tau using aptamer-armed monocytes alleviates neuroinflammation in mice with Alzheimer's disease.",
+          "authors": "Yuting Zhuo, Yao Lu, Yan Zhu...",
+          "abstract": "Extracellular Tau determines the progression of Alzheimer's disease, yet therapeutic strategies targeting it are hindered by poor brain delivery and limited clearance. Here we developed a Tau-clearing cell therapy based on monocytes functionalized with a high-affinity Tau-specific aptamer. The aptamer was covalently conjugated to the surface of monocytes (derived from bone marrow leucocytes and cultured under monocyte-inducing conditions) via bioorthogonal chemistry without affecting their viability or function. Upon intravenous administration in mice expressing mutant and disease-relevant human Tau, the engineered monocytes actively crossed the blood-brain barrier and accumulated in Tau-rich brain regions such as the hippocampus and striatum. They efficiently phagocytosed extracellular Tau, leading to a significant reduction in Tau burden. As a result, glial activation was suppressed, neuroinflammation was alleviated, and neuronal and mitochondrial integrity was preserved. Long-term treatment improved memory and spatial learning, without inducing toxicity or behavioural side effects. These results demonstrate that aptamer-guided monocytes can achieve targeted delivery, effective clearance and sustained neuroprotection, offering a promising strategy for therapeutic intervention in Alzheimer's disease.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41034513/",
+          "source": "PubMed",
+          "relevance_score": 6.199999999999999,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "tau",
+            "brain"
+          ],
+          "journal": "Nature biomedical engineering",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Synthetic chaperone based on Hsp90-Tau interaction inhibits Tau aggregation and rescues physiological Tau-Microtubule interaction.",
+          "authors": "Davide Di Lorenzo, Nicolo Bisi, Julia Kaffy...",
+          "abstract": "The accumulation of intracellular aggregates of Tau protein is one main hallmark of Alzheimer's disease (AD) and is the consequence of Tau conformational changes, increased phosphorylation, and self-association to form fibrillar aggregates. This pathological process prevents the physiological interaction of Tau with microtubules to the detriment of the structural integrity of neurons. In healthy cells, aberrant protein misfolding and aggregation are counteracted by chaperone proteins whose protective capacity decreases with age. The role of the chaperone Hsp90 and the mechanism by which it can prevent Tau aggregation are controversial. In this work, the strategy of mimicking Hsp90 through the design of the β-hairpin like peptidomimetic β-Hsp90, inspired by two Hsp90/Tau interaction sequences, is presented. β-Hsp90 inhibits Tau aggregation both in vitro and in cells, restoring Tau's physiological interaction with microtubules. β-Hsp90, which interacts with the P1 region of Tau, is more effective than individual peptide sequences from the chaperone HSP90 and another β-hairpin mimic based on Tau sequences. Moreover, β-Hsp90 reduces AD-associated Aβ",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41034231/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Nature communications",
+          "volume": "16",
+          "issue": "1"
+        },
+        {
+          "title": "Evidence-based standardized sample handling protocol for accurate blood-based Alzheimer's disease biomarker measurement: Results and consensus of the Global Biomarker Standardization Consortium.",
+          "authors": "Inge M W Verberk, Mariam Gouda, Daniel Antwi-Berko...",
+          "abstract": "Blood-based biomarkers (BBMs) have revolutionized Alzheimer's disease diagnosis and monitoring. Their pre-analytical stability requires scrutiny. This study assessed pre-analytical effects to inform a standardized sample handling protocol.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41025225/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+          "volume": "21",
+          "issue": "10"
+        },
+        {
+          "title": "Dysregulated Lipids in Alzheimer's Disease: Insights into Biological Pathways through LC-MS/MS Analysis of Human Brain Tissues.",
+          "authors": "Akeem Sanni, Andrew I Bennett, Moyinoluwa Adeniyi...",
+          "abstract": "Alzheimer's Disease (AD), the leading cause of dementia, is characterized by complex pathological mechanisms that extend beyond amyloid-β plaques and tau tangles. This study investigates the dysregulation of lipids with a focus on phospholipids and sphingolipids, in human post-mortem AD brain tissue using lipidomics methodology. By employing a ZIC-HILIC LC-MS/MS platform, the lipidome of AD (",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40957103/",
+          "source": "PubMed",
+          "relevance_score": 5.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "ACS chemical neuroscience",
+          "volume": "16",
+          "issue": "19"
+        },
+        {
+          "title": "Artificial Intelligence for Alzheimer's disease diagnosis through T1-weighted MRI: A systematic review.",
+          "authors": "Sara Basanta-Torres, Miguel Ángel Rivas-Fernández, Santiago Galdo-Alvarez",
+          "abstract": "Alzheimer's disease (AD) is a leading cause of dementia worldwide, characterized by heterogeneous neuropathological changes and progressive cognitive decline. Despite the numerous studies, there are still no effective treatments beyond those that aim to slow progression and compensate the impairment. Neuroimaging techniques provide a comprehensive view of brain changes, with magnetic resonance imaging (MRI) playing a key role due to its non-invasive nature and wide availability. The T1-weighted MRI sequence is frequently used due to its prevalence in most MRI protocols, generating large datasets, ideal for artificial intelligence (AI) applications. AI, particularly machine learning (ML) and deep learning (DL) techniques, has been increasingly utilized to model these datasets and classify individuals along the AD continuum. This systematic review evaluates studies using AI to classify more than two stages of AD based on T1-weighted MRI data. Convolutional neural networks (CNNs) are the most widely applied, achieving an average classification accuracy of 85.93 % (range: 51.80-100 %; median: 87.70 %). These good results are due to CNNs' ability to extract hierarchical features directly from raw imaging data, reducing the need for extensive preprocessing. Non-convolutional neural networks and traditional ML approaches also demonstrated strong performance, with mean accuracies of 82.50 % (range: 57.61-99.38 %; median: 86.67 %) and 84.22 % (range: 33-99.10 %; median: 87.75 %), respectively, underscoring importance of input data selection. Despite promising outcomes, challenges remain, including methodological heterogeneity, overfitting risks, and a reliance on the ADNI database, which limits dataset diversity. Addressing these limitations is critical to advancing AI's clinical application for early detection, improved classification, and enhanced patient outcomes.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40902465/",
+          "source": "PubMed",
+          "relevance_score": 4.9,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Computers in biology and medicine",
+          "volume": "197",
+          "issue": "Pt A"
+        },
+        {
+          "title": "Design of Tau Aggregation Inhibitors Using Iterative Machine Learning and a Polymorph-Specific Brain-Seeded Fibril Amplification Assay.",
+          "authors": "Alessia Santambrogio, Robert I Horne, Michael A Metrick...",
+          "abstract": "The aggregation of tau into amyloid fibrils is associated with Alzheimer's disease (AD) and related tauopathies. Since different tauopathies are characterized by the formation of distinct tau fibril morphologies, it is important to combine the search of tau aggregation inhibitors with the development of in vitro tau aggregation assays that recapitulate aggregation as it may occur in the brain. Here we address this problem by reporting an in vitro tau aggregation assay in which AD brain homogenates are used to seed the generation of first-generation tau fibrils in a polymorph-specific manner under quiescent conditions. These fibrils are then used to create amyloid seed libraries from which second-generation kinetic assays can be readily performed. Using this strategy, we illustrate an iterative machine learning method for the identification of small molecules for the polymorph-specific inhibition of the in vitro formation of tau fibrils. We further show that the small molecules selected by this procedure are potent inhibitors in a",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40964862/",
+          "source": "PubMed",
+          "relevance_score": 4.4,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Journal of the American Chemical Society",
+          "volume": "147",
+          "issue": "39"
+        },
+        {
+          "title": "Analysis of Specific Serum Markers for Early Prediction of Alzheimer's Disease in Adolescents with Down Syndrome.",
+          "authors": "Nagwa A Meguid, Maha Hemimi, Gina Elpatrik...",
+          "abstract": "Down syndrome (DS) is accompanied by cognitive manifestations resulting from full or partial extra chromosome 21. Amyloid precursor protein overexpression and the exponential aggregation of amyloid beta in the brain cause dementia in individuals with DS. This study aimed to uncover early serum marker candidates of amyloid precursor protein-like protein 1 beta species denoted APL1β25, APL1β27 and APL1β28 and the noradrenergic metabolite 3-methoxy-4-hydroxyphenylglycol (MHPG) as predictors of Alzheimer's disease (AD) in adolescents with DS and to elucidate the correlation between these parameters and the cognition of DS patients. This study included 30 DS cases (13-18 years old) with full trisomy 21 in addition to 30 healthy age-matched controls. The cognitive decline in DS subjects was evaluated using the short form of the Informant Questionnaire on Cognitive Decline in the Elderly (Short IQCODE). Serum levels of APL1b25, ALP1b27, ALP1b28 and MHPG were evaluated using enzyme-linked immunosorbent assay. The results indicated a significant positive correlation (",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/40937385/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Indian journal of clinical biochemistry : IJCB",
+          "volume": "40",
+          "issue": "4"
+        },
+        {
+          "title": "Altered habenular and whole brain functional connectivity in early Parkinson's disease using 7 T MRI.",
+          "authors": "Bedia Samanci, Ulas Ay, Mark L Kuijf...",
+          "abstract": "Parkinson's disease (PD) is traditionally linked to basal ganglia dysfunction, yet evidence highlights broader network disruptions. Habenula, involved in regulating mood, reward, and motor functions, remains underexplored in PD. This study investigated whole-brain and habenular functional connectivity and their clinical correlates in early-stage PD using 7 T MRI. Functional connectivity was analyzed in 104 early-stage PD and 45 healthy controls. Whole-brain analysis revealed increased connectivity in two clusters in PD: the first involved paracentral lobule, middle frontal gyrus, orbital middle frontal gyrus, precentral gyrus, angular gyrus, middle cingulate gyrus, supplementary motor area; the second included middle cingulate gyrus and cerebellum Crus I. Left habenula showed increased connectivity with right middle temporal and angular gyri (p-FDR = 0.011). Levodopa equivalent daily dose positively correlated with connectivity between postcentral gyrus and cerebellum (p-FDR = 0.020). These findings highlight early motor and cognitive network disruptions and suggest these regions may serve as potential markers of PD-related neurobiological changes.",
+          "published": "2025-10-01",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41034223/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "NPJ Parkinson's disease",
+          "volume": "11",
+          "issue": "1"
+        }
+      ],
+      "paper_count": 14
+    }
+  }
+}

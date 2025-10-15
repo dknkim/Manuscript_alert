@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "created_at": "2025-10-13T12:32:19.530327",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 1000,
+    "filtered_papers": 96,
+    "high_relevance_papers": 7,
+    "top_papers_selected": 7,
+    "papers_per_week": 7,
+    "date_range": "2025-10-06 to 2025-10-13",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 7 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-10-06T00:00:00",
+        "end_date": "2025-10-13T00:00:00",
+        "week_label": "Top 20 Papers (2025-10-06 to 2025-10-13)"
+      },
+      "papers": [
+        {
+          "title": "KIF2A downregulation links amyloid-β to Tau phosphorylation in Alzheimer's disease.",
+          "authors": "Nuria Ruiz-Reig, Margaux Virosztek, Georges Chehade...",
+          "abstract": "Microtubules (MT) are essential components of the cytoskeleton. Dysfunctions of MT and MT-associated proteins are prominent features of neurodegenerative disorders. In Alzheimer's disease (AD), changes in MT composition and hyperphosphorylation of Tau are more closely related to neurodegeneration than amyloid plaque formation. However, the accumulation of amyloid beta (Aβ) species is the earliest event in AD pathology and induces Tau toxicity. KIF2A is a microtubule depolarizing kinesin with important roles during cortical development. KIF2A expression is maintained in the mature brain, where it is required for neuronal survival. Here, we used a conditional approach to ablate KIF2A specifically in the adult mouse cortex and hippocampus to assess the impact of KIF2A deletion on neuronal survival and Tau phosphorylation. We found that KIF2A deficiency leads to a reduction of dendritic spine density and maturation associated with cognitive decline, followed by an increase in Tau phosphorylation through ERK1/2 activation. We also studied KIF2A expression in 5xFAD mouse model and post-mortem human brain tissue. We report that Aβ accumulation alters KIF2A expression in neurons and most importantly, KIF2A protein levels are drastically reduced in AD patients but not in patients with other primary Tauopathies. Our results shed light on the relationship between Aβ accumulation, KIF2A deregulation, microtubule dysfunction, and enhanced Tau phosphorylation in the context of AD.",
+          "published": "2025-10-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41071932/",
+          "source": "PubMed",
+          "relevance_score": 8.3,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Glia inflammation and cell death pathways drive disease progression in preclinical and early AD.",
+          "authors": "Marcel S Woo, Joseph Therriault, Seyyed Ali Hosseini...",
+          "abstract": "Accumulation of amyloid-β (Aβ) and neurofibrillary tangles (NFTs) are followed by the activation of glia cells and infiltration of peripheral immune cells that collectively accelerate neurodegeneration in preclinical AD models. Yet, the role of neuroinflammation for neuronal injury and disease progression in preclinical and early symptomatic AD remains elusive. Here, we combined multiplexed immunoassays and SomaScan proteomics of the cerebrospinal fluid (CSF) with MRI and PET brain imaging of people across the AD continuum to identify pathways that are associated with AD progression. Unbiased clustering revealed that glia-mediated inflammation, activation of cell death pathways (CDPs) and synaptic pathologies were among the earliest Aβ-induced changes, and were associated with disease progression in preclinical AD. Mediation analysis revealed that activation of CDPs were decisive drivers of inflammation in early symptomatic AD. The cycle of glia-mediated neuroinflammation and neuronal injury characterizes preclinical AD and has implications for novel treatment approaches.",
+          "published": "2025-10-10",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41073674/",
+          "source": "PubMed",
+          "relevance_score": 5.0,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "EMBO molecular medicine",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "IoMT driven Alzheimer's prediction model empowered with transfer learning and explainable AI approach in healthcare 5.0.",
+          "authors": "Abdul Hannan Khan, Danish Ali, Shakeel Ahmed...",
+          "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative disorder and the primary cause of dementia, responsible for 60-70% of global cases. It severely affects memory, cognitive function, and daily independence, placing a substantial emotional and economic burden on patients and caregivers. Early and accurate prediction remains difficult due to the high cost of neuroimaging, scarcity of annotated datasets, and the \"black-box\" nature of most artificial intelligence (AI) models. With the emergence of Healthcare 5.0, the Internet of Medical Things (IoMT) offers new opportunities for patient-centric, real-time monitoring and data-driven diagnosis. This study proposes an IoMT-driven Alzheimer's prediction framework that combines transfer learning (ResNet152) with explainable AI (XAI) to provide both accuracy and interpretability. The publicly available Kaggle Alzheimer's MRI dataset, comprising 33,984 images across four classes (Non-Demented, Very Mild, Mild, and Moderate Demented) was employed. To address class imbalance, a Conditional Wasserstein GAN was applied for synthetic image generation and balanced sampling. The proposed ResNet152-TL-XAI model achieved 97.77% accuracy, with a precision of 0.981, recall of 0.987, F1-score of 0.983, and specificity of 99.13%, outperforming several state-of-the-art methods. Interpretability was ensured through Grad-CAM, SHAP, and LIME, which consistently highlighted clinically relevant brain regions such as the Hippocampus and ventricles, confirming biological plausibility and increasing clinician trust. By integrating IoMT-enabled data acquisition, transfer learning for efficient training, and multi-method XAI for transparency, the proposed pipeline demonstrates strong potential for early, accurate, and interpretable Alzheimer's staging. These results position the framework as a practical candidate for integration into Healthcare 5.0 ecosystems, supporting timely diagnosis, patient monitoring, and personalized interventions.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41068276/",
+          "source": "PubMed",
+          "relevance_score": 4.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Scientific reports",
+          "volume": "15",
+          "issue": "1"
+        },
+        {
+          "title": "Machine learning-based estimation of the mild cognitive impairment stage using multimodal physical and behavioral measures.",
+          "authors": "Ingyu Park, Sang-Kyu Lee, Hui-Chul Choi...",
+          "abstract": "Mild cognitive impairment (MCI) is a prodromal stage of dementia, and its early detection is critical for improving clinical outcomes. However, current diagnostic tools such as brain magnetic resonance imaging (MRI) and neuropsychological testing have limited accessibility and scalability. Using machine-learning models, we aimed to evaluate whether multimodal physical and behavioral measures, specifically gait characteristics, body mass composition, and sleep parameters, could serve as digital biomarkers for estimating MCI severity. We recruited 80 patients diagnosed with MCI and classified them into early- and late-stage groups based on their Mini-Mental State Examination scores. Participants underwent clinical assessments, including the Consortium to Establish a Registry for Alzheimer's Disease Assessment Packet Korean Version, gait analysis using GAITRite, body composition evaluation via dual-energy X-ray absorptiometry, and polysomnography-based sleep assessment. Brain MRI was also performed to obtain structural imaging data. We evaluated the classification performance across various models, including support vector machines, random forest, multilayer perceptron, and convolutional neural network, using unimodal and multimodal datasets. Machine learning models trained on physical and behavioral data alone achieved a high classification accuracy (AUC up to 94%), comparable to that of MRI-based models, in differentiating early- and late-stage MCI. Combining physical and behavioral and MRI features yielded marginal improvements in the prediction performance. Gait velocity, lean body mass, and sleep efficiency were among the top predictors of cognitive function. Multimodal digital biomarkers or multimodal physical and behavioral signals can effectively estimate MCI severity and may offer a scalable, low-cost approach for early detection and monitoring of cognitive decline in real-world settings.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41068341/",
+          "source": "PubMed",
+          "relevance_score": 4.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Scientific reports",
+          "volume": "15",
+          "issue": "1"
+        },
+        {
+          "title": "Neighborhood socioeconomic status and distance from home address to imaging center impact acuity of brain MRI findings.",
+          "authors": "Ishita Raghuvanshi, Benjamin B Risk, Gelareh Sadigh...",
+          "abstract": "Lower socioeconomic status (SES) and longer distance to providers have been linked to disparities in healthcare access, often delaying diagnostic evaluation of acute conditions. Determining the effects of non-medical factors on the acuity of MRI findings is critical for addressing healthcare inequities and improving access to medical imaging.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41076172/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Journal of the American College of Radiology : JACR",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Saturation-Transfer-Based MRI of the Brain in Multiple Sclerosis Patients at 3T.",
+          "authors": "Ziyan Wang, Yingying Lin, Peng Cao...",
+          "abstract": "Multiple sclerosis (MS) is an autoimmune demyelinating disease that attacks myelin. MRI is an important imaging modality for diagnosis and monitoring in MS. However, the current standard MRI protocol for MS lacks sequences capable of detecting molecular changes.",
+          "published": "2025-10-13",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41078166/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "MRI",
+            "brain"
+          ],
+          "journal": "Journal of magnetic resonance imaging : JMRI",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Potential barriers to timely Alzheimer's disease diagnosis and treatment: Tracer delivery and patient travel to amyloid PET scanners in the United States.",
+          "authors": "Mark Hanson, Ying Liu, Tabasa Ozawa...",
+          "abstract": "Several disease-modifying Alzheimer's disease treatments are available or in clinical trials. Participation in these trials and access to approved treatments often require amyloid positron emission tomography (PET) scans. Amyloid PET requires a radioactive tracer with a short half-life so PET scanner must be near a cyclotron facility that produces and delivers viable tracers. We examined the size and composition of the US population that faces likely geographic obstacles due to travel time constraints. Our estimate that 1.5 million older Americans would drive more than one hour to a qualifying PET site raises concern for differences in access to memory care.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41066449/",
+          "source": "PubMed",
+          "relevance_score": 4.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": ""
+        }
+      ],
+      "paper_count": 7
+    }
+  }
+}

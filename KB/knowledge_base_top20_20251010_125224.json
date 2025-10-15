@@ -1,0 +1,258 @@
+{
+  "metadata": {
+    "created_at": "2025-10-10T12:52:24.388840",
+    "weeks_covered": 1,
+    "keywords_used": [
+      "Alzheimer's disease",
+      "PET",
+      "MRI",
+      "dementia",
+      "amyloid",
+      "tau",
+      "brain",
+      "plasma"
+    ],
+    "data_sources": {
+      "pubmed": true
+    },
+    "search_mode": "Brief (PubMed: 1000, Others: 500)",
+    "days_back": 7,
+    "total_papers_found": 1000,
+    "filtered_papers": 100,
+    "high_relevance_papers": 12,
+    "top_papers_selected": 12,
+    "papers_per_week": 12,
+    "date_range": "2025-10-03 to 2025-10-10",
+    "selection_criteria": "Papers with relevance score > 4.0 ONLY (up to 20 papers)",
+    "selection_details": "Selected 12 papers with relevance score > 4.0 (fewer than 20 available)"
+  },
+  "weeks": {
+    "top_papers": {
+      "week_info": {
+        "week_number": 1,
+        "start_date": "2025-10-03T00:00:00",
+        "end_date": "2025-10-10T00:00:00",
+        "week_label": "Top 20 Papers (2025-10-03 to 2025-10-10)"
+      },
+      "papers": [
+        {
+          "title": "Imposter in the brain: aetiological, clinical and neuroimaging characteristics of Capgras syndrome.",
+          "authors": "Hiroyuki Watanabe, Jennifer L Whitwell, Jerusha G Bhaskaran...",
+          "abstract": "Capgras syndrome is a delusional misidentification syndrome characterized by the recurrent belief that someone, usually a family member, has been replaced by an impostor. Although described over a century ago, its etiology, clinical features, and neuroimaging characteristics remain poorly understood due to its rarity. This study aimed to clarify these aspects through the analysis of a large cohort and to explore its clinical implications and underlying mechanisms. We conducted a retrospective cohort study by reviewing medical records of patients diagnosed with Capgras syndrome at the Mayo Clinic (Rochester, Minnesota) over a 28-year period (January 1995-December 2022). Clinical, neuropathological, and neuroimaging data were analyzed. A total of 204 patients were included (median age at onset: 73 years; 44% female). Twelve patients underwent neuropathological examination, all of whom exhibited α-synuclein pathology, including one patient with a clinical diagnosis of Alzheimer's disease (AD). Regarding clinical diagnoses, neurodegenerative diseases were the most common (69%, n=140), with dementia with Lewy bodies (DLB) being predominant (58%, n=118), followed by mixed etiologies (\"two-hits\") (18%, n=36) and AD (10%, n=21). Psychotic disorders accounted for 9% (n=18) of cases. No case was attributed to a single stroke, although 9% (n=19) involved coexisting cerebrovascular disease in the context of AD or DLB. In DLB, the timing of Capgras syndrome onset varied: it occurred later than cognitive decline and core clinical features (e.g., visual hallucinations, fluctuating cognition, parkinsonism) in both DLB and mild cognitive impairment (MCI)-onset prodromal DLB, but earlier in psychiatric-onset prodromal DLB. In both DLB and AD, Capgras syndrome typically targeted a single spouse, whereas in psychotic disorders, it often involved multiple, non-spousal targets. Depression or anxiety was present in 55% (n=112). Capgras syndrome worsened in the evening or at night (87%, n=45/52), suggesting a link to negative affective states. Among 82 patients with DLB and AD treated with cholinesterase inhibitors, 15% (n=12) showed symptomatic improvement. Neuroimaging with MRI and 18F-fluorodeoxyglucose-PET revealed widespread bilateral cortical involvement and prominent right frontal dysfunction in DLB and AD. Capgras syndrome is associated with DLB and could serve as a potential early diagnostic clue. Recognizing its phenomenological features-the number and type of targeted individuals-can help differentiate between neurodegenerative and psychiatric etiologies. In neurodegenerative diseases, Capgras syndrome may reflect a multifactorial, dynamic process, driven by widespread bilateral cortical dysfunction (particularly involving the right frontal lobe), and psychological factors. Thus, a combined approach involving pharmacological and non-pharmacological interventions may offer effective management strategies.",
+          "published": "2025-10-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41059767/",
+          "source": "PubMed",
+          "relevance_score": 11.3,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Neuronal activity and amyloid-β promote tau seeding in the entorhinal cortex in Alzheimer's disease.",
+          "authors": "Christoffer G Alexandersen, Dani S Bassett, Alain Goriely...",
+          "abstract": "The entorhinal cortex is the first region to develop tau pathology in Alzheimer's disease and primary age-related tauopathy, yet the reasons for this selective vulnerability remain unclear. We developed a computational model in which neuronal activity and amyloid-β (Aβ) modulate tau transport, hypothesizing that this mechanism explains entorhinal vulnerability to early tau pathology. The model combines structural connectivity with either neuronal activity (measured by heading hierarchy okayfluorodeoxyglucose, FDG PET) or amyloid-β burden (measured by Aβ PET). We analyzed Alzheimer's Disease Neuroimaging Initiative (ADNI) data comprising 527 FDG PET scans (mean age 71.8 years; 174 cognitively normal, 293 mild cognitive impairment, 60 Alzheimer's disease) and 1,244 Aβ PET scans (mean age 72.4 years; 501 cognitively normal, 588 mild cognitive impairment, 155 Alzheimer's disease). From these, 253 FDG-tau and 453 Aβ-tau PET pairs were used in regression analyses. Key results were replicated in the Harvard Aging Brain Study (HABS; 300 FDG, 348 Aβ, 116 FDG-tau, and 255 Aβ-tau pairs). Both FDG- and Aβ-based models consistently identified the entorhinal cortex as a primary tau seeding region in ADNI (FDG: z ≈ 4.6-4.9, p < 0.0066; Aβ: z ≈ 4.0-8.7, p ≤ 0.011) and in HABS (FDG: z = 5.7, p = 0.030; Aβ: z = 6.0, p = 0.0018). Simple linear regression showed modest associations between model-derived seeding and empirical entorhinal tau in ADNI (FDG: β = 6.7, p = 0.0039; Aβ: β = 11.3, p < 0.001), which remained significant after adjustment for age, sex, and APOE4 status (FDG: β = 7.1, p < 0.001; Aβ: β = 9.7, p < 0.001). Aβ-based associations replicated in HABS (β = 3.3, p < 0.001), while FDG-based correlations were not detectable in this predominantly cognitively normal cohort (β = -0.43, p = 0.80; power = 49%). These findings support a mechanistic role for neuronal activity and amyloid-β in initiating tau pathology, with the entorhinal cortex consistently emerging as highly vulnerable. Our computational model reliably identifies this region as the epicenter of pathology, supporting the idea that brain-wide patterns of neuronal activity and amyloid burden determine where tau pathology begins.",
+          "published": "2025-10-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41055040/",
+          "source": "PubMed",
+          "relevance_score": 11.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Fate mapping of peripherally-derived macrophages after traumatic brain injury in mice reveals a long-lasting population with a distinct transcriptomic signature.",
+          "authors": "Maria Serena Paladini, Benjamin A Yang, Kristof A Torkenczy...",
+          "abstract": "Traumatic brain injury (TBI) is an environmental risk factor for dementia and long-term neurological deficits, posing a significant public health challenge. TBI-induced neuroinflammation involves both brain-resident microglia and peripheral monocyte-derived macrophages (MDMs). Previous research has shown that MDMs contribute to the development of long-term memory deficits, yet their long-term behavior following brain infiltration remains unclear. To address this, our study uses two complementary fate-mapping mouse lines, CCR2-creERT2 and Ms4a3-cre, for precise and lasting tracking of MDMs in vivo. Here we show that MDMs persist in the brain for at least 8 months post-TBI in both male and female mice. MDMs retain phagocytic activity for at least 30 days post-TBI, remain transcriptionally distinct from microglia, and display a gene expression profile associated with aging and disease. Moreover, we identify a core transcriptomic signature of MDMs shared across various mouse models and brain perturbations, which is also enriched in the brain myeloid cells of male subjects with TBI and Alzheimer's disease patients. These findings enhance our understanding of MDMs' dynamics after TBI and inform future targeted myeloid-based therapies.",
+          "published": "2025-10-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41057304/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Nature communications",
+          "volume": "16",
+          "issue": "1"
+        },
+        {
+          "title": "A next-generation HDAC6 inhibitor for amyotrophic lateral sclerosis and frontotemporal dementia.",
+          "authors": "Rebecca E James, Michael Bekier, Pin-Tsun Justin Lee...",
+          "abstract": "Dysregulated proteostasis and intracellular transport contribute to neurodegeneration. HDAC6, a therapeutic target of interest for neurodegenerative diseases, acts at a nexus modulating both proteostasis and intracellular transport. Inhibition of HDAC6 deacetylase activity promotes autophagic clearance of protein aggregates and increases ⍺-tubulin acetylation, thereby enhancing microtubule resiliency and motor protein-microtubule binding, which facilitates intracellular transport and, subsequently, proteostasis. Despite these benefits, advancement of HDAC6 inhibitor therapeutics for neurodegenerative disease has been hindered by inadequate selectivity and CNS-penetrance of first-generation compounds. Here we characterize a next-generation small molecule HDAC6 inhibitor, EKZ-438, in preclinical models of amyotrophic lateral sclerosis and frontotemporal dementia. We present the pharmacological properties of EKZ-438, which demonstrate high selectivity for HDAC6 (>8,500-fold selectivity for HDAC6 versus all other HDAC6 paralogs), low nanomolar potency (12 nM) for HDAC6, and, importantly, CNS-penetrance (Kp,uu,brain) ≥ 0.55 and high oral bioavailability (F% = 70). In complementary preclinical in vitro and in vivo immunolabeling and live imaging studies we tested the hypothesis that selective inhibition of HDAC6 deacetylase activity is sufficient to improve pathophysiological proteostasis and intracellular transport deficits in animal models of familial and sporadic amyotrophic lateral sclerosis and frontotemporal dementia. Notably, we extended these findings to human induced pluripotent stem cell-derived neuronal cellular models, supporting the relevance of our findings to human disease. EKZ-438 treatment fully rescued SOD1 (q < 0.0001) and TDP-43 (q < 0.001) proteostasis defects following an excitotoxic glutamate challenge, and increased survival of SOD1G93A and wildtype motor neurons by 59% (q < 0.0001) and 37% (q < 0.01), respectively, demonstrating in vitro neuroprotection. In SOD1G93A mice, EKZ-438 improved axonal transport by 16% (q < 0.05), motor performance by ∼40% (q < 0.05), and decreased plasma neurofilament light chain levels by 35% (q < 0.05), demonstrating in vivo neuroprotection. In a TDP-43 mouse model, EKZ-438 reduced TDP-43 pathology by ∼30% (q < 0.05) and neuroinflammation by ∼26% (q < 0.05) in the brain, supporting HDAC6 inhibition for sporadic amyotrophic lateral sclerosis and frontotemporal dementia. Furthermore, EKZ-438 treatment improved intracellular transport by 39% (q < 0.001), rescued cytoplasmic TDP-43 accumulation by 87% (q < 0.0001), and restored nuclear TDP-43 splicing activity (P < 0.05) in human TARDBP neurons. These mechanistic improvements aligned with nearly complete rescue of human TARDBP and C9orf72 mutant neuron survival (P < 0.0001). We conclude that selective HDAC6 inhibition represents a promising therapeutic approach for potential disease modification in amyotrophic lateral sclerosis and frontotemporal dementia.",
+          "published": "2025-10-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41061670/",
+          "source": "PubMed",
+          "relevance_score": 6.0,
+          "matched_keywords": [
+            "dementia",
+            "brain",
+            "plasma"
+          ],
+          "journal": "Brain : a journal of neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Elderly-onset iatrogenic cerebral amyloid angiopathy presenting with lobar and deep haemorrhages.",
+          "authors": "Hiroki Sakamoto, Aya Murakami, Yumiko Kono...",
+          "abstract": "A man in his 60s, with no vascular risk factors, was referred for recurrent intracerebral haemorrhages. He had a subarachnoid haemorrhage in his 20s and underwent craniotomy for a right internal carotid artery aneurysm, with no record of a cadaveric dura graft. 35 years later, he experienced a right temporal lobar haemorrhage, followed by a left thalamic haemorrhage 6 months later in his 60s. A brain MRI could not be performed due to unknown materials from the previous clipping. Although over 55, his history of neurosurgery, negative genetic analysis for Alzheimer's and positive PET/CT for amyloid led to a diagnosis of iatrogenic cerebral amyloid angiopathy (CAA), which is more commonly observed in patients under 55. Given the thalamic haemorrhage, usually not associated with CAA, he would typically be diagnosed with hypertensive cerebral haemorrhage. This indicates that some patients diagnosed as hypertensive haemorrhage may actually represent iatrogenic CAA.",
+          "published": "2025-10-07",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41062125/",
+          "source": "PubMed",
+          "relevance_score": 5.2,
+          "matched_keywords": [
+            "PET",
+            "MRI",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "BMJ case reports",
+          "volume": "18",
+          "issue": "10"
+        },
+        {
+          "title": "Phytochemical based on nanoparticles for neurodegenerative alzheimer disease management: Update review.",
+          "authors": "Basma Youssef, Ehab A Ibrahim, Said S Moselhy...",
+          "abstract": "Alzheimer's disease (AD) is one of the most common chronic neurodegenerative diseases and dementia, with about 46 million cases worldwide and going to become tripled by 2050. It is characterized by formation and aggregation of amyloid-β plaques, tau tangles, and inflammatory mediators. The treatment protocol poses challenging obstacles particularly, effectiveness drug delivery to the brain. However, the available therapies with low potency and blood-brain barrier (BBB) are most challenges for developing novel treatments. New delivery systems that interact with biological systems at the molecular level, such as nanotechnology can overcome these problems and open new therapeutic avenues. Nanoparticles showed different applications in medicine due to its bioavailability, transport and low toxicity. This review explored the therapeutic potential of natural phytochemical nanomedicine that important in AD treatment through improving drug delivery system across BBB, increasing bioavailability and minimizing neurotoxicity.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41062840/",
+          "source": "PubMed",
+          "relevance_score": 5.0,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Discover nano",
+          "volume": "20",
+          "issue": "1"
+        },
+        {
+          "title": "IoMT driven Alzheimer's prediction model empowered with transfer learning and explainable AI approach in healthcare 5.0.",
+          "authors": "Abdul Hannan Khan, Danish Ali, Shakeel Ahmed...",
+          "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative disorder and the primary cause of dementia, responsible for 60-70% of global cases. It severely affects memory, cognitive function, and daily independence, placing a substantial emotional and economic burden on patients and caregivers. Early and accurate prediction remains difficult due to the high cost of neuroimaging, scarcity of annotated datasets, and the \"black-box\" nature of most artificial intelligence (AI) models. With the emergence of Healthcare 5.0, the Internet of Medical Things (IoMT) offers new opportunities for patient-centric, real-time monitoring and data-driven diagnosis. This study proposes an IoMT-driven Alzheimer's prediction framework that combines transfer learning (ResNet152) with explainable AI (XAI) to provide both accuracy and interpretability. The publicly available Kaggle Alzheimer's MRI dataset, comprising 33,984 images across four classes (Non-Demented, Very Mild, Mild, and Moderate Demented) was employed. To address class imbalance, a Conditional Wasserstein GAN was applied for synthetic image generation and balanced sampling. The proposed ResNet152-TL-XAI model achieved 97.77% accuracy, with a precision of 0.981, recall of 0.987, F1-score of 0.983, and specificity of 99.13%, outperforming several state-of-the-art methods. Interpretability was ensured through Grad-CAM, SHAP, and LIME, which consistently highlighted clinically relevant brain regions such as the Hippocampus and ventricles, confirming biological plausibility and increasing clinician trust. By integrating IoMT-enabled data acquisition, transfer learning for efficient training, and multi-method XAI for transparency, the proposed pipeline demonstrates strong potential for early, accurate, and interpretable Alzheimer's staging. These results position the framework as a practical candidate for integration into Healthcare 5.0 ecosystems, supporting timely diagnosis, patient monitoring, and personalized interventions.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41068276/",
+          "source": "PubMed",
+          "relevance_score": 4.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Scientific reports",
+          "volume": "15",
+          "issue": "1"
+        },
+        {
+          "title": "Machine learning-based estimation of the mild cognitive impairment stage using multimodal physical and behavioral measures.",
+          "authors": "Ingyu Park, Sang-Kyu Lee, Hui-Chul Choi...",
+          "abstract": "Mild cognitive impairment (MCI) is a prodromal stage of dementia, and its early detection is critical for improving clinical outcomes. However, current diagnostic tools such as brain magnetic resonance imaging (MRI) and neuropsychological testing have limited accessibility and scalability. Using machine-learning models, we aimed to evaluate whether multimodal physical and behavioral measures, specifically gait characteristics, body mass composition, and sleep parameters, could serve as digital biomarkers for estimating MCI severity. We recruited 80 patients diagnosed with MCI and classified them into early- and late-stage groups based on their Mini-Mental State Examination scores. Participants underwent clinical assessments, including the Consortium to Establish a Registry for Alzheimer's Disease Assessment Packet Korean Version, gait analysis using GAITRite, body composition evaluation via dual-energy X-ray absorptiometry, and polysomnography-based sleep assessment. Brain MRI was also performed to obtain structural imaging data. We evaluated the classification performance across various models, including support vector machines, random forest, multilayer perceptron, and convolutional neural network, using unimodal and multimodal datasets. Machine learning models trained on physical and behavioral data alone achieved a high classification accuracy (AUC up to 94%), comparable to that of MRI-based models, in differentiating early- and late-stage MCI. Combining physical and behavioral and MRI features yielded marginal improvements in the prediction performance. Gait velocity, lean body mass, and sleep efficiency were among the top predictors of cognitive function. Multimodal digital biomarkers or multimodal physical and behavioral signals can effectively estimate MCI severity and may offer a scalable, low-cost approach for early detection and monitoring of cognitive decline in real-world settings.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41068341/",
+          "source": "PubMed",
+          "relevance_score": 4.5,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "MRI",
+            "dementia",
+            "brain"
+          ],
+          "journal": "Scientific reports",
+          "volume": "15",
+          "issue": "1"
+        },
+        {
+          "title": "Impact of APOE on cerebrovascular lipid profile in Alzheimer's disease.",
+          "authors": "Yasuteru Inoue, Hu Wang, Michael G Heckman...",
+          "abstract": "Disturbances within the cerebrovascular system substantially contribute to the pathogenesis of age-related cognitive impairment and Alzheimer's disease (AD). Cerebral amyloid angiopathy (CAA) is characterized by the deposition of amyloid-β (Aβ) in the leptomeningeal and cortical arteries and is highly prevalent in AD, affecting over 90% of cases. While the ε4 allele of apolipoprotein E (APOE) represents the strongest genetic risk factor for AD, it is also associated with cerebrovascular dysregulations. APOE plays a crucial role in brain lipid transport, particularly in the trafficking of cholesterol and phospholipids. Lipid metabolism is increasingly recognized as a critical factor in AD pathogenesis. However, the precise mechanism by which APOE influences cerebrovascular lipid signatures in AD brains remains unclear. In this study, we conducted non-targeted lipidomics on cerebral vessels isolated from the middle temporal cortex of 89 postmortem human AD brains, representing varying degrees of CAA and different APOE genotypes: APOE ε2/ε3 (N = 9), APOE ε2/ε4 (N = 14), APOE ε3/ε3 (N = 21), APOE ε3/ε4 (N = 23), and APOE ε4/ε4 (N = 22). Lipidomics detected 10 major lipid classes with phosphatidylcholine (PC) and phosphatidylethanolamine (PE) being the most abundant lipid species. While we observed a positive association between age and total acyl-carnitine (CAR) levels (p = 0.0008), the levels of specific CAR subclasses were influenced by the APOE ε4 allele. Notably, APOE ε4 was associated with increased PE (p = 0.049) and decreased sphingomyelin (SM) levels (p = 0.028) in the cerebrovasculature. Furthermore, cerebrovascular Aβ40 and Aβ42 levels showed associations with sphingolipid levels including SM (p = 0.0079) and ceramide (CER) (p = 0.024). Weighted correlation network analysis revealed correlations between total tau and phosphorylated tau and lipid clusters enriched for PE plasmalogen and lysoglycerophospholipids. Taken together, our results suggest that cerebrovascular lipidomic profiles offer novel insights into the pathogenic mechanisms of AD, with specific lipid alterations potentially serving as biomarkers or therapeutic targets for AD.",
+          "published": "2025-10-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41060400/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "amyloid",
+            "tau",
+            "brain"
+          ],
+          "journal": "Acta neuropathologica",
+          "volume": "150",
+          "issue": "1"
+        },
+        {
+          "title": "A neuroimmune cerebral assembloid model to study the pathophysiology of familial Alzheimer's disease.",
+          "authors": "Andrea Becerra-Calixto, Anik Banerjee, Huihui Fan...",
+          "abstract": "Alzheimer's disease (AD) is the leading cause of dementia globally. The accumulation of amyloid and tau proteins, neuronal cell death and neuroinflammation are seen with AD progression, resulting in memory and cognitive impairment. Microglia are crucial for AD progression as they engage with neural cells and protein aggregates to regulate amyloid pathology and neuroinflammation. Recent studies indicate that microglia contribute to the propagation of amyloid beta (Aβ) via their immunomodulatory functions including Aβ phagocytosis and inflammatory cytokine production. Three-dimensional cell culture techniques provide the opportunity to study pathophysiological changes in AD in human-derived samples that are difficult to recapitulate in animal models (e.g., transgenic mice). However, these models often lack immune cells such as microglia, which play a critical role in AD pathophysiology. In this study, we developed a neuroimmune assembloid model by integrating cerebral organoids (COs) with induced microglia-like cells (iMGs) derived from human induced pluripotent stem cells from familial AD patient with PSEN2 mutation. After 120 days in culture, we found that iMGs were successfully integrated within the COs. Interestingly, our assembloids displayed histological, functional and transcriptional features of the pro-inflammatory environment seen in AD, including amyloid plaque-like and neurofibrillary tangle-like structures, reduced microglial phagocytic capability, and enhanced neuroinflammatory and apoptotic gene expression. In conclusion, our neuroimmune assembloid model effectively replicates the inflammatory phenotype and amyloid pathology seen in AD.",
+          "published": "2025-10-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41063316/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "tau"
+          ],
+          "journal": "Journal of neuroinflammation",
+          "volume": "22",
+          "issue": "1"
+        },
+        {
+          "title": "CSF Levels of NPTX2 Are Associated With Less Brain Atrophy Over Time in Cognitively Unimpaired Individuals.",
+          "authors": "Juan P Vazquez, Corinne Pettigrew, Yuxin Zhu...",
+          "abstract": "Neuronal pentraxin 2 (NPTX2) is a synaptic protein involved in synaptic plasticity and regulation of neuronal excitability. Lower baseline cerebrospinal fluid (CSF) NPTX2 levels have been shown to be associated with an earlier onset of mild cognitive impairment (MCI), a pre-dementia syndrome, even after CSF Alzheimer's Disease (AD) biomarkers (amyloid beta (Aβ",
+          "published": "2025-10-08",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41063558/",
+          "source": "PubMed",
+          "relevance_score": 4.2,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "dementia",
+            "amyloid",
+            "brain"
+          ],
+          "journal": "Annals of clinical and translational neurology",
+          "volume": "",
+          "issue": ""
+        },
+        {
+          "title": "Potential barriers to timely Alzheimer's disease diagnosis and treatment: Tracer delivery and patient travel to amyloid PET scanners in the United States.",
+          "authors": "Mark Hanson, Ying Liu, Tabasa Ozawa...",
+          "abstract": "Several disease-modifying Alzheimer's disease treatments are available or in clinical trials. Participation in these trials and access to approved treatments often require amyloid positron emission tomography (PET) scans. Amyloid PET requires a radioactive tracer with a short half-life so PET scanner must be near a cyclotron facility that produces and delivers viable tracers. We examined the size and composition of the US population that faces likely geographic obstacles due to travel time constraints. Our estimate that 1.5 million older Americans would drive more than one hour to a qualifying PET site raises concern for differences in access to memory care.",
+          "published": "2025-10-09",
+          "arxiv_url": "https://pubmed.ncbi.nlm.nih.gov/41066449/",
+          "source": "PubMed",
+          "relevance_score": 4.1,
+          "matched_keywords": [
+            "Alzheimer's disease",
+            "PET",
+            "amyloid"
+          ],
+          "journal": "Journal of Alzheimer's disease : JAD",
+          "volume": "",
+          "issue": ""
+        }
+      ],
+      "paper_count": 12
+    }
+  }
+}
