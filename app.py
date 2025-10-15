@@ -1,4 +1,5 @@
 import concurrent.futures
+import os
 from datetime import datetime, timedelta
 
 import pandas as pd
@@ -9,11 +10,13 @@ from fetchers.biorxiv_fetcher import BioRxivFetcher
 from fetchers.pubmed_fetcher import PubMedFetcher
 from processors.keyword_matcher import KeywordMatcher
 from storage.data_storage import DataStorage
+from services.settings_service import SettingsService
+from config import settings
 
 
 # Set page configuration
 st.set_page_config(
-    page_title="Manuscript Alert System for AD and Neuroimaging",
+    page_title="Manuscript Alert System",
     # page_icon="📚",
     layout="wide",
 )
@@ -28,33 +31,46 @@ def initialize_components():
         PubMedFetcher(),
         KeywordMatcher(),
         DataStorage(),
+        SettingsService(),
     )
 
 
-(arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher, keyword_matcher, data_storage) = (
+(arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher, keyword_matcher, data_storage, settings_service) = (
     initialize_components()
 )
 
-# Default keywords
-DEFAULT_KEYWORDS = [
-    "Alzheimer's disease",
-    "PET",
-    "MRI",
-    "dementia",
-    "amyloid",
-    "tau",
-    "plasma",
-    "brain",
-]
+# Load settings from config
+def get_current_settings():
+    return settings_service.load_settings()
+
+# Get current keywords from settings
+def get_current_keywords():
+    settings_dict = get_current_settings()
+    return settings_dict.get("keywords", settings.DEFAULT_KEYWORDS)
 
 
 def main():
-    st.title("Manuscript Alert System for AD and Neuroimaging")
+    st.title("Manuscript Alert System")
     st.markdown(
         "Stay updated with the latest Pubmed, arXiv, biorXiv, "
-        "and medrXiv papers in DK's field of interest"
+        "and medrXiv papers in your field of interest"
     )
 
+    # Create tabs
+    tab1, tab2, tab3 = st.tabs(["📚 Papers", "🤖 Models", "⚙️ Settings"])
+    
+    with tab1:
+        papers_tab()
+    
+    with tab2:
+        models_tab()
+    
+    with tab3:
+        settings_tab()
+
+
+def papers_tab():
+    """Main papers tab with search and filtering functionality"""
     # Sidebar for configuration
     with st.sidebar:
         st.header("🔧 Configuration")
@@ -66,7 +82,7 @@ def main():
         st.subheader("Keywords")
 
         # Load existing keywords or use defaults
-        current_keywords = preferences.get("keywords", DEFAULT_KEYWORDS)
+        current_keywords = get_current_keywords()
 
         # Text area for keywords input
         keywords_text = st.text_area(
@@ -497,21 +513,26 @@ def fetch_and_rank_papers(
             paper, keywords
         )
 
-        # Boost score for target journals (only if at least 2 keywords matched)
-        if paper.get("source") == "PubMed" and paper.get("journal"):
-            # if is_high_impact_journal(
-            #         paper['journal']) and len(matched_keywords) >= 2:
-            #     relevance_score += 3.0  # Boost target journal papers
-            #     # with sufficient keyword matches
-            if is_high_impact_journal(paper["journal"]):
-                if len(matched_keywords) >= 5:
-                    relevance_score += 5.1
-                elif 5 > len(matched_keywords) >= 4:
-                    relevance_score += 3.7
-                elif 4 > len(matched_keywords) >= 3:
-                    relevance_score += 2.8
-                elif 3 > len(matched_keywords) >= 2:
-                    relevance_score += 1.3
+        # Boost score for target journals using settings
+        current_settings = get_current_settings()
+        journal_scoring = current_settings.get("journal_scoring", {})
+        
+        if (paper.get("source") == "PubMed" and paper.get("journal") and 
+            journal_scoring.get("enabled", True) and is_high_impact_journal(paper["journal"])):
+            
+            boosts = journal_scoring.get("high_impact_journal_boost", {})
+            num_matches = len(matched_keywords)
+            
+            if num_matches >= 5:
+                relevance_score += boosts.get("5_or_more_keywords", 5.1)
+            elif num_matches >= 4:
+                relevance_score += boosts.get("4_keywords", 3.7)
+            elif num_matches >= 3:
+                relevance_score += boosts.get("3_keywords", 2.8)
+            elif num_matches >= 2:
+                relevance_score += boosts.get("2_keywords", 1.3)
+            elif num_matches >= 1:
+                relevance_score += boosts.get("1_keyword", 0.5)
 
         # Format authors list
         authors = paper.get("authors", [])
@@ -567,79 +588,6 @@ def fetch_and_rank_papers(
     return df
 
 
-def get_exclusion_patterns():
-    """Get patterns for excluding journals from target journal matching"""
-    return {
-        # Radiology subspecialties - exclude if they contain these specific patterns
-        # "radiology_exclusions": [
-        #     "abdominal radiology",
-        #     "pediatric radiology",
-        #     "cardiovascular and interventional radiology",
-        #     "interventional radiology",
-        #     "emergency radiology",
-        #     "skeletal radiology",
-        #     "clinical radiology",
-        #     "academic radiology",
-        #     "investigative radiology",
-        #     "case reports",  # This will exclude "radiology case reports"
-        #     "oral surgery",  # This will exclude the long oral surgery journal name
-        #     "korean journal of radiology",
-        #     "the neuroradiology journal",
-        #     "interventional neuroradiology",
-        #     "japanese journal of radiology",
-        # ],
-        "radiology_exclusions": [
-            "abdominal",
-            "pediatric",
-            "cardiovascular and interventional",
-            "interventional",
-            "emergency",
-            "skeletal",
-            "clinical",
-            "academic",
-            "investigative",
-            "case reports",  # This will exclude "radiology case reports"
-            "oral surgery",  # This will exclude the long oral surgery journal name
-            "korean journal of",
-            "the neuroradiology",
-            "interventional",
-            "japanese journal of",
-        ],
-        # Brain subspecialties - exclude these specific patterns
-        "brain_exclusions": [
-            "brain research",  # Exclude if exact match
-            "brain and behavior",
-            "brain imaging and behavior",
-            "brain stimulation",
-            "brain connectivity",
-            "brain and cognition",
-            "brain, behavior, and immunity",
-            "metabolic brain disease",
-        ],
-        # Neuroscience subspecialties - exclude these patterns
-        "neuroscience_exclusions": [
-            "neuroscience letters",
-            "neuroscience bulletin",
-            "neuroscience methods",
-            "neuroscience research",
-            "neuroscience and biobehavioral",
-            "clinical neuroscience",
-            "neuropsychiatry",
-            "ibro neuroscience",
-            "acs chemical neuroscience",
-        ],
-        # Other exclusions
-        "other_exclusions": [
-            "proceedings of the national academy",
-            "life science alliance",
-            "life sciences",
-            "animal science",
-            "biomaterials science",
-            "veterinary medical science",
-            "philosophical transactions",
-            "annals of the new york academy",
-        ],
-    }
 
 
 def is_journal_excluded(journal_name):
@@ -648,33 +596,44 @@ def is_journal_excluded(journal_name):
         return False
 
     journal_lower = journal_name.lower()
-    exclusion_patterns = get_exclusion_patterns()
+    
+    # Load exclusion patterns from settings
+    current_settings = get_current_settings()
+    exclusion_patterns = current_settings.get("journal_exclusions", [])
 
-    # Check each category of exclusions
-    for category, patterns in exclusion_patterns.items():
-        for pattern in patterns:
+    # Handle both old format (dict) and new format (list)
+    if isinstance(exclusion_patterns, list):
+        # New simplified format - just check all patterns
+        for pattern in exclusion_patterns:
             pattern_lower = pattern.lower()
+            if pattern_lower in journal_lower:
+                return True
+    else:
+        # Old format - maintain backward compatibility
+        for category, patterns in exclusion_patterns.items():
+            for pattern in patterns:
+                pattern_lower = pattern.lower()
 
-            # For radiology, be more specific
-            if category == "radiology_exclusions":
-                if "radiology" in journal_lower and pattern_lower in journal_lower:
-                    # Exception: don't exclude plain "radiology"
-                    if journal_lower.strip() == "radiology":
-                        continue
-                    return True
+                # For radiology, be more specific
+                if category == "radiology_exclusions":
+                    if "radiology" in journal_lower and pattern_lower in journal_lower:
+                        # Exception: don't exclude plain "radiology"
+                        if journal_lower.strip() == "radiology":
+                            continue
+                        return True
 
-            # For brain, be more specific
-            elif category == "brain_exclusions":
-                if "brain" in journal_lower and pattern_lower in journal_lower:
-                    # Exception: don't exclude plain "brain"
-                    if journal_lower.strip() == "brain":
-                        continue
-                    return True
+                # For brain, be more specific
+                elif category == "brain_exclusions":
+                    if "brain" in journal_lower and pattern_lower in journal_lower:
+                        # Exception: don't exclude plain "brain"
+                        if journal_lower.strip() == "brain":
+                            continue
+                        return True
 
-            # For other categories, simple pattern matching
-            else:
-                if pattern_lower in journal_lower:
-                    return True
+                # For other categories, simple pattern matching
+                else:
+                    if pattern_lower in journal_lower:
+                        return True
 
     return False
 
@@ -690,65 +649,24 @@ def is_high_impact_journal(journal_name):
     if is_journal_excluded(journal_name):
         return False
 
-    # Define target journal patterns with priority levels
-    target_patterns = {
-        # High priority - exact matches
-        "exact_matches": [
-            "jama",
-            "nature",
-            "science",
-            #'brain',
-            "radiology",
-            "ajnr",
-            "the lancet",
-        ],
-        # Medium priority - specific journal families
-        "family_matches": [
-            "jama ",  # Space ensures it's part of JAMA family
-            "nature ",  # Space ensures it's part of Nature family
-            "science ",  # Space ensures it's part of Science family
-            "npj ",  # Nature Partner Journals
-            "the lancet",
-        ],
-        # Specific important journals
-        "specific_journals": [
-            "american journal of neuroradiology",
-            "alzheimer's & dementia",
-            "alzheimers dement",
-            "ebiomedicine",
-            "journal of magnetic resonance imaging",
-            "magnetic resonance in medicine",
-            "radiology",
-            "jmri",
-            "j magn reson imaging",
-            #'brain',
-            "brain : a journal of neurology",
-        ],
-    }
+    # Load target journal patterns from settings
+    current_settings = get_current_settings()
+    target_patterns = current_settings.get("target_journals", {})
 
     # Check exact matches first (highest priority)
-    for exact_match in target_patterns["exact_matches"]:
+    for exact_match in target_patterns.get("exact_matches", []):
         if journal_lower == exact_match:
             return True
 
     # Check family matches (medium priority)
-    for family_pattern in target_patterns["family_matches"]:
+    for family_pattern in target_patterns.get("family_matches", []):
         if journal_lower.startswith(family_pattern):
             return True
 
     # Check specific journals (lower priority)
-    for specific_journal in target_patterns["specific_journals"]:
+    for specific_journal in target_patterns.get("specific_journals", []):
         if specific_journal in journal_lower:
             return True
-
-    # # Special case for abbreviated forms
-    # abbreviations = {
-    #     'ajnr': 'american journal of neuroradiology',
-    #     'jmri': 'journal of magnetic resonance imaging',
-    # }
-
-    # if journal_lower in abbreviations:
-    #     return True
 
     return False
 
@@ -925,6 +843,560 @@ def display_papers(papers_df):
                         f"<div style='{base_style}'>{score_div}{label_div}</div>",
                         unsafe_allow_html=True,
                     )
+
+
+def settings_tab():
+    """Settings tab for configuring keywords, journals, and scoring"""
+    st.header("⚙️ Application Settings")
+    st.markdown("Configure keywords, journal selections, and scoring parameters. Changes are saved to the source code and persist across app runs.")
+    
+    # Load current settings
+    current_settings = get_current_settings()
+    
+    # Create tabs within settings
+    settings_tab1, settings_tab2, settings_tab3, settings_tab4 = st.tabs([
+        "🔍 Keywords", "📰 Journals", "📊 Scoring", "💾 Backup"
+    ])
+    
+    with settings_tab1:
+        keyword_settings(current_settings)
+    
+    with settings_tab2:
+        journal_settings(current_settings)
+    
+    with settings_tab3:
+        scoring_settings(current_settings)
+    
+    with settings_tab4:
+        backup_settings()
+
+
+def keyword_settings(current_settings):
+    """Keywords configuration tab"""
+    st.subheader("🔍 Research Keywords")
+    st.markdown("Configure the keywords used for paper matching. Papers must match at least 2 keywords to be displayed.")
+    
+    # Current keywords
+    current_keywords = current_settings.get("keywords", [])
+    
+    # Keywords input
+    keywords_text = st.text_area(
+        "Research Keywords (one per line):",
+        value="\n".join(current_keywords),
+        height=200,
+        help="Enter research topics you're interested in, one per line."
+    )
+    
+    # Parse keywords
+    new_keywords = [k.strip() for k in keywords_text.split("\n") if k.strip()]
+    
+    # Keyword priority settings
+    st.subheader("📈 Keyword Priority Scoring")
+    st.markdown("Set priority levels for different keywords to boost their relevance scores.")
+    
+    keyword_scoring = current_settings.get("keyword_scoring", {})
+    
+    # High priority keywords - filter defaults to only include current keywords
+    current_high_priority = [kw for kw in keyword_scoring.get("high_priority", {}).get("keywords", []) if kw in new_keywords]
+    high_priority_keywords = st.multiselect(
+        "High Priority Keywords (1.5x boost):",
+        options=new_keywords,
+        default=current_high_priority,
+        help="Keywords that get a 1.5x relevance score boost"
+    )
+    
+    # Medium priority keywords - filter defaults to only include current keywords
+    current_medium_priority = [kw for kw in keyword_scoring.get("medium_priority", {}).get("keywords", []) if kw in new_keywords and kw not in high_priority_keywords]
+    medium_priority_keywords = st.multiselect(
+        "Medium Priority Keywords (1.2x boost):",
+        options=[kw for kw in new_keywords if kw not in high_priority_keywords],
+        default=current_medium_priority,
+        help="Keywords that get a 1.2x relevance score boost"
+    )
+    
+    # Show remaining keywords as default priority
+    remaining_keywords = [kw for kw in new_keywords if kw not in high_priority_keywords and kw not in medium_priority_keywords]
+    
+    if remaining_keywords:
+        st.info(f"**Default Priority Keywords (1.0x boost):** {', '.join(remaining_keywords)}")
+    
+    # Save keywords
+    if st.button("💾 Save Keywords Configuration", type="primary"):
+        # Update settings
+        current_settings["keywords"] = new_keywords
+        current_settings["keyword_scoring"] = {
+            "high_priority": {
+                "keywords": high_priority_keywords,
+                "boost": 1.5,
+            },
+            "medium_priority": {
+                "keywords": medium_priority_keywords,
+                "boost": 1.2,
+            },
+        }
+        
+        # Save to file
+        if settings_service.save_settings(current_settings):
+            st.success("✅ Keywords configuration saved successfully!")
+            st.rerun()
+        else:
+            st.error("❌ Failed to save keywords configuration.")
+
+
+def journal_settings(current_settings):
+    """Journal configuration tab"""
+    st.subheader("📰 Journal Selection & Filtering")
+    
+    # Target journals
+    st.markdown("### Target Journals")
+    st.markdown("Configure which journals are considered high-impact and get scoring boosts.")
+    
+    target_journals = current_settings.get("target_journals", {})
+    
+    # Exact matches
+    exact_matches = st.text_area(
+        "Exact Journal Matches (highest priority):",
+        value="\n".join(target_journals.get("exact_matches", [])),
+        height=100,
+        help="Journal names that must match exactly (case-insensitive)"
+    )
+    
+    # Family matches
+    family_matches = st.text_area(
+        "Journal Family Matches (medium priority):",
+        value="\n".join(target_journals.get("family_matches", [])),
+        height=100,
+        help="Journal name prefixes (e.g., 'nature ' for all Nature journals)"
+    )
+    
+    # Specific journals
+    specific_journals = st.text_area(
+        "Specific Journal Names (lower priority):",
+        value="\n".join(target_journals.get("specific_journals", [])),
+        height=150,
+        help="Full journal names or partial matches"
+    )
+    
+    # Journal exclusions
+    st.markdown("### Journal Exclusions")
+    st.markdown("Configure patterns to exclude from target journal matching. Enter one exclusion pattern per line.")
+    st.markdown("*Any journal containing these patterns will be excluded from high-impact journal scoring.*")
+    
+    journal_exclusions = current_settings.get("journal_exclusions", {})
+    
+    # Collect current exclusions - handle both old format (dict) and new format (list)
+    if isinstance(journal_exclusions, list):
+        all_exclusions = journal_exclusions
+    else:
+        # Old format - collect from all categories
+        all_exclusions = []
+        if journal_exclusions.get("radiology_exclusions"):
+            all_exclusions.extend(journal_exclusions["radiology_exclusions"])
+        if journal_exclusions.get("brain_exclusions"):
+            all_exclusions.extend(journal_exclusions["brain_exclusions"])
+        if journal_exclusions.get("neuroscience_exclusions"):
+            all_exclusions.extend(journal_exclusions["neuroscience_exclusions"])
+        if journal_exclusions.get("other_exclusions"):
+            all_exclusions.extend(journal_exclusions["other_exclusions"])
+    
+    exclusion_patterns = st.text_area(
+        "Journal Exclusion Patterns:",
+        value="\n".join(all_exclusions),
+        height=200,
+        help="Enter patterns to exclude (e.g., 'pediatric', 'abdominal', 'case reports'). Any journal containing these patterns will be excluded from target journal scoring."
+    )
+    
+    # Parse exclusion patterns into a single list
+    exclusion_list = [pattern.strip() for pattern in exclusion_patterns.split("\n") if pattern.strip()]
+    
+    # Show current exclusions
+    if exclusion_list:
+        st.markdown("**Current Exclusion Patterns:**")
+        for pattern in exclusion_list:
+            st.write(f"• {pattern}")
+    
+    # Save journal settings
+    if st.button("💾 Save Journal Configuration", type="primary"):
+        # Update settings
+        current_settings["target_journals"] = {
+            "exact_matches": [j.strip() for j in exact_matches.split("\n") if j.strip()],
+            "family_matches": [j.strip() for j in family_matches.split("\n") if j.strip()],
+            "specific_journals": [j.strip() for j in specific_journals.split("\n") if j.strip()],
+        }
+        
+        # Simplified: all exclusions apply to all journal types
+        current_settings["journal_exclusions"] = exclusion_list
+        
+        # Save to file
+        if settings_service.save_settings(current_settings):
+            st.success("✅ Journal configuration saved successfully!")
+            st.rerun()
+        else:
+            st.error("❌ Failed to save journal configuration.")
+
+
+def scoring_settings(current_settings):
+    """Scoring configuration tab"""
+    st.subheader("📊 Relevance Scoring Configuration")
+    
+    # Journal scoring
+    st.markdown("### Journal Impact Scoring")
+    journal_scoring = current_settings.get("journal_scoring", {})
+    
+    scoring_enabled = st.checkbox(
+        "Enable Journal Impact Scoring",
+        value=journal_scoring.get("enabled", True),
+        help="Whether to apply scoring boosts for high-impact journals"
+    )
+    
+    if scoring_enabled:
+        st.markdown("**High-Impact Journal Score Boosts (based on keyword matches):**")
+        
+        boosts = journal_scoring.get("high_impact_journal_boost", {})
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            boost_5_or_more = st.number_input(
+                "5+ keywords matched:",
+                value=boosts.get("5_or_more_keywords", 5.1),
+                step=0.1,
+                format="%.1f"
+            )
+            
+            boost_4 = st.number_input(
+                "4 keywords matched:",
+                value=boosts.get("4_keywords", 3.7),
+                step=0.1,
+                format="%.1f"
+            )
+        
+        with col2:
+            boost_3 = st.number_input(
+                "3 keywords matched:",
+                value=boosts.get("3_keywords", 2.8),
+                step=0.1,
+                format="%.1f"
+            )
+            
+            boost_2 = st.number_input(
+                "2 keywords matched:",
+                value=boosts.get("2_keywords", 1.3),
+                step=0.1,
+                format="%.1f"
+            )
+            
+            boost_1 = st.number_input(
+                "1 keyword matched:",
+                value=boosts.get("1_keyword", 0.5),
+                step=0.1,
+                format="%.1f"
+            )
+    
+    # Search settings
+    st.markdown("### Search Configuration")
+    search_settings = current_settings.get("search_settings", {})
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        default_days_back = st.number_input(
+            "Default Days Back:",
+            value=search_settings.get("days_back", 7),
+            min_value=1,
+            max_value=30
+        )
+        
+        min_keyword_matches = st.number_input(
+            "Minimum Keyword Matches:",
+            value=search_settings.get("min_keyword_matches", 2),
+            min_value=1,
+            max_value=10
+        )
+    
+    with col2:
+        search_mode = st.selectbox(
+            "Default Search Mode:",
+            options=["Brief", "Standard", "Extended"],
+            index=["Brief", "Standard", "Extended"].index(search_settings.get("search_mode", "Brief"))
+        )
+        
+        max_results = st.number_input(
+            "Maximum Results Display:",
+            value=search_settings.get("max_results_display", 50),
+            min_value=10,
+            max_value=200
+        )
+    
+    # Default data sources
+    st.markdown("### Default Data Sources")
+    default_sources = search_settings.get("default_sources", {})
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        use_pubmed = st.checkbox("PubMed", value=default_sources.get("pubmed", True))
+        use_arxiv = st.checkbox("arXiv", value=default_sources.get("arxiv", False))
+    
+    with col2:
+        use_biorxiv = st.checkbox("bioRxiv", value=default_sources.get("biorxiv", False))
+        use_medrxiv = st.checkbox("medRxiv", value=default_sources.get("medrxiv", False))
+    
+    # Save scoring settings
+    if st.button("💾 Save Scoring Configuration", type="primary"):
+        # Update settings
+        if scoring_enabled:
+            current_settings["journal_scoring"] = {
+                "enabled": True,
+                "high_impact_journal_boost": {
+                    "5_or_more_keywords": boost_5_or_more,
+                    "4_keywords": boost_4,
+                    "3_keywords": boost_3,
+                    "2_keywords": boost_2,
+                    "1_keyword": boost_1,
+                }
+            }
+        else:
+            current_settings["journal_scoring"] = {"enabled": False}
+        
+        current_settings["search_settings"] = {
+            "days_back": default_days_back,
+            "search_mode": search_mode,
+            "min_keyword_matches": min_keyword_matches,
+            "max_results_display": max_results,
+            "default_sources": {
+                "pubmed": use_pubmed,
+                "arxiv": use_arxiv,
+                "biorxiv": use_biorxiv,
+                "medrxiv": use_medrxiv,
+            },
+            "journal_quality_filter": search_settings.get("journal_quality_filter", False),
+        }
+        
+        # Save to file
+        if settings_service.save_settings(current_settings):
+            st.success("✅ Scoring configuration saved successfully!")
+            st.rerun()
+        else:
+            st.error("❌ Failed to save scoring configuration.")
+
+
+def models_tab():
+    """Models tab for saving and loading different settings presets"""
+    st.header("🤖 Model Management")
+    st.markdown("Save and manage different configuration presets for different research scenarios. Switch between different research setups with one click.")
+    
+    # Load current settings
+    current_settings = get_current_settings()
+    
+    # Create models directory if it doesn't exist
+    models_dir = "config/models"
+    if not os.path.exists(models_dir):
+        os.makedirs(models_dir)
+    
+    # Save current settings as a new model
+    st.markdown("### Save Current Settings as Model")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        model_name = st.text_input(
+            "Model Name:",
+            placeholder="e.g., 'AD Neuroimaging Focus', 'General Neuroscience'",
+            help="Enter a descriptive name for this configuration preset"
+        )
+    
+    with col2:
+        st.markdown("<br>", unsafe_allow_html=True)  # Add some spacing
+        save_button = st.button("💾 Save Model", type="primary")
+    
+    if save_button and model_name.strip():
+        model_name_clean = "".join(c for c in model_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
+        if model_name_clean:
+            model_file = os.path.join(models_dir, f"{model_name_clean.replace(' ', '_')}.json")
+            
+            try:
+                import json
+                with open(model_file, 'w', encoding='utf-8') as f:
+                    json.dump(current_settings, f, indent=2, ensure_ascii=False)
+                st.success(f"✅ Model '{model_name_clean}' saved successfully!")
+                st.rerun()
+            except Exception as e:
+                st.error(f"❌ Error saving model: {e}")
+        else:
+            st.error("❌ Please enter a valid model name (alphanumeric characters, spaces, hyphens, underscores only)")
+    elif save_button and not model_name.strip():
+        st.error("❌ Please enter a model name")
+    
+    # List existing models
+    st.markdown("### Load Existing Models")
+    
+    # Get list of model files
+    model_files = []
+    if os.path.exists(models_dir):
+        for file in os.listdir(models_dir):
+            if file.endswith('.json'):
+                model_files.append(file)
+    
+    if model_files:
+        st.markdown(f"Found {len(model_files)} saved models:")
+        
+        for i, model_file in enumerate(sorted(model_files)):
+            model_name = model_file.replace('.json', '').replace('_', ' ')
+            model_path = os.path.join(models_dir, model_file)
+            
+            # Get file modification time
+            mod_time = os.path.getmtime(model_path)
+            mod_time_str = datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M")
+            
+            col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
+            
+            with col1:
+                st.write(f"**{model_name}**")
+                st.caption(f"Last modified: {mod_time_str}")
+            
+            with col2:
+                if st.button(f"Load", key=f"model_load_{i}"):
+                    try:
+                        import json
+                        with open(model_path, 'r', encoding='utf-8') as f:
+                            loaded_settings = json.load(f)
+                        
+                        # Save the loaded settings as current settings
+                        if settings_service.save_settings(loaded_settings):
+                            st.success(f"✅ Model '{model_name}' loaded successfully!")
+                            st.rerun()
+                        else:
+                            st.error(f"❌ Error applying model settings")
+                    except Exception as e:
+                        st.error(f"❌ Error loading model: {e}")
+            
+            with col3:
+                if st.button(f"Preview", key=f"model_preview_{i}"):
+                    try:
+                        import json
+                        with open(model_path, 'r', encoding='utf-8') as f:
+                            loaded_settings = json.load(f)
+                        
+                        # Show preview in expander
+                        with st.expander(f"Preview: {model_name}", expanded=True):
+                            st.write("**Keywords:**")
+                            keywords = loaded_settings.get('keywords', [])
+                            st.write(f"{len(keywords)} keywords: {', '.join(keywords[:5])}{'...' if len(keywords) > 5 else ''}")
+                            
+                            st.write("**Journal Exclusions:**")
+                            exclusions = loaded_settings.get('journal_exclusions', [])
+                            st.write(f"{len(exclusions)} exclusion patterns")
+                            
+                            st.write("**Target Journals:**")
+                            target_journals = loaded_settings.get('target_journals', {})
+                            exact_matches = target_journals.get('exact_matches', [])
+                            st.write(f"Exact matches: {', '.join(exact_matches[:3])}{'...' if len(exact_matches) > 3 else ''}")
+                            
+                            st.write("**Search Settings:**")
+                            search_settings = loaded_settings.get('search_settings', {})
+                            st.write(f"Days back: {search_settings.get('days_back', 'N/A')}")
+                            st.write(f"Search mode: {search_settings.get('search_mode', 'N/A')}")
+                            
+                    except Exception as e:
+                        st.error(f"❌ Error previewing model: {e}")
+            
+            with col4:
+                if st.button(f"Delete", key=f"model_delete_{i}"):
+                    try:
+                        os.remove(model_path)
+                        st.success(f"✅ Model '{model_name}' deleted successfully!")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Error deleting model: {e}")
+            
+            st.markdown("---")
+    else:
+        st.info("No saved models found. Save your current settings as a model to get started!")
+    
+    # Quick actions
+    st.markdown("### Quick Actions")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("📋 Export Current Settings"):
+            try:
+                import json
+                settings_json = json.dumps(current_settings, indent=2, ensure_ascii=False)
+                st.download_button(
+                    label="📥 Download Settings JSON",
+                    data=settings_json,
+                    file_name=f"manuscript_alert_settings_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    mime="application/json",
+                )
+            except Exception as e:
+                st.error(f"❌ Error exporting settings: {e}")
+    
+    with col2:
+        uploaded_file = st.file_uploader("📤 Import Settings", type=['json'], help="Upload a JSON settings file to import")
+        if uploaded_file is not None:
+            try:
+                import json
+                imported_settings = json.load(uploaded_file)
+                
+                if st.button("Import Settings"):
+                    if settings_service.save_settings(imported_settings):
+                        st.success("✅ Settings imported successfully!")
+                        st.rerun()
+                    else:
+                        st.error("❌ Error importing settings")
+            except Exception as e:
+                st.error(f"❌ Error importing settings: {e}")
+
+
+def backup_settings():
+    """Backup and restore settings"""
+    st.subheader("💾 Settings Backup & Restore")
+    
+    # List available backups
+    backups = settings_service.list_backups()
+    
+    if backups:
+        st.markdown("### Available Backups")
+        
+        for i, backup_file in enumerate(backups[:10]):  # Show last 10 backups
+            backup_name = os.path.basename(backup_file)
+            backup_date = backup_name.replace("settings_backup_", "").replace(".py", "")
+            
+            col1, col2, col3 = st.columns([3, 1, 1])
+            
+            with col1:
+                st.text(f"Backup {i+1}: {backup_date}")
+            
+            with col2:
+                if st.button(f"Restore", key=f"backup_restore_{i}"):
+                    if settings_service.restore_backup(backup_file):
+                        st.success("✅ Backup restored successfully!")
+                        st.rerun()
+                    else:
+                        st.error("❌ Failed to restore backup.")
+            
+            with col3:
+                if st.button(f"Delete", key=f"backup_delete_{i}"):
+                    try:
+                        os.remove(backup_file)
+                        st.success("✅ Backup deleted successfully!")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Failed to delete backup: {e}")
+    else:
+        st.info("No backup files found. Backups are automatically created when you save settings.")
+    
+    # Manual backup creation
+    st.markdown("### Create Manual Backup")
+    if st.button("📁 Create Backup Now"):
+        # Load current settings and save them (this will create a backup)
+        current_settings = get_current_settings()
+        if settings_service.save_settings(current_settings):
+            st.success("✅ Manual backup created successfully!")
+        else:
+            st.error("❌ Failed to create backup.")
 
 
 if __name__ == "__main__":

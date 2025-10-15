@@ -1,0 +1,135 @@
+{
+  "keywords": [
+    "PET",
+    "aneurysm",
+    "MRI",
+    "stroke",
+    "CT",
+    "brain",
+    "outcome",
+    "discharge",
+    "cerebral"
+  ],
+  "journal_scoring": {
+    "enabled": true,
+    "high_impact_journal_boost": {
+      "5_or_more_keywords": 5.1,
+      "4_keywords": 3.7,
+      "3_keywords": 2.8,
+      "2_keywords": 1.3,
+      "1_keyword": 0.5
+    }
+  },
+  "target_journals": {
+    "exact_matches": [
+      "jama",
+      "nature",
+      "science",
+      "radiology",
+      "ajnr",
+      "the lancet"
+    ],
+    "family_matches": [
+      "jama",
+      "nature",
+      "science",
+      "npj",
+      "the lancet"
+    ],
+    "specific_journals": [
+      "american journal of neuroradiology",
+      "alzheimer's & dementia",
+      "alzheimers dement",
+      "ebiomedicine",
+      "journal of magnetic resonance imaging",
+      "magnetic resonance in medicine",
+      "radiology",
+      "jmri",
+      "stroke",
+      "j magn reson imaging",
+      "brain : a journal of neurology"
+    ]
+  },
+  "journal_exclusions": [
+    "abdominal",
+    "pediatric",
+    "cardiovascular and interventional",
+    "interventional",
+    "emergency",
+    "skeletal",
+    "clinical",
+    "academic",
+    "investigative",
+    "case reports",
+    "oral surgery",
+    "korean journal of",
+    "the neuroradiology",
+    "japanese journal of",
+    "brain research",
+    "brain and behavior",
+    "brain imaging and behavior",
+    "brain stimulation",
+    "brain connectivity",
+    "brain and cognition",
+    "brain, behavior, and immunity",
+    "metabolic brain disease",
+    "neuroscience letters",
+    "neuroscience bulletin",
+    "neuroscience methods",
+    "neuroscience research",
+    "neuroscience and biobehavioral",
+    "clinical neuroscience",
+    "neuropsychiatry",
+    "ibro neuroscience",
+    "acs chemical neuroscience",
+    "proceedings of the national academy",
+    "life science alliance",
+    "life sciences",
+    "animal science",
+    "biomaterials science",
+    "veterinary medical science",
+    "philosophical transactions",
+    "annals of the new york academy"
+  ],
+  "keyword_scoring": {
+    "high_priority": {
+      "keywords": [
+        "MRI",
+        "stroke",
+        "CT"
+      ],
+      "boost": 1.5
+    },
+    "medium_priority": {
+      "keywords": [
+        "PET",
+        "brain",
+        "outcome",
+        "discharge",
+        "aneurysm",
+        "cerebral"
+      ],
+      "boost": 1.2
+    }
+  },
+  "search_settings": {
+    "days_back": 7,
+    "search_mode": "Brief",
+    "min_keyword_matches": 2,
+    "max_results_display": 50,
+    "default_sources": {
+      "pubmed": true,
+      "arxiv": false,
+      "biorxiv": false,
+      "medrxiv": false
+    },
+    "journal_quality_filter": false
+  },
+  "ui_settings": {
+    "theme": "light",
+    "show_abstracts": true,
+    "show_keywords": true,
+    "show_relevance_scores": true,
+    "papers_per_page": 50
+  }
+}
