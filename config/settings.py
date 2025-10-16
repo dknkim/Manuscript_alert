@@ -7,8 +7,6 @@ This file contains all configurable settings that can be modified through the UI
 DEFAULT_KEYWORDS = [
     "Alzheimer's disease",
     "PET",
-    "MRI",
-    "dementia",
     "amyloid",
     "tau",
     "plasma",
@@ -19,43 +17,43 @@ DEFAULT_KEYWORDS = [
 JOURNAL_SCORING = {
     "enabled": True,
     "high_impact_journal_boost": {
-        "5_or_more_keywords": 5.1,
+        "5_or_more_keywords": 4.9,
         "4_keywords": 3.7,
         "3_keywords": 2.8,
-        "2_keywords": 1.3,
-        "1_keyword": 0.5
-    }
+        "2_keywords": 0.9999999999999999,
+        "1_keyword": 0.10000000000000003,
+    },
 }
 
 # Target journal patterns with priority levels
 TARGET_JOURNALS = {
     "exact_matches": [
-    "jama",
-    "nature",
-    "science",
-    "radiology",
-    "ajnr",
-    "the lancet",
-],
+        "jama",
+        "nature",
+        "science",
+        "radiology",
+        "ajnr",
+        "the lancet",
+    ],
     "family_matches": [
-    "jama ",
-    "nature ",
-    "science ",
-    "npj ",
-    "the lancet",
-],
+        "jama",
+        "nature",
+        "science",
+        "npj",
+        "the lancet",
+    ],
     "specific_journals": [
-    "american journal of neuroradiology",
-    "alzheimer's & dementia",
-    "alzheimers dement",
-    "ebiomedicine",
-    "journal of magnetic resonance imaging",
-    "magnetic resonance in medicine",
-    "radiology",
-    "jmri",
-    "j magn reson imaging",
-    "brain : a journal of neurology",
-]
+        "american journal of neuroradiology",
+        "alzheimer's & dementia",
+        "alzheimers dement",
+        "ebiomedicine",
+        "journal of magnetic resonance imaging",
+        "magnetic resonance in medicine",
+        "radiology",
+        "jmri",
+        "j magn reson imaging",
+        "brain : a journal of neurology",
+    ],
 }
 
 # Simplified journal exclusions - all patterns apply to all journal types
@@ -64,7 +62,6 @@ JOURNAL_EXCLUSIONS = [
     "pediatric",
     "cardiovascular and interventional",
     "interventional",
-    "emergency",
     "skeletal",
     "clinical",
     "academic",
@@ -78,7 +75,6 @@ JOURNAL_EXCLUSIONS = [
     "brain and behavior",
     "brain imaging and behavior",
     "brain stimulation",
-    "brain connectivity",
     "brain and cognition",
     "brain, behavior, and immunity",
     "metabolic brain disease",
@@ -95,7 +91,6 @@ JOURNAL_EXCLUSIONS = [
     "life science alliance",
     "life sciences",
     "animal science",
-    "biomaterials science",
     "veterinary medical science",
     "philosophical transactions",
     "annals of the new york academy",
@@ -105,45 +100,34 @@ JOURNAL_EXCLUSIONS = [
 KEYWORD_SCORING = {
     "high_priority": {
         "keywords": [
-    "Alzheimer's disease",
-    "dementia",
-    "amyloid",
-    "tau",
-],
-        "boost": 1.5
+            "Alzheimer's disease",
+            "amyloid",
+        ],
+        "boost": 1.5,
     },
     "medium_priority": {
         "keywords": [
-    "PET",
-    "MRI",
-    "brain",
-    "plasma",
-],
-        "boost": 1.2
+            "PET",
+            "brain",
+            "plasma",
+        ],
+        "boost": 1.2,
     },
-    "low_priority": {
-        "keywords": [
-    "neuroimaging",
-    "cognition",
-    "memory",
-],
-        "boost": 1.0
-    }
 }
 
 # Default search settings
 DEFAULT_SEARCH_SETTINGS = {
-    "days_back": 7,
+    "days_back": 8,
     "search_mode": "Brief",
     "min_keyword_matches": 2,
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
         "arxiv": False,
-        "biorxiv": False,
-        "medrxiv": False
+        "biorxiv": True,
+        "medrxiv": True,
     },
-    "journal_quality_filter": False
+    "journal_quality_filter": False,
 }
 
 # UI settings
@@ -152,5 +136,5 @@ UI_SETTINGS = {
     "show_abstracts": True,
     "show_keywords": True,
     "show_relevance_scores": True,
-    "papers_per_page": 50
+    "papers_per_page": 50,
 }
