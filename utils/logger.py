@@ -105,9 +105,13 @@ class Logger:
         self.max_bytes = max_bytes
         self.backup_count = backup_count
 
-        # Use cached logger if exists, otherwise setup new one
+        # Use cached logger if exists and has handlers, otherwise setup new one
         if self.name in Logger._loggers and self.name in Logger._initialized:
             self.logger = Logger._loggers[self.name]
+            # Verify logger still has handlers (they may have been cleared)
+            if not self.logger.handlers:
+                self.logger = self._setup_logger()
+                Logger._loggers[self.name] = self.logger
         else:
             self.logger = self._setup_logger()
             Logger._loggers[self.name] = self.logger
@@ -140,6 +144,15 @@ class Logger:
         )
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
+
+        # Console handler (with colors) for terminal output
+        console_handler = logging.StreamHandler()
+        console_formatter = ColoredFormatter(
+            "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S"
+        )
+        console_handler.setFormatter(console_formatter)
+        logger.addHandler(console_handler)
 
         return logger
 
