@@ -10,8 +10,8 @@ paper_cache.json       # Cached paper data
 *.csv                 # Exported data files
 
 # Log files
-logs/                 # Log directory
-*.log                # Log files
+logs/
+*.log
  
 # macOS & tooling
 .DS_Store
