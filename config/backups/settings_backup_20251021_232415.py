@@ -12,7 +12,6 @@ DEFAULT_KEYWORDS = [
     "llm",
     "gpt",
     "agent",
-    "agentic",
 ]
 
 # Journal scoring configuration
@@ -109,7 +108,6 @@ KEYWORD_SCORING = {
     "llm",
     "gpt",
     "agent",
-    "agentic",
 ],
         "boost": 1.5
     },

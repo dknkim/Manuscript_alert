@@ -11,8 +11,6 @@ DEFAULT_KEYWORDS = [
     "large language model",
     "llm",
     "gpt",
-    "agent",
-    "agentic",
 ]
 
 # Journal scoring configuration
@@ -107,9 +105,6 @@ KEYWORD_SCORING = {
         "keywords": [
     "large language model",
     "llm",
-    "gpt",
-    "agent",
-    "agentic",
 ],
         "boost": 1.5
     },
@@ -117,6 +112,7 @@ KEYWORD_SCORING = {
         "keywords": [
     "MRI",
     "brain",
+    "gpt",
     "CT",
 ],
         "boost": 1.2

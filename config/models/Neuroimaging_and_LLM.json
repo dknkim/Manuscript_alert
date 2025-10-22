@@ -1,20 +1,13 @@
 {
   "keywords": [
-    "LIM",
-    "LIMK1",
-    "LMO1",
-    "force",
-    "keratin",
-    "filaments",
-    "actin",
-    "keratin",
-    "mechanotransduction",
-    "cytoskeleton",
-    "cell stretch",
-    "FRAP",
-    "mechano-sensing",
-    "mechanosensing",
-    "proteins"
+    "MRI",
+    "CT",
+    "brain",
+    "large language model",
+    "llm",
+    "gpt",
+    "agent",
+    "agentic"
   ],
   "journal_scoring": {
     "enabled": true,
@@ -31,19 +24,28 @@
       "jama",
       "nature",
       "science",
-      "cell",
+      "radiology",
+      "ajnr",
       "the lancet"
     ],
     "family_matches": [
-      "jama",
-      "nature",
-      "science",
-      "npj",
+      "jama ",
+      "nature ",
+      "science ",
+      "npj ",
       "the lancet"
     ],
     "specific_journals": [
+      "american journal of neuroradiology",
+      "alzheimer's & dementia",
+      "alzheimers dement",
       "ebiomedicine",
-      "proceedings of the national academy"
+      "journal of magnetic resonance imaging",
+      "magnetic resonance in medicine",
+      "radiology",
+      "jmri",
+      "j magn reson imaging",
+      "brain : a journal of neurology"
     ]
   },
   "journal_exclusions": [
@@ -56,6 +58,7 @@
     "clinical",
     "academic",
     "investigative",
+    "case reports",
     "oral surgery",
     "korean journal of",
     "the neuroradiology",
@@ -77,6 +80,7 @@
     "neuropsychiatry",
     "ibro neuroscience",
     "acs chemical neuroscience",
+    "proceedings of the national academy",
     "life science alliance",
     "life sciences",
     "animal science",
@@ -88,25 +92,19 @@
   "keyword_scoring": {
     "high_priority": {
       "keywords": [
-        "mechanotransduction",
-        "force",
-        "keratin",
-        "cell stretch",
-        "mechano-sensing",
-        "proteins",
-        "mechanosensing"
+        "large language model",
+        "llm",
+        "gpt",
+        "agent",
+        "agentic"
       ],
       "boost": 1.5
     },
     "medium_priority": {
       "keywords": [
-        "LIM",
-        "LIMK1",
-        "LMO1",
-        "filaments",
-        "actin",
-        "cytoskeleton",
-        "FRAP"
+        "MRI",
+        "brain",
+        "CT"
       ],
       "boost": 1.2
     }
@@ -114,13 +112,13 @@
   "search_settings": {
     "days_back": 7,
     "search_mode": "Brief",
-    "min_keyword_matches": 2,
+    "min_keyword_matches": 3,
     "max_results_display": 50,
     "default_sources": {
       "pubmed": true,
-      "arxiv": false,
-      "biorxiv": false,
-      "medrxiv": false
+      "arxiv": true,
+      "biorxiv": true,
+      "medrxiv": true
     },
     "journal_quality_filter": false
   },

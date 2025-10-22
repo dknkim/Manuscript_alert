@@ -5,14 +5,16 @@ This file contains all configurable settings that can be modified through the UI
 
 # Default keywords for research alerts
 DEFAULT_KEYWORDS = [
+    "Alzheimer's disease",
+    "PET",
     "MRI",
-    "CT",
+    "dementia",
+    "amyloid",
+    "tau",
     "brain",
     "large language model",
     "llm",
     "gpt",
-    "agent",
-    "agentic",
 ]
 
 # Journal scoring configuration
@@ -105,19 +107,21 @@ JOURNAL_EXCLUSIONS = [
 KEYWORD_SCORING = {
     "high_priority": {
         "keywords": [
+    "Alzheimer's disease",
+    "dementia",
+    "amyloid",
+    "tau",
     "large language model",
     "llm",
-    "gpt",
-    "agent",
-    "agentic",
 ],
         "boost": 1.5
     },
     "medium_priority": {
         "keywords": [
+    "PET",
     "MRI",
     "brain",
-    "CT",
+    "gpt",
 ],
         "boost": 1.2
     }
@@ -127,13 +131,13 @@ KEYWORD_SCORING = {
 DEFAULT_SEARCH_SETTINGS = {
     "days_back": 7,
     "search_mode": "Brief",
-    "min_keyword_matches": 3,
+    "min_keyword_matches": 2,
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
-        "arxiv": True,
-        "biorxiv": True,
-        "medrxiv": True
+        "arxiv": False,
+        "biorxiv": False,
+        "medrxiv": False
     },
     "journal_quality_filter": False
 }

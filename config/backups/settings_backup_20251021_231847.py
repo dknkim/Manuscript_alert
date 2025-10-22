@@ -11,8 +11,6 @@ DEFAULT_KEYWORDS = [
     "large language model",
     "llm",
     "gpt",
-    "agent",
-    "agentic",
 ]
 
 # Journal scoring configuration
@@ -107,9 +105,6 @@ KEYWORD_SCORING = {
         "keywords": [
     "large language model",
     "llm",
-    "gpt",
-    "agent",
-    "agentic",
 ],
         "boost": 1.5
     },
@@ -117,6 +112,7 @@ KEYWORD_SCORING = {
         "keywords": [
     "MRI",
     "brain",
+    "gpt",
     "CT",
 ],
         "boost": 1.2
@@ -127,13 +123,13 @@ KEYWORD_SCORING = {
 DEFAULT_SEARCH_SETTINGS = {
     "days_back": 7,
     "search_mode": "Brief",
-    "min_keyword_matches": 3,
+    "min_keyword_matches": 2,
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
-        "arxiv": True,
-        "biorxiv": True,
-        "medrxiv": True
+        "arxiv": False,
+        "biorxiv": False,
+        "medrxiv": False
     },
     "journal_quality_filter": False
 }
