@@ -2,10 +2,11 @@
 
 ## Document Information
 - **Document Type**: Product Requirements Document (PRD)
-- **Version**: 1.0
-- **Date**: September 9, 2025
+- **Version**: 2.0
+- **Date**: October 25, 2025 (Updated)
 - **Project**: Manuscript Alert System Supabase Enhancement
 - **Team**: 김태호, 김동훈
+- **Status**: Implementation In Progress
 
 ---
 
@@ -30,12 +31,14 @@ The existing Manuscript Alert System is a local Streamlit application that:
 
 ### Proposed Enhancement
 Integrate Supabase to transform the system from a local research tool into a cloud-enabled personal research platform with:
-- **Single-user Authentication**: Personal account and cloud sync
+- **Role-Based Authentication**: Username/password authentication with admin/user/guest roles
+- **Username-Based Login**: Users login with username (not email) for better privacy
 - **Cross-device Access**: Continue research on any device
 - **Background Processing**: Non-blocking paper fetching and updates
 - **Smart Keyword Learning**: Dynamic relevance scoring that improves over time
 - **Cloud Storage**: Never lose research data with automatic backup
 - **Configurable Intervals**: Personal control over update frequency
+- **Multi-User Ready**: Admin controls with future-ready collaboration features
 
 ---
 
@@ -89,28 +92,65 @@ Integrate Supabase to transform the system from a local research tool into a clo
 
 #### 3.1.1 Core Tables
 
+**Authentication Model (Updated v2.0)**
+
+The system uses a **username-based authentication** model:
+- **Primary Login**: Users login with `username` + `password` (not email)
+- **Email Purpose**: Required for notifications and account recovery only
+- **Role-Based Access**: Three levels - admin, user, guest
+- **Updateable Credentials**: Users can change both username and email (uniqueness enforced)
+
 **Users Table (managed by Supabase Auth)**
 ```sql
 -- Automatically created by Supabase
 users (
   id UUID PRIMARY KEY,
-  email TEXT,
+  email TEXT,  -- For notifications/recovery, NOT login
+  raw_user_meta_data JSONB,  -- Stores username and role
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 )
 ```
 
-**User Profiles Table**
+**User Roles Enum**
+```sql
+CREATE TYPE user_role AS ENUM ('admin', 'user', 'guest');
+```
+
+**User Profiles Table (Updated v2.0)**
 ```sql
 CREATE TABLE user_profiles (
   id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
-  username TEXT UNIQUE,
+  email TEXT UNIQUE NOT NULL,  -- Required for notifications
+  username TEXT UNIQUE NOT NULL,  -- Primary login identifier (updatable)
   full_name TEXT,
-  institution TEXT,
-  research_area TEXT,
-  avatar_url TEXT,
-  preferences JSONB DEFAULT '{}',
+  role user_role DEFAULT 'user',  -- admin/user/guest
+  is_active BOOLEAN DEFAULT TRUE,  -- Soft delete flag
+  preferences JSONB DEFAULT '{
+    "theme": "light",
+    "notifications_enabled": true,
+    "email_alerts": false
+  }',
   created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  last_login TIMESTAMP,
+  created_by UUID REFERENCES auth.users(id)  -- Audit trail
+);
+
+-- Comments for clarity
+COMMENT ON COLUMN user_profiles.username IS 'Primary login identifier - users login with username, not email';
+COMMENT ON COLUMN user_profiles.email IS 'Required for notifications and account recovery (updatable)';
+COMMENT ON TABLE user_profiles IS 'Users can update their own username and email (uniqueness enforced). Only admins can change roles.';
+```
+
+**System Settings Table (Admin-Only)**
+```sql
+CREATE TABLE system_settings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  key TEXT UNIQUE NOT NULL,
+  value JSONB NOT NULL,
+  description TEXT,
+  updated_by UUID REFERENCES auth.users(id),
   updated_at TIMESTAMP DEFAULT NOW()
 );
 ```
@@ -244,31 +284,223 @@ END;
 $$;
 ```
 
-#### 3.1.2 Row Level Security (RLS) Policies
+#### 3.1.2 Row Level Security (RLS) Policies (Updated v2.0)
+
+**Role-Based Access Control System**
+
+The system implements three user roles with distinct permissions:
+- **Admin**: Full system control, can manage all users and data
+- **User**: Standard access, can create projects and manage own data
+- **Guest**: Read-only access to public/shared content
 
 ```sql
--- Users can only see their own profiles
+-- Enable RLS on all tables
 ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view own profile" ON user_profiles
-  FOR ALL USING (auth.uid() = id);
-
--- Project access control
+ALTER TABLE system_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view own projects" ON projects
-  FOR ALL USING (auth.uid() = owner_id);
-CREATE POLICY "Users can view public projects" ON projects
-  FOR SELECT USING (is_public = true);
-
--- Paper collections inherit project permissions
+ALTER TABLE project_collaborators ENABLE ROW LEVEL SECURITY;
+ALTER TABLE papers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE paper_collections ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can access collections of accessible projects" ON paper_collections
-  FOR ALL USING (
-    EXISTS (
-      SELECT 1 FROM projects 
-      WHERE projects.id = paper_collections.project_id 
-      AND (projects.owner_id = auth.uid() OR projects.is_public = true)
+ALTER TABLE search_alerts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE activity_log ENABLE ROW LEVEL SECURITY;
+
+-- Helper function to check if user is admin
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM user_profiles
+    WHERE id = auth.uid() AND role = 'admin' AND is_active = TRUE
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Helper function to check user role
+CREATE OR REPLACE FUNCTION get_user_role()
+RETURNS user_role AS $$
+BEGIN
+  RETURN (
+    SELECT role FROM user_profiles
+    WHERE id = auth.uid() AND is_active = TRUE
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- USER PROFILES POLICIES
+-- Admins can view all profiles
+CREATE POLICY "Admins can view all profiles"
+  ON user_profiles FOR SELECT
+  USING (is_admin());
+
+-- Users can view their own profile
+CREATE POLICY "Users can view own profile"
+  ON user_profiles FOR SELECT
+  USING (auth.uid() = id);
+
+-- Users can update their own profile (including username/email, but not role)
+CREATE POLICY "Users can update own profile"
+  ON user_profiles FOR UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (
+    auth.uid() = id AND
+    -- Users cannot change their own role
+    role = (SELECT role FROM user_profiles WHERE id = auth.uid())
+  );
+
+-- System can create user profiles (via trigger)
+CREATE POLICY "System can create user profiles"
+  ON user_profiles FOR INSERT
+  WITH CHECK (true);
+
+-- Only admins can fully manage all user profiles
+CREATE POLICY "Admins can manage all user profiles"
+  ON user_profiles FOR ALL
+  USING (is_admin())
+  WITH CHECK (is_admin());
+
+-- Uniqueness validation trigger for username/email updates
+CREATE OR REPLACE FUNCTION check_username_unique()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.username != OLD.username THEN
+    IF EXISTS (
+      SELECT 1 FROM user_profiles
+      WHERE username = NEW.username AND id != NEW.id
+    ) THEN
+      RAISE EXCEPTION 'Username "%" is already taken', NEW.username
+        USING ERRCODE = '23505';
+    END IF;
+  END IF;
+
+  IF NEW.email != OLD.email THEN
+    IF EXISTS (
+      SELECT 1 FROM user_profiles
+      WHERE email = NEW.email AND id != NEW.id
+    ) THEN
+      RAISE EXCEPTION 'Email "%" is already registered', NEW.email
+        USING ERRCODE = '23505';
+    END IF;
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_user_uniqueness_on_update
+  BEFORE UPDATE ON user_profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION check_username_unique();
+
+-- SYSTEM SETTINGS POLICIES
+-- Admins have full access
+CREATE POLICY "Admins manage system settings"
+  ON system_settings FOR ALL
+  USING (is_admin())
+  WITH CHECK (is_admin());
+
+-- All authenticated users can read settings
+CREATE POLICY "Users can view system settings"
+  ON system_settings FOR SELECT
+  USING (auth.role() = 'authenticated');
+
+-- PROJECTS POLICIES
+-- Users can view their own projects
+CREATE POLICY "Users can view own projects"
+  ON projects FOR SELECT
+  USING (owner_id = auth.uid());
+
+-- Users can view public projects
+CREATE POLICY "Users can view public projects"
+  ON projects FOR SELECT
+  USING (is_public = TRUE);
+
+-- Admins can view all projects
+CREATE POLICY "Admins can view all projects"
+  ON projects FOR SELECT
+  USING (is_admin());
+
+-- Users can manage their own projects
+CREATE POLICY "Users can manage own projects"
+  ON projects FOR ALL
+  USING (owner_id = auth.uid())
+  WITH CHECK (owner_id = auth.uid());
+
+-- Admins can manage all projects
+CREATE POLICY "Admins can manage all projects"
+  ON projects FOR ALL
+  USING (is_admin())
+  WITH CHECK (is_admin());
+
+-- PAPERS POLICIES
+-- All authenticated users can read papers
+CREATE POLICY "Authenticated users can view papers"
+  ON papers FOR SELECT
+  USING (auth.role() = 'authenticated');
+
+-- Only admins can insert papers (or background jobs with service role)
+CREATE POLICY "Admins can insert papers"
+  ON papers FOR INSERT
+  WITH CHECK (is_admin());
+
+-- PAPER COLLECTIONS POLICIES
+-- Users can view collections from their projects
+CREATE POLICY "Users can view own collections"
+  ON paper_collections FOR SELECT
+  USING (
+    project_id IN (
+      SELECT id FROM projects WHERE owner_id = auth.uid()
     )
   );
+
+-- Admins can view all collections
+CREATE POLICY "Admins can view all collections"
+  ON paper_collections FOR SELECT
+  USING (is_admin());
+
+-- Users (not guests) can manage collections in their projects
+CREATE POLICY "Users can manage own collections"
+  ON paper_collections FOR ALL
+  USING (
+    get_user_role() != 'guest' AND
+    project_id IN (
+      SELECT id FROM projects WHERE owner_id = auth.uid()
+    )
+  )
+  WITH CHECK (
+    get_user_role() != 'guest' AND
+    project_id IN (
+      SELECT id FROM projects WHERE owner_id = auth.uid()
+    )
+  );
+
+-- SEARCH ALERTS POLICIES
+-- Users can manage their own alerts
+CREATE POLICY "Users can manage own alerts"
+  ON search_alerts FOR ALL
+  USING (user_id = auth.uid())
+  WITH CHECK (user_id = auth.uid() AND get_user_role() != 'guest');
+
+-- Admins can manage all alerts
+CREATE POLICY "Admins can manage all alerts"
+  ON search_alerts FOR ALL
+  USING (is_admin())
+  WITH CHECK (is_admin());
+
+-- ACTIVITY LOG POLICIES (for audit trail)
+-- Admins can view all logs
+CREATE POLICY "Admins can view activity logs"
+  ON activity_log FOR SELECT
+  USING (is_admin());
+
+-- Users can view their own activity
+CREATE POLICY "Users can view own activity"
+  ON activity_log FOR SELECT
+  USING (user_id = auth.uid());
+
+-- System can insert logs
+CREATE POLICY "System can insert logs"
+  ON activity_log FOR INSERT
+  WITH CHECK (true);
 ```
 
 ### 3.2 Supabase Features Integration
@@ -771,25 +1003,40 @@ def start_manual_refresh():
 
 ## 4. Implementation Plan
 
-### 4.1 Phase 1: Foundation Setup
+**Current Status: Phase 1 Complete, Phase 2 Ready to Start**
 
-#### 4.1.1 Supabase Project Setup
-- [ ] Create Supabase project
-- [ ] Set up database schema and tables
-- [ ] Configure Row Level Security policies
-- [ ] Set up storage buckets for documents
-- [ ] Create database functions for search and matching
+| Phase | Status | Completion Date | Next Actions |
+|-------|--------|----------------|--------------|
+| Phase 1: Foundation Setup | ✅ Complete | October 26, 2025 | - |
+| Phase 2: Core Cloud Features | 🟡 Ready to Start | - | Authentication UI, Data Migration |
+| Phase 3: Advanced Features | ⏳ Planned | - | - |
 
-#### 4.1.2 Authentication Integration
-- [ ] Install Supabase Python client
-- [ ] Implement user authentication in Streamlit
-- [ ] Add user registration and login flows
-- [ ] Create user profile management
-- [ ] Set up session management
+### 4.1 Phase 1: Foundation Setup ✅ COMPLETED (October 26, 2025)
 
-#### 4.1.3 Basic Data Migration
+#### 4.1.1 Supabase Project Setup ✅
+- [x] Create Supabase project (ID: `lrlefufmpvxhfumbtuwc`)
+- [x] Set up database schema and tables (username-first authentication)
+- [x] Configure Row Level Security policies (admin/user/guest roles)
+- [x] Create database functions for role checking (`is_admin()`, `get_user_role()`)
+- [x] Set up migrations for version control
+- [x] Insert default system settings
+- [ ] Set up storage buckets for documents (Phase 3)
+
+#### 4.1.2 Authentication Integration ✅
+- [x] Install Supabase Python client (`supabase-py`)
+- [x] Create connection module (`services/supabase_client.py`)
+- [x] Set up environment variables (`.env` with credentials)
+- [x] Create first admin user (username: `admin`)
+- [x] Test database connection and verify setup
+- [ ] Implement user authentication in Streamlit UI (Phase 2 - NEXT)
+- [ ] Add user registration and login flows (Phase 2 - NEXT)
+- [ ] Create user profile management UI (Phase 2)
+- [ ] Set up session management in Streamlit (Phase 2)
+
+#### 4.1.3 Basic Data Migration (Phase 2 - PENDING)
 - [ ] Create migration scripts for existing local data
-- [ ] Migrate user preferences to Supabase
+- [ ] Migrate user preferences from JSON to Supabase
+- [ ] Migrate paper cache from JSON to Supabase
 - [ ] Set up data synchronization between local and cloud
 - [ ] Implement offline mode with sync capability
 
@@ -1823,9 +2070,167 @@ This upgrade transforms your local research tool into a **smart, cloud-enabled p
 
 ---
 
-## 14. Dynamic Keyword Intelligence Enhancement
+## 14. Implementation Status (October 26, 2025 - ✅ PHASE 1 COMPLETE)
 
-### 14.1 Problem Statement
+### 14.1 Completed Setup ✅
+
+**Infrastructure:**
+- ✅ Supabase project created (Project ID: `lrlefufmpvxhfumbtuwc`)
+- ✅ Supabase CLI installed and configured (v2.53.6)
+- ✅ Project linked to local development environment
+- ✅ Access token configured for CLI operations
+- ✅ Environment variables configured in `.env` file
+
+**Database Schema - Fresh Start:**
+- ✅ **All tables dropped and recreated with username-first model**
+- ✅ Username is PRIMARY login identifier (REQUIRED, NOT NULL, UNIQUE)
+- ✅ Email is OPTIONAL (only for notifications/recovery, can be NULL)
+- ✅ User roles enum (admin/user/guest) implemented
+- ✅ Row Level Security (RLS) policies configured and tested
+- ✅ Helper functions for role checking (`is_admin()`, `get_user_role()`)
+- ✅ Uniqueness validation triggers for username/email updates
+- ✅ Activity log table for audit trail
+- ✅ System settings table with default values inserted
+- ✅ Background jobs tracking table created
+- ✅ All tables verified with proper indexes
+
+**Migration Files:**
+- ✅ Fresh start migration: `supabase/migrations/20251026000000_fresh_start_username_auth.sql`
+- ✅ System settings migration: `supabase/migrations/20251026000001_system_settings.sql`
+
+**User Management:**
+- ✅ First admin user created successfully
+  - Username: `admin`
+  - Email: `tk.hfes@gmail.com` (optional)
+  - Role: `admin`
+  - Active: `true`
+- ✅ Admin user verified via Python script
+- ✅ RLS policies tested and working (anon users cannot read profiles - secure!)
+
+**Python Integration:**
+- ✅ Python dependencies installed (`supabase`, `python-dotenv`)
+- ✅ `.env` file created with Supabase credentials
+- ✅ Supabase client module implemented (`services/supabase_client.py`)
+- ✅ Database connection tested and working
+- ✅ Test scripts created and passing:
+  - `test_supabase_connection.py` - Full system test
+  - `verify_admin.py` - Admin user verification
+  - `check_and_fix_admin.py` - User management helper
+
+**Testing Results:**
+```
+✅ Connection to Supabase: SUCCESS
+✅ Database access successful
+✅ User profiles found: 1 user(s)
+✅ Admin user configured correctly!
+✅ System settings: 4 settings loaded
+✅ Tables accessible: CONFIRMED
+```
+
+### 14.2 Ready for Phase 2
+
+**Application Updates (Next):**
+- ⏳ Update Streamlit app with authentication UI
+- ⏳ Implement username/password login flow
+- ⏳ Migrate local JSON storage to Supabase
+- ⏳ Implement cloud sync for user preferences
+- ⏳ Add user session management
+
+**Advanced Features (Future):**
+- ⏳ Implement keyword intelligence system
+- ⏳ Set up Edge Functions for background processing
+- ⏳ Configure scheduled paper refresh jobs
+- ⏳ Add real-time status updates
+
+### 14.3 Next Steps
+
+**Immediate (Next Session):**
+1. ✅ ~~Create first admin user~~ **DONE**
+2. ✅ ~~Test database connection~~ **DONE**
+3. Implement authentication UI in Streamlit
+4. Create login/logout functionality
+5. Add session state management
+
+**Short-term (This Week):**
+1. Create data migration scripts for existing JSON data
+2. Test username/password login flow in Streamlit
+3. Implement user profile management UI
+4. Verify role-based access control in application
+
+**Medium-term (Next 2 Weeks):**
+1. Implement background processing with Edge Functions
+2. Add keyword intelligence learning system
+3. Create cross-device synchronization
+4. Set up automated paper fetching
+
+### 14.4 Key Design Decisions Implemented
+
+**Authentication Model:**
+- Username-based login (not email-based)
+- Email required for notifications and recovery only
+- Users can update both username and email (with uniqueness validation)
+- Role-based access control from day one
+
+**Database Structure:**
+- Three-tier role system (admin/user/guest)
+- Comprehensive RLS policies for data security
+- Audit trail via activity_log table
+- System settings table for admin control
+
+**Future-Ready Architecture:**
+- `project_collaborators` table ready for multi-user features
+- `system_settings` table for dynamic configuration
+- Soft delete with `is_active` flag preserves data integrity
+- Activity logging for compliance and debugging
+
+### 14.5 Essential Files for Sharing/Deployment
+
+**CORE FILES (Required for setup):**
+- `DROP_AND_RECREATE.sql` - Complete database schema with username-first auth
+- `FRESH_START_GUIDE.md` - Step-by-step setup instructions
+- `create_admin.sql` - Template for creating admin user
+- `.env.example` - Environment variable template (DO NOT share actual .env!)
+- `services/supabase_client.py` - Supabase connection module
+- `supabase/config.toml` - Supabase CLI configuration
+- `supabase/migrations/` - All migration files (version controlled schema)
+
+**TESTING & VERIFICATION FILES (Useful but optional):**
+- `test_supabase_connection.py` - Verify database connection and setup
+- `check_and_fix_admin.py` - Helper script to fix orphaned auth users
+- `.env.example` - Copy this to `.env` and fill in your credentials
+
+**IMPORTANT SECURITY NOTES:**
+- `.env` is in `.gitignore` (line 5) - NEVER commit this file!
+- Service role key has full admin access - keep it secret
+- Anon key is safe for client-side use but still don't expose unnecessarily
+
+**FILES CLEANED UP (removed from repo):**
+- `setup_admin.sql`, `verify_schema.sql`, `MANUAL_UPDATES.sql` - Obsolete SQL files
+- `COMPLETE_SETUP.sql`, `update_user_policies.sql` - Superseded by migrations
+- `insert_system_settings.sql` - Now in migration `20251026000001_system_settings.sql`
+- `setup_first_admin.py`, `setup_admin_simple.py`, `verify_admin.py` - Redundant scripts
+
+**FOR SHARING WITH FRIEND:**
+Send these files:
+1. `FRESH_START_GUIDE.md` - Complete instructions
+2. `DROP_AND_RECREATE.sql` - Database schema
+3. `.env.example` - They need to create their own `.env`
+4. `services/supabase_client.py` - Connection code
+5. `test_supabase_connection.py` - For verification
+6. `check_and_fix_admin.py` - Admin setup helper
+
+Your friend will need to:
+- Create their own Supabase project
+- Get their own API keys
+- Run `DROP_AND_RECREATE.sql` in their SQL editor
+- Create `.env` with their credentials
+- Follow `FRESH_START_GUIDE.md` to create admin user
+
+---
+
+## 15. Dynamic Keyword Intelligence Enhancement
+
+### 15.1 Problem Statement
 
 Your current implementation at `core/paper_manager.py:279` uses static keyword matching, which has limitations:
 - Keywords don't adapt based on paper quality or user preferences
@@ -1833,11 +2238,11 @@ Your current implementation at `core/paper_manager.py:279` uses static keyword m
 - RAG searches are too slow for real-time relevance scoring
 - Missing trending topics and emerging research areas
 
-### 14.2 Proposed Solution: Smart Keyword Learning
+### 15.2 Proposed Solution: Smart Keyword Learning
 
 **Core Concept:** Track keyword performance across journals, sources, and user interactions to create dynamic relevance scoring without expensive vector operations.
 
-#### 14.2.1 Database Schema for Keyword Intelligence
+#### 15.2.1 Database Schema for Keyword Intelligence
 
 ```sql
 -- Keywords intelligence table
@@ -1872,7 +2277,7 @@ CREATE INDEX idx_keyword_intelligence_trending ON keyword_intelligence(trending_
 CREATE INDEX idx_user_interactions_user_paper ON user_paper_interactions(user_id, paper_id);
 ```
 
-#### 14.2.2 Fast Keyword Extraction Service
+#### 15.2.2 Fast Keyword Extraction Service
 
 ```python
 from datetime import datetime
@@ -1948,7 +2353,7 @@ class KeywordIntelligenceService:
                          .execute()
 ```
 
-#### 14.2.3 Enhanced Relevance Scoring
+#### 15.2.3 Enhanced Relevance Scoring
 
 ```python
 def calculate_smart_relevance_score(paper, user_keywords, project_id=None):
@@ -2033,7 +2438,7 @@ def calculate_smart_relevance_score(paper, user_keywords, project_id=None):
     }
 ```
 
-#### 14.2.4 Learning from User Behavior
+#### 15.2.4 Learning from User Behavior
 
 ```python
 def learn_from_user_interactions():
@@ -2087,7 +2492,7 @@ def learn_from_user_interactions():
                .execute()
 ```
 
-### 14.3 Performance Benefits
+### 15.3 Performance Benefits
 
 **Speed Improvements:**
 - **10x faster** than RAG similarity search
@@ -2107,7 +2512,7 @@ def learn_from_user_interactions():
 - Backward compatible with existing keyword lists
 - Enhances rather than replaces current functionality
 
-### 14.4 Implementation Priority
+### 15.4 Implementation Priority
 
 This enhancement directly addresses your performance concerns while making the system much smarter. It can be implemented as:
 

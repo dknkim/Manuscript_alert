@@ -1,13 +1,13 @@
-venv/          # Python virtual environment directory
-**/__pycache__/ # Python bytecode cache directories (recursive)
-*.pyc          # Compiled Python files
-*.py[cod]      # More Python compiled files
-.env           # Environment variables file
+venv/
+**/__pycache__/
+*.pyc
+*.py[cod]
+.env
 
 # User data files
-user_preferences.json  # User-specific preferences and settings
-paper_cache.json       # Cached paper data
-*.csv                 # Exported data files
+user_preferences.json
+paper_cache.json
+*.csv
 
 # Log files
 logs/
@@ -22,3 +22,6 @@ logs/
 
 # Claude Code settings
 .claude/
+
+# Supabase CLI temporary files
+supabase/.temp/
