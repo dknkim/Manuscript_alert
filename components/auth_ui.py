@@ -20,6 +20,8 @@ def initialize_session_state():
         st.session_state.user = None
     if "show_signup" not in st.session_state:
         st.session_state.show_signup = False
+    if "remembered_email" not in st.session_state:
+        st.session_state.remembered_email = ""
 
 
 def render_login_form(auth_service: AuthService):
@@ -32,14 +34,23 @@ def render_login_form(auth_service: AuthService):
     st.markdown("### 🔐 Login to Manuscript Alert System")
 
     with st.form("login_form"):
-        email = st.text_input("Email", placeholder="your.email@example.com")
-        password = st.text_input("Password", type="password", placeholder="Enter your password")
+        # Pre-fill email with remembered email from last login
+        email = st.text_input(
+            "Email",
+            value=st.session_state.get("remembered_email", ""),
+            placeholder="your.email@example.com",
+        )
+        password = st.text_input(
+            "Password", type="password", placeholder="Enter your password"
+        )
 
         col1, col2 = st.columns([1, 1])
         with col1:
             submit = st.form_submit_button("Login", use_container_width=True)
         with col2:
-            signup_button = st.form_submit_button("Sign Up Instead", use_container_width=True)
+            signup_button = st.form_submit_button(
+                "Sign Up Instead", use_container_width=True
+            )
 
         if signup_button:
             st.session_state.show_signup = True
@@ -54,10 +65,12 @@ def render_login_form(auth_service: AuthService):
                 result = auth_service.login(email, password)
 
             if result["success"]:
+                # Cache the email for next login
+                st.session_state.remembered_email = email
                 st.session_state.authenticated = True
                 st.session_state.user = result["user"]
                 logger.info(f"User logged in: {email}")
-                st.success(f"Welcome back, {result['user']['email']}!")
+                # Immediately rerun to show main app instead of continuing to render login form
                 st.rerun()
             else:
                 st.error(result["error"])
@@ -77,32 +90,27 @@ def render_signup_form(auth_service: AuthService):
         email = st.text_input(
             "Email *",
             placeholder="your.email@example.com",
-            help="Required. This is your primary login identifier."
+            help="Required. This is your primary login identifier.",
         )
         password = st.text_input(
-            "Password *",
-            type="password",
-            placeholder="Choose a strong password"
+            "Password *", type="password", placeholder="Choose a strong password"
         )
         password_confirm = st.text_input(
-            "Confirm Password *",
-            type="password",
-            placeholder="Re-enter your password"
+            "Confirm Password *", type="password", placeholder="Re-enter your password"
         )
 
         st.markdown("---")
         st.caption("Optional field:")
 
-        full_name = st.text_input(
-            "Full Name (optional)",
-            placeholder="Your full name"
-        )
+        full_name = st.text_input("Full Name (optional)", placeholder="Your full name")
 
         col1, col2 = st.columns([1, 1])
         with col1:
             submit = st.form_submit_button("Create Account", use_container_width=True)
         with col2:
-            login_button = st.form_submit_button("Back to Login", use_container_width=True)
+            login_button = st.form_submit_button(
+                "Back to Login", use_container_width=True
+            )
 
         if login_button:
             st.session_state.show_signup = False
@@ -130,14 +138,16 @@ def render_signup_form(auth_service: AuthService):
                 result = auth_service.signup(
                     email=email,
                     password=password,
-                    full_name=full_name if full_name else None
+                    full_name=full_name if full_name else None,
                 )
 
             if result["success"]:
+                # Cache the email for next login
+                st.session_state.remembered_email = email
                 st.session_state.authenticated = True
                 st.session_state.user = result["user"]
                 logger.info(f"New user registered: {email}")
-                st.success(f"Account created successfully! Welcome, {email}!")
+                # Immediately rerun to show main app instead of continuing to render signup form
                 st.rerun()
             else:
                 st.error(result["error"])
@@ -180,30 +190,31 @@ def render_user_menu(auth_service: AuthService):
     if not user:
         return
 
-    # Create top-right user menu using columns
-    col1, col2 = st.columns([6, 1])
+    # Use a container at the top of the page for the user menu
+    with st.container():
+        col1, col2 = st.columns([6, 1])
 
-    with col2:
-        st.markdown(
-            f"""
-            <div style="text-align: right; padding: 5px 0;">
-                <div style="font-size: 14px; font-weight: bold;">
-                    👤 {user.get('full_name') or user['email']}
+        with col2:
+            st.markdown(
+                f"""
+                <div style="text-align: right; padding: 5px 0;">
+                    <div style="font-size: 14px; font-weight: bold;">
+                        👤 {user.get("full_name") or user["email"]}
+                    </div>
+                    <div style="font-size: 11px; color: #666;">
+                        {user["role"].upper()}
+                    </div>
                 </div>
-                <div style="font-size: 11px; color: #666;">
-                    {user['role'].upper()}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+                """,
+                unsafe_allow_html=True,
+            )
 
-        if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
-            auth_service.logout()
-            st.session_state.authenticated = False
-            st.session_state.user = None
-            logger.info(f"User logged out: {user['email']}")
-            st.rerun()
+            if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
+                auth_service.logout()
+                st.session_state.authenticated = False
+                st.session_state.user = None
+                logger.info(f"User logged out: {user['email']}")
+                st.rerun()
 
 
 def require_auth(auth_service: AuthService) -> bool:
@@ -221,16 +232,30 @@ def require_auth(auth_service: AuthService) -> bool:
 
     # Check if already authenticated in session
     if st.session_state.get("authenticated"):
+        # User is authenticated - do NOT render auth page
         return True
 
-    # Try to restore session from Supabase
-    current_user = auth_service.get_current_user()
-    if current_user:
-        st.session_state.authenticated = True
-        st.session_state.user = current_user
-        logger.info(f"Session restored for user: {current_user['email']}")
-        return True
+    # Check if we've already checked session (to avoid checking on every rerun)
+    if "session_checked" not in st.session_state:
+        st.session_state.session_checked = False
 
-    # Not authenticated - show login page
+    # If we haven't checked session yet, show spinner and check Supabase
+    if not st.session_state.session_checked:
+        # Show ONLY spinner, no login form during auth check
+        st.info("🔄 Checking authentication...")
+        current_user = auth_service.get_current_user()
+        st.session_state.session_checked = True
+
+        if current_user:
+            st.session_state.authenticated = True
+            st.session_state.user = current_user
+            logger.info(f"Session restored for user: {current_user['email']}")
+            # Trigger rerun to show main app
+            st.rerun()
+        else:
+            # No active session, trigger rerun to show login form
+            st.rerun()
+
+    # Not authenticated - show login page and stop execution
     render_auth_page(auth_service)
-    return False
+    st.stop()  # Stop execution here to prevent main app from rendering
