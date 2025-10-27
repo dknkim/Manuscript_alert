@@ -82,14 +82,14 @@ def main():
         return
 
     # User is authenticated - show main app
+    # Show user menu in top-right corner FIRST
+    render_user_menu(auth_service)
+
     st.title("Manuscript Alert System")
     st.markdown(
         "Stay updated with the latest Pubmed, arXiv, biorXiv, "
         "and medrXiv papers in your field of interest"
     )
-
-    # Show user menu in sidebar
-    render_user_menu(auth_service)
 
     # Initialize session state for active tab tracking
     if "active_main_tab" not in st.session_state:
@@ -98,17 +98,33 @@ def main():
 
     logger.debug(f"Current active_main_tab: {st.session_state.active_main_tab}")
 
-    # Create tabs
-    tab1, tab2, tab3 = st.tabs(["📚 Papers", "🤖 Models", "⚙️ Settings"])
+    # Create tabs - conditionally add Admin tab for admin users
+    user = st.session_state.get("user")
+    if user and user.get("role") == "admin":
+        tab1, tab2, tab3, tab4 = st.tabs(["📚 Papers", "🤖 Models", "⚙️ Settings", "👥 Admin"])
 
-    with tab1:
-        papers_tab()
+        with tab1:
+            papers_tab()
 
-    with tab2:
-        models_tab()
+        with tab2:
+            models_tab()
 
-    with tab3:
-        settings_tab()
+        with tab3:
+            settings_tab()
+
+        with tab4:
+            admin_tab()
+    else:
+        tab1, tab2, tab3 = st.tabs(["📚 Papers", "🤖 Models", "⚙️ Settings"])
+
+        with tab1:
+            papers_tab()
+
+        with tab2:
+            models_tab()
+
+        with tab3:
+            settings_tab()
 
 
 def papers_tab():
@@ -907,23 +923,27 @@ def settings_tab():
     logger.info(f"Loaded settings with {len(current_settings.get('keywords', []))} keywords")
 
     # Create tabs within settings
-    settings_tab1, settings_tab2, settings_tab3, settings_tab4 = st.tabs([
-        "🔍 Keywords", "📰 Journals", "📊 Scoring", "💾 Backup"
+    settings_tab1, settings_tab2, settings_tab3, settings_tab4, settings_tab5 = st.tabs([
+        "👤 My Profile", "🔍 Keywords", "📰 Journals", "📊 Scoring", "💾 Backup"
     ])
 
     with settings_tab1:
+        logger.debug("Rendering My Profile tab")
+        my_profile_settings()
+
+    with settings_tab2:
         logger.debug("Rendering Keywords tab")
         keyword_settings(current_settings)
 
-    with settings_tab2:
+    with settings_tab3:
         logger.debug("Rendering Journals tab")
         journal_settings(current_settings)
 
-    with settings_tab3:
+    with settings_tab4:
         logger.debug("Rendering Scoring tab")
         scoring_settings(current_settings)
 
-    with settings_tab4:
+    with settings_tab5:
         logger.debug("Rendering Backup tab")
         backup_settings()
 
@@ -1454,6 +1474,158 @@ def models_tab():
                 st.error(f"❌ Error importing settings: {e}")
 
 
+def my_profile_settings():
+    """My Profile settings tab"""
+    st.subheader("👤 My Profile")
+    st.markdown("View and edit your profile information.")
+
+    # Get current user
+    user = st.session_state.get("user")
+    if not user:
+        st.error("No user session found.")
+        return
+
+    from services.supabase_client import get_supabase_admin_client
+
+    admin_client = get_supabase_admin_client()
+
+    try:
+        # Fetch latest user data
+        result = admin_client.table("user_profiles")\
+            .select("*")\
+            .eq("id", user["id"])\
+            .single()\
+            .execute()
+
+        if result.data:
+            user_data = result.data
+
+            # Account Information (Read-only)
+            st.markdown("### Account Information")
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.text_input("Email", value=user_data["email"], disabled=True,
+                             help="Email cannot be changed")
+                st.text_input("Role", value=user_data["role"].upper(), disabled=True,
+                             help="Contact an admin to change your role")
+
+            with col2:
+                created_at = user_data.get("created_at", "N/A")
+                st.text_input("Account Created", value=created_at, disabled=True)
+                last_login = user_data.get("last_login", "Never")
+                st.text_input("Last Login", value=last_login, disabled=True)
+
+            # Editable Profile Information
+            st.markdown("### Profile Information")
+
+            with st.form("profile_form"):
+                full_name = st.text_input(
+                    "Full Name",
+                    value=user_data.get("full_name", ""),
+                    placeholder="Enter your full name"
+                )
+
+                # Preferences
+                st.markdown("### Preferences")
+                preferences = user_data.get("preferences", {})
+
+                theme = st.selectbox(
+                    "Theme",
+                    options=["light", "dark"],
+                    index=["light", "dark"].index(preferences.get("theme", "light"))
+                )
+
+                notifications_enabled = st.checkbox(
+                    "Enable Notifications",
+                    value=preferences.get("notifications_enabled", True)
+                )
+
+                email_alerts = st.checkbox(
+                    "Enable Email Alerts",
+                    value=preferences.get("email_alerts", False)
+                )
+
+                if st.form_submit_button("💾 Save Profile", type="primary"):
+                    # Update user profile
+                    update_data = {
+                        "full_name": full_name if full_name else None,
+                        "preferences": {
+                            "theme": theme,
+                            "notifications_enabled": notifications_enabled,
+                            "email_alerts": email_alerts
+                        },
+                        "updated_at": "now()"
+                    }
+
+                    admin_client.table("user_profiles")\
+                        .update(update_data)\
+                        .eq("id", user["id"])\
+                        .execute()
+
+                    # Update session state
+                    st.session_state.user["full_name"] = full_name
+
+                    st.success("✅ Profile updated successfully!")
+                    st.rerun()
+
+            # Change Password Section
+            st.markdown("### Change Password")
+
+            with st.form("password_change_form"):
+                current_password = st.text_input(
+                    "Current Password",
+                    type="password",
+                    placeholder="Enter your current password"
+                )
+
+                new_password = st.text_input(
+                    "New Password",
+                    type="password",
+                    placeholder="Enter new password (min 6 characters)"
+                )
+
+                confirm_password = st.text_input(
+                    "Confirm New Password",
+                    type="password",
+                    placeholder="Re-enter new password"
+                )
+
+                if st.form_submit_button("🔒 Change Password", type="primary"):
+                    # Validation
+                    if not current_password or not new_password or not confirm_password:
+                        st.error("All fields are required")
+                    elif len(new_password) < 6:
+                        st.error("New password must be at least 6 characters")
+                    elif new_password != confirm_password:
+                        st.error("New passwords do not match")
+                    else:
+                        try:
+                            # Update password using Supabase Auth
+                            auth_service.supabase.auth.update_user({
+                                "password": new_password
+                            })
+
+                            st.success("✅ Password changed successfully!")
+                            logger.info(f"Password changed for user: {user['email']}")
+                        except Exception as pwd_error:
+                            st.error(f"Failed to change password: {pwd_error}")
+                            logger.error(f"Password change error for {user['email']}: {pwd_error}")
+
+            # Danger Zone
+            st.markdown("### Danger Zone")
+            with st.expander("⚠️ Delete Account", expanded=False):
+                st.warning("**Warning:** This action cannot be undone. Your account and all associated data will be permanently deleted.")
+                st.info("🚧 Account deletion functionality coming soon. Contact an admin to delete your account.")
+
+        else:
+            st.error("Could not load user profile.")
+
+    except Exception as e:
+        st.error(f"Error loading profile: {e}")
+        logger.error(f"Error in my_profile_settings: {e}")
+
+
 def backup_settings():
     """Backup and restore settings"""
     st.subheader("💾 Settings Backup & Restore")
@@ -1501,6 +1673,176 @@ def backup_settings():
             st.success("✅ Manual backup created successfully!")
         else:
             st.error("❌ Failed to create backup.")
+
+
+def admin_tab():
+    """Admin tab for user management and system administration"""
+    st.header("👥 Admin Panel")
+    st.markdown("Manage users, permissions, and system settings.")
+
+    # Create sub-tabs within Admin
+    admin_tab1, admin_tab2 = st.tabs(["👥 User Management", "⚙️ System Settings"])
+
+    with admin_tab1:
+        user_management_section()
+
+    with admin_tab2:
+        system_settings_section()
+
+
+def user_management_section():
+    """User management section within Admin tab"""
+    st.subheader("User Management")
+    st.markdown("View and manage all users in the system.")
+
+    # Get admin client to fetch all users
+    from services.supabase_client import get_supabase_admin_client
+
+    admin_client = get_supabase_admin_client()
+
+    try:
+        # Fetch all users
+        result = admin_client.table("user_profiles")\
+            .select("*")\
+            .order("created_at", desc=True)\
+            .execute()
+
+        if result.data:
+            users = result.data
+
+            st.markdown(f"**Total Users:** {len(users)}")
+
+            # Display users in a table-like format
+            for i, user in enumerate(users):
+                with st.container(border=True):
+                    col1, col2, col3, col4 = st.columns([3, 2, 1, 2])
+
+                    with col1:
+                        st.markdown(f"**{user.get('full_name') or 'No Name'}**")
+                        st.caption(user["email"])
+
+                    with col2:
+                        # Role badge
+                        role = user["role"]
+                        role_color = {
+                            "admin": "#FF6B35",
+                            "user": "#00A86B",
+                            "guest": "#666666"
+                        }.get(role, "#666666")
+
+                        st.markdown(
+                            f"<span style='background-color: {role_color}; "
+                            f"color: white; padding: 4px 12px; border-radius: 15px; "
+                            f"font-size: 12px; font-weight: bold;'>{role.upper()}</span>",
+                            unsafe_allow_html=True
+                        )
+
+                    with col3:
+                        # Active status
+                        is_active = user.get("is_active", True)
+                        status_icon = "✅" if is_active else "❌"
+                        st.markdown(f"{status_icon} {'Active' if is_active else 'Inactive'}")
+
+                    with col4:
+                        # Action buttons
+                        current_user = st.session_state.get("user")
+
+                        # Prevent admin from modifying their own account
+                        if current_user and user["id"] != current_user["id"]:
+                            # Role change
+                            with st.popover("Change Role"):
+                                new_role = st.selectbox(
+                                    "Select new role:",
+                                    options=["admin", "user", "guest"],
+                                    index=["admin", "user", "guest"].index(role),
+                                    key=f"role_select_{i}"
+                                )
+
+                                if st.button("Update Role", key=f"update_role_{i}"):
+                                    admin_client.table("user_profiles")\
+                                        .update({"role": new_role})\
+                                        .eq("id", user["id"])\
+                                        .execute()
+
+                                    st.success(f"Role updated to {new_role}")
+                                    st.rerun()
+
+                            # Toggle active status
+                            if is_active:
+                                if st.button("Deactivate", key=f"deactivate_{i}", type="secondary"):
+                                    admin_client.table("user_profiles")\
+                                        .update({"is_active": False})\
+                                        .eq("id", user["id"])\
+                                        .execute()
+
+                                    st.success("User deactivated")
+                                    st.rerun()
+                            else:
+                                if st.button("Activate", key=f"activate_{i}", type="primary"):
+                                    admin_client.table("user_profiles")\
+                                        .update({"is_active": True})\
+                                        .eq("id", user["id"])\
+                                        .execute()
+
+                                    st.success("User activated")
+                                    st.rerun()
+                        else:
+                            st.caption("(You)")
+
+                    # Additional user info in expander
+                    with st.expander("View Details"):
+                        st.markdown(f"**User ID:** `{user['id']}`")
+                        st.markdown(f"**Created:** {user.get('created_at', 'N/A')}")
+                        st.markdown(f"**Last Login:** {user.get('last_login', 'Never')}")
+
+                        preferences = user.get("preferences", {})
+                        if preferences:
+                            st.markdown("**Preferences:**")
+                            st.json(preferences)
+
+                        # Activity logs
+                        st.markdown("---")
+                        st.markdown("**Recent Activity:**")
+                        try:
+                            activity_result = admin_client.table("activity_log")\
+                                .select("*")\
+                                .eq("user_id", user["id"])\
+                                .order("created_at", desc=True)\
+                                .limit(10)\
+                                .execute()
+
+                            if activity_result.data:
+                                for activity in activity_result.data:
+                                    action = activity.get("action", "Unknown")
+                                    timestamp = activity.get("created_at", "N/A")
+                                    resource_type = activity.get("resource_type", "")
+                                    st.caption(f"• {timestamp[:19]} - {action} {resource_type}")
+                            else:
+                                st.caption("No activity logs found")
+                        except Exception as log_error:
+                            st.caption(f"Could not load activity logs: {log_error}")
+
+        else:
+            st.info("No users found in the system.")
+
+    except Exception as e:
+        st.error(f"Error fetching users: {e}")
+        logger.error(f"Error in user_management_section: {e}")
+
+
+def system_settings_section():
+    """System settings section within Admin tab"""
+    st.subheader("System Settings")
+    st.markdown("Configure system-wide settings and preferences.")
+
+    st.info("🚧 System settings coming soon. This will include:")
+    st.markdown("""
+    - Database connection settings
+    - Email notification settings
+    - System logs and monitoring
+    - API usage statistics
+    - Backup and restore options
+    """)
 
 
 if __name__ == "__main__":

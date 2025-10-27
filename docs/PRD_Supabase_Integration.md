@@ -1000,58 +1000,56 @@ def start_manual_refresh():
 
 ## 4. Implementation Plan
 
-**Current Status: Phase 1 Complete, Phase 2 Ready to Start**
+**Current Status: Phase 1 Complete, Phase 2 In Progress**
 
 | Phase | Status | Completion Date | Next Actions |
 |-------|--------|----------------|--------------|
-| Phase 1: Foundation Setup | ✅ Complete | October 26, 2025 | - |
-| Phase 2: Core Cloud Features | 🟡 Ready to Start | - | Authentication UI, Data Migration |
+| Phase 1: Foundation Setup | ✅ Complete | October 27, 2025 | - |
+| Phase 2: Core Cloud Features | 🔄 In Progress | - | Data Migration (user preferences, paper cache) |
 | Phase 3: Advanced Features | ⏳ Planned | - | - |
 
-### 4.1 Phase 1: Foundation Setup ✅ COMPLETED (October 26, 2025)
+### 4.1 Phase 1: Foundation Setup ✅ COMPLETED (October 27, 2025)
 
 #### 4.1.1 Supabase Project Setup ✅
 - [x] Create Supabase project (ID: `lrlefufmpvxhfumbtuwc`)
-- [x] Set up database schema and tables (username-first authentication)
+- [x] Set up database schema and tables (email-based authentication)
 - [x] Configure Row Level Security policies (admin/user/guest roles)
 - [x] Create database functions for role checking (`is_admin()`, `get_user_role()`)
 - [x] Set up migrations for version control
 - [x] Insert default system settings
 - [ ] Set up storage buckets for documents (Phase 3)
 
-#### 4.1.2 Authentication Integration ✅
+#### 4.1.2 Authentication Integration ✅ COMPLETED
 - [x] Install Supabase Python client (`supabase-py`)
 - [x] Create connection module (`services/supabase_client.py`)
 - [x] Set up environment variables (`.env` with credentials)
-- [x] Create first admin user (username: `admin`)
+- [x] Create first admin user (email: `tk.hfes@gmail.com`)
 - [x] Test database connection and verify setup
-- [ ] Implement user authentication in Streamlit UI (Phase 2 - NEXT)
-- [ ] Add user registration and login flows (Phase 2 - NEXT)
-- [ ] Create user profile management UI (Phase 2)
-- [ ] Set up session management in Streamlit (Phase 2)
+- [x] Implement user authentication in Streamlit UI ✅ **DONE**
+- [x] Add user registration and login flows ✅ **DONE**
+- [x] Set up session management in Streamlit ✅ **DONE**
+- [x] User self-registration working (signup form)
+- [x] Admin tools created (promote users, list users)
 
-#### 4.1.3 Basic Data Migration (Phase 2 - PENDING)
-- [ ] Create migration scripts for existing local data
-- [ ] Migrate user preferences from JSON to Supabase
-- [ ] Migrate paper cache from JSON to Supabase
-- [ ] Set up data synchronization between local and cloud
-- [ ] Implement offline mode with sync capability
+### 4.2 Phase 2: Core Cloud Features 🔄 IN PROGRESS
 
-### 4.2 Phase 2: Core Cloud Features
+#### 4.2.1 User Preferences Migration (PRIORITY - START HERE)
+- [ ] Create migration script for `user_preferences.json` → Supabase `user_profiles.preferences`
+- [ ] Migrate keywords from local JSON to user profile
+- [ ] Migrate journal settings and exclusions to user profile
+- [ ] Migrate search settings (days_back, search_mode, etc.)
+- [ ] Test preference synchronization between local and cloud
+- [ ] Update `SettingsService` to read/write from Supabase instead of JSON
 
-#### 4.2.1 Personal Project Management  
-- [ ] Implement personal project creation and organization
-- [ ] Add project templates for research areas (AD, neuroimaging, etc.)
-- [ ] Create personal project analytics and insights
-- [ ] Implement project-specific keyword learning
+#### 4.2.2 Paper Cache Migration
+- [ ] Create migration script for `paper_cache.json` → Supabase `papers` table
+- [ ] Deduplicate papers during migration
+- [ ] Migrate paper metadata (title, authors, abstract, etc.)
+- [ ] Link migrated papers to user's default project
+- [ ] Update paper fetchers to save directly to Supabase
+- [ ] Implement local cache sync with cloud storage
 
-#### 4.2.2 Cloud Paper Storage
-- [ ] Migrate paper storage to Supabase
-- [ ] Implement advanced search with PostgreSQL full-text search
-- [ ] Add personal paper tagging and categorization
-- [ ] Create personal paper recommendations based on reading history
-
-#### 4.2.3 Background Processing System
+#### 4.2.3 Background Processing System (Future)
 - [ ] Implement Supabase Edge Functions for background paper fetching
 - [ ] Set up scheduled nightly paper refresh with cron jobs
 - [ ] Create background keyword intelligence learning pipeline
@@ -1059,21 +1057,37 @@ def start_manual_refresh():
 - [ ] Implement real-time status updates (last updated, progress indicators)
 - [ ] Set up background email/notification delivery system
 
-### 4.3 Phase 3: Advanced Features
+### 4.3 Phase 3: UI/UX & Advanced Features 🔄 IN PROGRESS
 
-#### 4.3.1 Personal Knowledge Base Enhancement
+#### 4.3.1 User Management UI ✅ COMPLETE (October 27, 2025)
+- [x] Move login status & logout button to top-right header ✅ **DONE**
+- [x] Add "Admin" tab (visible only to admin users) ✅ **DONE**
+- [x] Create User Management page in Admin tab ✅ **DONE**
+  - [x] List all users with roles and last login
+  - [x] Promote/demote user roles (admin/user/guest)
+  - [x] Activate/deactivate users
+  - [x] View user activity logs ✅ **DONE**
+- [x] Add "My Profile" section to Settings tab (for all users) ✅ **DONE**
+  - [x] View/edit email (view only, edit not allowed)
+  - [x] View/edit full name
+  - [x] View account info (role, created date)
+  - [x] Change password functionality ✅ **DONE**
+
+**⚠️ NOTE:** Phase 3.1 was implemented before Phase 2 data migration. These features are functional but Phase 2 should be prioritized next.
+
+#### 4.3.2 Personal Knowledge Base Enhancement
 - [ ] Integrate personal document storage with Supabase Storage
 - [ ] Implement vector search for personal RAG functionality
 - [ ] Add personal note-taking and annotation features
 - [ ] Build personal research timeline and knowledge mapping
 
-#### 4.3.2 Personal Analytics and Insights
+#### 4.3.3 Personal Analytics and Insights
 - [ ] Create personal research analytics dashboard
 - [ ] Implement personal trend analysis for research topics
 - [ ] Add personal reading patterns and productivity insights
 - [ ] Build research progress tracking and milestone metrics
 
-#### 4.3.3 Personal Data and Integration Support
+#### 4.3.4 Personal Data and Integration Support
 - [ ] Implement personal data export/import functionality
 - [ ] Add personal backup and restore capabilities
 - [ ] Build basic reference manager integration (Zotero export)

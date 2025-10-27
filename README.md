@@ -317,3 +317,49 @@ For issues or questions:
 ---
 
 **Note**: This app requires an internet connection to fetch papers from the various APIs. The app will cache results locally to improve performance on subsequent runs. 
+
+---
+
+## 📚 Documentation
+
+### Setup & Configuration
+- **[Setup Guide](docs/setup/SETUP_GUIDE.md)** - Quick setup for new installations
+- **[User Guide](docs/USER_GUIDE.md)** - Complete user documentation
+- **[Settings Guide](docs/SETTINGS_GUIDE.md)** - Configure keywords, journals, scoring
+
+### Admin Tools
+- **[Admin Tools](utils/admin_tools/README.md)** - Manage users and admins
+- **Promote to Admin**: `python utils/admin_tools/promote_to_admin.py`
+- **List Users**: `python utils/admin_tools/list_users.py`
+
+### Technical Documentation
+- **[Supabase Integration PRD](docs/PRD_Supabase_Integration.md)** - Database & auth architecture
+- **[UX Improvements](docs/ux_improvements.md)** - UI/UX enhancement plans
+
+---
+
+## 🗄️ Database
+
+This app uses **Supabase** (PostgreSQL) for:
+- User authentication (email-based)
+- Role-based access control (admin/user/guest)
+- Cloud data storage
+- Multi-user support
+
+**Database Schema**: See [docs/setup/DROP_AND_RECREATE_EMAIL_AUTH.sql](docs/setup/DROP_AND_RECREATE_EMAIL_AUTH.sql)
+
+---
+
+## 👥 Multi-User Setup
+
+**Adding Users:**
+1. Users can self-register via the app
+2. Or admin creates them: `python utils/admin_tools/create_admin_email.py`
+
+**Making Someone Admin:**
+```bash
+python utils/admin_tools/promote_to_admin.py
+```
+
+See [User Guide](docs/USER_GUIDE.md) for details.
+

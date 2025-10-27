@@ -168,7 +168,7 @@ def render_auth_page(auth_service: AuthService):
 
 def render_user_menu(auth_service: AuthService):
     """
-    Render user menu in sidebar with logout option.
+    Render user menu in top-right corner with logout option.
 
     Args:
         auth_service: AuthService instance
@@ -180,16 +180,25 @@ def render_user_menu(auth_service: AuthService):
     if not user:
         return
 
-    with st.sidebar:
-        st.markdown("---")
-        st.markdown(f"### 👤 {user.get('full_name') or user['email']}")
+    # Create top-right user menu using columns
+    col1, col2 = st.columns([6, 1])
 
-        if user.get("full_name"):
-            st.caption(user["email"])
+    with col2:
+        st.markdown(
+            f"""
+            <div style="text-align: right; padding: 5px 0;">
+                <div style="font-size: 14px; font-weight: bold;">
+                    👤 {user.get('full_name') or user['email']}
+                </div>
+                <div style="font-size: 11px; color: #666;">
+                    {user['role'].upper()}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-        st.caption(f"Role: {user['role'].upper()}")
-
-        if st.button("🚪 Logout", use_container_width=True):
+        if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
             auth_service.logout()
             st.session_state.authenticated = False
             st.session_state.user = None
@@ -219,7 +228,7 @@ def require_auth(auth_service: AuthService) -> bool:
     if current_user:
         st.session_state.authenticated = True
         st.session_state.user = current_user
-        logger.info(f"Session restored for user: {current_user['username']}")
+        logger.info(f"Session restored for user: {current_user['email']}")
         return True
 
     # Not authenticated - show login page
