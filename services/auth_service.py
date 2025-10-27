@@ -118,15 +118,31 @@ class AuthService:
                 }
 
             # Create user profile using admin client
+            from config import settings
             from services.supabase_client import get_supabase_admin_client
             admin_client = get_supabase_admin_client()
+
+            # Build default preferences from settings.py
+            default_preferences = {
+                "theme": settings.UI_SETTINGS.get("theme", "light"),
+                "notifications_enabled": True,
+                "email_alerts": False,
+                "keywords": settings.DEFAULT_KEYWORDS,
+                "target_journals": settings.TARGET_JOURNALS,
+                "journal_exclusions": settings.JOURNAL_EXCLUSIONS,
+                "journal_scoring": settings.JOURNAL_SCORING,
+                "keyword_scoring": settings.KEYWORD_SCORING,
+                "search_settings": settings.DEFAULT_SEARCH_SETTINGS,
+                "ui_settings": settings.UI_SETTINGS,
+            }
 
             profile_data = {
                 "id": auth_response.user.id,
                 "email": email,
                 "full_name": full_name,
                 "role": "user",  # Default role
-                "is_active": True
+                "is_active": True,
+                "preferences": default_preferences
             }
 
             profile_result = admin_client.table("user_profiles")\

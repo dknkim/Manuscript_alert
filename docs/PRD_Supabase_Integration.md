@@ -1033,13 +1033,19 @@ def start_manual_refresh():
 
 ### 4.2 Phase 2: Core Cloud Features 🔄 IN PROGRESS
 
-#### 4.2.1 User Preferences Migration (PRIORITY - START HERE)
-- [ ] Create migration script for `user_preferences.json` → Supabase `user_profiles.preferences`
-- [ ] Migrate keywords from local JSON to user profile
-- [ ] Migrate journal settings and exclusions to user profile
-- [ ] Migrate search settings (days_back, search_mode, etc.)
-- [ ] Test preference synchronization between local and cloud
-- [ ] Update `SettingsService` to read/write from Supabase instead of JSON
+#### 4.2.1 User Preferences Migration ✅ COMPLETE (October 27, 2025)
+- [x] Create migration script for populating user preferences ✅ **DONE**
+- [x] New users automatically get default preferences on signup ✅ **DONE**
+- [x] Existing admin user populated with default preferences ✅ **DONE**
+- [x] Keywords, journal settings, search settings all migrated ✅ **DONE**
+- [x] Update `SettingsService` to read/write from Supabase ✅ **DONE**
+- [x] Update `app.py` to use user-specific settings from Supabase ✅ **DONE**
+
+**Implementation Summary:**
+- `config/settings.py` now serves as DEFAULT settings template
+- Each user gets their own copy of preferences in `user_profiles.preferences` JSONB field
+- Settings are user-specific and stored in Supabase
+- `SettingsService` supports both Supabase (current) and legacy file-based storage
 
 #### 4.2.2 Paper Cache Migration
 - [ ] Create migration script for `paper_cache.json` → Supabase `papers` table
@@ -1067,6 +1073,7 @@ def start_manual_refresh():
   - [x] Promote/demote user roles (admin/user/guest)
   - [x] Activate/deactivate users
   - [x] View user activity logs ✅ **DONE**
+  - [ ] View/edit other users' preferences (keywords, settings, etc.) - **TODO after Phase 2**
 - [x] Add "My Profile" section to Settings tab (for all users) ✅ **DONE**
   - [x] View/edit email (view only, edit not allowed)
   - [x] View/edit full name

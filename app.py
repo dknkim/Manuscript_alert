@@ -39,7 +39,7 @@ def initialize_components():
         PubMedFetcher(),
         KeywordMatcher(),
         DataStorage(),
-        SettingsService(),
+        SettingsService(use_supabase=True),  # Use Supabase for settings storage
     )
 
 
@@ -60,17 +60,38 @@ def initialize_auth():
 )
 auth_service = initialize_auth()
 
-# Load settings from config with caching to prevent excessive disk reads
+# Helper to get current user ID from session
+def get_current_user_id():
+    """Get the current logged-in user's ID from session state"""
+    user = st.session_state.get("user")
+    if user:
+        return user.get("id")
+    return None
+
+# Load settings from Supabase user profile with caching to prevent excessive reads
 @st.cache_data(ttl=60)  # Cache for 60 seconds
-def get_current_settings():
-    logger.debug("Fetching current settings from settings_service")
-    settings_dict = settings_service.load_settings()
+def get_current_settings(user_id: str = None):
+    """
+    Load settings for the current user from Supabase.
+
+    Args:
+        user_id: User ID to load settings for (if None, gets from session)
+
+    Returns:
+        Dict containing user settings
+    """
+    if not user_id:
+        user_id = get_current_user_id()
+
+    logger.debug(f"Fetching current settings from Supabase for user: {user_id}")
+    settings_dict = settings_service.load_settings(user_id=user_id)
     logger.debug(f"Retrieved settings with {len(settings_dict.get('keywords', []))} keywords")
     return settings_dict
 
 # Get current keywords from settings
 def get_current_keywords():
-    settings_dict = get_current_settings()
+    user_id = get_current_user_id()
+    settings_dict = get_current_settings(user_id)
     return settings_dict.get("keywords", settings.DEFAULT_KEYWORDS)
 
 
@@ -1026,9 +1047,10 @@ def keyword_settings(current_settings):
             },
         }
 
-        # Save to file
+        # Save to Supabase
+        user_id = get_current_user_id()
         logger.info("Calling settings_service.save_settings()...")
-        save_result = settings_service.save_settings(current_settings)
+        save_result = settings_service.save_settings(current_settings, user_id=user_id)
         logger.info(f"Save result: {save_result}")
 
         if save_result:
@@ -1131,9 +1153,10 @@ def journal_settings(current_settings):
         # Simplified: all exclusions apply to all journal types
         current_settings["journal_exclusions"] = exclusion_list
 
-        # Save to file
+        # Save to Supabase
+        user_id = get_current_user_id()
         logger.info("Calling settings_service.save_settings()...")
-        save_result = settings_service.save_settings(current_settings)
+        save_result = settings_service.save_settings(current_settings, user_id=user_id)
         logger.info(f"Save result: {save_result}")
 
         if save_result:
@@ -1288,9 +1311,10 @@ def scoring_settings(current_settings):
             "journal_quality_filter": search_settings.get("journal_quality_filter", False),
         }
 
-        # Save to file
+        # Save to Supabase
+        user_id = get_current_user_id()
         logger.info("Calling settings_service.save_settings()...")
-        save_result = settings_service.save_settings(current_settings)
+        save_result = settings_service.save_settings(current_settings, user_id=user_id)
         logger.info(f"Save result: {save_result}")
 
         if save_result:
@@ -1385,7 +1409,8 @@ def models_tab():
                             loaded_settings = json.load(f)
 
                         # Save the loaded settings as current settings
-                        if settings_service.save_settings(loaded_settings):
+                        user_id = get_current_user_id()
+                        if settings_service.save_settings(loaded_settings, user_id=user_id):
                             st.success(f"✅ Model '{model_name}' loaded successfully!")
                             get_current_settings.clear()  # Clear cache before rerun
                             st.rerun()
@@ -1464,7 +1489,8 @@ def models_tab():
                 imported_settings = json.load(uploaded_file)
 
                 if st.button("Import Settings"):
-                    if settings_service.save_settings(imported_settings):
+                    user_id = get_current_user_id()
+                    if settings_service.save_settings(imported_settings, user_id=user_id):
                         st.success("✅ Settings imported successfully!")
                         get_current_settings.clear()  # Clear cache before rerun
                         st.rerun()
@@ -1668,8 +1694,9 @@ def backup_settings():
     st.markdown("### Create Manual Backup")
     if st.button("📁 Create Backup Now"):
         # Load current settings and save them (this will create a backup)
+        user_id = get_current_user_id()
         current_settings = get_current_settings()
-        if settings_service.save_settings(current_settings):
+        if settings_service.save_settings(current_settings, user_id=user_id):
             st.success("✅ Manual backup created successfully!")
         else:
             st.error("❌ Failed to create backup.")

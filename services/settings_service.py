@@ -1,6 +1,8 @@
 """
 Settings management service for the Manuscript Alert System.
 Handles loading, saving, and updating settings that persist across app runs.
+
+After Phase 2 migration: Settings are stored in Supabase user_profiles.preferences
 """
 
 import os
@@ -17,9 +19,16 @@ from utils.logger import Logger
 logger = Logger(__name__)
 
 class SettingsService:
-    """Manages application settings with persistence to source files"""
+    """Manages application settings with persistence to Supabase user profiles"""
 
-    def __init__(self):
+    def __init__(self, use_supabase=True):
+        """
+        Initialize SettingsService.
+
+        Args:
+            use_supabase: If True, use Supabase for storage. If False, use legacy settings.py file.
+        """
+        self.use_supabase = use_supabase
         self.settings_file = "config/settings.py"
         self.backup_dir = "config/backups"
         self._ensure_backup_dir()
@@ -29,9 +38,56 @@ class SettingsService:
         if not os.path.exists(self.backup_dir):
             os.makedirs(self.backup_dir)
 
-    def load_settings(self) -> dict[str, Any]:
-        """Load current settings from the settings.py file"""
+    def load_settings(self, user_id: str = None) -> dict[str, Any]:
+        """
+        Load settings - from Supabase user profile or legacy settings.py file.
+
+        Args:
+            user_id: User ID to load settings for (required if use_supabase=True)
+
+        Returns:
+            Dict containing all user settings
+        """
         logger.info(">>> SettingsService.load_settings() called")
+
+        if self.use_supabase:
+            return self._load_settings_from_supabase(user_id)
+        else:
+            return self._load_settings_from_file()
+
+    def _load_settings_from_supabase(self, user_id: str) -> dict[str, Any]:
+        """Load settings from Supabase user profile preferences"""
+        if not user_id:
+            logger.error("user_id required for Supabase settings")
+            return self._get_default_settings()
+
+        try:
+            from services.supabase_client import get_supabase_admin_client
+
+            logger.debug(f"Loading settings from Supabase for user: {user_id}")
+            admin_client = get_supabase_admin_client()
+
+            result = admin_client.table("user_profiles")\
+                .select("preferences")\
+                .eq("id", user_id)\
+                .single()\
+                .execute()
+
+            if result.data and result.data.get("preferences"):
+                preferences = result.data["preferences"]
+                logger.info(f"Settings loaded from Supabase: {len(preferences.get('keywords', []))} keywords")
+                return preferences
+            else:
+                logger.warning(f"No preferences found for user {user_id}, using defaults")
+                return self._get_default_settings()
+
+        except Exception as e:
+            logger.error(f"Error loading settings from Supabase: {e}", exc_info=True)
+            return self._get_default_settings()
+
+    def _load_settings_from_file(self) -> dict[str, Any]:
+        """Load settings from legacy settings.py file"""
+        logger.info("Loading settings from legacy settings.py file")
         try:
             # Import the settings module
             import importlib.util
@@ -149,11 +205,62 @@ class SettingsService:
             },
         }
 
-    def save_settings(self, settings: dict[str, Any]) -> bool:
-        """Save settings to the settings.py file by completely rewriting it"""
+    def save_settings(self, settings: dict[str, Any], user_id: str = None) -> bool:
+        """
+        Save settings - to Supabase user profile or legacy settings.py file.
+
+        Args:
+            settings: Dict containing all settings to save
+            user_id: User ID to save settings for (required if use_supabase=True)
+
+        Returns:
+            True if successful, False otherwise
+        """
         logger.warning(">>> SettingsService.save_settings() called")
         logger.info(f"Saving settings: {len(settings.get('keywords', []))} keywords")
 
+        if self.use_supabase:
+            return self._save_settings_to_supabase(settings, user_id)
+        else:
+            return self._save_settings_to_file(settings)
+
+    def _save_settings_to_supabase(self, settings: dict[str, Any], user_id: str) -> bool:
+        """Save settings to Supabase user profile preferences"""
+        if not user_id:
+            logger.error("user_id required for Supabase settings")
+            st.error("Cannot save settings: user not identified")
+            return False
+
+        try:
+            from services.supabase_client import get_supabase_admin_client
+
+            logger.debug(f"Saving settings to Supabase for user: {user_id}")
+            admin_client = get_supabase_admin_client()
+
+            result = admin_client.table("user_profiles")\
+                .update({
+                    "preferences": settings,
+                    "updated_at": "now()"
+                })\
+                .eq("id", user_id)\
+                .execute()
+
+            if result.data:
+                logger.warning("✅ Settings saved to Supabase successfully!")
+                return True
+            else:
+                logger.error("Failed to save settings to Supabase")
+                st.error("Failed to save settings")
+                return False
+
+        except Exception as e:
+            logger.error(f"❌ Error saving settings to Supabase: {e}", exc_info=True)
+            st.error(f"Error saving settings: {e}")
+            return False
+
+    def _save_settings_to_file(self, settings: dict[str, Any]) -> bool:
+        """Save settings to legacy settings.py file"""
+        logger.info("Saving settings to legacy settings.py file")
         try:
             # Create backup first
             logger.debug("Creating backup before save...")
