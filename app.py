@@ -5,12 +5,15 @@ from datetime import datetime, timedelta
 import pandas as pd
 import streamlit as st
 
+from components.auth_ui import render_user_menu, require_auth
 from config import settings
 from fetchers.arxiv_fetcher import ArxivFetcher
 from fetchers.biorxiv_fetcher import BioRxivFetcher
 from fetchers.pubmed_fetcher import PubMedFetcher
 from processors.keyword_matcher import KeywordMatcher
+from services.auth_service import AuthService
 from services.settings_service import SettingsService
+from services.supabase_client import get_supabase_client
 from storage.data_storage import DataStorage
 from utils.logger import Logger
 
@@ -40,9 +43,22 @@ def initialize_components():
     )
 
 
+@st.cache_resource
+def initialize_auth():
+    """Initialize authentication service with Supabase client."""
+    try:
+        supabase_client = get_supabase_client()
+        return AuthService(supabase_client)
+    except Exception as e:
+        logger.error(f"Failed to initialize auth service: {e}")
+        st.error("Failed to connect to authentication service. Please check your .env file.")
+        st.stop()
+
+
 (arxiv_fetcher, biorxiv_fetcher, pubmed_fetcher, keyword_matcher, data_storage, settings_service) = (
     initialize_components()
 )
+auth_service = initialize_auth()
 
 # Load settings from config with caching to prevent excessive disk reads
 @st.cache_data(ttl=60)  # Cache for 60 seconds
@@ -61,11 +77,19 @@ def get_current_keywords():
 def main():
     logger.info("=== App started/rerun ===")
 
+    # Require authentication - if not authenticated, show login page and stop
+    if not require_auth(auth_service):
+        return
+
+    # User is authenticated - show main app
     st.title("Manuscript Alert System")
     st.markdown(
         "Stay updated with the latest Pubmed, arXiv, biorXiv, "
         "and medrXiv papers in your field of interest"
     )
+
+    # Show user menu in sidebar
+    render_user_menu(auth_service)
 
     # Initialize session state for active tab tracking
     if "active_main_tab" not in st.session_state:

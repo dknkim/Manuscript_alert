@@ -92,21 +92,20 @@ Integrate Supabase to transform the system from a local research tool into a clo
 
 #### 3.1.1 Core Tables
 
-**Authentication Model (Updated v2.0)**
+**Authentication Model (Updated v3.0 - Email-Based)**
 
-The system uses a **username-based authentication** model:
-- **Primary Login**: Users login with `username` + `password` (not email)
-- **Email Purpose**: Required for notifications and account recovery only
+The system uses a **email-based authentication** model:
+- **Primary Login**: Users login with `email` + `password` (standard Supabase Auth)
+- **Email Purpose**: Primary identifier for authentication
 - **Role-Based Access**: Three levels - admin, user, guest
-- **Updateable Credentials**: Users can change both username and email (uniqueness enforced)
+- **Simplified Design**: Works natively with Supabase Auth without workarounds
 
 **Users Table (managed by Supabase Auth)**
 ```sql
 -- Automatically created by Supabase
 users (
   id UUID PRIMARY KEY,
-  email TEXT,  -- For notifications/recovery, NOT login
-  raw_user_meta_data JSONB,  -- Stores username and role
+  email TEXT UNIQUE NOT NULL,  -- Primary login identifier
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 )
@@ -117,30 +116,28 @@ users (
 CREATE TYPE user_role AS ENUM ('admin', 'user', 'guest');
 ```
 
-**User Profiles Table (Updated v2.0)**
+**User Profiles Table (Updated v3.0 - Email-Based)**
 ```sql
 CREATE TABLE user_profiles (
   id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,  -- Required for notifications
-  username TEXT UNIQUE NOT NULL,  -- Primary login identifier (updatable)
+  email TEXT UNIQUE NOT NULL,  -- Primary login identifier (matches auth.users.email)
   full_name TEXT,
-  role user_role DEFAULT 'user',  -- admin/user/guest
-  is_active BOOLEAN DEFAULT TRUE,  -- Soft delete flag
+  role user_role DEFAULT 'user' NOT NULL,  -- admin/user/guest
+  is_active BOOLEAN DEFAULT TRUE NOT NULL,  -- Soft delete flag
   preferences JSONB DEFAULT '{
     "theme": "light",
     "notifications_enabled": true,
     "email_alerts": false
   }',
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
+  created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
   last_login TIMESTAMP,
   created_by UUID REFERENCES auth.users(id)  -- Audit trail
 );
 
 -- Comments for clarity
-COMMENT ON COLUMN user_profiles.username IS 'Primary login identifier - users login with username, not email';
-COMMENT ON COLUMN user_profiles.email IS 'Required for notifications and account recovery (updatable)';
-COMMENT ON TABLE user_profiles IS 'Users can update their own username and email (uniqueness enforced). Only admins can change roles.';
+COMMENT ON COLUMN user_profiles.email IS 'Primary login identifier - users login with email + password';
+COMMENT ON TABLE user_profiles IS 'User profiles with email-based authentication. Works natively with Supabase Auth.';
 ```
 
 **System Settings Table (Admin-Only)**
@@ -2070,7 +2067,7 @@ This upgrade transforms your local research tool into a **smart, cloud-enabled p
 
 ---
 
-## 14. Implementation Status (October 26, 2025 - ✅ PHASE 1 COMPLETE)
+## 14. Implementation Status (October 27, 2025 - ✅ PHASE 1 & 2.1 COMPLETE)
 
 ### 14.1 Completed Setup ✅
 
@@ -2081,62 +2078,71 @@ This upgrade transforms your local research tool into a **smart, cloud-enabled p
 - ✅ Access token configured for CLI operations
 - ✅ Environment variables configured in `.env` file
 
-**Database Schema - Fresh Start:**
-- ✅ **All tables dropped and recreated with username-first model**
-- ✅ Username is PRIMARY login identifier (REQUIRED, NOT NULL, UNIQUE)
-- ✅ Email is OPTIONAL (only for notifications/recovery, can be NULL)
+**Database Schema - Email-Based Auth (v3.0):**
+- ✅ **All tables dropped and recreated with email-based authentication**
+- ✅ Email is PRIMARY login identifier (REQUIRED, NOT NULL, UNIQUE)
+- ✅ Simplified schema that works natively with Supabase Auth
 - ✅ User roles enum (admin/user/guest) implemented
 - ✅ Row Level Security (RLS) policies configured and tested
 - ✅ Helper functions for role checking (`is_admin()`, `get_user_role()`)
-- ✅ Uniqueness validation triggers for username/email updates
 - ✅ Activity log table for audit trail
 - ✅ System settings table with default values inserted
 - ✅ Background jobs tracking table created
 - ✅ All tables verified with proper indexes
 
 **Migration Files:**
-- ✅ Fresh start migration: `supabase/migrations/20251026000000_fresh_start_username_auth.sql`
-- ✅ System settings migration: `supabase/migrations/20251026000001_system_settings.sql`
+- ✅ Email-based auth migration: `supabase/migrations/20251027000000_email_based_auth.sql`
+- ✅ System settings: Default 4 settings inserted via migration
 
 **User Management:**
 - ✅ First admin user created successfully
-  - Username: `admin`
-  - Email: `tk.hfes@gmail.com` (optional)
+  - Email: `tk.hfes@gmail.com` (PRIMARY LOGIN)
+  - Name: `TK`
   - Role: `admin`
   - Active: `true`
-- ✅ Admin user verified via Python script
-- ✅ RLS policies tested and working (anon users cannot read profiles - secure!)
+- ✅ Admin user verified and tested login successfully
+- ✅ RLS policies tested and working (admin client required for profile access)
 
 **Python Integration:**
 - ✅ Python dependencies installed (`supabase`, `python-dotenv`)
-- ✅ `.env` file created with Supabase credentials
+- ✅ `.env` file created with Supabase credentials (properly in `.gitignore`)
 - ✅ Supabase client module implemented (`services/supabase_client.py`)
+- ✅ Authentication service created (`services/auth_service.py`)
 - ✅ Database connection tested and working
-- ✅ Test scripts created and passing:
+- ✅ Helper scripts:
   - `test_supabase_connection.py` - Full system test
-  - `verify_admin.py` - Admin user verification
-  - `check_and_fix_admin.py` - User management helper
+  - `fix_admin_simple.py` - Admin user setup helper
+  - `create_admin_email.py` - Create new admin users
+
+**Streamlit Authentication UI ✅ NEW:**
+- ✅ Login/Signup forms implemented (`components/auth_ui.py`)
+- ✅ Email + password authentication working
+- ✅ Session state management implemented
+- ✅ User menu in sidebar with logout functionality
+- ✅ Authentication guard on main app (`app.py`)
+- ✅ Tested and verified - login working!
 
 **Testing Results:**
 ```
 ✅ Connection to Supabase: SUCCESS
 ✅ Database access successful
-✅ User profiles found: 1 user(s)
-✅ Admin user configured correctly!
-✅ System settings: 4 settings loaded
-✅ Tables accessible: CONFIRMED
+✅ Admin user created: tk.hfes@gmail.com
+✅ Admin profile verified
+✅ Login tested: SUCCESS
+✅ Authentication UI working
+✅ Session management working
 ```
 
-### 14.2 Ready for Phase 2
+### 14.2 Phase 2 Progress (In Progress)
 
-**Application Updates (Next):**
-- ⏳ Update Streamlit app with authentication UI
-- ⏳ Implement username/password login flow
-- ⏳ Migrate local JSON storage to Supabase
-- ⏳ Implement cloud sync for user preferences
-- ⏳ Add user session management
+**Application Updates:**
+- ✅ Update Streamlit app with authentication UI - **DONE**
+- ✅ Implement email/password login flow - **DONE**
+- ⏳ Migrate local JSON storage to Supabase - **NEXT**
+- ⏳ Implement cloud sync for user preferences - **NEXT**
+- ⏳ Add user profile management UI
 
-**Advanced Features (Future):**
+**Advanced Features (Phase 2.2+):**
 - ⏳ Implement keyword intelligence system
 - ⏳ Set up Edge Functions for background processing
 - ⏳ Configure scheduled paper refresh jobs
@@ -2144,18 +2150,19 @@ This upgrade transforms your local research tool into a **smart, cloud-enabled p
 
 ### 14.3 Next Steps
 
-**Immediate (Next Session):**
+**Immediate (Current Session):**
 1. ✅ ~~Create first admin user~~ **DONE**
 2. ✅ ~~Test database connection~~ **DONE**
-3. Implement authentication UI in Streamlit
-4. Create login/logout functionality
-5. Add session state management
+3. ✅ ~~Implement authentication UI in Streamlit~~ **DONE**
+4. ✅ ~~Create login/logout functionality~~ **DONE**
+5. ✅ ~~Add session state management~~ **DONE**
+6. ⏳ **Migrate local JSON storage to Supabase** - NEXT PRIORITY
 
 **Short-term (This Week):**
-1. Create data migration scripts for existing JSON data
-2. Test username/password login flow in Streamlit
-3. Implement user profile management UI
-4. Verify role-based access control in application
+1. Migrate user preferences from `user_preferences.json` to Supabase
+2. Migrate paper cache from `paper_cache.json` to Supabase
+3. Implement user profile management UI (view/edit profile)
+4. Add ability to create new users via UI
 
 **Medium-term (Next 2 Weeks):**
 1. Implement background processing with Edge Functions
@@ -2165,17 +2172,26 @@ This upgrade transforms your local research tool into a **smart, cloud-enabled p
 
 ### 14.4 Key Design Decisions Implemented
 
-**Authentication Model:**
-- Username-based login (not email-based)
-- Email required for notifications and recovery only
-- Users can update both username and email (with uniqueness validation)
-- Role-based access control from day one
+**Authentication Model (v3.0 - Email-Based):**
+- ✅ Email-based login (standard Supabase Auth)
+- ✅ Simplified authentication - works natively with Supabase
+- ✅ No workarounds needed for username lookups
+- ✅ Role-based access control from day one (admin/user/guest)
+- ✅ Clean separation: auth handled by Supabase, profiles in user_profiles table
 
 **Database Structure:**
-- Three-tier role system (admin/user/guest)
-- Comprehensive RLS policies for data security
-- Audit trail via activity_log table
-- System settings table for admin control
+- ✅ Three-tier role system (admin/user/guest)
+- ✅ Comprehensive RLS policies for data security
+- ✅ Activity log table for audit trail
+- ✅ System settings table for admin control
+- ✅ All tables use email as primary identifier
+
+**Authentication Implementation:**
+- ✅ `services/auth_service.py` - Clean auth logic using email
+- ✅ `components/auth_ui.py` - Login/signup forms
+- ✅ `app.py` - Protected main app with auth guard
+- ✅ Session management with Streamlit session_state
+- ✅ Admin client for RLS bypass when needed
 
 **Future-Ready Architecture:**
 - `project_collaborators` table ready for multi-user features
@@ -2186,45 +2202,47 @@ This upgrade transforms your local research tool into a **smart, cloud-enabled p
 ### 14.5 Essential Files for Sharing/Deployment
 
 **CORE FILES (Required for setup):**
-- `DROP_AND_RECREATE.sql` - Complete database schema with username-first auth
+- `DROP_AND_RECREATE_EMAIL_AUTH.sql` - Complete database schema with email-based auth
 - `FRESH_START_GUIDE.md` - Step-by-step setup instructions
-- `create_admin.sql` - Template for creating admin user
 - `.env.example` - Environment variable template (DO NOT share actual .env!)
-- `services/supabase_client.py` - Supabase connection module
-- `supabase/config.toml` - Supabase CLI configuration
+- `services/supabase_client.py` - Supabase connection module with admin client
+- `services/auth_service.py` - Authentication service
+- `components/auth_ui.py` - Login/signup UI components
+- `app.py` - Main application with auth protection
 - `supabase/migrations/` - All migration files (version controlled schema)
 
 **TESTING & VERIFICATION FILES (Useful but optional):**
 - `test_supabase_connection.py` - Verify database connection and setup
-- `check_and_fix_admin.py` - Helper script to fix orphaned auth users
-- `.env.example` - Copy this to `.env` and fill in your credentials
+- `fix_admin_simple.py` - Helper script to create admin profiles
+- `create_admin_email.py` - Script to create new admin users
 
 **IMPORTANT SECURITY NOTES:**
-- `.env` is in `.gitignore` (line 5) - NEVER commit this file!
+- `.env` is in `.gitignore` - NEVER commit this file!
 - Service role key has full admin access - keep it secret
 - Anon key is safe for client-side use but still don't expose unnecessarily
 
 **FILES CLEANED UP (removed from repo):**
-- `setup_admin.sql`, `verify_schema.sql`, `MANUAL_UPDATES.sql` - Obsolete SQL files
-- `COMPLETE_SETUP.sql`, `update_user_policies.sql` - Superseded by migrations
-- `insert_system_settings.sql` - Now in migration `20251026000001_system_settings.sql`
-- `setup_first_admin.py`, `setup_admin_simple.py`, `verify_admin.py` - Redundant scripts
+- Old username-based files: `DROP_AND_RECREATE.sql`, `create_admin.sql`
+- Obsolete scripts: `setup_first_admin.py`, `setup_admin_simple.py`, `verify_admin.py`
+- Old migrations superseded by email-based version
 
 **FOR SHARING WITH FRIEND:**
 Send these files:
-1. `FRESH_START_GUIDE.md` - Complete instructions
-2. `DROP_AND_RECREATE.sql` - Database schema
+1. `FRESH_START_GUIDE.md` - Complete instructions (updated for email auth)
+2. `DROP_AND_RECREATE_EMAIL_AUTH.sql` - Email-based database schema
 3. `.env.example` - They need to create their own `.env`
-4. `services/supabase_client.py` - Connection code
-5. `test_supabase_connection.py` - For verification
-6. `check_and_fix_admin.py` - Admin setup helper
+4. `services/` directory - Authentication and connection code
+5. `components/auth_ui.py` - Login UI
+6. `test_supabase_connection.py` - For verification
+7. `create_admin_email.py` - Admin user creation script
 
 Your friend will need to:
 - Create their own Supabase project
 - Get their own API keys
-- Run `DROP_AND_RECREATE.sql` in their SQL editor
+- Run `DROP_AND_RECREATE_EMAIL_AUTH.sql` in their SQL editor
 - Create `.env` with their credentials
-- Follow `FRESH_START_GUIDE.md` to create admin user
+- Run `python create_admin_email.py` to create admin user
+- Start app with `streamlit run app.py`
 
 ---
 
