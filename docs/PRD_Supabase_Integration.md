@@ -1040,12 +1040,75 @@ def start_manual_refresh():
 - [x] Keywords, journal settings, search settings all migrated ✅ **DONE**
 - [x] Update `SettingsService` to read/write from Supabase ✅ **DONE**
 - [x] Update `app.py` to use user-specific settings from Supabase ✅ **DONE**
+- [x] **REFACTOR:** Migrate from JSONB blob to structured `user_preferences` table ✅ **DONE**
+  - [x] Create separate `user_preferences` table with structured columns
+  - [x] Add foreign key relationship to `auth.users`
+  - [x] Implement GIN indexes for keyword array searches
+  - [x] Add Row Level Security (RLS) policies for users and admins
+  - [x] Create trigger to auto-populate preferences on user signup
+  - [x] Update `SettingsService` to use new table structure
+  - [x] Create data migration script to move existing JSONB data
 
 **Implementation Summary:**
 - `config/settings.py` now serves as DEFAULT settings template
-- Each user gets their own copy of preferences in `user_profiles.preferences` JSONB field
+- Each user has a dedicated row in `user_preferences` table (one-to-one relationship)
+- **Architecture Benefits:**
+  - ✅ Better querying: Can filter/search on specific preference fields
+  - ✅ Type safety: Check constraints enforce valid values (e.g., theme must be 'light' or 'dark')
+  - ✅ Indexing: GIN indexes on keywords array enable fast array operations
+  - ✅ Admin UI ready: Structured columns make it easy to build admin preference editor
+  - ✅ Hybrid storage: Simple values as columns, complex nested data as JSONB where appropriate
+- Auto-creation: Trigger automatically creates default preferences when user signs up
 - Settings are user-specific and stored in Supabase
 - `SettingsService` supports both Supabase (current) and legacy file-based storage
+
+**Database Schema:**
+```sql
+CREATE TABLE user_preferences (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) UNIQUE,
+
+  -- UI Preferences (structured columns)
+  theme TEXT CHECK (theme IN ('light', 'dark')),
+  notifications_enabled BOOLEAN,
+  email_alerts BOOLEAN,
+
+  -- Research Keywords (array with GIN index)
+  keywords TEXT[],
+
+  -- Journal Settings (JSONB for complex structures)
+  target_journals JSONB,
+  journal_exclusions TEXT[],
+  journal_scoring JSONB,
+  keyword_scoring JSONB,
+
+  -- Search Settings (structured columns)
+  search_days_back INTEGER,
+  search_mode TEXT CHECK (search_mode IN ('Brief', 'Standard', 'Extended')),
+  min_keyword_matches INTEGER,
+  max_results_display INTEGER,
+
+  -- Default Sources (boolean columns)
+  default_source_pubmed BOOLEAN,
+  default_source_arxiv BOOLEAN,
+  default_source_biorxiv BOOLEAN,
+  default_source_medrxiv BOOLEAN,
+
+  -- Display Settings
+  show_abstracts BOOLEAN,
+  show_keywords BOOLEAN,
+  show_relevance_scores BOOLEAN,
+  papers_per_page INTEGER,
+
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**Migration Files:**
+- SQL: [`supabase/migrations/20251027000001_user_preferences_table.sql`](../supabase/migrations/20251027000001_user_preferences_table.sql)
+- Data migration: [`utils/admin_tools/archives/migrate_preferences_to_table.py`](../utils/admin_tools/archives/migrate_preferences_to_table.py) (archived - completed)
+- Legacy migration: [`utils/admin_tools/archives/migrate_preferences_to_supabase.py`](../utils/admin_tools/archives/migrate_preferences_to_supabase.py) (archived - obsolete)
 
 #### 4.2.2 Paper Cache Migration
 - [ ] Create migration script for `paper_cache.json` → Supabase `papers` table
@@ -1073,7 +1136,7 @@ def start_manual_refresh():
   - [x] Promote/demote user roles (admin/user/guest)
   - [x] Activate/deactivate users
   - [x] View user activity logs ✅ **DONE**
-  - [ ] View/edit other users' preferences (keywords, settings, etc.) - **TODO after Phase 2**
+  - [ ] View/edit other users' preferences (keywords, settings, etc.) - **READY TO IMPLEMENT** (structured table makes this easy!)
 - [x] Add "My Profile" section to Settings tab (for all users) ✅ **DONE**
   - [x] View/edit email (view only, edit not allowed)
   - [x] View/edit full name

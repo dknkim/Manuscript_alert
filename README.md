@@ -320,6 +320,74 @@ For issues or questions:
 
 ---
 
+## 🛠️ Development Setup
+
+### For Developers/Contributors
+
+**1. Install Development Tools**
+
+First, install `ruff` for Python linting and formatting:
+```bash
+pip install ruff
+```
+
+**2. Install Git Hooks**
+
+We use git hooks to ensure code quality and prevent dangerous database migrations:
+```bash
+./scripts/install-hooks.sh
+```
+
+This installs a pre-commit hook that:
+- ✅ Runs `ruff` checks on Python files (auto-fixes style issues)
+- ✅ Enforces double quotes and PEP 8 import sorting
+- ✅ Checks SQL migrations for dangerous operations (DROP, TRUNCATE, DELETE)
+- ✅ Prevents accidental data loss
+
+**3. Safe Database Migrations**
+
+**IMPORTANT:** Always use the safe migration script instead of `supabase db push`:
+```bash
+./scripts/safe_migrate.sh
+```
+
+This script:
+- Creates automatic backups before migrations
+- Scans for dangerous SQL operations
+- Shows migration diffs
+- Requires explicit confirmation
+- Keeps last 10 backups
+
+**Rules for migrations:**
+- ❌ **NEVER** use `DROP TABLE`, `TRUNCATE`, or `DELETE` without WHERE
+- ✅ **ALWAYS** use `CREATE TABLE IF NOT EXISTS`
+- ✅ **ALWAYS** use `CREATE INDEX IF NOT EXISTS`
+- ✅ Make migrations idempotent (can run multiple times)
+
+See [supabase/MIGRATION_SAFETY_RULES.md](supabase/MIGRATION_SAFETY_RULES.md) for detailed guidelines.
+
+**4. Running Pre-commit Manually**
+
+The hook runs automatically on `git commit`, but you can run it manually:
+```bash
+# Check Python files
+ruff check --fix .
+
+# Format Python files
+ruff format .
+```
+
+**5. Bypassing Hooks (NOT Recommended)**
+
+If you absolutely need to bypass the pre-commit hook:
+```bash
+git commit --no-verify
+```
+
+⚠️ **WARNING:** Only use `--no-verify` if you fully understand the consequences.
+
+---
+
 ## 📚 Documentation
 
 ### Setup & Configuration

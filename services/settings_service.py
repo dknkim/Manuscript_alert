@@ -2,7 +2,8 @@
 Settings management service for the Manuscript Alert System.
 Handles loading, saving, and updating settings that persist across app runs.
 
-After Phase 2 migration: Settings are stored in Supabase user_profiles.preferences
+After Phase 2.1 refactor: Settings are stored in separate user_preferences table
+with structured columns for better querying, indexing, and type safety.
 """
 
 import os
@@ -17,6 +18,7 @@ from utils.logger import Logger
 
 # Initialize logger
 logger = Logger(__name__)
+
 
 class SettingsService:
     """Manages application settings with persistence to Supabase user profiles"""
@@ -56,7 +58,7 @@ class SettingsService:
             return self._load_settings_from_file()
 
     def _load_settings_from_supabase(self, user_id: str) -> dict[str, Any]:
-        """Load settings from Supabase user profile preferences"""
+        """Load settings from Supabase user_preferences table"""
         if not user_id:
             logger.error("user_id required for Supabase settings")
             return self._get_default_settings()
@@ -64,25 +66,38 @@ class SettingsService:
         try:
             from services.supabase_client import get_supabase_admin_client
 
-            logger.debug(f"Loading settings from Supabase for user: {user_id}")
+            logger.debug(
+                f"Loading settings from Supabase user_preferences table for user: {user_id}"
+            )
             admin_client = get_supabase_admin_client()
 
-            result = admin_client.table("user_profiles")\
-                .select("preferences")\
-                .eq("id", user_id)\
-                .single()\
+            # Load from structured user_preferences table
+            result = (
+                admin_client.table("user_preferences")
+                .select("*")
+                .eq("user_id", user_id)
+                .single()
                 .execute()
+            )
 
-            if result.data and result.data.get("preferences"):
-                preferences = result.data["preferences"]
-                logger.info(f"Settings loaded from Supabase: {len(preferences.get('keywords', []))} keywords")
+            if result.data:
+                # Transform table columns to dict format expected by app
+                preferences = self._table_to_dict(result.data)
+                logger.info(
+                    f"Settings loaded from user_preferences table: {len(preferences.get('keywords', []))} keywords"
+                )
                 return preferences
             else:
-                logger.warning(f"No preferences found for user {user_id}, using defaults")
+                logger.warning(
+                    f"No preferences found in table for user {user_id}, using defaults"
+                )
                 return self._get_default_settings()
 
         except Exception as e:
-            logger.error(f"Error loading settings from Supabase: {e}", exc_info=True)
+            logger.error(
+                f"Error loading settings from user_preferences table: {e}",
+                exc_info=True,
+            )
             return self._get_default_settings()
 
     def _load_settings_from_file(self) -> dict[str, Any]:
@@ -93,7 +108,9 @@ class SettingsService:
             import importlib.util
 
             logger.debug(f"Loading settings from: {self.settings_file}")
-            spec = importlib.util.spec_from_file_location("settings", self.settings_file)
+            spec = importlib.util.spec_from_file_location(
+                "settings", self.settings_file
+            )
             settings_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(settings_module)
 
@@ -107,7 +124,9 @@ class SettingsService:
                 "ui_settings": settings_module.UI_SETTINGS,
             }
 
-            logger.info(f"Settings loaded successfully: {len(settings_dict['keywords'])} keywords")
+            logger.info(
+                f"Settings loaded successfully: {len(settings_dict['keywords'])} keywords"
+            )
             logger.info("<<< SettingsService.load_settings() returning")
             return settings_dict
         except Exception as e:
@@ -136,11 +155,24 @@ class SettingsService:
                     "3_keywords": 2.8,
                     "2_keywords": 1.3,
                     "1_keyword": 0.5,
-                }
+                },
             },
             "target_journals": {
-                "exact_matches": ["jama", "nature", "science", "radiology", "ajnr", "the lancet"],
-                "family_matches": ["jama ", "nature ", "science ", "npj ", "the lancet"],
+                "exact_matches": [
+                    "jama",
+                    "nature",
+                    "science",
+                    "radiology",
+                    "ajnr",
+                    "the lancet",
+                ],
+                "family_matches": [
+                    "jama ",
+                    "nature ",
+                    "science ",
+                    "npj ",
+                    "the lancet",
+                ],
                 "specific_journals": [
                     "american journal of neuroradiology",
                     "alzheimer's & dementia",
@@ -155,19 +187,45 @@ class SettingsService:
                 ],
             },
             "journal_exclusions": [
-                "abdominal", "pediatric", "cardiovascular and interventional",
-                "interventional", "emergency", "skeletal", "clinical", "academic",
-                "investigative", "case reports", "oral surgery", "korean journal of",
-                "the neuroradiology", "japanese journal of", "brain research",
-                "brain and behavior", "brain imaging and behavior", "brain stimulation",
-                "brain connectivity", "brain and cognition", "brain, behavior, and immunity",
-                "metabolic brain disease", "neuroscience letters", "neuroscience bulletin",
-                "neuroscience methods", "neuroscience research", "neuroscience and biobehavioral",
-                "clinical neuroscience", "neuropsychiatry", "ibro neuroscience",
-                "acs chemical neuroscience", "proceedings of the national academy",
-                "life science alliance", "life sciences", "animal science",
-                "biomaterials science", "veterinary medical science",
-                "philosophical transactions", "annals of the new york academy",
+                "abdominal",
+                "pediatric",
+                "cardiovascular and interventional",
+                "interventional",
+                "emergency",
+                "skeletal",
+                "clinical",
+                "academic",
+                "investigative",
+                "case reports",
+                "oral surgery",
+                "korean journal of",
+                "the neuroradiology",
+                "japanese journal of",
+                "brain research",
+                "brain and behavior",
+                "brain imaging and behavior",
+                "brain stimulation",
+                "brain connectivity",
+                "brain and cognition",
+                "brain, behavior, and immunity",
+                "metabolic brain disease",
+                "neuroscience letters",
+                "neuroscience bulletin",
+                "neuroscience methods",
+                "neuroscience research",
+                "neuroscience and biobehavioral",
+                "clinical neuroscience",
+                "neuropsychiatry",
+                "ibro neuroscience",
+                "acs chemical neuroscience",
+                "proceedings of the national academy",
+                "life science alliance",
+                "life sciences",
+                "animal science",
+                "biomaterials science",
+                "veterinary medical science",
+                "philosophical transactions",
+                "annals of the new york academy",
             ],
             "keyword_scoring": {
                 "high_priority": {
@@ -205,6 +263,97 @@ class SettingsService:
             },
         }
 
+    def _table_to_dict(self, table_row: dict[str, Any]) -> dict[str, Any]:
+        """
+        Transform user_preferences table row to settings dict format.
+
+        Args:
+            table_row: Row from user_preferences table
+
+        Returns:
+            Settings dict in app format
+        """
+        return {
+            "keywords": table_row.get("keywords", []),
+            "target_journals": table_row.get("target_journals", {}),
+            "journal_exclusions": table_row.get("journal_exclusions", []),
+            "journal_scoring": table_row.get("journal_scoring", {}),
+            "keyword_scoring": table_row.get("keyword_scoring", {}),
+            "search_settings": {
+                "search_days_back": table_row.get("search_days_back", 8),
+                "search_mode": table_row.get("search_mode", "Brief"),
+                "min_keyword_matches": table_row.get("min_keyword_matches", 2),
+                "max_results_display": table_row.get("max_results_display", 50),
+                "default_sources": {
+                    "pubmed": table_row.get("default_source_pubmed", True),
+                    "arxiv": table_row.get("default_source_arxiv", False),
+                    "biorxiv": table_row.get("default_source_biorxiv", True),
+                    "medrxiv": table_row.get("default_source_medrxiv", True),
+                },
+                "journal_quality_filter": table_row.get(
+                    "journal_quality_filter", False
+                ),
+            },
+            "ui_preferences": {
+                "theme": table_row.get("theme", "light"),
+                "notifications_enabled": table_row.get("notifications_enabled", True),
+                "email_alerts": table_row.get("email_alerts", False),
+            },
+            "display_settings": {
+                "show_abstracts": table_row.get("show_abstracts", True),
+                "show_keywords": table_row.get("show_keywords", True),
+                "show_relevance_scores": table_row.get("show_relevance_scores", True),
+                "papers_per_page": table_row.get("papers_per_page", 50),
+            },
+        }
+
+    def _dict_to_table(self, settings: dict[str, Any]) -> dict[str, Any]:
+        """
+        Transform settings dict to user_preferences table columns.
+
+        Args:
+            settings: Settings dict in app format
+
+        Returns:
+            Dict matching user_preferences table schema
+        """
+        ui_prefs = settings.get("ui_preferences", {})
+        search = settings.get("search_settings", {})
+        sources = search.get("default_sources", {})
+        display = settings.get("display_settings", {})
+
+        return {
+            # UI Preferences
+            "theme": ui_prefs.get("theme", "light"),
+            "notifications_enabled": ui_prefs.get("notifications_enabled", True),
+            "email_alerts": ui_prefs.get("email_alerts", False),
+            # Research Keywords
+            "keywords": settings.get("keywords", []),
+            # Journal Settings (JSONB)
+            "target_journals": settings.get("target_journals", {}),
+            "journal_exclusions": settings.get("journal_exclusions", []),
+            "journal_scoring": settings.get("journal_scoring", {}),
+            "keyword_scoring": settings.get("keyword_scoring", {}),
+            # Search Settings
+            "search_days_back": search.get("search_days_back", 8),
+            "search_mode": search.get("search_mode", "Brief"),
+            "min_keyword_matches": search.get("min_keyword_matches", 2),
+            "max_results_display": search.get("max_results_display", 50),
+            # Default Sources
+            "default_source_pubmed": sources.get("pubmed", True),
+            "default_source_arxiv": sources.get("arxiv", False),
+            "default_source_biorxiv": sources.get("biorxiv", True),
+            "default_source_medrxiv": sources.get("medrxiv", True),
+            "journal_quality_filter": search.get("journal_quality_filter", False),
+            # Display Settings
+            "show_abstracts": display.get("show_abstracts", True),
+            "show_keywords": display.get("show_keywords", True),
+            "show_relevance_scores": display.get("show_relevance_scores", True),
+            "papers_per_page": display.get("papers_per_page", 50),
+            # Update timestamp
+            "updated_at": "now()",
+        }
+
     def save_settings(self, settings: dict[str, Any], user_id: str = None) -> bool:
         """
         Save settings - to Supabase user profile or legacy settings.py file.
@@ -224,8 +373,10 @@ class SettingsService:
         else:
             return self._save_settings_to_file(settings)
 
-    def _save_settings_to_supabase(self, settings: dict[str, Any], user_id: str) -> bool:
-        """Save settings to Supabase user profile preferences"""
+    def _save_settings_to_supabase(
+        self, settings: dict[str, Any], user_id: str
+    ) -> bool:
+        """Save settings to Supabase user_preferences table"""
         if not user_id:
             logger.error("user_id required for Supabase settings")
             st.error("Cannot save settings: user not identified")
@@ -234,27 +385,37 @@ class SettingsService:
         try:
             from services.supabase_client import get_supabase_admin_client
 
-            logger.debug(f"Saving settings to Supabase for user: {user_id}")
+            logger.debug(
+                f"Saving settings to user_preferences table for user: {user_id}"
+            )
             admin_client = get_supabase_admin_client()
 
-            result = admin_client.table("user_profiles")\
-                .update({
-                    "preferences": settings,
-                    "updated_at": "now()"
-                })\
-                .eq("id", user_id)\
+            # Transform dict format to table columns
+            table_data = self._dict_to_table(settings)
+
+            # Update user_preferences table
+            result = (
+                admin_client.table("user_preferences")
+                .update(table_data)
+                .eq("user_id", user_id)
                 .execute()
+            )
 
             if result.data:
-                logger.warning("✅ Settings saved to Supabase successfully!")
+                logger.warning(
+                    "✅ Settings saved to user_preferences table successfully!"
+                )
                 return True
             else:
-                logger.error("Failed to save settings to Supabase")
+                logger.error("Failed to save settings to user_preferences table")
                 st.error("Failed to save settings")
                 return False
 
         except Exception as e:
-            logger.error(f"❌ Error saving settings to Supabase: {e}", exc_info=True)
+            logger.error(
+                f"❌ Error saving settings to user_preferences table: {e}",
+                exc_info=True,
+            )
             st.error(f"Error saving settings: {e}")
             return False
 
@@ -304,13 +465,17 @@ class SettingsService:
         replacement = f"DEFAULT_KEYWORDS = {keywords_str}"
         return re.sub(pattern, replacement, content, flags=re.DOTALL)
 
-    def _update_journal_scoring(self, content: str, journal_scoring: dict[str, Any]) -> str:
+    def _update_journal_scoring(
+        self, content: str, journal_scoring: dict[str, Any]
+    ) -> str:
         """Update the JOURNAL_SCORING section"""
         scoring_str = self._dict_to_python_string(journal_scoring, "JOURNAL_SCORING")
         pattern = r"JOURNAL_SCORING = \{.*?\}"
         return re.sub(pattern, scoring_str, content, flags=re.DOTALL)
 
-    def _update_target_journals(self, content: str, target_journals: dict[str, list[str]]) -> str:
+    def _update_target_journals(
+        self, content: str, target_journals: dict[str, list[str]]
+    ) -> str:
         """Update the TARGET_JOURNALS section"""
         journals_str = self._dict_to_python_string(target_journals, "TARGET_JOURNALS")
         pattern = r"TARGET_JOURNALS = \{.*?\}"
@@ -319,7 +484,9 @@ class SettingsService:
     def _update_journal_exclusions(self, content: str, exclusions: list[str]) -> str:
         """Update the JOURNAL_EXCLUSIONS section"""
         # Create a simple list format
-        exclusions_str = "[\n" + "\n".join([f'    "{ex}",' for ex in exclusions]) + "\n]"
+        exclusions_str = (
+            "[\n" + "\n".join([f'    "{ex}",' for ex in exclusions]) + "\n]"
+        )
 
         # Use a more specific pattern that matches the entire JOURNAL_EXCLUSIONS assignment
         pattern = r"JOURNAL_EXCLUSIONS = \[.*?\]"
@@ -347,21 +514,31 @@ class SettingsService:
                             break
 
                 # Replace the entire section
-                content = content[:start_pos] + f"JOURNAL_EXCLUSIONS = {exclusions_str}" + content[end_pos:]
+                content = (
+                    content[:start_pos]
+                    + f"JOURNAL_EXCLUSIONS = {exclusions_str}"
+                    + content[end_pos:]
+                )
         else:
             content = re.sub(pattern, replacement, content, flags=re.DOTALL)
 
         return content
 
-    def _update_keyword_scoring(self, content: str, keyword_scoring: dict[str, Any]) -> str:
+    def _update_keyword_scoring(
+        self, content: str, keyword_scoring: dict[str, Any]
+    ) -> str:
         """Update the KEYWORD_SCORING section"""
         scoring_str = self._dict_to_python_string(keyword_scoring, "KEYWORD_SCORING")
         pattern = r"KEYWORD_SCORING = \{.*?\}"
         return re.sub(pattern, scoring_str, content, flags=re.DOTALL)
 
-    def _update_search_settings(self, content: str, search_settings: dict[str, Any]) -> str:
+    def _update_search_settings(
+        self, content: str, search_settings: dict[str, Any]
+    ) -> str:
         """Update the DEFAULT_SEARCH_SETTINGS section"""
-        settings_str = self._dict_to_python_string(search_settings, "DEFAULT_SEARCH_SETTINGS")
+        settings_str = self._dict_to_python_string(
+            search_settings, "DEFAULT_SEARCH_SETTINGS"
+        )
         pattern = r"DEFAULT_SEARCH_SETTINGS = \{.*?\}"
         return re.sub(pattern, settings_str, content, flags=re.DOTALL)
 
@@ -394,7 +571,14 @@ class SettingsService:
                     items.append(f"{key_str}: {val_str}")
 
                 indent_str = " " * (indent + 4)
-                return "{\n" + indent_str + (",\n" + indent_str).join(items) + "\n" + " " * indent + "}"
+                return (
+                    "{\n"
+                    + indent_str
+                    + (",\n" + indent_str).join(items)
+                    + "\n"
+                    + " " * indent
+                    + "}"
+                )
 
             elif isinstance(value, list):
                 if not value:
@@ -411,7 +595,14 @@ class SettingsService:
                         items.append(str(item))
 
                 indent_str = " " * (indent + 4)
-                return "[\n" + indent_str + (",\n" + indent_str).join(items) + "\n" + " " * indent + "]"
+                return (
+                    "[\n"
+                    + indent_str
+                    + (",\n" + indent_str).join(items)
+                    + "\n"
+                    + " " * indent
+                    + "]"
+                )
 
             elif isinstance(value, str):
                 return f'"{value}"'
@@ -455,7 +646,9 @@ UI_SETTINGS = {ui_settings}
         keywords_str = self._format_list(settings.get("keywords", []))
         journal_scoring_str = self._format_dict(settings.get("journal_scoring", {}))
         target_journals_str = self._format_dict(settings.get("target_journals", {}))
-        journal_exclusions_str = self._format_list(settings.get("journal_exclusions", []))
+        journal_exclusions_str = self._format_list(
+            settings.get("journal_exclusions", [])
+        )
         keyword_scoring_str = self._format_dict(settings.get("keyword_scoring", {}))
         search_settings_str = self._format_dict(settings.get("search_settings", {}))
         ui_settings_str = self._format_dict(settings.get("ui_settings", {}))
@@ -501,7 +694,14 @@ UI_SETTINGS = {ui_settings}
                     items.append(f"{key_str}: {val_str}")
 
                 indent_str = " " * (indent + 4)
-                return "{\n" + indent_str + (",\n" + indent_str).join(items) + "\n" + " " * indent + "}"
+                return (
+                    "{\n"
+                    + indent_str
+                    + (",\n" + indent_str).join(items)
+                    + "\n"
+                    + " " * indent
+                    + "}"
+                )
 
             elif isinstance(value, list):
                 return self._format_list(value)

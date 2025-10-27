@@ -40,29 +40,30 @@ class AuthService:
             logger.info(f"Login attempt for email: {email}")
 
             # Authenticate with Supabase Auth
-            auth_response = self.supabase.auth.sign_in_with_password({
-                "email": email,
-                "password": password
-            })
+            auth_response = self.supabase.auth.sign_in_with_password(
+                {"email": email, "password": password}
+            )
 
             if auth_response.user:
                 logger.info(f"User {email} logged in successfully")
 
                 # Get user profile using admin client
                 from services.supabase_client import get_supabase_admin_client
+
                 admin_client = get_supabase_admin_client()
 
                 # Update last_login and get profile
-                admin_client.table("user_profiles")\
-                    .update({"last_login": "now()"})\
-                    .eq("id", auth_response.user.id)\
-                    .execute()
+                admin_client.table("user_profiles").update({"last_login": "now()"}).eq(
+                    "id", auth_response.user.id
+                ).execute()
 
-                profile = admin_client.table("user_profiles")\
-                    .select("id, email, role, full_name, is_active")\
-                    .eq("id", auth_response.user.id)\
-                    .single()\
+                profile = (
+                    admin_client.table("user_profiles")
+                    .select("id, email, role, full_name, is_active")
+                    .eq("id", auth_response.user.id)
+                    .single()
                     .execute()
+                )
 
                 if profile.data:
                     return {
@@ -73,23 +74,19 @@ class AuthService:
                             "role": profile.data["role"],
                             "full_name": profile.data.get("full_name"),
                         },
-                        "session": auth_response.session
+                        "session": auth_response.session,
                     }
 
             logger.warning(f"Authentication failed for email: {email}")
-            return {
-                "success": False,
-                "error": "Invalid email or password"
-            }
+            return {"success": False, "error": "Invalid email or password"}
 
         except Exception as e:
             logger.error(f"Login error for {email}: {e!s}")
-            return {
-                "success": False,
-                "error": "Invalid email or password"
-            }
+            return {"success": False, "error": "Invalid email or password"}
 
-    def signup(self, email: str, password: str, full_name: str | None = None) -> dict[str, Any]:
+    def signup(
+        self, email: str, password: str, full_name: str | None = None
+    ) -> dict[str, Any]:
         """
         Register a new user.
 
@@ -105,36 +102,19 @@ class AuthService:
             logger.info(f"Signup attempt for email: {email}")
 
             # Create auth user
-            auth_response = self.supabase.auth.sign_up({
-                "email": email,
-                "password": password
-            })
+            auth_response = self.supabase.auth.sign_up(
+                {"email": email, "password": password}
+            )
 
             if not auth_response.user:
                 logger.error(f"Failed to create auth user for {email}")
-                return {
-                    "success": False,
-                    "error": "Failed to create account"
-                }
+                return {"success": False, "error": "Failed to create account"}
 
             # Create user profile using admin client
-            from config import settings
+            # Note: Preferences are auto-created by trigger in user_preferences table
             from services.supabase_client import get_supabase_admin_client
-            admin_client = get_supabase_admin_client()
 
-            # Build default preferences from settings.py
-            default_preferences = {
-                "theme": settings.UI_SETTINGS.get("theme", "light"),
-                "notifications_enabled": True,
-                "email_alerts": False,
-                "keywords": settings.DEFAULT_KEYWORDS,
-                "target_journals": settings.TARGET_JOURNALS,
-                "journal_exclusions": settings.JOURNAL_EXCLUSIONS,
-                "journal_scoring": settings.JOURNAL_SCORING,
-                "keyword_scoring": settings.KEYWORD_SCORING,
-                "search_settings": settings.DEFAULT_SEARCH_SETTINGS,
-                "ui_settings": settings.UI_SETTINGS,
-            }
+            admin_client = get_supabase_admin_client()
 
             profile_data = {
                 "id": auth_response.user.id,
@@ -142,12 +122,11 @@ class AuthService:
                 "full_name": full_name,
                 "role": "user",  # Default role
                 "is_active": True,
-                "preferences": default_preferences
             }
 
-            profile_result = admin_client.table("user_profiles")\
-                .insert(profile_data)\
-                .execute()
+            profile_result = (
+                admin_client.table("user_profiles").insert(profile_data).execute()
+            )
 
             if profile_result.data:
                 logger.info(f"User {email} registered successfully")
@@ -157,23 +136,17 @@ class AuthService:
                         "id": auth_response.user.id,
                         "email": email,
                         "role": "user",
-                        "full_name": full_name
+                        "full_name": full_name,
                     },
-                    "session": auth_response.session
+                    "session": auth_response.session,
                 }
             else:
                 logger.error(f"Failed to create profile for {email}")
-                return {
-                    "success": False,
-                    "error": "Failed to create user profile"
-                }
+                return {"success": False, "error": "Failed to create user profile"}
 
         except Exception as e:
             logger.error(f"Signup error for {email}: {e!s}")
-            return {
-                "success": False,
-                "error": f"Registration failed: {e!s}"
-            }
+            return {"success": False, "error": f"Registration failed: {e!s}"}
 
     def logout(self) -> dict[str, Any]:
         """
@@ -188,10 +161,7 @@ class AuthService:
             return {"success": True}
         except Exception as e:
             logger.error(f"Logout error: {e!s}")
-            return {
-                "success": False,
-                "error": "Logout failed"
-            }
+            return {"success": False, "error": "Logout failed"}
 
     def get_current_user(self) -> dict[str, Any] | None:
         """
@@ -205,19 +175,19 @@ class AuthService:
             if user:
                 # Fetch profile info using admin client (RLS bypass)
                 from services.supabase_client import get_supabase_admin_client
+
                 admin_client = get_supabase_admin_client()
 
-                profile = admin_client.table("user_profiles")\
-                    .select("email, role, full_name")\
-                    .eq("id", user.user.id)\
-                    .single()\
+                profile = (
+                    admin_client.table("user_profiles")
+                    .select("email, role, full_name")
+                    .eq("id", user.user.id)
+                    .single()
                     .execute()
+                )
 
                 if profile.data:
-                    return {
-                        "id": user.user.id,
-                        **profile.data
-                    }
+                    return {"id": user.user.id, **profile.data}
             return None
         except Exception as e:
             logger.debug(f"No authenticated user: {e!s}")

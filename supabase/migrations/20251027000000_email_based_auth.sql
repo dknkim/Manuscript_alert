@@ -2,50 +2,35 @@
 -- MANUSCRIPT ALERT SYSTEM - DATABASE SCHEMA
 -- Email-Based Authentication (Simplified)
 -- ============================================================
--- This script drops all existing tables and recreates them
--- with EMAIL as the primary login identifier
-
--- ============================================================
--- STEP 1: DROP ALL EXISTING TABLES
+-- ⚠️ SAFE MIGRATION - Uses CREATE IF NOT EXISTS
+-- ⚠️ DOES NOT DROP EXISTING DATA
+-- ⚠️ CRITICAL: NEVER USE DROP TABLE IN MIGRATIONS
 -- ============================================================
 
-DROP TABLE IF EXISTS activity_log CASCADE;
-DROP TABLE IF EXISTS project_collaborators CASCADE;
-DROP TABLE IF EXISTS keyword_intelligence CASCADE;
-DROP TABLE IF EXISTS user_paper_interactions CASCADE;
-DROP TABLE IF EXISTS knowledge_base CASCADE;
-DROP TABLE IF EXISTS search_alerts CASCADE;
-DROP TABLE IF EXISTS notifications CASCADE;
-DROP TABLE IF EXISTS background_jobs CASCADE;
-DROP TABLE IF EXISTS projects CASCADE;
-DROP TABLE IF EXISTS papers CASCADE;
-DROP TABLE IF EXISTS system_settings CASCADE;
-DROP TABLE IF EXISTS user_profiles CASCADE;
-
--- Drop custom types
-DROP TYPE IF EXISTS user_role CASCADE;
-DROP TYPE IF EXISTS notification_type CASCADE;
-
--- Drop functions
-DROP FUNCTION IF EXISTS is_admin() CASCADE;
-DROP FUNCTION IF EXISTS get_user_role(uuid) CASCADE;
-
 -- ============================================================
--- STEP 2: CREATE ENUM TYPES
+-- STEP 1: CREATE ENUM TYPES (IF NOT EXISTS)
 -- ============================================================
 
 -- User roles enum
-CREATE TYPE user_role AS ENUM ('admin', 'user', 'guest');
+DO $$ BEGIN
+  CREATE TYPE user_role AS ENUM ('admin', 'user', 'guest');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Notification types
-CREATE TYPE notification_type AS ENUM ('paper_match', 'system', 'collaboration', 'export_ready');
+DO $$ BEGIN
+  CREATE TYPE notification_type AS ENUM ('paper_match', 'system', 'collaboration', 'export_ready');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- ============================================================
--- STEP 3: CREATE TABLES
+-- STEP 2: CREATE TABLES (IF NOT EXISTS)
 -- ============================================================
 
 -- User profiles table - EMAIL IS PRIMARY LOGIN
-CREATE TABLE user_profiles (
+CREATE TABLE IF NOT EXISTS user_profiles (
   id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,  -- PRIMARY LOGIN - matches auth.users.email
   full_name TEXT,
@@ -63,7 +48,7 @@ CREATE TABLE user_profiles (
 );
 
 -- System settings table
-CREATE TABLE system_settings (
+CREATE TABLE IF NOT EXISTS system_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   key TEXT UNIQUE NOT NULL,
   value JSONB NOT NULL,
@@ -73,7 +58,7 @@ CREATE TABLE system_settings (
 );
 
 -- Papers table
-CREATE TABLE papers (
+CREATE TABLE IF NOT EXISTS papers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   title TEXT NOT NULL,
@@ -93,7 +78,7 @@ CREATE TABLE papers (
 );
 
 -- Projects table
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name TEXT NOT NULL,
@@ -106,7 +91,7 @@ CREATE TABLE projects (
 );
 
 -- Background jobs table
-CREATE TABLE background_jobs (
+CREATE TABLE IF NOT EXISTS background_jobs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   job_type TEXT NOT NULL,
@@ -121,7 +106,7 @@ CREATE TABLE background_jobs (
 );
 
 -- Notifications table
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   type notification_type NOT NULL,
@@ -134,7 +119,7 @@ CREATE TABLE notifications (
 );
 
 -- Search alerts table
-CREATE TABLE search_alerts (
+CREATE TABLE IF NOT EXISTS search_alerts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name TEXT NOT NULL,
@@ -147,7 +132,7 @@ CREATE TABLE search_alerts (
 );
 
 -- Knowledge base table
-CREATE TABLE knowledge_base (
+CREATE TABLE IF NOT EXISTS knowledge_base (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   project_id UUID REFERENCES projects(id) ON DELETE CASCADE NOT NULL,
   document_name TEXT NOT NULL,
@@ -160,7 +145,7 @@ CREATE TABLE knowledge_base (
 );
 
 -- User paper interactions table
-CREATE TABLE user_paper_interactions (
+CREATE TABLE IF NOT EXISTS user_paper_interactions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   paper_id UUID REFERENCES papers(id) ON DELETE CASCADE NOT NULL,
@@ -171,7 +156,7 @@ CREATE TABLE user_paper_interactions (
 );
 
 -- Keyword intelligence table
-CREATE TABLE keyword_intelligence (
+CREATE TABLE IF NOT EXISTS keyword_intelligence (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   keyword TEXT UNIQUE NOT NULL,
   base_score FLOAT DEFAULT 1.0,
@@ -186,7 +171,7 @@ CREATE TABLE keyword_intelligence (
 );
 
 -- Project collaborators table (for future multi-user)
-CREATE TABLE project_collaborators (
+CREATE TABLE IF NOT EXISTS project_collaborators (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   project_id UUID REFERENCES projects(id) ON DELETE CASCADE NOT NULL,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -197,7 +182,7 @@ CREATE TABLE project_collaborators (
 );
 
 -- Activity log table
-CREATE TABLE activity_log (
+CREATE TABLE IF NOT EXISTS activity_log (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   action TEXT NOT NULL,
@@ -208,36 +193,36 @@ CREATE TABLE activity_log (
 );
 
 -- ============================================================
--- STEP 4: CREATE INDEXES
+-- STEP 3: CREATE INDEXES (IF NOT EXISTS)
 -- ============================================================
 
 -- User profiles indexes
-CREATE INDEX idx_user_profiles_email ON user_profiles(email);
-CREATE INDEX idx_user_profiles_role ON user_profiles(role);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON user_profiles(email);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_role ON user_profiles(role);
 
 -- Papers indexes
-CREATE INDEX idx_papers_user_id ON papers(user_id);
-CREATE INDEX idx_papers_publication_date ON papers(publication_date DESC);
-CREATE INDEX idx_papers_source ON papers(source);
+CREATE INDEX IF NOT EXISTS idx_papers_user_id ON papers(user_id);
+CREATE INDEX IF NOT EXISTS idx_papers_publication_date ON papers(publication_date DESC);
+CREATE INDEX IF NOT EXISTS idx_papers_source ON papers(source);
 
 -- Projects indexes
-CREATE INDEX idx_projects_user_id ON projects(user_id);
-CREATE INDEX idx_projects_is_active ON projects(is_active);
+CREATE INDEX IF NOT EXISTS idx_projects_user_id ON projects(user_id);
+CREATE INDEX IF NOT EXISTS idx_projects_is_active ON projects(is_active);
 
 -- Background jobs indexes
-CREATE INDEX idx_background_jobs_user_status ON background_jobs(user_id, status);
-CREATE INDEX idx_background_jobs_created_at ON background_jobs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_background_jobs_user_status ON background_jobs(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_background_jobs_created_at ON background_jobs(created_at DESC);
 
 -- Notifications indexes
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
 
 -- Activity log indexes
-CREATE INDEX idx_activity_log_user_id ON activity_log(user_id);
-CREATE INDEX idx_activity_log_created_at ON activity_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_log_user_id ON activity_log(user_id);
+CREATE INDEX IF NOT EXISTS idx_activity_log_created_at ON activity_log(created_at DESC);
 
 -- ============================================================
--- STEP 5: CREATE HELPER FUNCTIONS
+-- STEP 4: CREATE HELPER FUNCTIONS
 -- ============================================================
 
 -- Function to check if current user is admin
@@ -260,7 +245,7 @@ RETURNS user_role AS $$
 $$ LANGUAGE sql SECURITY DEFINER;
 
 -- ============================================================
--- STEP 6: ROW LEVEL SECURITY (RLS) POLICIES
+-- STEP 5: ROW LEVEL SECURITY (RLS) POLICIES
 -- ============================================================
 
 -- Enable RLS on all tables
@@ -278,125 +263,210 @@ ALTER TABLE activity_log ENABLE ROW LEVEL SECURITY;
 ALTER TABLE system_settings ENABLE ROW LEVEL SECURITY;
 
 -- User Profiles Policies
-CREATE POLICY "Users can view own profile"
-  ON user_profiles FOR SELECT
-  USING (auth.uid() = id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view own profile"
+    ON user_profiles FOR SELECT
+    USING (auth.uid() = id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Users can update own profile"
-  ON user_profiles FOR UPDATE
-  USING (auth.uid() = id);
+DO $$ BEGIN
+  CREATE POLICY "Users can update own profile"
+    ON user_profiles FOR UPDATE
+    USING (auth.uid() = id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Admins can view all profiles"
-  ON user_profiles FOR SELECT
-  USING (is_admin());
+DO $$ BEGIN
+  CREATE POLICY "Admins can view all profiles"
+    ON user_profiles FOR SELECT
+    USING (is_admin());
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Admins can create profiles"
-  ON user_profiles FOR INSERT
-  WITH CHECK (is_admin());
+DO $$ BEGIN
+  CREATE POLICY "Admins can create profiles"
+    ON user_profiles FOR INSERT
+    WITH CHECK (is_admin());
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Admins can update all profiles"
-  ON user_profiles FOR UPDATE
-  USING (is_admin());
+DO $$ BEGIN
+  CREATE POLICY "Admins can update all profiles"
+    ON user_profiles FOR UPDATE
+    USING (is_admin());
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Papers Policies
-CREATE POLICY "Users can view own papers"
-  ON papers FOR ALL
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view own papers"
+    ON papers FOR ALL
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Projects Policies
-CREATE POLICY "Users can manage own projects"
-  ON projects FOR ALL
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can manage own projects"
+    ON projects FOR ALL
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Background Jobs Policies
-CREATE POLICY "Users can view own jobs"
-  ON background_jobs FOR ALL
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view own jobs"
+    ON background_jobs FOR ALL
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Notifications Policies
-CREATE POLICY "Users can view own notifications"
-  ON notifications FOR ALL
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view own notifications"
+    ON notifications FOR ALL
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Search Alerts Policies
-CREATE POLICY "Users can manage own alerts"
-  ON search_alerts FOR ALL
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can manage own alerts"
+    ON search_alerts FOR ALL
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Knowledge Base Policies
-CREATE POLICY "Users can manage own knowledge base"
-  ON knowledge_base FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM projects
-      WHERE projects.id = knowledge_base.project_id
-      AND projects.user_id = auth.uid()
-    )
-  );
+DO $$ BEGIN
+  CREATE POLICY "Users can manage own knowledge base"
+    ON knowledge_base FOR ALL
+    USING (
+      EXISTS (
+        SELECT 1 FROM projects
+        WHERE projects.id = knowledge_base.project_id
+        AND projects.user_id = auth.uid()
+      )
+    );
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- User Paper Interactions Policies
-CREATE POLICY "Users can manage own interactions"
-  ON user_paper_interactions FOR ALL
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can manage own interactions"
+    ON user_paper_interactions FOR ALL
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Keyword Intelligence Policies (read-only for all authenticated users)
-CREATE POLICY "Authenticated users can view keyword intelligence"
-  ON keyword_intelligence FOR SELECT
-  TO authenticated
-  USING (true);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can view keyword intelligence"
+    ON keyword_intelligence FOR SELECT
+    TO authenticated
+    USING (true);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Admins can manage keyword intelligence"
-  ON keyword_intelligence FOR ALL
-  USING (is_admin());
+DO $$ BEGIN
+  CREATE POLICY "Admins can manage keyword intelligence"
+    ON keyword_intelligence FOR ALL
+    USING (is_admin());
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Project Collaborators Policies
-CREATE POLICY "Users can view collaborations they're part of"
-  ON project_collaborators FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view collaborations they're part of"
+    ON project_collaborators FOR SELECT
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Project owners can manage collaborators"
-  ON project_collaborators FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM projects
-      WHERE projects.id = project_collaborators.project_id
-      AND projects.user_id = auth.uid()
-    )
-  );
+DO $$ BEGIN
+  CREATE POLICY "Project owners can manage collaborators"
+    ON project_collaborators FOR ALL
+    USING (
+      EXISTS (
+        SELECT 1 FROM projects
+        WHERE projects.id = project_collaborators.project_id
+        AND projects.user_id = auth.uid()
+      )
+    );
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Activity Log Policies
-CREATE POLICY "Users can view own activity"
-  ON activity_log FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view own activity"
+    ON activity_log FOR SELECT
+    USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Admins can view all activity"
-  ON activity_log FOR SELECT
-  USING (is_admin());
+DO $$ BEGIN
+  CREATE POLICY "Admins can view all activity"
+    ON activity_log FOR SELECT
+    USING (is_admin());
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "All authenticated users can insert activity"
-  ON activity_log FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "All authenticated users can insert activity"
+    ON activity_log FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- System Settings Policies
-CREATE POLICY "All authenticated users can view settings"
-  ON system_settings FOR SELECT
-  TO authenticated
-  USING (true);
+DO $$ BEGIN
+  CREATE POLICY "All authenticated users can view settings"
+    ON system_settings FOR SELECT
+    TO authenticated
+    USING (true);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE POLICY "Admins can manage settings"
-  ON system_settings FOR ALL
-  USING (is_admin());
+DO $$ BEGIN
+  CREATE POLICY "Admins can manage settings"
+    ON system_settings FOR ALL
+    USING (is_admin());
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- ============================================================
--- STEP 7: INSERT DEFAULT SYSTEM SETTINGS
+-- STEP 6: INSERT DEFAULT SYSTEM SETTINGS (IF NOT EXISTS)
 -- ============================================================
 
 INSERT INTO system_settings (key, value, description) VALUES
   ('default_search_limit', '1000', 'Default number of papers to fetch per source'),
   ('refresh_interval_hours', '24', 'How often to refresh paper data (hours)'),
   ('min_keywords_match', '2', 'Minimum number of keywords that must match for relevance'),
-  ('enable_background_jobs', 'true', 'Enable background processing for paper fetching');
+  ('enable_background_jobs', 'true', 'Enable background processing for paper fetching')
+ON CONFLICT (key) DO NOTHING;
 
 -- ============================================================
--- COMPLETE!
+-- MIGRATION COMPLETE
 -- ============================================================
