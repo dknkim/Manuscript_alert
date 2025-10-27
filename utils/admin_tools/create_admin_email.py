@@ -3,6 +3,14 @@ Create admin user with email-based authentication.
 Run this after deploying the new email-based schema.
 """
 
+import sys
+from pathlib import Path
+
+
+# Add project root to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
 from services.supabase_client import get_supabase_admin_client, get_supabase_client
 
 
@@ -26,11 +34,13 @@ def create_admin():
         # Create auth user with auto-confirm
         # Note: We use admin client to bypass email confirmation
         try:
-            auth_response = admin_client.auth.admin.create_user({
-                "email": email,
-                "password": password,
-                "email_confirm": True  # Auto-confirm the user
-            })
+            auth_response = admin_client.auth.admin.create_user(
+                {
+                    "email": email,
+                    "password": password,
+                    "email_confirm": True,  # Auto-confirm the user
+                }
+            )
         except Exception as e:
             if "already been registered" in str(e):
                 print("⚠️  User already exists in auth. Looking up existing user...")
@@ -62,12 +72,12 @@ def create_admin():
             "email": email,
             "full_name": full_name,
             "role": "admin",  # ADMIN role
-            "is_active": True
+            "is_active": True,
         }
 
-        profile_result = admin_client.table("user_profiles")\
-            .insert(profile_data)\
-            .execute()
+        profile_result = (
+            admin_client.table("user_profiles").insert(profile_data).execute()
+        )
 
         if profile_result.data:
             print("✅ Admin profile created successfully!")
@@ -84,6 +94,7 @@ def create_admin():
 
     except Exception as e:
         print(f"\n❌ Error: {e!s}")
+
 
 if __name__ == "__main__":
     create_admin()
