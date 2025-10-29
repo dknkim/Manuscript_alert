@@ -1128,7 +1128,7 @@ CREATE TABLE user_preferences (
 
 ### 4.3 Phase 3: UI/UX & Advanced Features 🔄 IN PROGRESS
 
-#### 4.3.1 User Management UI ✅ COMPLETE (October 27, 2025)
+#### 4.3.1 User Management & Authentication UI ✅ COMPLETE (October 28, 2025)
 - [x] Move login status & logout button to top-right header ✅ **DONE**
 - [x] Add "Admin" tab (visible only to admin users) ✅ **DONE**
 - [x] Create User Management page in Admin tab ✅ **DONE**
@@ -1142,6 +1142,12 @@ CREATE TABLE user_preferences (
   - [x] View/edit full name
   - [x] View account info (role, created date)
   - [x] Change password functionality ✅ **DONE**
+- [x] Authentication UI improvements ✅ **DONE** (October 28, 2025)
+  - [x] Fix login panel showing when already logged in
+  - [x] Add email caching for login form (remember last email)
+  - [x] Add loading state during session restore ("Checking authentication...")
+  - [x] Prevent login form flashing during authentication check
+  - [x] Clean transition from login to main app with `st.stop()`
 
 **⚠️ NOTE:** Phase 3.1 was implemented before Phase 2 data migration. These features are functional but Phase 2 should be prioritized next.
 
