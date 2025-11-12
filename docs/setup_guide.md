@@ -13,6 +13,9 @@ If
 Then,
 ```bash
 conda install pip
+```
+Otherwise,
+```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
