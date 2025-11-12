@@ -17,7 +17,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-
+## Another Quick Start, or see Advanced (Manual Conda) below
 
 If Conda is already installed and available in your terminal, just run:
 ```bash
