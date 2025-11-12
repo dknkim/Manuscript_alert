@@ -2,6 +2,23 @@
 
 ## Quick Start, or see Advanced (Manual Conda) below
 
+The easiest way with conda env:
+```bash
+pip install -r requirements.txt
+```
+If 
+```bash
+-bash: pip: command not found
+```
+Then,
+```bash
+conda install pip
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+
+
 If Conda is already installed and available in your terminal, just run:
 ```bash
 ./run_alert_app_conda.sh
