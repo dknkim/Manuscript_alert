@@ -93,33 +93,8 @@ def papers_tab():
     with st.sidebar:
         st.header("🔧 Configuration")
 
-        # Load user preferences
-        preferences = data_storage.load_preferences()
-
-        # Keywords configuration
-        st.subheader("Keywords")
-
-        # Load existing keywords or use defaults
-        current_keywords = get_current_keywords()
-
-        # Text area for keywords input
-        keywords_text = st.text_area(
-            "Enter keywords (one per line):",
-            value="\n".join(current_keywords),
-            height=150,
-            help="Enter research topics you're interested in, one per line. "
-            "Papers must match at least 2 keywords to be displayed.",
-        )
-
-        # Parse keywords from text area
-        keywords = [k.strip() for k in keywords_text.split("\n") if k.strip()]
-
-        # Save preferences button
-        if st.button("💾 Save Keywords"):
-            preferences["keywords"] = keywords
-            data_storage.save_preferences(preferences)
-            st.success("Keywords saved!")
-            st.rerun()
+        # Load keywords from settings (configured in Settings tab)
+        keywords = get_current_keywords()
 
         # Journal Quality Filter
         st.subheader("Journal Quality")
@@ -184,15 +159,10 @@ def papers_tab():
             st.success("All caches cleared! Data will be refreshed.")
             st.rerun()
 
-        # Date range selection (moved here)
-        st.subheader("Date Range")
-        days_back = st.slider(
-            "Days to look back:",
-            min_value=1,
-            max_value=21,
-            value=7,
-            help="Number of days to search back from today",
-        )
+        # Get days_back from settings (default: 7)
+        current_settings = get_current_settings()
+        search_settings = current_settings.get("search_settings", {})
+        days_back = search_settings.get("days_back", 7)
 
     # Main content area
     # Since Streamlit doesn't support right sidebars or sticky columns natively,
@@ -202,13 +172,8 @@ def papers_tab():
     with col1:
         st.header("Recent Papers")
 
-        # Display current keywords
-        if keywords:
-            st.info(
-                f"**Active Keywords:** {', '.join(keywords[:5])}"
-                + (f" and {len(keywords) - 5} more..." if len(keywords) > 5 else "")
-            )
-        else:
+        # Check if keywords are configured
+        if not keywords:
             st.warning(
                 "No keywords configured. Please add some keywords in the sidebar."
             )
@@ -246,10 +211,8 @@ def papers_tab():
                     keywords, days_back, data_sources, end_date_normalized, search_mode
                 )
 
-                # Clear loading and show compact success message
+                # Clear loading indicator
                 loading_placeholder.empty()
-                if not papers.empty:
-                    st.success(f"🎉 Found {len(papers)} papers from {len(source_names)} {'source' if len(source_names) == 1 else 'sources'}")
         else:
             # Fallback if no sources selected
             papers = pd.DataFrame()
@@ -298,6 +261,58 @@ def papers_tab():
         )
         filtered_papers = filtered_papers[keyword_filter_mask]
 
+        # Filter papers by must-have keywords (if configured)
+        current_settings = get_current_settings()
+        must_have_keywords = current_settings.get("must_have_keywords", [])
+        
+        if must_have_keywords and len(must_have_keywords) > 0:
+            logger.info(f"Applying must-have keywords filter: {must_have_keywords}")
+            # Get count before filtering
+            count_before_must_have = len(filtered_papers)
+            
+            # Apply must-have keyword filter
+            # Use the same pattern as the keyword filter above (row.get works on pandas Series)
+            def check_must_have_keywords(row):
+                matched_kws = row.get("matched_keywords", [])
+                # Ensure it's a list
+                if not isinstance(matched_kws, list):
+                    matched_kws = []
+                
+                # Normalize both lists for comparison (strip whitespace, handle None)
+                matched_kws_normalized = [str(kw).strip() for kw in matched_kws if kw]
+                must_have_normalized = [str(kw).strip() for kw in must_have_keywords if kw]
+                
+                # Check if any must-have keyword is in the matched keywords
+                # Use exact string matching after normalization
+                has_match = any(must_kw in matched_kws_normalized for must_kw in must_have_normalized)
+                
+                if not has_match and len(matched_kws) > 0:
+                    logger.debug(f"Paper '{row.get('title', 'Unknown')[:50]}...' excluded. Matched: {matched_kws_normalized}, Must-have: {must_have_normalized}")
+                
+                return has_match
+            
+            must_have_mask = filtered_papers.apply(check_must_have_keywords, axis=1)
+            
+            # Debug: Show how many papers pass the filter
+            num_passing = must_have_mask.sum()
+            logger.info(f"Must-have filter: {num_passing} out of {len(filtered_papers)} papers pass the filter")
+            
+            filtered_papers = filtered_papers[must_have_mask]
+            
+            # Log filtering info
+            count_after_must_have = len(filtered_papers)
+            excluded_by_must_have = count_before_must_have - count_after_must_have
+            
+            logger.info(f"Must-have filter: {count_before_must_have} -> {count_after_must_have} papers (excluded {excluded_by_must_have})")
+            
+            if excluded_by_must_have > 0:
+                logger.info(f"Must-have keywords filter: {excluded_by_must_have} papers excluded, {count_after_must_have} remaining")
+                st.warning(f"🔒 **Must-have keywords filter active:** {excluded_by_must_have} papers excluded (must match: {', '.join(must_have_keywords)})")
+            elif count_before_must_have > 0:
+                st.success(f"✅ All {count_after_must_have} papers match must-have keywords: {', '.join(must_have_keywords)}")
+        else:
+            logger.info("No must-have keywords configured or empty list")
+
         # Display results count
         st.markdown(
             f"**Found {len(filtered_papers)} papers** "
@@ -306,9 +321,17 @@ def papers_tab():
 
         if len(filtered_papers) < len(papers):
             excluded_count = len(papers) - len(filtered_papers)
+            exclusion_reasons = []
+            
+            # Check if must-have keywords filter is active
+            if must_have_keywords:
+                exclusion_reasons.append(f"must match at least one of: {', '.join(must_have_keywords)}")
+            
+            exclusion_reasons.append("require minimum 2 matched keywords")
+            
+            reason_text = " and ".join(exclusion_reasons)
             st.caption(
-                f"Note: {excluded_count} papers excluded "
-                f"(require minimum 2 matched keywords)"
+                f"Note: {excluded_count} papers excluded ({reason_text})"
             )
 
         # Warning for large date ranges
@@ -527,30 +550,46 @@ def fetch_and_rank_papers(
 
     # Define processing function for parallel execution
     def process_paper(paper):
+        # Get keyword scoring settings
+        current_settings = get_current_settings()
+        keyword_scoring = current_settings.get("keyword_scoring", {})
+        
         relevance_score, matched_keywords = keyword_matcher.calculate_relevance(
-            paper, keywords
+            paper, keywords, keyword_scoring
         )
 
         # Boost score for target journals using settings
-        current_settings = get_current_settings()
         journal_scoring = current_settings.get("journal_scoring", {})
 
         if (paper.get("source") == "PubMed" and paper.get("journal") and
-            journal_scoring.get("enabled", True) and is_high_impact_journal(paper["journal"])):
+            journal_scoring.get("enabled", True)):
+            
+            # Get journal match type to determine base boost
+            match_type = get_journal_match_type(paper["journal"])
+            
+            if match_type:
+                # Apply base boost based on match type (regardless of keyword matches)
+                if match_type == "exact":
+                    relevance_score += 6.0  # Highest priority: exact matches
+                elif match_type == "family":
+                    relevance_score += 4.0  # Medium priority: family matches
+                elif match_type == "specific":
+                    relevance_score += 2.0  # Lower priority: specific journal matches
+                
+                # Apply additional keyword-based boosts (on top of base boost)
+                boosts = journal_scoring.get("high_impact_journal_boost", {})
+                num_matches = len(matched_keywords)
 
-            boosts = journal_scoring.get("high_impact_journal_boost", {})
-            num_matches = len(matched_keywords)
-
-            if num_matches >= 5:
-                relevance_score += boosts.get("5_or_more_keywords", 5.1)
-            elif num_matches >= 4:
-                relevance_score += boosts.get("4_keywords", 3.7)
-            elif num_matches >= 3:
-                relevance_score += boosts.get("3_keywords", 2.8)
-            elif num_matches >= 2:
-                relevance_score += boosts.get("2_keywords", 1.3)
-            elif num_matches >= 1:
-                relevance_score += boosts.get("1_keyword", 0.5)
+                if num_matches >= 5:
+                    relevance_score += boosts.get("5_or_more_keywords", 5.1)
+                elif num_matches >= 4:
+                    relevance_score += boosts.get("4_keywords", 3.7)
+                elif num_matches >= 3:
+                    relevance_score += boosts.get("3_keywords", 2.8)
+                elif num_matches >= 2:
+                    relevance_score += boosts.get("2_keywords", 1.3)
+                elif num_matches >= 1:
+                    relevance_score += boosts.get("1_keyword", 0.5)
 
         # Format authors list
         authors = paper.get("authors", [])
@@ -656,37 +695,56 @@ def is_journal_excluded(journal_name):
     return False
 
 
-def is_high_impact_journal(journal_name):
-    """Check if a journal is in the user-specified list of target journals"""
+def get_journal_match_type(journal_name):
+    """
+    Get the match type for a journal if it matches target journals.
+    
+    Returns:
+        "exact" for exact matches (highest priority)
+        "family" for family matches (medium priority)
+        "specific" for specific journal matches (lower priority)
+        None if no match or excluded
+    """
     if not journal_name:
-        return False
+        return None
 
     journal_lower = journal_name.lower().strip()
 
     # First check if journal should be excluded using pattern matching
     if is_journal_excluded(journal_name):
-        return False
+        return None
 
     # Load target journal patterns from settings
     current_settings = get_current_settings()
     target_patterns = current_settings.get("target_journals", {})
 
     # Check exact matches first (highest priority)
+    # Normalize patterns to lowercase and strip whitespace for consistent matching
     for exact_match in target_patterns.get("exact_matches", []):
-        if journal_lower == exact_match:
-            return True
+        exact_match_normalized = exact_match.lower().strip()
+        if journal_lower == exact_match_normalized:
+            return "exact"
 
     # Check family matches (medium priority)
+    # Normalize patterns and check if journal starts with the pattern
     for family_pattern in target_patterns.get("family_matches", []):
-        if journal_lower.startswith(family_pattern):
-            return True
+        family_pattern_normalized = family_pattern.lower().strip()
+        if journal_lower.startswith(family_pattern_normalized):
+            return "family"
 
     # Check specific journals (lower priority)
+    # Normalize patterns and check if pattern is contained in journal name
     for specific_journal in target_patterns.get("specific_journals", []):
-        if specific_journal in journal_lower:
-            return True
+        specific_journal_normalized = specific_journal.lower().strip()
+        if specific_journal_normalized in journal_lower:
+            return "specific"
 
-    return False
+    return None
+
+
+def is_high_impact_journal(journal_name):
+    """Check if a journal is in the user-specified list of target journals"""
+    return get_journal_match_type(journal_name) is not None
 
 
 def display_papers(papers_df):
@@ -961,6 +1019,26 @@ def keyword_settings(current_settings):
     if remaining_keywords:
         st.info(f"**Default Priority Keywords (1.0x boost):** {', '.join(remaining_keywords)}")
 
+    # Must have keywords (required filter)
+    st.subheader("🔒 Must Have Keywords (Optional)")
+    st.markdown("Select keywords that papers **must** match to be included in results. Papers that don't match any of these keywords will be excluded.")
+    
+    must_have_keywords = current_settings.get("must_have_keywords", [])
+    current_must_have = [kw for kw in must_have_keywords if kw in new_keywords]
+    
+    must_have_selected = st.multiselect(
+        "Must Have Keywords:",
+        options=new_keywords,
+        default=current_must_have,
+        help="Papers must match at least one of these keywords to be included. Leave empty to disable this filter."
+    )
+    
+    if must_have_selected:
+        st.info(f"📌 **Active Must Have Keywords:** {', '.join(must_have_selected)}")
+        st.caption("⚠️ Papers that don't match any of these keywords will be excluded from results.")
+    else:
+        st.caption("💡 No must-have keywords selected. All papers matching the minimum keyword threshold will be shown.")
+
     # Save keywords
     logger.debug("About to check if Save Keywords button was clicked")
     if st.button("💾 Save Keywords Configuration", type="primary", key="save_keywords_btn"):
@@ -981,6 +1059,7 @@ def keyword_settings(current_settings):
                 "boost": 1.2,
             },
         }
+        current_settings["must_have_keywords"] = must_have_selected
 
         # Save to file
         logger.info("Calling settings_service.save_settings()...")

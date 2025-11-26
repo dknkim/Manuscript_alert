@@ -102,7 +102,6 @@ KEYWORD_SCORING = {
         "keywords": [
     "Alzheimer's disease",
     "amyloid",
-    "tau",
 ],
         "boost": 1.5
     },

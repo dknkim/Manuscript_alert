@@ -102,7 +102,6 @@ KEYWORD_SCORING = {
         "keywords": [
     "Alzheimer's disease",
     "amyloid",
-    "tau",
 ],
         "boost": 1.5
     },
@@ -117,7 +116,9 @@ KEYWORD_SCORING = {
 }
 
 # Must-have keywords (required filter - papers must match at least one)
-MUST_HAVE_KEYWORDS = []
+MUST_HAVE_KEYWORDS = [
+    "tau",
+]
 
 # Default search settings
 DEFAULT_SEARCH_SETTINGS = {

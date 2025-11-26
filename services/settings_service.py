@@ -49,6 +49,7 @@ class SettingsService:
                 "keyword_scoring": settings_module.KEYWORD_SCORING,
                 "search_settings": settings_module.DEFAULT_SEARCH_SETTINGS,
                 "ui_settings": settings_module.UI_SETTINGS,
+                "must_have_keywords": getattr(settings_module, "MUST_HAVE_KEYWORDS", []),
             }
 
             logger.info(f"Settings loaded successfully: {len(settings_dict['keywords'])} keywords")
@@ -337,6 +338,9 @@ JOURNAL_EXCLUSIONS = {journal_exclusions}
 # Keyword-specific scoring (for future enhancement)
 KEYWORD_SCORING = {keyword_scoring}
 
+# Must-have keywords (required filter - papers must match at least one)
+MUST_HAVE_KEYWORDS = {must_have_keywords}
+
 # Default search settings
 DEFAULT_SEARCH_SETTINGS = {search_settings}
 
@@ -350,6 +354,7 @@ UI_SETTINGS = {ui_settings}
         target_journals_str = self._format_dict(settings.get("target_journals", {}))
         journal_exclusions_str = self._format_list(settings.get("journal_exclusions", []))
         keyword_scoring_str = self._format_dict(settings.get("keyword_scoring", {}))
+        must_have_keywords_str = self._format_list(settings.get("must_have_keywords", []))
         search_settings_str = self._format_dict(settings.get("search_settings", {}))
         ui_settings_str = self._format_dict(settings.get("ui_settings", {}))
 
@@ -359,6 +364,7 @@ UI_SETTINGS = {ui_settings}
             target_journals=target_journals_str,
             journal_exclusions=journal_exclusions_str,
             keyword_scoring=keyword_scoring_str,
+            must_have_keywords=must_have_keywords_str,
             search_settings=search_settings_str,
             ui_settings=ui_settings_str,
         )

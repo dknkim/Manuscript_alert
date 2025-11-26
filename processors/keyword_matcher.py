@@ -12,21 +12,32 @@ class KeywordMatcher:
         self._score_cache = {}  # Cache calculated scores
 
     def calculate_relevance(self, paper: dict,
-                            keywords: List[str]) -> Tuple[float, List[str]]:
+                            keywords: List[str],
+                            keyword_scoring: dict = None) -> Tuple[float, List[str]]:
         """
         Calculate relevance score for a paper based on keyword matches
         
         Args:
             paper (dict): Paper data with title, abstract, etc.
             keywords (list): List of keywords to match against
+            keyword_scoring (dict): Optional keyword priority scoring configuration
+                Format: {
+                    "high_priority": {"keywords": [...], "boost": 1.5},
+                    "medium_priority": {"keywords": [...], "boost": 1.2}
+                }
             
         Returns:
             tuple: (relevance_score, matched_keywords)
         """
         
         # Create cache key for this paper-keyword combination
+        # Include keyword_scoring in cache key if provided
+        scoring_key = ""
+        if keyword_scoring:
+            scoring_key = hash(str(sorted(keyword_scoring.get("high_priority", {}).get("keywords", []))) + 
+                              str(sorted(keyword_scoring.get("medium_priority", {}).get("keywords", []))))
         paper_id = paper.get('pmid') or paper.get('arxiv_id') or paper.get('doi') or id(paper)
-        cache_key = f"{paper_id}_{hash(tuple(sorted(keywords)))}"
+        cache_key = f"{paper_id}_{hash(tuple(sorted(keywords)))}_{scoring_key}"
         
         if cache_key in self._score_cache:
             return self._score_cache[cache_key]
@@ -44,8 +55,8 @@ class KeywordMatcher:
                 matched_keywords.append(keyword)
                 keyword_counts[keyword] = matches
 
-        # Calculate relevance score
-        relevance_score = self._calculate_score(keyword_counts, paper)
+        # Calculate relevance score with keyword priority scoring
+        relevance_score = self._calculate_score(keyword_counts, paper, keyword_scoring)
         
         # Cache the result
         result = (relevance_score, matched_keywords)
@@ -113,44 +124,80 @@ class KeywordMatcher:
 
         return matches
 
-    def _calculate_score(self, keyword_counts: dict, paper: dict) -> float:
-        """Calculate overall relevance score"""
+    def _calculate_score(self, keyword_counts: dict, paper: dict, keyword_scoring: dict = None) -> float:
+        """Calculate overall relevance score with keyword priority boosts"""
 
         if not keyword_counts:
             return 0
 
-        # Base score: number of unique keywords matched
-        base_score = len(keyword_counts)
+        # Get keyword priority lists and boosts
+        high_priority_keywords = set()
+        medium_priority_keywords = set()
+        high_priority_boost = 1.5
+        medium_priority_boost = 1.2
+        
+        if keyword_scoring:
+            high_priority_config = keyword_scoring.get("high_priority", {})
+            medium_priority_config = keyword_scoring.get("medium_priority", {})
+            high_priority_keywords = set(high_priority_config.get("keywords", []))
+            medium_priority_keywords = set(medium_priority_config.get("keywords", []))
+            high_priority_boost = high_priority_config.get("boost", 1.5)
+            medium_priority_boost = medium_priority_config.get("boost", 1.2)
 
-        # Bonus for multiple occurrences of the same keyword
-        occurrence_bonus = sum(
-            min(count - 1, 2)
-            for count in keyword_counts.values())  # Cap bonus at 2 per keyword
+        # Calculate base score with priority boosts applied per keyword
+        base_score = 0.0
+        occurrence_bonus = 0.0
+        
+        for keyword, count in keyword_counts.items():
+            # Determine priority boost for this keyword
+            if keyword in high_priority_keywords:
+                boost_multiplier = high_priority_boost
+            elif keyword in medium_priority_keywords:
+                boost_multiplier = medium_priority_boost
+            else:
+                boost_multiplier = 1.0  # Default priority
+            
+            # Base contribution: 1 point per matched keyword, multiplied by priority boost
+            base_score += 1.0 * boost_multiplier
+            
+            # Occurrence bonus: extra points for multiple occurrences, also boosted
+            occurrence_bonus += min(count - 1, 2) * boost_multiplier
 
         # Bonus for title matches (check if any keyword appears in title)
         title = paper.get('title', '')
         if not self.case_sensitive:
             title = title.lower()
 
-        title_bonus = 0
+        title_bonus = 0.0
         for keyword in keyword_counts.keys():
-            search_keyword = keyword if self.case_sensitive else keyword.lower(
-            )
+            search_keyword = keyword if self.case_sensitive else keyword.lower()
             # Check for exact matches and word boundary matches in title
             if search_keyword in title or re.search(
                     r'\b' + re.escape(search_keyword) + r'\b', title):
-                title_bonus += 1
+                # Apply priority boost to title bonus as well
+                if keyword in high_priority_keywords:
+                    title_bonus += 1.0 * high_priority_boost
+                elif keyword in medium_priority_keywords:
+                    title_bonus += 1.0 * medium_priority_boost
+                else:
+                    title_bonus += 1.0
 
         # Bonus for specific high-value keywords (PET and MRI)
-        keyword_bonus = 0
+        keyword_bonus = 0.0
         high_value_keywords = ['pet', 'mri']
         for keyword in keyword_counts.keys():
             keyword_lower = keyword.lower()
             if keyword_lower in high_value_keywords:
-                keyword_bonus += 0.5
+                # Apply priority boost to keyword bonus as well
+                if keyword in high_priority_keywords:
+                    keyword_bonus += 0.5 * high_priority_boost
+                elif keyword in medium_priority_keywords:
+                    keyword_bonus += 0.5 * medium_priority_boost
+                else:
+                    keyword_bonus += 0.5
         
         # Calculate final score
-        final_score = float(base_score) + (float(title_bonus) * 0.2) + float(keyword_bonus)
+        final_score = float(base_score) + float(occurrence_bonus) + (float(title_bonus) * 0.2) + float(keyword_bonus)
         return round(final_score, 1)
 
     def search_papers(self, papers: List[dict],
