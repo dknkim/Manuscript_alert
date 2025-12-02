@@ -570,11 +570,11 @@ def fetch_and_rank_papers(
             if match_type:
                 # Apply base boost based on match type (regardless of keyword matches)
                 if match_type == "exact":
-                    relevance_score += 6.0  # Highest priority: exact matches
+                    relevance_score += 8.0  # Highest priority: exact matches
                 elif match_type == "family":
-                    relevance_score += 4.0  # Medium priority: family matches
+                    relevance_score += 6.0  # Medium priority: family matches
                 elif match_type == "specific":
-                    relevance_score += 2.0  # Lower priority: specific journal matches
+                    relevance_score += 5.0  # Lower priority: specific journal matches
                 
                 # Apply additional keyword-based boosts (on top of base boost)
                 boosts = journal_scoring.get("high_impact_journal_boost", {})

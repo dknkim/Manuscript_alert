@@ -38,8 +38,6 @@
     ],
     "specific_journals": [
       "american journal of neuroradiology",
-      "alzheimer's & dementia",
-      "alzheimers dement",
       "ebiomedicine",
       "journal of magnetic resonance imaging",
       "magnetic resonance in medicine",
@@ -131,5 +129,8 @@
     "show_keywords": true,
     "show_relevance_scores": true,
     "papers_per_page": 50
-  }
+  },
+  "must_have_keywords": [
+    "stroke"
+  ]
 }

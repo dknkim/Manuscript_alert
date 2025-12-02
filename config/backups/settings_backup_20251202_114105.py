@@ -5,24 +5,26 @@ This file contains all configurable settings that can be modified through the UI
 
 # Default keywords for research alerts
 DEFAULT_KEYWORDS = [
-    "Alzheimer's disease",
     "PET",
-    "amyloid",
-    "tau",
-    "plasma",
-    "brain",
+    "aneurysm",
     "MRI",
+    "stroke",
+    "CT",
+    "brain",
+    "outcome",
+    "discharge",
+    "cerebral",
 ]
 
 # Journal scoring configuration
 JOURNAL_SCORING = {
     "enabled": True,
     "high_impact_journal_boost": {
-        "5_or_more_keywords": 4.9,
+        "5_or_more_keywords": 5.1,
         "4_keywords": 3.7,
         "3_keywords": 2.8,
-        "2_keywords": 0.9999999999999999,
-        "1_keyword": 0.10000000000000003
+        "2_keywords": 1.3,
+        "1_keyword": 0.5
     }
 }
 
@@ -45,13 +47,12 @@ TARGET_JOURNALS = {
 ],
     "specific_journals": [
     "american journal of neuroradiology",
-    "alzheimer's & dementia",
-    "alzheimers dement",
     "ebiomedicine",
     "journal of magnetic resonance imaging",
     "magnetic resonance in medicine",
     "radiology",
     "jmri",
+    "stroke",
     "j magn reson imaging",
     "brain : a journal of neurology",
 ]
@@ -63,6 +64,7 @@ JOURNAL_EXCLUSIONS = [
     "pediatric",
     "cardiovascular and interventional",
     "interventional",
+    "emergency",
     "skeletal",
     "clinical",
     "academic",
@@ -76,6 +78,7 @@ JOURNAL_EXCLUSIONS = [
     "brain and behavior",
     "brain imaging and behavior",
     "brain stimulation",
+    "brain connectivity",
     "brain and cognition",
     "brain, behavior, and immunity",
     "metabolic brain disease",
@@ -92,6 +95,7 @@ JOURNAL_EXCLUSIONS = [
     "life science alliance",
     "life sciences",
     "animal science",
+    "biomaterials science",
     "veterinary medical science",
     "philosophical transactions",
     "annals of the new york academy",
@@ -101,9 +105,9 @@ JOURNAL_EXCLUSIONS = [
 KEYWORD_SCORING = {
     "high_priority": {
         "keywords": [
-    "Alzheimer's disease",
-    "amyloid",
-    "tau",
+    "MRI",
+    "stroke",
+    "CT",
 ],
         "boost": 1.5
     },
@@ -111,27 +115,31 @@ KEYWORD_SCORING = {
         "keywords": [
     "PET",
     "brain",
-    "plasma",
-    "MRI",
+    "outcome",
+    "discharge",
+    "aneurysm",
+    "cerebral",
 ],
         "boost": 1.2
     }
 }
 
 # Must-have keywords (required filter - papers must match at least one)
-MUST_HAVE_KEYWORDS = []
+MUST_HAVE_KEYWORDS = [
+    "stroke",
+]
 
 # Default search settings
 DEFAULT_SEARCH_SETTINGS = {
-    "days_back": 8,
+    "days_back": 7,
     "search_mode": "Brief",
     "min_keyword_matches": 2,
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
         "arxiv": False,
-        "biorxiv": True,
-        "medrxiv": True
+        "biorxiv": False,
+        "medrxiv": False
     },
     "journal_quality_filter": False
 }

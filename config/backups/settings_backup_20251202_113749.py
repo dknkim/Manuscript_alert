@@ -11,7 +11,6 @@ DEFAULT_KEYWORDS = [
     "tau",
     "plasma",
     "brain",
-    "MRI",
 ]
 
 # Journal scoring configuration
@@ -112,7 +111,6 @@ KEYWORD_SCORING = {
     "PET",
     "brain",
     "plasma",
-    "MRI",
 ],
         "boost": 1.2
     }
