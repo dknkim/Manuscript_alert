@@ -1,6 +1,26 @@
 # Setup Guide (macOS/Linux)
 
-## Quick Start, or see Advanced (Manual Conda) below
+## Quick Start (Without Conda)
+
+If you have Python 3.8+ installed (check with `python3 --version`):
+
+```bash
+# Install dependencies
+pip3 install -r requirements.txt
+
+# Run the application
+streamlit run app.py
+```
+
+If `pip3` is not found, try:
+```bash
+python3 -m pip install -r requirements.txt
+streamlit run app.py
+```
+
+The app will open at http://localhost:8501
+
+## Quick Start (With Conda)
 
 The easiest way with conda env:
 ```bash
