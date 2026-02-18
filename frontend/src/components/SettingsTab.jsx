@@ -77,6 +77,14 @@ function KeywordSettings({ settings, onChange }) {
   );
   const [msg, setMsg] = useState(null);
 
+  // Sync local state when settings change (e.g. after loading a model)
+  useEffect(() => {
+    setKeywordsText((settings.keywords || []).join("\n"));
+    setHighPriority(settings.keyword_scoring?.high_priority?.keywords || []);
+    setMediumPriority(settings.keyword_scoring?.medium_priority?.keywords || []);
+    setMustHave(settings.must_have_keywords || []);
+  }, [settings]);
+
   const allKeywords = keywordsText
     .split("\n")
     .map((k) => k.trim())
@@ -188,6 +196,16 @@ function JournalSettings({ settings, onChange }) {
   );
   const [msg, setMsg] = useState(null);
 
+  // Sync local state when settings change (e.g. after loading a model)
+  useEffect(() => {
+    const tj = settings.target_journals || {};
+    setExact((tj.exact_matches || []).join("\n"));
+    setFamily((tj.family_matches || []).join("\n"));
+    setSpecific((tj.specific_journals || []).join("\n"));
+    const excl = settings.journal_exclusions || [];
+    setExclusions(Array.isArray(excl) ? excl.join("\n") : "");
+  }, [settings]);
+
   const handleSave = async () => {
     try {
       const updated = {
@@ -292,6 +310,30 @@ function ScoringSettings({ settings, onChange }) {
   const [sMedrxiv, setSMedrxiv] = useState(ds.medrxiv ?? false);
 
   const [msg, setMsg] = useState(null);
+
+  // Sync local state when settings change (e.g. after loading a model)
+  useEffect(() => {
+    const js = settings.journal_scoring || {};
+    setEnabled(js.enabled ?? true);
+    const boosts = js.high_impact_journal_boost || {};
+    setB5(boosts["5_or_more_keywords"] ?? 5.1);
+    setB4(boosts["4_keywords"] ?? 3.7);
+    setB3(boosts["3_keywords"] ?? 2.8);
+    setB2(boosts["2_keywords"] ?? 1.3);
+    setB1(boosts["1_keyword"] ?? 0.5);
+
+    const ss = settings.search_settings || {};
+    setDaysBack(ss.days_back ?? 7);
+    setMinKw(ss.min_keyword_matches ?? 2);
+    setMode(ss.search_mode ?? "Brief");
+    setMaxResults(ss.max_results_display ?? 50);
+
+    const ds = ss.default_sources || {};
+    setSPubmed(ds.pubmed ?? true);
+    setSArxiv(ds.arxiv ?? false);
+    setSBiorxiv(ds.biorxiv ?? false);
+    setSMedrxiv(ds.medrxiv ?? false);
+  }, [settings]);
 
   const handleSave = async () => {
     try {
