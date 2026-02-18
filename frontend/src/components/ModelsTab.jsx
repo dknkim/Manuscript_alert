@@ -1,0 +1,302 @@
+import React, { useState, useEffect } from "react";
+import {
+  listModels,
+  saveModel,
+  loadModel,
+  previewModel,
+  deleteModel,
+  saveSettings,
+} from "../api";
+
+export default function ModelsTab({ settings, onSettingsChange }) {
+  const [models, setModels] = useState([]);
+  const [modelName, setModelName] = useState("");
+  const [previewData, setPreviewData] = useState(null);
+  const [previewName, setPreviewName] = useState("");
+  const [msg, setMsg] = useState(null);
+
+  const refresh = async () => {
+    try {
+      const data = await listModels();
+      setModels(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const flash = (text, type = "success") => {
+    setMsg({ text, type });
+    setTimeout(() => setMsg(null), 4000);
+  };
+
+  const handleSave = async () => {
+    if (!modelName.trim()) {
+      flash("Please enter a model name.", "error");
+      return;
+    }
+    try {
+      await saveModel(modelName.trim());
+      flash(`Model "${modelName}" saved.`);
+      setModelName("");
+      refresh();
+    } catch (e) {
+      flash(e.message, "error");
+    }
+  };
+
+  const handleLoad = async (filename) => {
+    try {
+      await loadModel(filename);
+      flash("Model loaded successfully.");
+      onSettingsChange();
+    } catch (e) {
+      flash(e.message, "error");
+    }
+  };
+
+  const handlePreview = async (filename, name) => {
+    try {
+      const data = await previewModel(filename);
+      setPreviewData(data);
+      setPreviewName(name);
+    } catch (e) {
+      flash(e.message, "error");
+    }
+  };
+
+  const handleDelete = async (filename) => {
+    if (!window.confirm("Are you sure you want to delete this model?")) return;
+    try {
+      await deleteModel(filename);
+      flash("Model deleted.");
+      refresh();
+    } catch (e) {
+      flash(e.message, "error");
+    }
+  };
+
+  const handleExport = () => {
+    const json = JSON.stringify(settings, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `manuscript_alert_settings_${new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace(/[:-]/g, "")}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const imported = JSON.parse(text);
+      await saveSettings(imported);
+      flash("Settings imported successfully.");
+      onSettingsChange();
+    } catch (err) {
+      flash("Failed to import settings: " + err.message, "error");
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div>
+        <h2 className="text-xl font-bold text-gray-900">
+          🤖 Model Management
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Save and manage different configuration presets for different research
+          scenarios.
+        </p>
+      </div>
+
+      {/* Flash message */}
+      {msg && (
+        <div
+          className={`px-4 py-3 rounded-lg text-sm ${
+            msg.type === "error"
+              ? "bg-red-50 border border-red-200 text-red-700"
+              : "bg-green-50 border border-green-200 text-green-700"
+          }`}
+        >
+          {msg.text}
+        </div>
+      )}
+
+      {/* Save new model */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          Save Current Settings as Model
+        </h3>
+        <div className="flex gap-3">
+          <input
+            type="text"
+            value={modelName}
+            onChange={(e) => setModelName(e.target.value)}
+            placeholder='e.g., "AD Neuroimaging Focus"'
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+          />
+          <button
+            onClick={handleSave}
+            className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors"
+          >
+            💾 Save
+          </button>
+        </div>
+      </div>
+
+      {/* Existing models */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          Load Existing Models
+          <span className="ml-2 text-gray-400 font-normal">
+            ({models.length})
+          </span>
+        </h3>
+
+        {models.length === 0 ? (
+          <p className="text-sm text-gray-400 py-4 text-center">
+            No saved models yet. Save your current settings to get started.
+          </p>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {models.map((m) => (
+              <div
+                key={m.filename}
+                className="flex items-center justify-between py-3"
+              >
+                <div>
+                  <p className="text-sm font-medium text-gray-800">{m.name}</p>
+                  <p className="text-xs text-gray-400">
+                    Modified: {m.modified}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Btn
+                    onClick={() => handleLoad(m.filename)}
+                    color="indigo"
+                  >
+                    Load
+                  </Btn>
+                  <Btn
+                    onClick={() => handlePreview(m.filename, m.name)}
+                    color="gray"
+                  >
+                    Preview
+                  </Btn>
+                  <Btn onClick={() => handleDelete(m.filename)} color="red">
+                    Delete
+                  </Btn>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Preview modal */}
+      {previewData && (
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">
+              Preview: {previewName}
+            </h3>
+            <button
+              onClick={() => setPreviewData(null)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="font-medium text-gray-600 mb-1">Keywords</p>
+              <p className="text-gray-500">
+                {(previewData.keywords || []).length} keywords:{" "}
+                {(previewData.keywords || []).slice(0, 5).join(", ")}
+                {(previewData.keywords || []).length > 5 ? "…" : ""}
+              </p>
+            </div>
+            <div>
+              <p className="font-medium text-gray-600 mb-1">
+                Journal Exclusions
+              </p>
+              <p className="text-gray-500">
+                {(previewData.journal_exclusions || []).length} patterns
+              </p>
+            </div>
+            <div>
+              <p className="font-medium text-gray-600 mb-1">Search Settings</p>
+              <p className="text-gray-500">
+                Days back:{" "}
+                {previewData.search_settings?.days_back || "N/A"} | Mode:{" "}
+                {previewData.search_settings?.search_mode || "N/A"}
+              </p>
+            </div>
+            <div>
+              <p className="font-medium text-gray-600 mb-1">Target Journals</p>
+              <p className="text-gray-500">
+                {(previewData.target_journals?.exact_matches || [])
+                  .slice(0, 3)
+                  .join(", ")}
+                {(previewData.target_journals?.exact_matches || []).length > 3
+                  ? "…"
+                  : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Actions */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          Quick Actions
+        </h3>
+        <div className="flex gap-3">
+          <button
+            onClick={handleExport}
+            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            📋 Export Settings JSON
+          </button>
+          <label className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
+            📤 Import Settings
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleImport}
+              className="hidden"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Btn({ children, onClick, color }) {
+  const colors = {
+    indigo:
+      "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
+    gray: "bg-gray-50 text-gray-700 hover:bg-gray-100",
+    red: "bg-red-50 text-red-700 hover:bg-red-100",
+  };
+  return (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${colors[color]}`}
+    >
+      {children}
+    </button>
+  );
+}

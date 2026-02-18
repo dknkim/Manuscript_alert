@@ -5,173 +5,132 @@ A local web application that helps researchers stay updated with the latest pape
 ---
 ## ⚡ I've only tested Mac and Linux systems with Conda ⚡
 
-**📱 Setup Guide:** See [docs/setup_guide.md](docs/setup_guide.md) for detailed setup and troubleshooting.
-## 🐍 Run (Conda, Recommended)
+## 🚀 Quick Start (Single Command)
 
-Just run (linux):
 ```bash
-./run_alert_app_conda.sh
+#conda activate basic #if desired
+python server.py
 ```
 
-Just run (Mac):
-```bash
-streamlit run app.py 
-   
-```
-- The script creates/activates the `manuscript_alert` Conda env if needed, installs dependencies only when `requirements.txt` changes, and launches the app with hot reload.
-- The app opens at http://localhost:8501
+That's it! The server will:
+1. Automatically install frontend dependencies (if needed)
+2. Build the React frontend (if needed)
+3. Start the application at **http://localhost:8000**
 
-#### ⚡ Running Remotely ⚡ ###
-If you are running the app on a remote server (e.g., via SSH), you will not be able to access http://localhost:8501 directly from your local browser. Use one of the following methods:
+Papers from all sources (arXiv, bioRxiv, medRxiv, PubMed) are fetched automatically on startup.
+
+### Development Mode
+
+If you're working on the frontend separately with the Vite dev server:
+
+```bash
+# Terminal 1: Start the API server (skip frontend build)
+python server.py --dev
+
+# Terminal 2: Start Vite dev server with hot reload
+cd frontend && npm run dev
+```
+
+---
+
+## ⚡ Running Remotely
+
+If you are running the app on a remote server (e.g., via SSH), you will not be able to access http://localhost:8000 directly from your local browser. Use one of the following methods:
 
 **Option 1: SSH Port Forwarding (Recommended)**
 1. On your local machine, run:
    ```bash
-   ssh -L 8501:localhost:8501 your_username@remote_server_ip
+   ssh -L 8000:localhost:8000 your_username@remote_server_ip
    ```
-2. Then open [http://localhost:8501](http://localhost:8501) in your local browser.
+2. Then open [http://localhost:8000](http://localhost:8000) in your local browser.
 
 **Option 2: Access via Network/External URL**
-1. Launch the app with this command (or modify the script):
-   For local run,
-  
+1. The server already binds to `0.0.0.0`, so it is accessible on all network interfaces.
+2. Open `http://<server_ip>:8000` from your local browser.
+3. Make sure your server's firewall allows inbound connections on port 8000:
    ```bash
-
-   streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0 --server.runOnSave true
-   ```
-2. Open the Network or External URL shown in the terminal (e.g., http://10.110.5.6:8501 or http://171.66.11.71:8501) from your local browser.
-3. Make sure your server's firewall allows inbound connections on port 8501:
-   ```bash
-   sudo ufw allow 8501
+   sudo ufw allow 8000
    ```
 
 > **Note:** Exposing the app to the internet can have security implications. SSH port forwarding is safer for most users.
 
-### 4. Stopping and Restarting the App
-- To stop: Press `Ctrl+C` in the terminal where the app is running.
-- To restart after making changes to `app.py`:
+### Stopping and Restarting
+- To stop: Press `Ctrl+C` in the terminal where the server is running.
+- To restart:
   ```bash
-  ./run_alert_app_conda.sh
+  python server.py
   ```
+  The frontend is only rebuilt when source files have changed.
 
-### 5. If You See "Port 8501 is already in use", Or Choose different port
-- Find the process using the port:
-  ```bash
-  netstat -tlnp | grep 8501
-  # Example output: tcp 0 0 0.0.0.0:8501 0.0.0.0:* LISTEN 12345/python3.11
-  ```
-- Kill the process (replace 12345 with your PID):
-  ```bash
-  kill -9 12345
-  # If needed, use sudo: sudo kill -9 12345
-  ```
-- Then restart the app.
-
-### 6. Example Workflow (Full Session)
+### If Port 8000 is Already in Use
 ```bash
-# 1. Start the app (first run bootstraps env and installs deps)
-./run_alert_app_conda.sh
-
-# 2. After code changes, stop (Ctrl+C) and re-run
-./run_alert_app_conda.sh
-
-# 3. If you get a port error, find and kill the process:
-netstat -tlnp | grep 8501
+# Find the process
+lsof -i :8000
+# Kill it (replace <PID> with the actual PID)
 kill -9 <PID>
-./run_alert_app_conda.sh
+# Restart
+python server.py
 ```
+
 ---
 
 ## Features
 
 - **Multi-source paper fetching**: PubMed, arXiv, bioRxiv, and medRxiv
+- **Auto-fetch on startup**: Papers are fetched automatically when the app loads
 - **Smart keyword matching**: Papers must match at least 2 keywords to be displayed
 - **Relevance scoring**: Papers are ranked by relevance to your research interests
 - **Journal quality filtering**: Option to show only papers from high-impact journals
 - **Configurable search parameters**: Date range, search limits, and data sources
+- **Model presets**: Save and load different keyword/settings configurations
+- **Settings backup & restore**: Automatic and manual backup of settings
 - **Export functionality**: Download results as CSV
 - **Real-time statistics**: Source distribution and keyword analysis
+- **Persistent results**: Fetched papers persist across tab switches
 
 ## System Requirements
 
-- Linux operating system
-- Python 3.7 or higher
+- macOS or Linux
+- Python 3.10+
+- Node.js 18+ (with npm)
+- Conda (recommended) or venv
 - Internet connection for fetching papers
 
-## Installation using venv (legacy, not recommended)
+## Installation
 
-### Quick Install⚡
+### Prerequisites
 
-1. **Download or clone the project** to your local machine
-2. **Make the installer executable**:
+1. **Conda environment** (recommended):
    ```bash
-   chmod +x install.sh
-   ```
-3. **Run the installer**:
-   ```bash
-   ./install.sh
+   conda create -n basic python=3.11 nodejs -y
+   conda activate basic
    ```
 
-The installer will:
-- Check for Python 3 and pip
-- Create a virtual environment
-- Install all dependencies
-- Create a desktop entry for easy launching
-- Set up a custom icon
-
-### Manual Installation
-
-If you prefer to install manually:
-
-1. **Install Python dependencies**:
+2. **Install Python dependencies**:
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
-2. Launch via the legacy script:
-   ```bash
-   scripts/legacy/run_alert_app.sh
-   ```
+Frontend dependencies (npm) are installed automatically when you run `python server.py`.
 
-3. **Create a desktop entry** (optional):
-   ```bash
-   cp ManuscriptAlert.desktop ~/.local/share/applications/
-   ```
-   *Note: Update the Exec path in the .desktop file to point to your installation directory*
+---
 
 ## Usage
 
-### Launching the App
-
-**Option 1: Application Menu**
-- Search for "Manuscript Alert System" in your application menu
-- Click to launch
-
-**Option 2: Command Line (legacy venv path)**
-```bash
-scripts/legacy/run_alert_app.sh
-```
-
-**Option 3: Direct Streamlit Command**
-```bash
-source venv/bin/activate
-streamlit run app.py
-```
-
 ### Using the App
 
-1. **Configure Keywords**: Add research topics you're interested in (one per line)
-2. **Set Date Range**: Choose how many days back to search
-3. **Select Data Sources**: Choose which databases to search (PubMed, arXiv, etc.)
-4. **Adjust Search Limits**: Choose between Brief, Standard, or Extended search modes
-5. **Apply Filters**: Use the search box to filter results, or enable journal quality filtering
-6. **View Results**: Papers are ranked by relevance score and displayed with abstracts
+1. **Papers Tab**: Papers are fetched automatically on load. Use the sidebar to:
+   - Toggle data sources (arXiv, bioRxiv, medRxiv, PubMed)
+   - Select search mode (Brief / Standard / Extended)
+   - Filter by journal quality
+   - Search within results
+   - Export to CSV
+2. **Models Tab**: Save/load keyword & settings presets for different research topics
+3. **Settings Tab**: Configure keywords, journal preferences, scoring parameters, and manage backups
 
 ### Default Keywords
 
-The app comes with these default keywords:
+The app comes with default keywords including:
 - Alzheimer's disease
 - PET
 - MRI
@@ -184,124 +143,157 @@ The app comes with these default keywords:
 ## Configuration
 
 ### Keywords
-- Add your research interests in the sidebar
+- Add your research interests in the Settings tab
 - Papers must match at least 2 keywords to be displayed
 - Keywords are saved automatically
 
 ### Date Range
-- Choose from 1-21 days back from today
+- Configurable in the Settings tab (default: 7 days back)
 - Longer ranges may take more time to search
 
 ### Search Modes
-- **Brief**: Fastest, PubMed: 1000, Others: 500 papers
-- **Standard**: Balanced, PubMed: 2500, Others: 1000 papers  
-- **Extended**: Comprehensive, All sources: 5000 papers
+- **Brief**: Fastest — PubMed: 1000, Others: 500 papers
+- **Standard**: Balanced — PubMed: 2500, Others: 1000 papers
+- **Extended**: Comprehensive — All sources: 5000 papers
 
 ### Journal Quality Filter
-When enabled, shows only papers from:
-- Nature/JAMA/NPJ/Science journals
-- Radiology, AJNR, Brain
-- MRM, JMRI
-- Alzheimer's & Dementia
+When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Science, Radiology, Brain, Alzheimer's & Dementia, etc.).
+
+---
+
+## Technical Details
+
+### Architecture
+- **Frontend**: React (Vite + Tailwind CSS)
+- **Backend**: FastAPI (Python) with REST API
+- **Data Sources**: PubMed, arXiv, bioRxiv/medRxiv APIs
+- **Storage**: Local file-based settings and model presets
+- **Serving**: FastAPI serves the built React app as static files
+
+### Dependencies
+
+**Python** (`requirements.txt`):
+- `fastapi` — Web framework / API server
+- `uvicorn` — ASGI server
+- `pandas` — Data manipulation / CSV export
+- `requests` — HTTP requests
+- `beautifulsoup4` — HTML parsing
+- `lxml` — XML parsing
+- `feedparser` — RSS feed parsing
+
+**Frontend** (`frontend/package.json`):
+- `react` / `react-dom` — UI framework
+- `vite` — Build tool
+- `tailwindcss` — Utility-first CSS
+
+### File Structure
+```
+Manuscript_alert/
+├── server.py                  # FastAPI backend + static file serving
+├── requirements.txt           # Python dependencies
+├── config/
+│   ├── settings.py            # Current application settings
+│   ├── models/                # Saved model presets (JSON)
+│   └── backups/               # Settings backups
+├── core/
+│   ├── paper_manager.py       # Core paper management logic
+│   └── filters.py             # Paper filtering
+├── fetchers/
+│   ├── arxiv_fetcher.py       # arXiv API integration
+│   ├── biorxiv_fetcher.py     # bioRxiv/medRxiv API integration
+│   └── pubmed_fetcher.py      # PubMed API integration
+├── processors/
+│   └── keyword_matcher.py     # Keyword matching & relevance scoring
+├── services/
+│   ├── settings_service.py    # Settings load/save/backup
+│   └── export_service.py      # CSV export
+├── storage/
+│   └── data_storage.py        # Local data persistence
+├── utils/
+│   ├── constants.py           # Shared constants
+│   ├── journal_utils.py       # Journal name utilities
+│   └── logger.py              # Logging
+├── frontend/                  # React application
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── index.html
+│   ├── src/
+│   │   ├── main.jsx           # React entry point
+│   │   ├── App.jsx            # Root component & tab navigation
+│   │   ├── api.js             # API client (calls FastAPI)
+│   │   ├── index.css          # Tailwind CSS imports
+│   │   └── components/
+│   │       ├── PapersTab.jsx  # Papers view with sidebar controls
+│   │       ├── PaperCard.jsx  # Individual paper display
+│   │       ├── Statistics.jsx # Paper statistics
+│   │       ├── ModelsTab.jsx  # Model preset management
+│   │       └── SettingsTab.jsx# Settings management
+│   └── dist/                  # Built frontend (auto-generated)
+├── logs/                      # Application logs
+├── KB_alz/                    # Knowledge base PDFs
+├── docs/                      # Documentation
+└── scripts/                   # Utility scripts
+    └── legacy/                # Legacy Streamlit scripts
+```
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/settings` | Get current settings |
+| `PUT` | `/api/settings` | Save settings |
+| `POST` | `/api/papers/fetch` | Fetch and rank papers |
+| `POST` | `/api/papers/export` | Export papers as CSV |
+| `GET` | `/api/models` | List saved model presets |
+| `POST` | `/api/models` | Save a new model preset |
+| `POST` | `/api/models/{filename}/load` | Load a model preset |
+| `GET` | `/api/models/{filename}/preview` | Preview a model preset |
+| `DELETE` | `/api/models/{filename}` | Delete a model preset |
+| `GET` | `/api/backups` | List settings backups |
+| `POST` | `/api/backups/create` | Create a settings backup |
+| `POST` | `/api/backups/restore` | Restore a settings backup |
+| `DELETE` | `/api/backups` | Delete a settings backup |
+
+---
 
 ## Troubleshooting
 
 ### Common Issues
 
-**"Python 3 is not installed"**
+**"npm: command not found"**
 ```bash
-# Ubuntu/Debian
-sudo apt install python3 python3-pip python3-venv
-
-# CentOS/RHEL
-sudo yum install python3 python3-pip
-
-# Arch
-sudo pacman -S python python-pip
+# Install Node.js into your Conda environment
+conda install nodejs -y
 ```
 
-**"Permission denied"**
+**"Module not found" (Python)**
 ```bash
-chmod +x run_alert_app.sh
-chmod +x install.sh
-```
-
-**"Module not found"**
-```bash
-source venv/bin/activate
+conda activate basic
 pip install -r requirements.txt
 ```
 
-**App doesn't open in browser**
-- Check if port 8501 is available
-- Try accessing http://localhost:8501 manually
-- Check firewall settings
+**Port 8000 already in use**
+```bash
+lsof -i :8000
+kill -9 <PID>
+```
+
+**Frontend not displaying**
+```bash
+# Force a rebuild
+cd frontend && npm run build
+# Then restart
+cd .. && python server.py
+```
 
 ### Logs and Debugging
 
-The app runs in the terminal, so you can see any error messages directly. Common debug steps:
+- Application logs are written to `logs/app.log`
+- The server outputs to the terminal — check there for startup errors
+- API docs are available at `http://localhost:8000/docs` (Swagger UI)
 
-1. **Check if Streamlit is running**:
-   ```bash
-   ps aux | grep streamlit
-   ```
-
-2. **Check port usage**:
-   ```bash
-   netstat -tlnp | grep 8501
-   ```
-
-3. **Clear cache**:
-   ```bash
-   rm -rf ~/.streamlit/
-   ```
-
-## Uninstallation
-
-To remove the app:
-
-1. **Delete the project folder**
-2. **Remove the desktop entry**:
-   ```bash
-   rm ~/.local/share/applications/manuscript-alert.desktop
-   ```
-3. **Remove the icon** (optional):
-   ```bash
-   rm ~/.local/share/icons/manuscript-alert.svg
-   ```
-
-## Technical Details
-
-### Architecture
-- **Frontend**: Streamlit web interface
-- **Backend**: Python with concurrent API fetching
-- **Data Sources**: PubMed, arXiv, bioRxiv APIs
-- **Storage**: Local file-based caching and preferences
-
-### Dependencies
-- `streamlit`: Web framework
-- `pandas`: Data manipulation
-- `requests`: HTTP requests
-- `beautifulsoup4`: HTML parsing
-- `lxml`: XML parsing
-- `feedparser`: RSS feed parsing
-
-### File Structure
-```
-manuscript-alert-system/
-├── app.py                 # Main application
-├── arxiv_fetcher.py      # arXiv API integration
-├── biorxiv_fetcher.py    # bioRxiv/medRxiv integration
-├── pubmed_fetcher.py     # PubMed API integration
-├── keyword_matcher.py    # Keyword matching logic
-├── data_storage.py       # Local data persistence
-├── requirements.txt      # Python dependencies
-├── run_alert_app.sh     # Launcher script
-├── install.sh           # Installation script
-├── ManuscriptAlert.desktop # Desktop entry
-└── README.md            # This file
-```
-
+---
 
 ## License
 
@@ -311,9 +303,9 @@ This project is open source, but not for commercial use. Buy me a coffee when we
 
 For issues or questions:
 1. Check the troubleshooting section above
-2. Review the logs in the terminal
+2. Review the logs in the terminal and `logs/app.log`
 3. Create an issue in the project repository
 
 ---
 
-**Note**: This app requires an internet connection to fetch papers from the various APIs. The app will cache results locally to improve performance on subsequent runs. 
+**Note**: This app requires an internet connection to fetch papers from the various APIs.

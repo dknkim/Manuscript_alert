@@ -12,12 +12,15 @@
 ## 1. Executive Summary
 
 ### Current State Analysis
-The existing Manuscript Alert System is a well-architected Streamlit application that successfully:
-- Fetches papers from multiple sources (PubMed, arXiv, bioRxiv, medRxiv)
+The Manuscript Alert System has been migrated from Streamlit to a **React + FastAPI** architecture:
+- **Frontend**: React (Vite + Tailwind CSS) with tab-based UI (Papers, Models, Settings)
+- **Backend**: FastAPI REST API serving the React build as static files
+- Fetches papers from multiple sources (PubMed, arXiv, bioRxiv, medRxiv) with auto-fetch on startup
 - Implements smart keyword matching with relevance scoring
 - Provides journal quality filtering (PubMed only)
-- Offers configurable search parameters and export functionality
+- Offers configurable search parameters, model presets, and export functionality
 - Uses concurrent API fetching for performance optimization
+- Single-command launch: `python server.py` (auto-builds frontend if needed)
 
 ### Proposed Enhancement
 Integrate RAG (Retrieval-Augmented Generation) capabilities to enable project-specific knowledge base creation and semantic similarity scoring, moving beyond simple keyword matching to intelligent manuscript relevance assessment.
@@ -28,38 +31,52 @@ Integrate RAG (Retrieval-Augmented Generation) capabilities to enable project-sp
 
 ### 2.1 Core Components
 ```
-app.py (757 lines) - Main Streamlit application (UI-focused)
-├── arxiv_fetcher.py (204 lines) - arXiv API integration
-├── biorxiv_fetcher.py (211 lines) - bioRxiv/medRxiv API integration
-├── pubmed_fetcher.py (393 lines) - PubMed API integration
-├── keyword_matcher.py (201 lines) - Relevance scoring algorithm
-└── data_storage.py (189 lines) - Local data persistence
+server.py              — FastAPI backend (REST API + static file serving)
+frontend/              — React application (Vite + Tailwind CSS)
+├── src/App.jsx        — Root component & tab navigation
+├── src/api.js         — API client (calls FastAPI endpoints)
+├── src/components/    — PapersTab, ModelsTab, SettingsTab, PaperCard, Statistics
+fetchers/
+├── arxiv_fetcher.py   — arXiv API integration
+├── biorxiv_fetcher.py — bioRxiv/medRxiv API integration
+├── pubmed_fetcher.py  — PubMed API integration
+processors/
+└── keyword_matcher.py — Relevance scoring algorithm
+services/
+├── settings_service.py— Settings load/save/backup
+└── export_service.py  — CSV export
+storage/
+└── data_storage.py    — Local data persistence
+config/
+├── settings.py        — Application settings
+├── models/            — Saved model presets (JSON)
+└── backups/           — Settings backups
+utils/
+├── constants.py, journal_utils.py, logger.py
 
-**Current Issues Identified:**
-- app.py contains both UI and business logic (757 lines - too large)
-- CSV export has redundant button and poor naming ("arxiv_papers")
-- Hardcoded values scattered throughout the codebase
-- No clear separation between UI and business logic
+**Previous issues resolved by React + FastAPI migration:**
+- UI and business logic are now fully separated (React frontend vs FastAPI backend)
+- CSV export improved with direct download
+- Hardcoded values extracted to config/settings.py
+- Clean REST API with Swagger docs at /docs
 ```
 
 ### 2.2 Current Strengths
-- **Modular Architecture**: Clear separation of concerns with dedicated fetcher classes
-- **Performance Optimized**: Concurrent API fetching, caching, compiled regex patterns
-- **User-Friendly Interface**: Comprehensive sidebar configuration, real-time search
+- **Modern Architecture**: React frontend + FastAPI backend with clean REST API separation
+- **Modular Codebase**: Dedicated packages for fetchers, processors, services, storage, config, and utils
+- **Performance Optimized**: Concurrent API fetching, auto-fetch on startup, persistent results across tab switches
+- **User-Friendly Interface**: Tab-based UI (Papers, Models, Settings) with sidebar configuration and real-time search
+- **Model Presets**: Save/load different keyword & settings configurations for different research topics
 - **Robust Error Handling**: Graceful API failure handling and logging
 - **Multi-Source Integration**: Unified interface for 4 different academic APIs
+- **Single-Command Launch**: `python server.py` auto-builds frontend and starts the server
 
-### 2.3 Current Limitations Identified
+### 2.3 Remaining Limitations (to be addressed by RAG integration)
 1. **Journal Quality Filter**: Only applies to PubMed papers (not preprints)
 2. **Simple Keyword Matching**: No semantic understanding or context awareness
 3. **No Project Isolation**: All users share the same keyword-based filtering
 4. **Limited Personalization**: No learning from user preferences or reading history
 5. **No Knowledge Accumulation**: Papers are processed independently without building knowledge bases
-6. **Code Architecture Issues**: 
-   - Mixed UI and business logic in app.py (757 lines)
-   - Poor CSV export UX (redundant button, unclear naming)
-   - Hardcoded values throughout codebase
-   - No clear separation of concerns
 
 ---
 
@@ -146,13 +163,13 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
 
 ### 3.3 User Interface Enhancements
 
-#### 3.3.1 Sidebar Additions
+#### 3.3.1 React Frontend Additions (Papers Tab sidebar)
 - **Project Selection**: Dropdown for multiple knowledge bases
 - **Similarity Threshold**: Slider for minimum RAG similarity score
 - **RAG Mode Toggle**: Switch between keyword-only and RAG-enhanced modes
 - **Knowledge Base Management**: Create, delete, and manage projects
 
-#### 3.3.2 Main Interface Enhancements
+#### 3.3.2 React Frontend Enhancements (Papers Tab main area)
 - **Dual Scoring Display**: Show both keyword and RAG relevance scores
 - **Similarity Breakdown**: Display individual scoring components
 - **Knowledge Base Statistics**: Show project size and coverage
@@ -162,105 +179,73 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
 
 ## 4. Technical Implementation Plan
 
-### 4.1 Phase 0: Code Refactoring and Cleanup
+### 4.1 Phase 0: Code Refactoring and Cleanup ✅ COMPLETED
 **Objective**: Restructure existing codebase for better maintainability and prepare for RAG integration
 
-**Tasks:**
-1. **Architecture Refactoring**
-   - Step A (non-breaking reorg, no behavior changes):
-     - Create packages: `fetchers/`, `services/`, `processors/`, `storage/`, `config/`, `utils/` (with `__init__.py`)
-     - Move fetcher modules to `fetchers/` and add root-level shims:
-       - `arxiv_fetcher.py` → `fetchers/arxiv_fetcher.py` (root shim re-exports)
-       - `biorxiv_fetcher.py` → `fetchers/biorxiv_fetcher.py` (root shim re-exports)
-       - `pubmed_fetcher.py` → `fetchers/pubmed_fetcher.py` (root shim re-exports)
-     - Acceptance: All imports continue to work; no code logic changed
-   - Step B (incremental moves):
-     - Begin extracting non-UI functions from `app.py` into `services/` and `processors/` in small PRs
-   - **Create Service Layer**: Implement `paper_service.py`, `scoring_service.py`, `export_service.py` (subsequent steps)
-   - **Extract Configuration**: Move hardcoded values to `config/settings.py` and `config/constants.py` (subsequent steps)
-   - **Improve File Organization**: Continue grouping related functionality
+**Status**: This phase is complete. The system has been migrated from Streamlit to React + FastAPI:
 
-2. **UI/UX Improvements**
-   - **Fix CSV Export**: 
-     - Remove redundant "Download Results as CSV" button
-     - Make "Download Results as CSV" directly trigger CSV download
-     - Fix naming convention: Change from "arxiv_papers" to "manuscript_alert_results" or similar
-   - **Clean Up CSS**: Add custom CSS to reduce random padding and improve layout
-   - **Improve Component Structure**: Break down large functions in `app.py` into smaller, focused components
+1. **Architecture Refactoring** ✅
+   - Packages created: `fetchers/`, `services/`, `processors/`, `storage/`, `config/`, `utils/`
+   - Fetcher modules organized under `fetchers/`
+   - Service layer implemented: `settings_service.py`, `export_service.py`
+   - Configuration extracted to `config/settings.py` and `utils/constants.py`
+   - Backend API: `server.py` (FastAPI) with REST endpoints
 
-3. **Code Quality Enhancements**
-   - **Apply SOLID Principles**: Ensure each class/module has single responsibility
-   - **Implement DRY**: Remove code duplication across fetchers and processors
-   - **Follow KISS**: Simplify complex logic and reduce unnecessary complexity
-   - **Add Type Hints**: Improve code maintainability with proper type annotations
+2. **UI/UX Migration** ✅
+   - Streamlit replaced with React (Vite + Tailwind CSS)
+   - Tab-based interface: Papers, Models, Settings
+   - CSV export triggers direct file download
+   - Auto-fetch papers on startup with persistent results across tab switches
 
-4. **File Structure Reorganization**
-5. **Script Cleanup (Consolidation)**
-   - Consolidate to a single entry point `run_alert_app_conda.sh` (Conda-only path)
-   - Add `scripts/bootstrap_conda_env.sh` to auto-create/activate the `manuscript_alert` env and install dependencies only when `requirements.txt` changes
-   - Enable Streamlit hot reload by default (`--server.runOnSave true`)
-   - Move legacy scripts to `scripts/legacy/` and remove platform-specific duplication
-   - Update `README.md` to a single-step run flow (`./run_alert_app_conda.sh`) with an optional advanced manual Conda section
+3. **Code Quality** ✅
+   - Clean separation: React frontend ↔ FastAPI backend ↔ Python services
+   - SOLID principles applied across packages
+   - Type hints in backend code
+
+4. **Launch Simplification** ✅
+   - Single command: `python server.py` (auto-builds frontend, serves everything)
+   - Legacy scripts moved to `scripts/legacy/`
    ```
-   manuscript_alert/
-   ├── app.py                    # UI-focused Streamlit application
-   ├── services/                 # Business logic layer
-   │   ├── __init__.py
-   │   ├── paper_service.py      # Paper fetching and processing
-   │   ├── scoring_service.py    # Relevance scoring algorithms
-   │   ├── export_service.py     # Export functionality
-   │   └── rag_service.py        # RAG integration (future)
-   ├── fetchers/                 # Data source integrations
-   │   ├── __init__.py
+   Manuscript_alert/
+   ├── server.py                  # FastAPI backend + static file serving
+   ├── requirements.txt           # Python dependencies
+   ├── frontend/                  # React application (Vite + Tailwind CSS)
+   │   ├── src/
+   │   │   ├── App.jsx            # Root component & tab navigation
+   │   │   ├── api.js             # API client (calls FastAPI)
+   │   │   └── components/        # PapersTab, ModelsTab, SettingsTab, etc.
+   │   └── dist/                  # Built frontend (auto-generated)
+   ├── services/                  # Business logic layer
+   │   ├── settings_service.py    # Settings load/save/backup
+   │   ├── export_service.py      # Export functionality
+   │   └── rag_service.py         # RAG integration (future)
+   ├── fetchers/                  # Data source integrations
    │   ├── arxiv_fetcher.py
    │   ├── biorxiv_fetcher.py
    │   └── pubmed_fetcher.py
-   ├── processors/               # Data processing modules
-   │   ├── __init__.py
-   │   ├── keyword_matcher.py
-   │   └── text_processor.py
-   ├── storage/                  # Data persistence
-   │   ├── __init__.py
-   │   ├── data_storage.py
-   │   └── cache_manager.py
-   ├── config/                   # Configuration management
-   │   ├── __init__.py
-   │   ├── settings.py
-   │   └── constants.py
-   ├── utils/                    # Utility functions
-   │   ├── __init__.py
-   │   ├── helpers.py
-   │   └── validators.py
-   ├── data/                     # Application data storage
-   │   ├── cache/                # Temporary cache files
-   │   │   ├── api_cache/        # API response cache
-   │   │   ├── embeddings/       # Generated embeddings
-   │   │   └── temp/             # Temporary processing files
-   │   ├── user_data/            # User-specific data
-   │   │   ├── preferences/      # User preferences and settings
-   │   │   ├── exports/          # Exported CSV files
-   │   │   └── logs/             # Application logs
-   │   └── vector_db/            # Vector database storage
-   │       ├── chroma/           # ChromaDB data
-   │       └── indexes/          # Search indexes
-   └── knowledge_bases/          # Project-specific knowledge bases
+   ├── processors/                # Data processing modules
+   │   └── keyword_matcher.py
+   ├── storage/
+   │   └── data_storage.py        # Local data persistence
+   ├── config/
+   │   ├── settings.py            # Application settings
+   │   ├── models/                # Saved model presets (JSON)
+   │   └── backups/               # Settings backups
+   ├── utils/
+   │   ├── constants.py
+   │   ├── journal_utils.py
+   │   └── logger.py
+   ├── core/
+   │   ├── paper_manager.py
+   │   └── filters.py
+   ├── logs/                      # Application logs
+   ├── KB_alz/                    # Knowledge base PDFs (Alzheimer's)
+   └── knowledge_bases/           # Project-specific knowledge bases (future)
        ├── project_alzheimers/
-       │   ├── papers/           # PDF papers
-       │   │   ├── paper1.pdf
-       │   │   ├── paper2.pdf
-       │   │   └── ...
-       │   ├── press_releases/   # Press releases and news
-       │   │   ├── press1.txt
-       │   │   └── ...
-       │   └── metadata.json     # Project metadata
-       ├── project_neuroimaging/
        │   ├── papers/
        │   ├── press_releases/
        │   └── metadata.json
-       └── project_tau/
-           ├── papers/
-           ├── press_releases/
-           └── metadata.json
+       └── ...
    ```
 
 5. **Data Storage Strategy**
@@ -304,13 +289,13 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
 
 **For Manuscript Alert System:**
 1. **Keep JSON for Simple Data**: User preferences, project metadata, logs
-2. **Keep Current Cache System**: Streamlit's built-in caching + simple JSON cache
+2. **Keep Python-based Settings**: `config/settings.py` for application configuration
 3. **Add ChromaDB for RAG**: Only for embeddings and similarity search
 4. **File System for Documents**: Simple folder structure for PDFs and knowledge bases
 
 **Rationale:**
-- **JSON**: Simple, works well for small datasets, no setup required
-- **Streamlit Cache**: Already handles paper caching efficiently
+- **JSON/Python files**: Simple, works well for small datasets, no setup required
+- **FastAPI in-memory**: Papers are fetched per-session; React state persists across tab switches
 - **ChromaDB**: Only needed for RAG functionality
 - **File System**: Natural for document storage, no database needed
 
@@ -328,7 +313,7 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
 
 **Phase 2: Add ChromaDB for RAG**
 - Integrate ChromaDB only for embeddings and similarity search
-- Keep existing paper caching system unchanged
+- Add new FastAPI endpoints for RAG operations
 - Add RAG scoring to existing keyword matching
 
 **Phase 3: Document Management**
@@ -593,18 +578,18 @@ app.py (757 lines) - Main Streamlit application (UI-focused)
    - Add project-specific settings
 
 ### 4.4 Phase 3: UI Enhancement
-**Objective**: Enhance user interface for RAG functionality
+**Objective**: Enhance React frontend for RAG functionality
 
 **Tasks:**
-1. **Sidebar Enhancements**
+1. **PapersTab Sidebar Enhancements**
    - Add project selection dropdown
    - Implement similarity threshold controls
    - Create RAG mode toggle
 
-2. **Main Interface Updates**
-   - Display dual scoring system
+2. **React Component Updates**
+   - Display dual scoring system in PaperCard component
    - Add similarity breakdown visualization
-   - Implement knowledge base statistics
+   - New KnowledgeBaseTab or section in SettingsTab for KB management
 
 3. **User Experience Improvements**
    - Add onboarding for RAG features

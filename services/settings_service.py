@@ -8,8 +8,6 @@ import re
 from datetime import datetime
 from typing import Any
 
-import streamlit as st
-
 from utils.logger import Logger
 
 
@@ -57,7 +55,7 @@ class SettingsService:
             return settings_dict
         except Exception as e:
             logger.error(f"Error loading settings: {e}", exc_info=True)
-            st.error(f"Error loading settings: {e}")
+            logger.error(f"Error loading settings: {e}")
             return self._get_default_settings()
 
     def _get_default_settings(self) -> dict[str, Any]:
@@ -176,7 +174,7 @@ class SettingsService:
 
         except Exception as e:
             logger.error(f"❌ Error saving settings: {e}", exc_info=True)
-            st.error(f"Error saving settings: {e}")
+            logger.error(f"Error saving settings: {e}")
             return False
 
     def _create_backup(self):
@@ -189,7 +187,7 @@ class SettingsService:
                 with open(backup_file, "w", encoding="utf-8") as dst:
                     dst.write(src.read())
         except Exception as e:
-            st.warning(f"Could not create backup: {e}")
+            logger.warning(f"Could not create backup: {e}")
 
     def _update_keywords(self, content: str, keywords: list[str]) -> str:
         """Update the DEFAULT_KEYWORDS section"""
@@ -424,7 +422,7 @@ UI_SETTINGS = {ui_settings}
 
             return True
         except Exception as e:
-            st.error(f"Error restoring backup: {e}")
+            logger.error(f"Error restoring backup: {e}")
             return False
 
     def list_backups(self) -> list[str]:
