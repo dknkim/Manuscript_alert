@@ -3,6 +3,10 @@ from datetime import datetime, timedelta
 
 import requests
 
+from utils.logger import Logger
+
+logger = Logger(__name__)
+
 
 class BioRxivFetcher:
     """Handles fetching papers from bioRxiv and medRxiv APIs"""
@@ -56,15 +60,15 @@ class BioRxivFetcher:
             # Check if this is a rate limiting error
             if hasattr(e, "response") and e.response is not None and e.response.status_code == 429:
                 self.consecutive_rate_limits += 1
-                print(f"⏳ Rate limited by {server} (#{self.consecutive_rate_limits}): {e}")
+                logger.warning(f"Rate limited by {server} (#{self.consecutive_rate_limits}): {e}")
             else:
-                print(f"Error fetching papers from {server}: {e}")
+                logger.error(f"Error fetching papers from {server}: {e}")
             if api_url:
-                print(f"URL attempted: {api_url}")
+                logger.info(f"URL attempted: {api_url}")
         except Exception as e:
-            print(f"Error processing {server} response: {e}")
+            logger.error(f"Error processing {server} response: {e}")
             if api_url:
-                print(f"URL attempted: {api_url}")
+                logger.info(f"URL attempted: {api_url}")
         return papers
 
     def _paper_matches_keywords(self, paper, keywords):
@@ -134,7 +138,7 @@ class BioRxivFetcher:
         if time_since_last < adjusted_delay:
             sleep_time = adjusted_delay - time_since_last
             if self.consecutive_rate_limits > 0:
-                print(f"⏸️ BioRxiv: Using adjusted delay {adjusted_delay:.2f}s after {self.consecutive_rate_limits} rate limits")
+                logger.info(f"BioRxiv: Using adjusted delay {adjusted_delay:.2f}s after {self.consecutive_rate_limits} rate limits")
             time.sleep(sleep_time)
 
         self.last_request_time = time.time()
@@ -156,5 +160,3 @@ class BioRxivFetcher:
         except:
             pass
         return status
-
-

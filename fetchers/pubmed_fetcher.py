@@ -5,6 +5,10 @@ from urllib.parse import quote
 
 import requests
 
+from utils.logger import Logger
+
+logger = Logger(__name__)
+
 
 class PubMedFetcher:
     """Handles fetching papers from PubMed API"""
@@ -22,21 +26,21 @@ class PubMedFetcher:
 
     def fetch_papers(self, start_date, end_date, keywords, brief_mode=False, extended_mode=False):
         try:
-            print("🔎 PubMed: Searching for papers...")
+            logger.info("PubMed: Searching for papers...")
             paper_ids = self._search_papers(start_date, end_date, keywords, brief_mode, extended_mode)
             if not paper_ids:
-                print("❌ PubMed: No paper IDs found")
+                logger.info("PubMed: No paper IDs found")
                 return []
-            print(f"🆔 PubMed: Found {len(paper_ids)} paper IDs")
+            logger.info(f"PubMed: Found {len(paper_ids)} paper IDs")
             papers = self._fetch_paper_details(paper_ids)
             return papers
         except Exception as e:
-            print(f"Error fetching papers from PubMed: {e}")
+            logger.error(f"Error fetching papers from PubMed: {e}")
             return []
 
     def _search_papers(self, start_date, end_date, keywords, brief_mode=False, extended_mode=False):
         search_query = self._build_search_query(keywords, start_date, end_date)
-        print(f"🔍 PubMed query: {search_query}")
+        logger.info(f"PubMed query: {search_query}")
         count_params = {
             "db": "pubmed",
             "term": search_query,
@@ -45,13 +49,13 @@ class PubMedFetcher:
             "email": "research@example.com"
         }
         try:
-            print("📊 Getting search count...")
+            logger.info("Getting search count...")
             count_response = requests.get(self.search_url, params=count_params, timeout=10)
             count_response.raise_for_status()
             count_root = ET.fromstring(count_response.content)
             count_elem = count_root.find("Count")
             total_count = int(count_elem.text) if count_elem is not None and count_elem.text else 0
-            print(f"📊 Found {total_count} total papers in PubMed")
+            logger.info(f"Found {total_count} total papers in PubMed")
             if brief_mode:
                 max_limit = 1000
             elif extended_mode:
@@ -59,16 +63,16 @@ class PubMedFetcher:
             else:
                 max_limit = self.max_results
             actual_max = min(total_count, max_limit)
-            print(f"📄 Will fetch {actual_max} papers (limit: {max_limit})")
+            logger.info(f"Will fetch {actual_max} papers (limit: {max_limit})")
         except Exception as e:
-            print(f"⚠️ Error getting search count: {e}")
+            logger.warning(f"Error getting search count: {e}")
             if brief_mode:
                 actual_max = 1000
             elif extended_mode:
                 actual_max = 5000
             else:
                 actual_max = self.max_results
-            print(f"📄 Using fallback limit: {actual_max}")
+            logger.info(f"Using fallback limit: {actual_max}")
 
         # Adaptive rate limiting - only delay if we made a recent request
         self._apply_rate_limit()
@@ -83,20 +87,20 @@ class PubMedFetcher:
             "email": "research@example.com"
         }
         try:
-            print("🌐 Making PubMed search request...")
+            logger.info("Making PubMed search request...")
             response = requests.get(self.search_url, params=params, timeout=10)
             response.raise_for_status()
-            print("✅ PubMed search response received")
+            logger.info("PubMed search response received")
             root = ET.fromstring(response.content)
             id_list = root.find("IdList")
             if id_list is not None:
                 paper_ids = [id_elem.text for id_elem in id_list.findall("Id") if id_elem.text]
-                print(f"🆔 Extracted {len(paper_ids)} paper IDs")
+                logger.info(f"Extracted {len(paper_ids)} paper IDs")
                 return paper_ids
-            print("❌ No IdList found in response")
+            logger.info("No IdList found in response")
             return []
         except Exception as e:
-            print(f"❌ Error searching PubMed: {e}")
+            logger.error(f"Error searching PubMed: {e}")
             return []
 
     def _build_search_query(self, keywords, start_date, end_date):
@@ -114,19 +118,19 @@ class PubMedFetcher:
 
     def _fetch_paper_details(self, paper_ids):
         if not paper_ids:
-            print("❌ No paper IDs to fetch details for")
+            logger.info("No paper IDs to fetch details for")
             return []
 
-        print(f"📄 Starting to fetch details for {len(paper_ids)} papers...")
+        logger.info(f"Starting to fetch details for {len(paper_ids)} papers...")
         all_papers = []
         batch_size = 100  # Increased from 50 for better performance
         total_batches = (len(paper_ids) + batch_size - 1) // batch_size
-        print(f"📦 Will process {total_batches} batches of {batch_size} papers each")
+        logger.info(f"Will process {total_batches} batches of {batch_size} papers each")
 
         for i in range(0, len(paper_ids), batch_size):
             batch_num = (i // batch_size) + 1
             batch_ids = paper_ids[i:i + batch_size]
-            print(f"📦 Processing batch {batch_num}/{total_batches} ({len(batch_ids)} papers)...")
+            logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch_ids)} papers)...")
             id_string = ",".join(batch_ids)
             params = {
                 "db": "pubmed",
@@ -147,9 +151,9 @@ class PubMedFetcher:
 
                     # Reset rate limiting on successful request
                     if self.consecutive_rate_limits > 0:
-                        print("✅ Successful request - resetting rate limit counter")
+                        logger.info("Successful request - resetting rate limit counter")
                         self.consecutive_rate_limits = max(0, self.consecutive_rate_limits - 1)
-                    print(f"✅ Batch {batch_num}/{total_batches} completed - got {len(batch_papers)} papers (total: {len(all_papers)})")
+                    logger.info(f"Batch {batch_num}/{total_batches} completed - got {len(batch_papers)} papers (total: {len(all_papers)})")
                     break
                 except requests.exceptions.HTTPError as e:
                     if e.response.status_code == 429:
@@ -162,10 +166,10 @@ class PubMedFetcher:
                         jitter = base_wait * 0.1 * (0.5 + (hash(str(time.time())) % 100) / 100)
                         wait_time = base_wait + jitter
 
-                        print(f"⏳ Rate limited by PubMed (#{self.consecutive_rate_limits}). Waiting {wait_time:.1f}s...")
+                        logger.warning(f"Rate limited by PubMed (#{self.consecutive_rate_limits}). Waiting {wait_time:.1f}s...")
                         time.sleep(wait_time)
                     else:
-                        print(f"HTTP error fetching PubMed batch {i//batch_size + 1}: {e}")
+                        logger.error(f"HTTP error fetching PubMed batch {i//batch_size + 1}: {e}")
                         break
                 except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                     # Connection issues - retry with conservative backoff following NCBI guidelines
@@ -173,13 +177,13 @@ class PubMedFetcher:
                         # Conservative wait times: 3s, 10s, 30s - respecting NCBI's infrastructure
                         wait_times = [3, 10, 30]
                         wait_time = wait_times[min(retry, len(wait_times) - 1)]
-                        print(f"Connection error for PubMed batch {i//batch_size + 1}. Retrying in {wait_time}s...")
+                        logger.warning(f"Connection error for PubMed batch {i//batch_size + 1}. Retrying in {wait_time}s...")
                         time.sleep(wait_time)
                     else:
-                        print(f"Connection failed for PubMed batch {i//batch_size + 1} after {max_retries} attempts: {e}")
+                        logger.error(f"Connection failed for PubMed batch {i//batch_size + 1} after {max_retries} attempts: {e}")
                         break
                 except Exception as e:
-                    print(f"Unexpected error fetching PubMed batch {i//batch_size + 1}: {e}")
+                    logger.error(f"Unexpected error fetching PubMed batch {i//batch_size + 1}: {e}")
                     break
         return all_papers
 
@@ -193,9 +197,9 @@ class PubMedFetcher:
                 if paper:
                     papers.append(paper)
         except ET.ParseError as e:
-            print(f"Error parsing PubMed XML: {e}")
+            logger.error(f"Error parsing PubMed XML: {e}")
         except Exception as e:
-            print(f"Error extracting PubMed paper data: {e}")
+            logger.error(f"Error extracting PubMed paper data: {e}")
         return papers
 
     def _extract_paper_info(self, article):
@@ -281,7 +285,7 @@ class PubMedFetcher:
                 paper["categories"].extend(mesh_terms[:5])
             return paper
         except Exception as e:
-            print(f"Error extracting paper info: {e}")
+            logger.error(f"Error extracting paper info: {e}")
             return None
 
     def _clean_text(self, text):
@@ -329,10 +333,10 @@ class PubMedFetcher:
             if time_since_rate_limit < self.cooldown_period:
                 # Still in cooldown - use higher delay
                 adjusted_delay = self.rate_limit_delay * (1 + self.consecutive_rate_limits)
-                print(f"⏸️ In cooldown period ({time_since_rate_limit:.1f}s/{self.cooldown_period}s), using {adjusted_delay:.2f}s delay")
+                logger.info(f"In cooldown period ({time_since_rate_limit:.1f}s/{self.cooldown_period}s), using {adjusted_delay:.2f}s delay")
             else:
                 # Cooldown expired - reset rate limit tracking
-                print("✅ Cooldown period expired, resuming normal rate limiting")
+                logger.info("Cooldown period expired, resuming normal rate limiting")
                 self.consecutive_rate_limits = 0
                 adjusted_delay = self.rate_limit_delay
         else:
@@ -359,5 +363,3 @@ class PubMedFetcher:
             return response.status_code == 200
         except Exception:
             return False
-
-

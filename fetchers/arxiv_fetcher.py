@@ -5,6 +5,10 @@ from urllib.parse import quote
 
 import requests
 
+from utils.logger import Logger
+
+logger = Logger(__name__)
+
 
 class ArxivFetcher:
     """Handles fetching papers from arXiv API"""
@@ -60,10 +64,10 @@ class ArxivFetcher:
             return filtered_papers
 
         except requests.RequestException as e:
-            print(f"Error fetching papers from arXiv: {e}")
+            logger.error(f"Error fetching papers from arXiv: {e}")
             return []
         except Exception as e:
-            print(f"Error processing arXiv response: {e}")
+            logger.error(f"Error processing arXiv response: {e}")
             return []
 
     def _build_search_query(self, keywords, start_date, end_date):
@@ -164,9 +168,9 @@ class ArxivFetcher:
                 papers.append(paper)
 
         except ET.ParseError as e:
-            print(f"Error parsing XML: {e}")
+            logger.error(f"Error parsing XML: {e}")
         except Exception as e:
-            print(f"Error extracting paper data: {e}")
+            logger.error(f"Error extracting paper data: {e}")
 
         return papers
 
@@ -203,5 +207,3 @@ class ArxivFetcher:
                 filtered_papers.append(paper)
 
         return filtered_papers
-
-
