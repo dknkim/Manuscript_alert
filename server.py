@@ -61,6 +61,9 @@ pubmed_fetcher: PubMedFetcher = PubMedFetcher()
 keyword_matcher: KeywordMatcher = KeywordMatcher()
 settings_service: SettingsService = SettingsService()
 
+# Cache for the last fetch result so export doesn't re-fetch
+_fetch_cache: dict[str, Any] | None = None
+
 # ---------------------------------------------------------------------------
 # Pydantic models
 # ---------------------------------------------------------------------------
@@ -334,6 +337,7 @@ def save_settings(req: SaveSettingsRequest) -> StatusResponse:
 @app.post("/api/papers/fetch")
 def fetch_papers(req: FetchRequest) -> dict[str, Any]:
     """Fetch, rank, and filter papers."""
+    global _fetch_cache
     settings: dict[str, Any] = _load_settings()
     papers: list[dict[str, Any]]
     errors: list[str]
@@ -349,6 +353,13 @@ def fetch_papers(req: FetchRequest) -> dict[str, Any]:
             if not any(mk in p["matched_keywords"] for mk in must_have):
                 continue
         filtered.append(p)
+
+    # Cache the full filtered list so export can reuse it without re-fetching
+    _fetch_cache = {
+        "data_sources": req.data_sources,
+        "search_mode": req.search_mode,
+        "filtered": filtered,
+    }
 
     return {
         "papers": filtered[:50],
@@ -366,18 +377,24 @@ def export_papers(req: FetchRequest) -> StreamingResponse:
 
     import pandas as pd
 
-    settings: dict[str, Any] = _load_settings()
-    papers: list[dict[str, Any]]
-    papers, _ = _fetch_and_rank(settings, req.data_sources, req.search_mode)
-
-    # Same filter
-    must_have: list[str] = settings.get("must_have_keywords", [])
-    filtered: list[dict[str, Any]] = [
-        p
-        for p in papers
-        if len(p["matched_keywords"]) >= 2
-        and (not must_have or any(mk in p["matched_keywords"] for mk in must_have))
-    ]
+    # Reuse the last fetch result if the request params match, skipping a full re-fetch
+    if (
+        _fetch_cache is not None
+        and _fetch_cache["data_sources"] == req.data_sources
+        and _fetch_cache["search_mode"] == req.search_mode
+    ):
+        filtered: list[dict[str, Any]] = _fetch_cache["filtered"]
+    else:
+        settings: dict[str, Any] = _load_settings()
+        papers: list[dict[str, Any]]
+        papers, _ = _fetch_and_rank(settings, req.data_sources, req.search_mode)
+        must_have: list[str] = settings.get("must_have_keywords", [])
+        filtered = [
+            p
+            for p in papers
+            if len(p["matched_keywords"]) >= 2
+            and (not must_have or any(mk in p["matched_keywords"] for mk in must_have))
+        ]
 
     df: pd.DataFrame = pd.DataFrame(filtered)
     buf: io.StringIO = io.StringIO()

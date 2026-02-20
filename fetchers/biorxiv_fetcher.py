@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import concurrent.futures
 import time
 from datetime import datetime, timedelta
 
@@ -31,21 +32,14 @@ class BioRxivFetcher:
         brief_mode: bool = False,
         extended_mode: bool = False,
     ) -> list[dict[str, object]]:
-        """Fetch papers from both bioRxiv and medRxiv."""
-        all_papers: list[dict[str, object]] = []
-
-        biorxiv_papers: list[dict[str, object]] = self._fetch_from_server(
-            "biorxiv", start_date, end_date, keywords, brief_mode, extended_mode
-        )
-        all_papers.extend(biorxiv_papers)
-
-        self._apply_rate_limit()
-
-        medrxiv_papers: list[dict[str, object]] = self._fetch_from_server(
-            "medrxiv", start_date, end_date, keywords, brief_mode, extended_mode
-        )
-        all_papers.extend(medrxiv_papers)
-        return all_papers
+        """Fetch papers from both bioRxiv and medRxiv in parallel."""
+        args = (start_date, end_date, keywords, brief_mode, extended_mode)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            future_bio = executor.submit(self._fetch_from_server, "biorxiv", *args)
+            future_med = executor.submit(self._fetch_from_server, "medrxiv", *args)
+            biorxiv_papers = future_bio.result()
+            medrxiv_papers = future_med.result()
+        return biorxiv_papers + medrxiv_papers
 
     def _fetch_from_server(
         self,

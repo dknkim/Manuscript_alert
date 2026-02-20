@@ -38,5 +38,67 @@
       "is_high_impact": true,
       "archived_at": "2026-02-19T22:21:33.846821"
     }
+  ],
+  "2026-02-20": [
+    {
+      "title": "Hallucinations and delusions are associated with elevated tau PET signal independent of age, clinical severity, and amyloid burden.",
+      "authors": "Aubrey S Johnson, Hannah Houlihan, Galen Ziaggi...",
+      "abstract": "Psychosis in Alzheimer's disease (AD) is associated with worse outcomes, yet no established biomarkers exist for early diagnosis and intervention. We compared tau positron emission tomography (PET) burden across older individuals with and without psychotic symptoms.",
+      "published": "2026-01-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41696647/",
+      "source": "PubMed",
+      "relevance_score": 24.2,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau"
+      ],
+      "journal": "Alzheimer's & dementia (Amsterdam, Netherlands)",
+      "volume": "18",
+      "issue": "1",
+      "is_high_impact": true,
+      "archived_at": "2026-02-20T11:11:36.516309"
+    },
+    {
+      "title": "Refining Alzheimer's disease biological diagnosis with plasma biomarkers: Resolving p-tau217 \"gray zone\" with p-tau181 integration.",
+      "authors": "Giulia Giacomucci, Silvia Maria Rita Tabbì, Assunta Ingannato...",
+      "abstract": "Blood-based biomarkers offer a less invasive and more scalable alternative to cerebrospinal fluid (CSF) analysis and amyloid-positron emission tomography (PET) for the biological diagnosis of Alzheimer's disease (AD). Among blood-based biomarkers (BBMs), plasma phosphorylated tau217 (p-tau217) has shown the highest accuracy, although intermediate (\"gray zone\") values remain challenging to interpret.",
+      "published": "2026-01-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41700306/",
+      "source": "PubMed",
+      "relevance_score": 20.6,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "plasma"
+      ],
+      "journal": "Alzheimer's & dementia (Amsterdam, Netherlands)",
+      "volume": "18",
+      "issue": "1",
+      "is_high_impact": true,
+      "archived_at": "2026-02-20T11:11:52.476958"
+    },
+    {
+      "title": "Clinical amyloid and tau positron emission tomography imaging in Alzheimer's disease: image interpretation in the era of anti-amyloid therapies.",
+      "authors": "Gregory Mathoux, Elif Harput, Débora E Peretti...",
+      "abstract": "The introduction of disease-modifying anti-amyloid therapies has shifted the role of positron emission tomography (PET) imaging in Alzheimer's disease from confirming diagnosis to actively guiding clinical decision-making within the AT(N) framework.",
+      "published": "2026-02-20",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41715292/",
+      "source": "PubMed",
+      "relevance_score": 16.2,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau"
+      ],
+      "journal": "Current opinion in neurology",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-02-20T11:12:15.914525"
+    }
   ]
 }
