@@ -1,9 +1,26 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { fetchPapers, exportPapersCSV } from "../api";
+"use client";
+
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import { fetchPapers, exportPapersCSV } from "@/lib/api";
+import type { Settings, FetchResult, DataSources } from "@/types";
 import PaperCard from "./PaperCard";
 import Statistics from "./Statistics";
 
-const SEARCH_MODES = [
+interface SearchMode {
+  value: string;
+  label: string;
+  hint: string;
+}
+
+const SEARCH_MODES: SearchMode[] = [
   {
     value: "Brief (PubMed: 1000, Others: 500)",
     label: "Brief",
@@ -21,6 +38,16 @@ const SEARCH_MODES = [
   },
 ];
 
+interface PapersTabProps {
+  settings: Settings;
+  result: FetchResult | null;
+  setResult: Dispatch<SetStateAction<FetchResult | null>>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  error: string | null;
+  setError: Dispatch<SetStateAction<string | null>>;
+}
+
 export default function PapersTab({
   settings,
   result,
@@ -29,50 +56,58 @@ export default function PapersTab({
   setLoading,
   error,
   setError,
-}) {
-  const searchSettings = settings.search_settings || {};
+}: PapersTabProps) {
+  const searchSettings = settings.search_settings || ({} as Settings["search_settings"]);
 
-  const [sources, setSources] = useState({
+  const [sources, setSources] = useState<DataSources>({
     arxiv: true,
     biorxiv: true,
     medrxiv: true,
     pubmed: true,
   });
-  const [searchMode, setSearchMode] = useState(SEARCH_MODES[0].value);
-  const [highImpactOnly, setHighImpactOnly] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchMode, setSearchMode] = useState<string>(SEARCH_MODES[0].value);
+  const [highImpactOnly, setHighImpactOnly] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const keywords = settings.keywords || [];
+  const keywords: string[] = settings.keywords || [];
 
   // ---------- fetch ----------
-  const handleFetch = useCallback(async (overrideSources) => {
-    const srcs = overrideSources || sources;
-    if (!Object.values(srcs).some(Boolean)) {
-      setError("Please select at least one data source.");
-      return;
-    }
-    if (keywords.length === 0) {
-      setError("No keywords configured. Add keywords in Settings.");
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchPapers(srcs, searchMode);
-      setResult(data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [sources, searchMode, keywords, setResult, setLoading, setError]);
+  const handleFetch = useCallback(
+    async (overrideSources?: DataSources) => {
+      const srcs = overrideSources || sources;
+      if (!Object.values(srcs).some(Boolean)) {
+        setError("Please select at least one data source.");
+        return;
+      }
+      if (keywords.length === 0) {
+        setError("No keywords configured. Add keywords in Settings.");
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchPapers(srcs, searchMode);
+        setResult(data);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [sources, searchMode, keywords, setResult, setLoading, setError],
+  );
 
   // ---------- auto-fetch on first load ----------
-  const didAutoFetch = useRef(false);
+  const didAutoFetch = useRef<boolean>(false);
   useEffect(() => {
     if (!didAutoFetch.current && keywords.length > 0 && !result) {
       didAutoFetch.current = true;
-      const allSources = { arxiv: true, biorxiv: true, medrxiv: true, pubmed: true };
+      const allSources: DataSources = {
+        arxiv: true,
+        biorxiv: true,
+        medrxiv: true,
+        pubmed: true,
+      };
       handleFetch(allSources);
     }
   }, [keywords, handleFetch, result]);
@@ -91,14 +126,14 @@ export default function PapersTab({
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.abstract.toLowerCase().includes(q) ||
-          p.authors.toLowerCase().includes(q)
+          p.authors.toLowerCase().includes(q),
       );
     }
     return papers;
   }, [result, highImpactOnly, searchQuery]);
 
   // ---------- export ----------
-  const handleExport = async () => {
+  const handleExport = async (): Promise<void> => {
     try {
       const blob = await exportPapersCSV(sources, searchMode);
       const url = window.URL.createObjectURL(blob);
@@ -112,7 +147,7 @@ export default function PapersTab({
     }
   };
 
-  const toggleSource = (key) =>
+  const toggleSource = (key: keyof DataSources): void =>
     setSources((prev) => ({ ...prev, [key]: !prev[key] }));
 
   return (
@@ -179,13 +214,18 @@ export default function PapersTab({
             Data Sources
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            {[
-              { key: "arxiv", label: "arXiv" },
-              { key: "biorxiv", label: "bioRxiv" },
-              { key: "medrxiv", label: "medRxiv" },
-              { key: "pubmed", label: "PubMed" },
-            ].map((s) => (
-              <label key={s.key} className="flex items-center gap-2 cursor-pointer">
+            {(
+              [
+                { key: "arxiv", label: "arXiv" },
+                { key: "biorxiv", label: "bioRxiv" },
+                { key: "medrxiv", label: "medRxiv" },
+                { key: "pubmed", label: "PubMed" },
+              ] as const
+            ).map((s) => (
+              <label
+                key={s.key}
+                className="flex items-center gap-2 cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={sources[s.key]}
@@ -271,21 +311,21 @@ export default function PapersTab({
           )}
 
           {/* API errors */}
-          {result?.errors?.length > 0 && (
+          {result?.errors?.length ? (
             <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg text-sm">
               {result.errors.map((e, i) => (
                 <div key={i}>⚠️ {e}</div>
               ))}
             </div>
-          )}
+          ) : null}
 
           {/* Must-have info */}
-          {result?.must_have_keywords?.length > 0 && (
+          {result?.must_have_keywords?.length ? (
             <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm">
               🔒 Must-have filter active: papers must match one of{" "}
               <strong>{result.must_have_keywords.join(", ")}</strong>
             </div>
-          )}
+          ) : null}
 
           {/* Result count */}
           {result && (

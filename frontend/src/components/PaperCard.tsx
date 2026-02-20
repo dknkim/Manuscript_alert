@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+"use client";
 
-const SOURCE_COLORS = {
+import { useState } from "react";
+import type { Paper } from "@/types";
+
+const SOURCE_COLORS: Record<string, string> = {
   PubMed: "bg-orange-500",
   arXiv: "bg-red-700",
   BioRxiv: "bg-emerald-600",
@@ -9,15 +12,19 @@ const SOURCE_COLORS = {
   Medrxiv: "bg-blue-600",
 };
 
-function scoreColor(score) {
+function scoreColor(score: number): string {
   if (score >= 7.5) return "text-green-600 border-green-500";
   if (score >= 5) return "text-amber-500 border-amber-400";
   if (score >= 2.5) return "text-orange-600 border-orange-400";
   return "text-red-600 border-red-500";
 }
 
-export default function PaperCard({ paper }) {
-  const [expanded, setExpanded] = useState(false);
+interface PaperCardProps {
+  paper: Paper;
+}
+
+export default function PaperCard({ paper }: PaperCardProps) {
+  const [expanded, setExpanded] = useState<boolean>(false);
   const badge = SOURCE_COLORS[paper.source] || "bg-gray-500";
   const colors = scoreColor(paper.relevance_score);
 
@@ -37,7 +44,6 @@ export default function PaperCard({ paper }) {
       <div className="flex gap-5">
         {/* Main content */}
         <div className="flex-1 min-w-0">
-          {/* Title */}
           {paper.url ? (
             <a
               href={paper.url}

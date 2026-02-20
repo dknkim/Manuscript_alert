@@ -21,13 +21,13 @@ Papers from all sources (arXiv, bioRxiv, medRxiv, PubMed) are fetched automatica
 
 ### Development Mode
 
-If you're working on the frontend separately with the Vite dev server:
+If you're working on the frontend separately with the Next.js dev server:
 
 ```bash
 # Terminal 1: Start the API server (skip frontend build)
 python server.py --dev
 
-# Terminal 2: Start Vite dev server with hot reload
+# Terminal 2: Start Next.js dev server with hot reload
 cd frontend && npm run dev
 ```
 
@@ -164,11 +164,11 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 ## Technical Details
 
 ### Architecture
-- **Frontend**: React (Vite + Tailwind CSS)
-- **Backend**: FastAPI (Python) with REST API
+- **Frontend**: Next.js 15 + React 19 + TypeScript 5.7 + Tailwind CSS 3.4
+- **Backend**: FastAPI (Python 3.10+) with type hints, Pydantic models, REST API
 - **Data Sources**: PubMed, arXiv, bioRxiv/medRxiv APIs
-- **Storage**: Local file-based settings and model presets
-- **Serving**: FastAPI serves the built React app as static files
+- **Storage**: Local file-based settings and model presets (JSON + Python)
+- **Serving**: FastAPI serves the Next.js static export (`frontend/out/`) + REST API
 
 ### Dependencies
 
@@ -180,61 +180,69 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 - `beautifulsoup4` — HTML parsing
 - `lxml` — XML parsing
 - `feedparser` — RSS feed parsing
+- `ruff` — Python linter
 
 **Frontend** (`frontend/package.json`):
-- `react` / `react-dom` — UI framework
-- `vite` — Build tool
+- `next` — React framework (static export)
+- `react` / `react-dom` — UI library
+- `typescript` — Type-safe JavaScript
 - `tailwindcss` — Utility-first CSS
 
 ### File Structure
 ```
 Manuscript_alert/
-├── server.py                  # FastAPI backend + static file serving
-├── requirements.txt           # Python dependencies
+├── server.py                      # FastAPI backend + static file serving
+├── requirements.txt               # Python dependencies
+├── pyproject.toml                 # Ruff configuration
 ├── config/
-│   ├── settings.py            # Current application settings
-│   ├── models/                # Saved model presets (JSON)
-│   └── backups/               # Settings backups
+│   ├── settings.py                # Current application settings
+│   ├── models/                    # Saved model presets (JSON)
+│   └── backups/                   # Settings backups
 ├── core/
-│   ├── paper_manager.py       # Core paper management logic
-│   └── filters.py             # Paper filtering
+│   ├── paper_manager.py           # Core paper management logic
+│   └── filters.py                 # Paper filtering
 ├── fetchers/
-│   ├── arxiv_fetcher.py       # arXiv API integration
-│   ├── biorxiv_fetcher.py     # bioRxiv/medRxiv API integration
-│   └── pubmed_fetcher.py      # PubMed API integration
+│   ├── arxiv_fetcher.py           # arXiv API integration
+│   ├── biorxiv_fetcher.py         # bioRxiv/medRxiv API integration
+│   └── pubmed_fetcher.py          # PubMed API integration
 ├── processors/
-│   └── keyword_matcher.py     # Keyword matching & relevance scoring
+│   └── keyword_matcher.py         # Keyword matching & relevance scoring
 ├── services/
-│   ├── settings_service.py    # Settings load/save/backup
-│   └── export_service.py      # CSV export
+│   ├── settings_service.py        # Settings load/save/backup
+│   └── export_service.py          # CSV export
 ├── storage/
-│   └── data_storage.py        # Local data persistence
+│   └── data_storage.py            # Local data persistence
 ├── utils/
-│   ├── constants.py           # Shared constants
-│   ├── journal_utils.py       # Journal name utilities
-│   └── logger.py              # Logging
-├── frontend/                  # React application
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   ├── index.html
+│   ├── constants.py               # Shared constants
+│   ├── journal_utils.py           # Journal name utilities
+│   └── logger.py                  # Logging
+├── frontend/                      # Next.js + TypeScript application
+│   ├── package.json               # Next.js 15, React 19, TypeScript 5.7
+│   ├── tsconfig.json              # Strict TypeScript config
+│   ├── next.config.ts             # Static export (output: "export")
+│   ├── tailwind.config.ts         # Tailwind CSS config
+│   ├── postcss.config.mjs         # PostCSS + Autoprefixer
 │   ├── src/
-│   │   ├── main.jsx           # React entry point
-│   │   ├── App.jsx            # Root component & tab navigation
-│   │   ├── api.js             # API client (calls FastAPI)
-│   │   ├── index.css          # Tailwind CSS imports
-│   │   └── components/
-│   │       ├── PapersTab.jsx  # Papers view with sidebar controls
-│   │       ├── PaperCard.jsx  # Individual paper display
-│   │       ├── Statistics.jsx # Paper statistics
-│   │       ├── ModelsTab.jsx  # Model preset management
-│   │       └── SettingsTab.jsx# Settings management
-│   └── dist/                  # Built frontend (auto-generated)
-├── logs/                      # Application logs
-├── KB_alz/                    # Knowledge base PDFs
-├── docs/                      # Documentation
-└── scripts/                   # Utility scripts
-    └── legacy/                # Legacy Streamlit scripts
+│   │   ├── app/
+│   │   │   ├── layout.tsx         # Root layout
+│   │   │   ├── page.tsx           # Main page & tab navigation
+│   │   │   └── globals.css        # Tailwind directives
+│   │   ├── components/
+│   │   │   ├── PapersTab.tsx      # Papers view with sidebar controls
+│   │   │   ├── PaperCard.tsx      # Individual paper display
+│   │   │   ├── Statistics.tsx     # Paper statistics
+│   │   │   ├── ModelsTab.tsx      # Model preset management
+│   │   │   └── SettingsTab.tsx    # Settings management
+│   │   ├── lib/
+│   │   │   └── api.ts             # Typed API client
+│   │   └── types/
+│   │       └── index.ts           # Shared TypeScript interfaces
+│   └── out/                       # Built static files (auto-generated)
+├── logs/                          # Application logs
+├── KB_alz/                        # Knowledge base PDFs
+├── docs/                          # Documentation
+└── scripts/                       # Utility scripts
+    └── legacy/                    # Legacy scripts
 ```
 
 ### API Endpoints

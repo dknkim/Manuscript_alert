@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   listModels,
   saveModel,
@@ -6,16 +8,25 @@ import {
   previewModel,
   deleteModel,
   saveSettings,
-} from "../api";
+} from "@/lib/api";
+import type { Settings, ModelInfo, FlashMessage } from "@/types";
 
-export default function ModelsTab({ settings, onSettingsChange }) {
-  const [models, setModels] = useState([]);
-  const [modelName, setModelName] = useState("");
-  const [previewData, setPreviewData] = useState(null);
-  const [previewName, setPreviewName] = useState("");
-  const [msg, setMsg] = useState(null);
+interface ModelsTabProps {
+  settings: Settings;
+  onSettingsChange: () => Promise<void>;
+}
 
-  const refresh = async () => {
+export default function ModelsTab({
+  settings,
+  onSettingsChange,
+}: ModelsTabProps) {
+  const [models, setModels] = useState<ModelInfo[]>([]);
+  const [modelName, setModelName] = useState<string>("");
+  const [previewData, setPreviewData] = useState<Settings | null>(null);
+  const [previewName, setPreviewName] = useState<string>("");
+  const [msg, setMsg] = useState<FlashMessage | null>(null);
+
+  const refresh = async (): Promise<void> => {
     try {
       const data = await listModels();
       setModels(data);
@@ -28,12 +39,12 @@ export default function ModelsTab({ settings, onSettingsChange }) {
     refresh();
   }, []);
 
-  const flash = (text, type = "success") => {
+  const flash = (text: string, type: "success" | "error" = "success"): void => {
     setMsg({ text, type });
     setTimeout(() => setMsg(null), 4000);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     if (!modelName.trim()) {
       flash("Please enter a model name.", "error");
       return;
@@ -43,43 +54,46 @@ export default function ModelsTab({ settings, onSettingsChange }) {
       flash(`Model "${modelName}" saved.`);
       setModelName("");
       refresh();
-    } catch (e) {
-      flash(e.message, "error");
+    } catch (e: unknown) {
+      flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
   };
 
-  const handleLoad = async (filename) => {
+  const handleLoad = async (filename: string): Promise<void> => {
     try {
       await loadModel(filename);
       flash("Model loaded successfully.");
       onSettingsChange();
-    } catch (e) {
-      flash(e.message, "error");
+    } catch (e: unknown) {
+      flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
   };
 
-  const handlePreview = async (filename, name) => {
+  const handlePreview = async (
+    filename: string,
+    name: string,
+  ): Promise<void> => {
     try {
       const data = await previewModel(filename);
       setPreviewData(data);
       setPreviewName(name);
-    } catch (e) {
-      flash(e.message, "error");
+    } catch (e: unknown) {
+      flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
   };
 
-  const handleDelete = async (filename) => {
+  const handleDelete = async (filename: string): Promise<void> => {
     if (!window.confirm("Are you sure you want to delete this model?")) return;
     try {
       await deleteModel(filename);
       flash("Model deleted.");
       refresh();
-    } catch (e) {
-      flash(e.message, "error");
+    } catch (e: unknown) {
+      flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
   };
 
-  const handleExport = () => {
+  const handleExport = (): void => {
     const json = JSON.stringify(settings, null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -93,17 +107,23 @@ export default function ModelsTab({ settings, onSettingsChange }) {
     URL.revokeObjectURL(url);
   };
 
-  const handleImport = async (e) => {
+  const handleImport = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
       const text = await file.text();
-      const imported = JSON.parse(text);
+      const imported = JSON.parse(text) as Settings;
       await saveSettings(imported);
       flash("Settings imported successfully.");
       onSettingsChange();
-    } catch (err) {
-      flash("Failed to import settings: " + err.message, "error");
+    } catch (err: unknown) {
+      flash(
+        "Failed to import settings: " +
+          (err instanceof Error ? err.message : "Unknown error"),
+        "error",
+      );
     }
   };
 
@@ -181,10 +201,7 @@ export default function ModelsTab({ settings, onSettingsChange }) {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Btn
-                    onClick={() => handleLoad(m.filename)}
-                    color="indigo"
-                  >
+                  <Btn onClick={() => handleLoad(m.filename)} color="indigo">
                     Load
                   </Btn>
                   <Btn
@@ -284,10 +301,19 @@ export default function ModelsTab({ settings, onSettingsChange }) {
   );
 }
 
-function Btn({ children, onClick, color }) {
-  const colors = {
-    indigo:
-      "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
+/* ── Sub-components ──────────────────────────────────────── */
+
+function Btn({
+  children,
+  onClick,
+  color,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  color: "indigo" | "gray" | "red";
+}) {
+  const colors: Record<string, string> = {
+    indigo: "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
     gray: "bg-gray-50 text-gray-700 hover:bg-gray-100",
     red: "bg-red-50 text-red-700 hover:bg-red-100",
   };

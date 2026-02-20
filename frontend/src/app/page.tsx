@@ -1,23 +1,32 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { getSettings } from "./api";
-import PapersTab from "./components/PapersTab";
-import ModelsTab from "./components/ModelsTab";
-import SettingsTab from "./components/SettingsTab";
+"use client";
 
-const TABS = [
+import { useState, useEffect, useCallback } from "react";
+import { getSettings } from "@/lib/api";
+import type { Settings, FetchResult } from "@/types";
+import PapersTab from "@/components/PapersTab";
+import ModelsTab from "@/components/ModelsTab";
+import SettingsTab from "@/components/SettingsTab";
+
+interface TabDef {
+  key: string;
+  label: string;
+  icon: string;
+}
+
+const TABS: TabDef[] = [
   { key: "papers", label: "Papers", icon: "📚" },
   { key: "models", label: "Models", icon: "🤖" },
   { key: "settings", label: "Settings", icon: "⚙️" },
 ];
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState("papers");
-  const [settings, setSettings] = useState(null);
+export default function Home() {
+  const [activeTab, setActiveTab] = useState<string>("papers");
+  const [settings, setSettings] = useState<Settings | null>(null);
 
   // Lifted paper state — survives tab switches
-  const [papersResult, setPapersResult] = useState(null);
-  const [papersLoading, setPapersLoading] = useState(false);
-  const [papersError, setPapersError] = useState(null);
+  const [papersResult, setPapersResult] = useState<FetchResult | null>(null);
+  const [papersLoading, setPapersLoading] = useState<boolean>(false);
+  const [papersError, setPapersError] = useState<string | null>(null);
 
   const loadSettings = useCallback(async () => {
     try {
@@ -96,10 +105,16 @@ export default function App() {
           />
         </div>
         <div style={{ display: activeTab === "models" ? "block" : "none" }}>
-          <ModelsTab settings={settings} onSettingsChange={handleSettingsChange} />
+          <ModelsTab
+            settings={settings}
+            onSettingsChange={handleSettingsChange}
+          />
         </div>
         <div style={{ display: activeTab === "settings" ? "block" : "none" }}>
-          <SettingsTab settings={settings} onSettingsChange={handleSettingsChange} />
+          <SettingsTab
+            settings={settings}
+            onSettingsChange={handleSettingsChange}
+          />
         </div>
       </main>
     </div>

@@ -1,10 +1,18 @@
-import React from "react";
+"use client";
 
-export default function Statistics({ papers, allPapers }) {
+import { useState } from "react";
+import type { Paper } from "@/types";
+
+interface StatisticsProps {
+  papers: Paper[];
+  allPapers: Paper[];
+}
+
+export default function Statistics({ papers, allPapers }: StatisticsProps) {
   if (!allPapers || allPapers.length === 0) return null;
 
   // Source counts
-  const sourceCounts = {};
+  const sourceCounts: Record<string, number> = {};
   allPapers.forEach((p) => {
     sourceCounts[p.source] = (sourceCounts[p.source] || 0) + 1;
   });
@@ -13,7 +21,7 @@ export default function Statistics({ papers, allPapers }) {
   const highImpact = allPapers.filter((p) => p.is_high_impact).length;
 
   // Keyword frequency
-  const kwCounts = {};
+  const kwCounts: Record<string, number> = {};
   allPapers.forEach((p) => {
     (p.matched_keywords || []).forEach((kw) => {
       kwCounts[kw] = (kwCounts[kw] || 0) + 1;
@@ -30,14 +38,12 @@ export default function Statistics({ papers, allPapers }) {
 
   return (
     <div className="space-y-5">
-      {/* Overview */}
       <Section title="📈 Overview" defaultOpen>
         <Metric label="Total Papers" value={allPapers.length} />
         <Metric label="Avg Score" value={avg} />
         <Metric label="Max Score" value={max} />
       </Section>
 
-      {/* Sources */}
       <Section title="📊 Sources" defaultOpen>
         {Object.entries(sourceCounts).map(([src, count]) => (
           <div key={src} className="flex justify-between text-sm py-0.5">
@@ -47,14 +53,12 @@ export default function Statistics({ papers, allPapers }) {
         ))}
       </Section>
 
-      {/* High Impact */}
       {highImpact > 0 && (
         <Section title="🏆 Journal Quality" defaultOpen>
           <Metric label="Relevant Journals" value={highImpact} />
         </Section>
       )}
 
-      {/* Keywords */}
       <Section title="🔍 Top Keywords">
         {topKeywords.map(([kw, count]) => (
           <div key={kw} className="flex justify-between text-sm py-0.5">
@@ -67,7 +71,15 @@ export default function Statistics({ papers, allPapers }) {
   );
 }
 
-function Metric({ label, value }) {
+/* ── Sub-components ──────────────────────────────────────── */
+
+function Metric({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) {
   return (
     <div className="flex justify-between items-baseline py-1">
       <span className="text-sm text-gray-500">{label}</span>
@@ -76,8 +88,16 @@ function Metric({ label, value }) {
   );
 }
 
-function Section({ title, defaultOpen = false, children }) {
-  const [open, setOpen] = React.useState(defaultOpen);
+function Section({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState<boolean>(defaultOpen);
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <button

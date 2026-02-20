@@ -1,3 +1,7 @@
+"""Fetcher for arXiv papers via the arXiv API."""
+
+from __future__ import annotations
+
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -7,31 +11,39 @@ import requests
 
 from utils.logger import Logger
 
-logger = Logger(__name__)
+logger: Logger = Logger(__name__)
 
 
 class ArxivFetcher:
-    """Handles fetching papers from arXiv API"""
+    """Handles fetching papers from arXiv API."""
 
-    def __init__(self):
-        self.base_url = "http://export.arxiv.org/api/query"
-        self.max_results = 1000  # Balanced for speed and coverage
+    def __init__(self) -> None:
+        self.base_url: str = "http://export.arxiv.org/api/query"
+        self.max_results: int = 1000  # Balanced for speed and coverage
 
-    def fetch_papers(self, start_date, end_date, keywords, brief_mode=False, extended_mode=False):
+    def fetch_papers(
+        self,
+        start_date: datetime,
+        end_date: datetime,
+        keywords: list[str],
+        brief_mode: bool = False,
+        extended_mode: bool = False,
+    ) -> list[dict[str, object]]:
         """
-        Fetch papers from arXiv API based on date range and keywords
-        
+        Fetch papers from arXiv API based on date range and keywords.
+
         Args:
-            start_date (datetime): Start date for search
-            end_date (datetime): End date for search
-            keywords (list): List of keywords to search for
-            
-        Returns:
-            list: List of paper dictionaries
-        """
+            start_date: Start date for search
+            end_date: End date for search
+            keywords: List of keywords to search for
+            brief_mode: If True, limit results for faster retrieval
+            extended_mode: If True, fetch more results for comprehensive coverage
 
+        Returns:
+            List of paper dictionaries
+        """
         # Build search query
-        search_query = self._build_search_query(keywords, start_date, end_date)
+        search_query: str = self._build_search_query(keywords, start_date, end_date)
 
         # Set max results based on mode
         if brief_mode:
@@ -42,25 +54,26 @@ class ArxivFetcher:
             max_results = self.max_results
 
         # Prepare API parameters
-        params = {
+        params: dict[str, str | int] = {
             "search_query": search_query,
             "start": 0,
             "max_results": max_results,
             "sortBy": "submittedDate",
-            "sortOrder": "descending"
+            "sortOrder": "descending",
         }
 
         try:
-            # Make API request
-            response = requests.get(self.base_url, params=params, timeout=10)
+            response: requests.Response = requests.get(
+                self.base_url, params=params, timeout=10
+            )
             response.raise_for_status()
 
-            # Parse XML response
-            papers = self._parse_arxiv_response(response.content)
-
-            # Filter by date (additional filtering as arXiv search might be imprecise)
-            filtered_papers = self._filter_by_date(papers, start_date, end_date)
-
+            papers: list[dict[str, object]] = self._parse_arxiv_response(
+                response.content
+            )
+            filtered_papers: list[dict[str, object]] = self._filter_by_date(
+                papers, start_date, end_date
+            )
             return filtered_papers
 
         except requests.RequestException as e:
@@ -70,85 +83,92 @@ class ArxivFetcher:
             logger.error(f"Error processing arXiv response: {e}")
             return []
 
-    def _build_search_query(self, keywords, start_date, end_date):
-        """Build arXiv search query string"""
-
-        # Create OR query for keywords in title, abstract, or categories
-        keyword_queries = []
+    def _build_search_query(
+        self,
+        keywords: list[str],
+        start_date: datetime,
+        end_date: datetime,
+    ) -> str:
+        """Build arXiv search query string."""
+        keyword_queries: list[str] = []
         for keyword in keywords:
-            # Escape special characters and build query
-            escaped_keyword = quote(keyword)
-            keyword_query = f'(ti:"{keyword}" OR abs:"{keyword}")'
+            _escaped_keyword: str = quote(keyword)
+            keyword_query: str = f'(ti:"{keyword}" OR abs:"{keyword}")'
             keyword_queries.append(keyword_query)
 
-        # Combine all keyword queries with OR
-        combined_query = " OR ".join(keyword_queries)
-
-        # Add date range (arXiv uses YYYYMMDD format)
-        date_query = f'submittedDate:[{start_date.strftime("%Y%m%d")}0000 TO {end_date.strftime("%Y%m%d")}2359]'
-
-        # Combine keyword and date queries
-        full_query = f"({combined_query}) AND {date_query}"
-
+        combined_query: str = " OR ".join(keyword_queries)
+        date_query: str = (
+            f'submittedDate:[{start_date.strftime("%Y%m%d")}0000 '
+            f'TO {end_date.strftime("%Y%m%d")}2359]'
+        )
+        full_query: str = f"({combined_query}) AND {date_query}"
         return full_query
 
-    def _parse_arxiv_response(self, xml_content):
-        """Parse arXiv API XML response"""
-
-        papers = []
+    def _parse_arxiv_response(
+        self, xml_content: bytes
+    ) -> list[dict[str, object]]:
+        """Parse arXiv API XML response."""
+        papers: list[dict[str, object]] = []
 
         try:
-            # Parse XML
-            root = ET.fromstring(xml_content)
-
-            # Define namespaces
-            namespaces = {
+            root: ET.Element = ET.fromstring(xml_content)
+            namespaces: dict[str, str] = {
                 "atom": "http://www.w3.org/2005/Atom",
-                "arxiv": "http://arxiv.org/schemas/atom"
+                "arxiv": "http://arxiv.org/schemas/atom",
             }
-
-            # Extract entries (papers)
-            entries = root.findall("atom:entry", namespaces)
+            entries: list[ET.Element] = root.findall("atom:entry", namespaces)
 
             for entry in entries:
-                paper = {}
+                paper: dict[str, object] = {}
 
                 # Title
-                title_elem = entry.find("atom:title", namespaces)
-                paper["title"] = self._clean_text(title_elem.text if title_elem is not None else "")
+                title_elem: ET.Element | None = entry.find("atom:title", namespaces)
+                paper["title"] = self._clean_text(
+                    title_elem.text if title_elem is not None else ""
+                )
 
                 # Abstract
-                summary_elem = entry.find("atom:summary", namespaces)
-                paper["abstract"] = self._clean_text(summary_elem.text if summary_elem is not None else "")
+                summary_elem: ET.Element | None = entry.find(
+                    "atom:summary", namespaces
+                )
+                paper["abstract"] = self._clean_text(
+                    summary_elem.text if summary_elem is not None else ""
+                )
 
                 # Authors
-                authors = []
-                author_elems = entry.findall("atom:author", namespaces)
+                authors: list[str] = []
+                author_elems: list[ET.Element] = entry.findall(
+                    "atom:author", namespaces
+                )
                 for author_elem in author_elems:
-                    name_elem = author_elem.find("atom:name", namespaces)
+                    name_elem: ET.Element | None = author_elem.find(
+                        "atom:name", namespaces
+                    )
                     if name_elem is not None and name_elem.text:
                         authors.append(name_elem.text.strip())
                 paper["authors"] = authors
 
                 # Published date
-                published_elem = entry.find("atom:published", namespaces)
-                if published_elem is not None:
+                published_elem: ET.Element | None = entry.find(
+                    "atom:published", namespaces
+                )
+                if published_elem is not None and published_elem.text:
                     paper["published"] = self._parse_date(published_elem.text)
                 else:
                     paper["published"] = datetime.now().strftime("%Y-%m-%d")
 
                 # arXiv URL
-                id_elem = entry.find("atom:id", namespaces)
+                id_elem: ET.Element | None = entry.find("atom:id", namespaces)
                 if id_elem is not None and id_elem.text:
-                    arxiv_id = id_elem.text
-                    # Ensure the URL is properly formatted
+                    arxiv_id: str = id_elem.text
                     if arxiv_id.startswith("http://arxiv.org/abs/"):
                         paper["arxiv_url"] = arxiv_id.replace("http://", "https://")
                     elif not arxiv_id.startswith("https://"):
-                        # Extract arXiv ID and construct proper URL
                         if "arxiv.org/abs/" in arxiv_id:
-                            arxiv_number = arxiv_id.split("arxiv.org/abs/")[-1]
-                            paper["arxiv_url"] = f"https://arxiv.org/abs/{arxiv_number}"
+                            arxiv_number: str = arxiv_id.split("arxiv.org/abs/")[-1]
+                            paper["arxiv_url"] = (
+                                f"https://arxiv.org/abs/{arxiv_number}"
+                            )
                         else:
                             paper["arxiv_url"] = arxiv_id
                     else:
@@ -157,10 +177,12 @@ class ArxivFetcher:
                     paper["arxiv_url"] = ""
 
                 # Categories
-                categories = []
-                category_elems = entry.findall("atom:category", namespaces)
+                categories: list[str] = []
+                category_elems: list[ET.Element] = entry.findall(
+                    "atom:category", namespaces
+                )
                 for cat_elem in category_elems:
-                    term = cat_elem.get("term")
+                    term: str | None = cat_elem.get("term")
                     if term:
                         categories.append(term)
                 paper["categories"] = categories
@@ -174,36 +196,38 @@ class ArxivFetcher:
 
         return papers
 
-    def _clean_text(self, text):
-        """Clean and normalize text"""
+    def _clean_text(self, text: str | None) -> str:
+        """Clean and normalize text."""
         if not text:
             return ""
+        return re.sub(r"\s+", " ", text.strip())
 
-        # Remove extra whitespace and newlines
-        text = re.sub(r"\s+", " ", text.strip())
-
-        return text
-
-    def _parse_date(self, date_string):
-        """Parse date string to YYYY-MM-DD format"""
+    def _parse_date(self, date_string: str) -> str:
+        """Parse date string to YYYY-MM-DD format."""
         try:
-            # arXiv dates are in ISO format
-            dt = datetime.fromisoformat(date_string.replace("Z", "+00:00"))
+            dt: datetime = datetime.fromisoformat(
+                date_string.replace("Z", "+00:00")
+            )
             return dt.strftime("%Y-%m-%d")
-        except:
+        except Exception:
             return datetime.now().strftime("%Y-%m-%d")
 
-    def _filter_by_date(self, papers, start_date, end_date):
-        """Additional date filtering for papers"""
-        filtered_papers = []
-
+    def _filter_by_date(
+        self,
+        papers: list[dict[str, object]],
+        start_date: datetime,
+        end_date: datetime,
+    ) -> list[dict[str, object]]:
+        """Additional date filtering for papers."""
+        filtered_papers: list[dict[str, object]] = []
         for paper in papers:
             try:
-                paper_date = datetime.strptime(paper["published"], "%Y-%m-%d")
+                paper_date: datetime = datetime.strptime(
+                    str(paper["published"]), "%Y-%m-%d"
+                )
                 if start_date.date() <= paper_date.date() <= end_date.date():
                     filtered_papers.append(paper)
-            except:
+            except Exception:
                 # If date parsing fails, include the paper
                 filtered_papers.append(paper)
-
         return filtered_papers

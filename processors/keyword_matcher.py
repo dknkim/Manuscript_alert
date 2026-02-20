@@ -1,180 +1,186 @@
+"""Keyword matching and relevance scoring for papers."""
+
+from __future__ import annotations
+
 import re
-from typing import List, Tuple
 
 
 class KeywordMatcher:
-    """Handles keyword matching and relevance scoring for papers"""
+    """Handles keyword matching and relevance scoring for papers."""
 
-    def __init__(self):
-        self.case_sensitive = False
-        self._compiled_patterns = {}  # Cache compiled regex patterns
-        self._text_cache = {}  # Cache processed text
-        self._score_cache = {}  # Cache calculated scores
+    def __init__(self) -> None:
+        self.case_sensitive: bool = False
+        self._compiled_patterns: dict[str, re.Pattern[str]] = {}
+        self._text_cache: dict[object, str] = {}
+        self._score_cache: dict[str, tuple[float, list[str]]] = {}
 
-    def calculate_relevance(self, paper: dict,
-                            keywords: List[str],
-                            keyword_scoring: dict = None) -> Tuple[float, List[str]]:
+    def calculate_relevance(
+        self,
+        paper: dict[str, object],
+        keywords: list[str],
+        keyword_scoring: dict[str, object] | None = None,
+    ) -> tuple[float, list[str]]:
         """
-        Calculate relevance score for a paper based on keyword matches
-        
+        Calculate relevance score for a paper based on keyword matches.
+
         Args:
-            paper (dict): Paper data with title, abstract, etc.
-            keywords (list): List of keywords to match against
-            keyword_scoring (dict): Optional keyword priority scoring configuration
-                Format: {
-                    "high_priority": {"keywords": [...], "boost": 1.5},
-                    "medium_priority": {"keywords": [...], "boost": 1.2}
-                }
-            
+            paper: Paper data with title, abstract, etc.
+            keywords: List of keywords to match against
+            keyword_scoring: Optional keyword priority scoring configuration
+
         Returns:
-            tuple: (relevance_score, matched_keywords)
+            Tuple of (relevance_score, matched_keywords)
         """
-        
-        # Create cache key for this paper-keyword combination
-        # Include keyword_scoring in cache key if provided
-        scoring_key = ""
+        scoring_key: str | int = ""
         if keyword_scoring:
-            scoring_key = hash(str(sorted(keyword_scoring.get("high_priority", {}).get("keywords", []))) + 
-                              str(sorted(keyword_scoring.get("medium_priority", {}).get("keywords", []))))
-        paper_id = paper.get('pmid') or paper.get('arxiv_id') or paper.get('doi') or id(paper)
-        cache_key = f"{paper_id}_{hash(tuple(sorted(keywords)))}_{scoring_key}"
-        
+            hp: dict[str, object] = keyword_scoring.get("high_priority", {})  # type: ignore[assignment]
+            mp: dict[str, object] = keyword_scoring.get("medium_priority", {})  # type: ignore[assignment]
+            scoring_key = hash(
+                str(sorted(hp.get("keywords", [])))  # type: ignore[arg-type]
+                + str(sorted(mp.get("keywords", [])))  # type: ignore[arg-type]
+            )
+        paper_id: object = (
+            paper.get("pmid") or paper.get("arxiv_id") or paper.get("doi") or id(paper)
+        )
+        cache_key: str = f"{paper_id}_{hash(tuple(sorted(keywords)))}_{scoring_key}"
+
         if cache_key in self._score_cache:
             return self._score_cache[cache_key]
 
-        # Combine searchable text
-        searchable_text = self._prepare_searchable_text(paper)
+        searchable_text: str = self._prepare_searchable_text(paper)
 
-        # Find matching keywords with optimized loop
-        matched_keywords = []
-        keyword_counts = {}
+        matched_keywords: list[str] = []
+        keyword_counts: dict[str, int] = {}
 
         for keyword in keywords:
-            matches = self._find_keyword_matches(searchable_text, keyword)
+            matches: int = self._find_keyword_matches(searchable_text, keyword)
             if matches > 0:
                 matched_keywords.append(keyword)
                 keyword_counts[keyword] = matches
 
-        # Calculate relevance score with keyword priority scoring
-        relevance_score = self._calculate_score(keyword_counts, paper, keyword_scoring)
-        
-        # Cache the result
-        result = (relevance_score, matched_keywords)
-        self._score_cache[cache_key] = result
+        relevance_score: float = self._calculate_score(
+            keyword_counts, paper, keyword_scoring
+        )
 
+        result: tuple[float, list[str]] = (relevance_score, matched_keywords)
+        self._score_cache[cache_key] = result
         return result
 
-    def _prepare_searchable_text(self, paper: dict) -> str:
-        """Prepare combined text for keyword searching with caching"""
+    def _prepare_searchable_text(self, paper: dict[str, object]) -> str:
+        """Prepare combined text for keyword searching with caching."""
+        paper_id: object = (
+            paper.get("pmid") or paper.get("arxiv_id") or paper.get("doi") or id(paper)
+        )
 
-        # Create cache key from paper content
-        paper_id = paper.get('pmid') or paper.get('arxiv_id') or paper.get('doi') or id(paper)
-        
         if paper_id in self._text_cache:
             return self._text_cache[paper_id]
 
-        # Build searchable text efficiently
-        title = paper.get('title', '')
-        abstract = paper.get('abstract', '')
-        authors = paper.get('authors', [])
-        categories = paper.get('categories', [])
-        
-        # Combine components efficiently
-        text_components = [
-            title * 3,  # Title weighted 3x
+        title: str = str(paper.get("title", ""))
+        abstract: str = str(paper.get("abstract", ""))
+        authors: list[str] | str = paper.get("authors", [])  # type: ignore[assignment]
+        categories: list[str] | str = paper.get("categories", [])  # type: ignore[assignment]
+
+        text_components: list[str] = [
+            title * 3,
             abstract,
-            ' '.join(authors) if authors else '',
-            ' '.join(categories) if categories else ''
+            " ".join(authors) if isinstance(authors, list) else str(authors),
+            " ".join(categories) if isinstance(categories, list) else str(categories),
         ]
 
-        combined_text = ' '.join(filter(None, text_components))
-        
+        combined_text: str = " ".join(filter(None, text_components))
+
         if not self.case_sensitive:
             combined_text = combined_text.lower()
 
-        # Cache the result for reuse
         self._text_cache[paper_id] = combined_text
         return combined_text
 
     def _find_keyword_matches(self, text: str, keyword: str) -> int:
-        """Find and count keyword matches in text with optimized caching"""
-
+        """Find and count keyword matches in text with caching."""
         if not keyword.strip():
             return 0
 
-        # Prepare keyword for matching
-        search_keyword = keyword if self.case_sensitive else keyword.lower()
+        search_keyword: str = keyword if self.case_sensitive else keyword.lower()
 
-        # Use cached compiled patterns for better performance
-        pattern_key = search_keyword
+        pattern_key: str = search_keyword
         if pattern_key not in self._compiled_patterns:
-            # For single words, use word boundaries; for phrases, use exact matches
-            if ' ' in search_keyword:
-                self._compiled_patterns[pattern_key] = re.compile(re.escape(search_keyword), re.IGNORECASE if not self.case_sensitive else 0)
+            flags: int = 0 if self.case_sensitive else re.IGNORECASE
+            if " " in search_keyword:
+                self._compiled_patterns[pattern_key] = re.compile(
+                    re.escape(search_keyword), flags
+                )
             else:
-                self._compiled_patterns[pattern_key] = re.compile(r'\b' + re.escape(search_keyword) + r'\b', re.IGNORECASE if not self.case_sensitive else 0)
+                self._compiled_patterns[pattern_key] = re.compile(
+                    r"\b" + re.escape(search_keyword) + r"\b", flags
+                )
 
-        # Count matches using compiled pattern
-        matches = len(self._compiled_patterns[pattern_key].findall(text))
-        
-        # For multi-word keywords, also check simple substring presence for robustness
-        if ' ' in search_keyword and matches == 0:
+        matches: int = len(self._compiled_patterns[pattern_key].findall(text))
+
+        if " " in search_keyword and matches == 0:
             if search_keyword in text:
                 matches = 1
 
         return matches
 
-    def _calculate_score(self, keyword_counts: dict, paper: dict, keyword_scoring: dict = None) -> float:
-        """Calculate overall relevance score with keyword priority boosts"""
-
+    def _calculate_score(
+        self,
+        keyword_counts: dict[str, int],
+        paper: dict[str, object],
+        keyword_scoring: dict[str, object] | None = None,
+    ) -> float:
+        """Calculate overall relevance score with keyword priority boosts."""
         if not keyword_counts:
-            return 0
+            return 0.0
 
-        # Get keyword priority lists and boosts
-        high_priority_keywords = set()
-        medium_priority_keywords = set()
-        high_priority_boost = 1.5
-        medium_priority_boost = 1.2
-        
+        high_priority_keywords: set[str] = set()
+        medium_priority_keywords: set[str] = set()
+        high_priority_boost: float = 1.5
+        medium_priority_boost: float = 1.2
+
         if keyword_scoring:
-            high_priority_config = keyword_scoring.get("high_priority", {})
-            medium_priority_config = keyword_scoring.get("medium_priority", {})
-            high_priority_keywords = set(high_priority_config.get("keywords", []))
-            medium_priority_keywords = set(medium_priority_config.get("keywords", []))
-            high_priority_boost = high_priority_config.get("boost", 1.5)
-            medium_priority_boost = medium_priority_config.get("boost", 1.2)
+            high_priority_config: dict[str, object] = keyword_scoring.get(
+                "high_priority", {}
+            )  # type: ignore[assignment]
+            medium_priority_config: dict[str, object] = keyword_scoring.get(
+                "medium_priority", {}
+            )  # type: ignore[assignment]
+            high_priority_keywords = set(
+                high_priority_config.get("keywords", [])  # type: ignore[arg-type]
+            )
+            medium_priority_keywords = set(
+                medium_priority_config.get("keywords", [])  # type: ignore[arg-type]
+            )
+            high_priority_boost = float(
+                high_priority_config.get("boost", 1.5)  # type: ignore[arg-type]
+            )
+            medium_priority_boost = float(
+                medium_priority_config.get("boost", 1.2)  # type: ignore[arg-type]
+            )
 
-        # Calculate base score with priority boosts applied per keyword
-        base_score = 0.0
-        occurrence_bonus = 0.0
-        
+        base_score: float = 0.0
+        occurrence_bonus: float = 0.0
+
         for keyword, count in keyword_counts.items():
-            # Determine priority boost for this keyword
             if keyword in high_priority_keywords:
-                boost_multiplier = high_priority_boost
+                boost_multiplier: float = high_priority_boost
             elif keyword in medium_priority_keywords:
                 boost_multiplier = medium_priority_boost
             else:
-                boost_multiplier = 1.0  # Default priority
-            
-            # Base contribution: 1 point per matched keyword, multiplied by priority boost
+                boost_multiplier = 1.0
+
             base_score += 1.0 * boost_multiplier
-            
-            # Occurrence bonus: extra points for multiple occurrences, also boosted
             occurrence_bonus += min(count - 1, 2) * boost_multiplier
 
-        # Bonus for title matches (check if any keyword appears in title)
-        title = paper.get('title', '')
+        title: str = str(paper.get("title", ""))
         if not self.case_sensitive:
             title = title.lower()
 
-        title_bonus = 0.0
-        for keyword in keyword_counts.keys():
+        title_bonus: float = 0.0
+        for keyword in keyword_counts:
             search_keyword = keyword if self.case_sensitive else keyword.lower()
-            # Check for exact matches and word boundary matches in title
             if search_keyword in title or re.search(
-                    r'\b' + re.escape(search_keyword) + r'\b', title):
-                # Apply priority boost to title bonus as well
+                r"\b" + re.escape(search_keyword) + r"\b", title
+            ):
                 if keyword in high_priority_keywords:
                     title_bonus += 1.0 * high_priority_boost
                 elif keyword in medium_priority_keywords:
@@ -182,66 +188,60 @@ class KeywordMatcher:
                 else:
                     title_bonus += 1.0
 
-        # Bonus for specific high-value keywords (PET and MRI)
-        keyword_bonus = 0.0
-        high_value_keywords = ['pet', 'mri']
-        for keyword in keyword_counts.keys():
-            keyword_lower = keyword.lower()
+        keyword_bonus: float = 0.0
+        high_value_keywords: list[str] = ["pet", "mri"]
+        for keyword in keyword_counts:
+            keyword_lower: str = keyword.lower()
             if keyword_lower in high_value_keywords:
-                # Apply priority boost to keyword bonus as well
                 if keyword in high_priority_keywords:
                     keyword_bonus += 0.5 * high_priority_boost
                 elif keyword in medium_priority_keywords:
                     keyword_bonus += 0.5 * medium_priority_boost
                 else:
                     keyword_bonus += 0.5
-        
-        # Calculate final score
-        final_score = float(base_score) + float(occurrence_bonus) + (float(title_bonus) * 0.2) + float(keyword_bonus)
+
+        final_score: float = (
+            base_score + occurrence_bonus + (title_bonus * 0.2) + keyword_bonus
+        )
         return round(final_score, 1)
 
-    def search_papers(self, papers: List[dict],
-                      search_query: str) -> List[dict]:
-        """Search through papers using a query string"""
-
+    def search_papers(
+        self, papers: list[dict[str, object]], search_query: str
+    ) -> list[dict[str, object]]:
+        """Search through papers using a query string."""
         if not search_query.strip():
             return papers
 
-        search_terms = search_query.lower().split()
-        filtered_papers = []
+        search_terms: list[str] = search_query.lower().split()
+        filtered_papers: list[dict[str, object]] = []
 
         for paper in papers:
-            searchable_text = self._prepare_searchable_text(paper).lower()
-
-            # Check if all search terms are present
+            searchable_text: str = self._prepare_searchable_text(paper).lower()
             if all(term in searchable_text for term in search_terms):
                 filtered_papers.append(paper)
 
         return filtered_papers
 
-    def get_keyword_statistics(self, papers: List[dict],
-                               keywords: List[str]) -> dict:
-        """Generate statistics about keyword matches across papers"""
-
-        stats = {
-            'keyword_counts': {},
-            'total_papers': len(papers),
-            'papers_with_matches': 0
+    def get_keyword_statistics(
+        self, papers: list[dict[str, object]], keywords: list[str]
+    ) -> dict[str, object]:
+        """Generate statistics about keyword matches across papers."""
+        stats: dict[str, object] = {
+            "keyword_counts": {},
+            "total_papers": len(papers),
+            "papers_with_matches": 0,
         }
 
-        papers_with_matches = set()
+        papers_with_matches: set[int] = set()
+        kw_counts: dict[str, int] = {}
 
         for paper in papers:
             _, matched_keywords = self.calculate_relevance(paper, keywords)
-
             if matched_keywords:
-                papers_with_matches.add(
-                    id(paper))  # Use object id as unique identifier
-
+                papers_with_matches.add(id(paper))
                 for keyword in matched_keywords:
-                    stats['keyword_counts'][
-                        keyword] = stats['keyword_counts'].get(keyword, 0) + 1
+                    kw_counts[keyword] = kw_counts.get(keyword, 0) + 1
 
-        stats['papers_with_matches'] = len(papers_with_matches)
-
+        stats["keyword_counts"] = kw_counts
+        stats["papers_with_matches"] = len(papers_with_matches)
         return stats

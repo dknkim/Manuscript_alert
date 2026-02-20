@@ -1,20 +1,36 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   saveSettings,
   listBackups,
   restoreBackup,
   createBackup,
-} from "../api";
+} from "@/lib/api";
+import type { Settings, BackupInfo, FlashMessage } from "@/types";
 
-const SUB_TABS = [
+interface SubTab {
+  key: string;
+  label: string;
+}
+
+const SUB_TABS: SubTab[] = [
   { key: "keywords", label: "🔍 Keywords" },
   { key: "journals", label: "📰 Journals" },
   { key: "scoring", label: "📊 Scoring" },
   { key: "backup", label: "💾 Backup" },
 ];
 
-export default function SettingsTab({ settings, onSettingsChange }) {
-  const [sub, setSub] = useState("keywords");
+interface SettingsTabProps {
+  settings: Settings;
+  onSettingsChange: () => Promise<void>;
+}
+
+export default function SettingsTab({
+  settings,
+  onSettingsChange,
+}: SettingsTabProps) {
+  const [sub, setSub] = useState<string>("keywords");
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -59,29 +75,40 @@ export default function SettingsTab({ settings, onSettingsChange }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Keywords sub-tab
-// ---------------------------------------------------------------------------
-function KeywordSettings({ settings, onChange }) {
-  const [keywordsText, setKeywordsText] = useState(
-    (settings.keywords || []).join("\n")
+/* ─────────────────────────────────────────────────────────────
+   Keywords sub-tab
+   ───────────────────────────────────────────────────────────── */
+
+function KeywordSettings({
+  settings,
+  onChange,
+}: {
+  settings: Settings;
+  onChange: () => Promise<void>;
+}) {
+  const [keywordsText, setKeywordsText] = useState<string>(
+    (settings.keywords || []).join("\n"),
   );
-  const [highPriority, setHighPriority] = useState(
-    settings.keyword_scoring?.high_priority?.keywords || []
+  const [highPriority, setHighPriority] = useState<string[]>(
+    settings.keyword_scoring?.high_priority?.keywords || [],
   );
-  const [mediumPriority, setMediumPriority] = useState(
-    settings.keyword_scoring?.medium_priority?.keywords || []
+  const [mediumPriority, setMediumPriority] = useState<string[]>(
+    settings.keyword_scoring?.medium_priority?.keywords || [],
   );
-  const [mustHave, setMustHave] = useState(
-    settings.must_have_keywords || []
+  const [mustHave, setMustHave] = useState<string[]>(
+    settings.must_have_keywords || [],
   );
-  const [msg, setMsg] = useState(null);
+  const [msg, setMsg] = useState<FlashMessage | null>(null);
 
   // Sync local state when settings change (e.g. after loading a model)
   useEffect(() => {
     setKeywordsText((settings.keywords || []).join("\n"));
-    setHighPriority(settings.keyword_scoring?.high_priority?.keywords || []);
-    setMediumPriority(settings.keyword_scoring?.medium_priority?.keywords || []);
+    setHighPriority(
+      settings.keyword_scoring?.high_priority?.keywords || [],
+    );
+    setMediumPriority(
+      settings.keyword_scoring?.medium_priority?.keywords || [],
+    );
     setMustHave(settings.must_have_keywords || []);
   }, [settings]);
 
@@ -90,9 +117,9 @@ function KeywordSettings({ settings, onChange }) {
     .map((k) => k.trim())
     .filter(Boolean);
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     try {
-      const updated = {
+      const updated: Settings = {
         ...settings,
         keywords: allKeywords,
         keyword_scoring: {
@@ -104,8 +131,11 @@ function KeywordSettings({ settings, onChange }) {
       await saveSettings(updated);
       setMsg({ type: "success", text: "Keywords configuration saved!" });
       onChange();
-    } catch (e) {
-      setMsg({ type: "error", text: e.message });
+    } catch (e: unknown) {
+      setMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Unknown error",
+      });
     }
   };
 
@@ -113,7 +143,10 @@ function KeywordSettings({ settings, onChange }) {
     <div className="space-y-6">
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
-      <Card title="Research Keywords" desc="Papers must match at least 2 keywords.">
+      <Card
+        title="Research Keywords"
+        desc="Papers must match at least 2 keywords."
+      >
         <textarea
           value={keywordsText}
           onChange={(e) => setKeywordsText(e.target.value)}
@@ -139,13 +172,14 @@ function KeywordSettings({ settings, onChange }) {
           exclude={highPriority}
         />
         {allKeywords.filter(
-          (k) => !highPriority.includes(k) && !mediumPriority.includes(k)
+          (k) => !highPriority.includes(k) && !mediumPriority.includes(k),
         ).length > 0 && (
           <p className="text-sm text-gray-400 mt-2">
             Default priority:{" "}
             {allKeywords
               .filter(
-                (k) => !highPriority.includes(k) && !mediumPriority.includes(k)
+                (k) =>
+                  !highPriority.includes(k) && !mediumPriority.includes(k),
               )
               .join(", ")}
           </p>
@@ -179,26 +213,44 @@ function KeywordSettings({ settings, onChange }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Journals sub-tab
-// ---------------------------------------------------------------------------
-function JournalSettings({ settings, onChange }) {
-  const tj = settings.target_journals || {};
-  const [exact, setExact] = useState((tj.exact_matches || []).join("\n"));
-  const [family, setFamily] = useState((tj.family_matches || []).join("\n"));
-  const [specific, setSpecific] = useState(
-    (tj.specific_journals || []).join("\n")
-  );
+/* ─────────────────────────────────────────────────────────────
+   Journals sub-tab
+   ───────────────────────────────────────────────────────────── */
 
-  const excl = settings.journal_exclusions || [];
-  const [exclusions, setExclusions] = useState(
-    Array.isArray(excl) ? excl.join("\n") : ""
+function JournalSettings({
+  settings,
+  onChange,
+}: {
+  settings: Settings;
+  onChange: () => Promise<void>;
+}) {
+  const tj = settings.target_journals || {
+    exact_matches: [],
+    family_matches: [],
+    specific_journals: [],
+  };
+  const [exact, setExact] = useState<string>(
+    (tj.exact_matches || []).join("\n"),
   );
-  const [msg, setMsg] = useState(null);
+  const [family, setFamily] = useState<string>(
+    (tj.family_matches || []).join("\n"),
+  );
+  const [specific, setSpecific] = useState<string>(
+    (tj.specific_journals || []).join("\n"),
+  );
+  const excl = settings.journal_exclusions || [];
+  const [exclusions, setExclusions] = useState<string>(
+    Array.isArray(excl) ? excl.join("\n") : "",
+  );
+  const [msg, setMsg] = useState<FlashMessage | null>(null);
 
   // Sync local state when settings change (e.g. after loading a model)
   useEffect(() => {
-    const tj = settings.target_journals || {};
+    const tj = settings.target_journals || {
+      exact_matches: [],
+      family_matches: [],
+      specific_journals: [],
+    };
     setExact((tj.exact_matches || []).join("\n"));
     setFamily((tj.family_matches || []).join("\n"));
     setSpecific((tj.specific_journals || []).join("\n"));
@@ -206,9 +258,9 @@ function JournalSettings({ settings, onChange }) {
     setExclusions(Array.isArray(excl) ? excl.join("\n") : "");
   }, [settings]);
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     try {
-      const updated = {
+      const updated: Settings = {
         ...settings,
         target_journals: {
           exact_matches: lines(exact),
@@ -220,8 +272,11 @@ function JournalSettings({ settings, onChange }) {
       await saveSettings(updated);
       setMsg({ type: "success", text: "Journal configuration saved!" });
       onChange();
-    } catch (e) {
-      setMsg({ type: "error", text: e.message });
+    } catch (e: unknown) {
+      setMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Unknown error",
+      });
     }
   };
 
@@ -284,36 +339,45 @@ function JournalSettings({ settings, onChange }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Scoring sub-tab
-// ---------------------------------------------------------------------------
-function ScoringSettings({ settings, onChange }) {
-  const js = settings.journal_scoring || {};
-  const [enabled, setEnabled] = useState(js.enabled ?? true);
+/* ─────────────────────────────────────────────────────────────
+   Scoring sub-tab
+   ───────────────────────────────────────────────────────────── */
+
+function ScoringSettings({
+  settings,
+  onChange,
+}: {
+  settings: Settings;
+  onChange: () => Promise<void>;
+}) {
+  const js = settings.journal_scoring || { enabled: true, high_impact_journal_boost: {} };
+  const [enabled, setEnabled] = useState<boolean>(js.enabled ?? true);
   const boosts = js.high_impact_journal_boost || {};
-  const [b5, setB5] = useState(boosts["5_or_more_keywords"] ?? 5.1);
-  const [b4, setB4] = useState(boosts["4_keywords"] ?? 3.7);
-  const [b3, setB3] = useState(boosts["3_keywords"] ?? 2.8);
-  const [b2, setB2] = useState(boosts["2_keywords"] ?? 1.3);
-  const [b1, setB1] = useState(boosts["1_keyword"] ?? 0.5);
+  const [b5, setB5] = useState<number>(boosts["5_or_more_keywords"] ?? 5.1);
+  const [b4, setB4] = useState<number>(boosts["4_keywords"] ?? 3.7);
+  const [b3, setB3] = useState<number>(boosts["3_keywords"] ?? 2.8);
+  const [b2, setB2] = useState<number>(boosts["2_keywords"] ?? 1.3);
+  const [b1, setB1] = useState<number>(boosts["1_keyword"] ?? 0.5);
 
-  const ss = settings.search_settings || {};
-  const [daysBack, setDaysBack] = useState(ss.days_back ?? 7);
-  const [minKw, setMinKw] = useState(ss.min_keyword_matches ?? 2);
-  const [mode, setMode] = useState(ss.search_mode ?? "Brief");
-  const [maxResults, setMaxResults] = useState(ss.max_results_display ?? 50);
+  const ss = settings.search_settings || ({} as Settings["search_settings"]);
+  const [daysBack, setDaysBack] = useState<number>(ss.days_back ?? 7);
+  const [minKw, setMinKw] = useState<number>(ss.min_keyword_matches ?? 2);
+  const [mode, setMode] = useState<string>(ss.search_mode ?? "Brief");
+  const [maxResults, setMaxResults] = useState<number>(
+    ss.max_results_display ?? 50,
+  );
 
-  const ds = ss.default_sources || {};
-  const [sPubmed, setSPubmed] = useState(ds.pubmed ?? true);
-  const [sArxiv, setSArxiv] = useState(ds.arxiv ?? false);
-  const [sBiorxiv, setSBiorxiv] = useState(ds.biorxiv ?? false);
-  const [sMedrxiv, setSMedrxiv] = useState(ds.medrxiv ?? false);
+  const ds = ss.default_sources || { pubmed: true, arxiv: false, biorxiv: false, medrxiv: false };
+  const [sPubmed, setSPubmed] = useState<boolean>(ds.pubmed ?? true);
+  const [sArxiv, setSArxiv] = useState<boolean>(ds.arxiv ?? false);
+  const [sBiorxiv, setSBiorxiv] = useState<boolean>(ds.biorxiv ?? false);
+  const [sMedrxiv, setSMedrxiv] = useState<boolean>(ds.medrxiv ?? false);
 
-  const [msg, setMsg] = useState(null);
+  const [msg, setMsg] = useState<FlashMessage | null>(null);
 
   // Sync local state when settings change (e.g. after loading a model)
   useEffect(() => {
-    const js = settings.journal_scoring || {};
+    const js = settings.journal_scoring || { enabled: true, high_impact_journal_boost: {} };
     setEnabled(js.enabled ?? true);
     const boosts = js.high_impact_journal_boost || {};
     setB5(boosts["5_or_more_keywords"] ?? 5.1);
@@ -322,40 +386,40 @@ function ScoringSettings({ settings, onChange }) {
     setB2(boosts["2_keywords"] ?? 1.3);
     setB1(boosts["1_keyword"] ?? 0.5);
 
-    const ss = settings.search_settings || {};
+    const ss = settings.search_settings || ({} as Settings["search_settings"]);
     setDaysBack(ss.days_back ?? 7);
     setMinKw(ss.min_keyword_matches ?? 2);
     setMode(ss.search_mode ?? "Brief");
     setMaxResults(ss.max_results_display ?? 50);
 
-    const ds = ss.default_sources || {};
+    const ds = ss.default_sources || { pubmed: true, arxiv: false, biorxiv: false, medrxiv: false };
     setSPubmed(ds.pubmed ?? true);
     setSArxiv(ds.arxiv ?? false);
     setSBiorxiv(ds.biorxiv ?? false);
     setSMedrxiv(ds.medrxiv ?? false);
   }, [settings]);
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     try {
-      const updated = {
+      const updated: Settings = {
         ...settings,
         journal_scoring: enabled
           ? {
               enabled: true,
               high_impact_journal_boost: {
-                "5_or_more_keywords": parseFloat(b5),
-                "4_keywords": parseFloat(b4),
-                "3_keywords": parseFloat(b3),
-                "2_keywords": parseFloat(b2),
-                "1_keyword": parseFloat(b1),
+                "5_or_more_keywords": Number(b5),
+                "4_keywords": Number(b4),
+                "3_keywords": Number(b3),
+                "2_keywords": Number(b2),
+                "1_keyword": Number(b1),
               },
             }
-          : { enabled: false },
+          : { enabled: false, high_impact_journal_boost: {} },
         search_settings: {
-          days_back: parseInt(daysBack, 10),
+          days_back: Number(daysBack),
           search_mode: mode,
-          min_keyword_matches: parseInt(minKw, 10),
-          max_results_display: parseInt(maxResults, 10),
+          min_keyword_matches: Number(minKw),
+          max_results_display: Number(maxResults),
           default_sources: {
             pubmed: sPubmed,
             arxiv: sArxiv,
@@ -369,8 +433,11 @@ function ScoringSettings({ settings, onChange }) {
       await saveSettings(updated);
       setMsg({ type: "success", text: "Scoring configuration saved!" });
       onChange();
-    } catch (e) {
-      setMsg({ type: "error", text: e.message });
+    } catch (e: unknown) {
+      setMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Unknown error",
+      });
     }
   };
 
@@ -464,14 +531,15 @@ function ScoringSettings({ settings, onChange }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Backup sub-tab
-// ---------------------------------------------------------------------------
-function BackupSettings() {
-  const [backups, setBackups] = useState([]);
-  const [msg, setMsg] = useState(null);
+/* ─────────────────────────────────────────────────────────────
+   Backup sub-tab
+   ───────────────────────────────────────────────────────────── */
 
-  const refresh = async () => {
+function BackupSettings() {
+  const [backups, setBackups] = useState<BackupInfo[]>([]);
+  const [msg, setMsg] = useState<FlashMessage | null>(null);
+
+  const refresh = async (): Promise<void> => {
     try {
       const data = await listBackups();
       setBackups(data);
@@ -484,27 +552,27 @@ function BackupSettings() {
     refresh();
   }, []);
 
-  const flash = (text, type = "success") => {
+  const flash = (text: string, type: "success" | "error" = "success"): void => {
     setMsg({ text, type });
     setTimeout(() => setMsg(null), 4000);
   };
 
-  const handleRestore = async (path) => {
+  const handleRestore = async (path: string): Promise<void> => {
     try {
       await restoreBackup(path);
       flash("Backup restored successfully!");
-    } catch (e) {
-      flash(e.message, "error");
+    } catch (e: unknown) {
+      flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
   };
 
-  const handleCreate = async () => {
+  const handleCreate = async (): Promise<void> => {
     try {
       await createBackup();
       flash("Manual backup created.");
       refresh();
-    } catch (e) {
-      flash(e.message, "error");
+    } catch (e: unknown) {
+      flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
   };
 
@@ -552,11 +620,19 @@ function BackupSettings() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Shared helpers / UI atoms
-// ---------------------------------------------------------------------------
+/* ─────────────────────────────────────────────────────────────
+   Shared helpers / UI atoms
+   ───────────────────────────────────────────────────────────── */
 
-function Card({ title, desc, children }) {
+function Card({
+  title,
+  desc,
+  children,
+}: {
+  title: string;
+  desc?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
@@ -567,7 +643,21 @@ function Card({ title, desc, children }) {
   );
 }
 
-function NumField({ label, value, onChange, min, max, step = 0.1 }) {
+function NumField({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step = 0.1,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+}) {
   return (
     <div>
       <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -576,7 +666,7 @@ function NumField({ label, value, onChange, min, max, step = 0.1 }) {
       <input
         type="number"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(Number(e.target.value))}
         min={min}
         max={max}
         step={step}
@@ -586,7 +676,15 @@ function NumField({ label, value, onChange, min, max, step = 0.1 }) {
   );
 }
 
-function Toggle({ label, checked, onChange }) {
+function Toggle({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
   return (
     <label className="flex items-center gap-2 cursor-pointer">
       <input
@@ -600,10 +698,22 @@ function Toggle({ label, checked, onChange }) {
   );
 }
 
-function MultiSelect({ label, options, selected, onChange, exclude = [] }) {
+function MultiSelect({
+  label,
+  options,
+  selected,
+  onChange,
+  exclude = [],
+}: {
+  label: string;
+  options: string[];
+  selected: string[];
+  onChange: (v: string[]) => void;
+  exclude?: string[];
+}) {
   const available = options.filter((o) => !exclude.includes(o));
 
-  const toggle = (item) => {
+  const toggle = (item: string): void => {
     if (selected.includes(item)) {
       onChange(selected.filter((s) => s !== item));
     } else {
@@ -642,7 +752,13 @@ function MultiSelect({ label, options, selected, onChange, exclude = [] }) {
   );
 }
 
-function Flash({ msg, onClear }) {
+function Flash({
+  msg,
+  onClear,
+}: {
+  msg: FlashMessage | null;
+  onClear: () => void;
+}) {
   if (!msg) return null;
   return (
     <div
@@ -660,7 +776,7 @@ function Flash({ msg, onClear }) {
   );
 }
 
-function lines(text) {
+function lines(text: string): string[] {
   return text
     .split("\n")
     .map((l) => l.trim())
