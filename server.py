@@ -79,6 +79,15 @@ class SaveModelRequest(BaseModel):
     name: str
 
 
+class ArchivePaperRequest(BaseModel):
+    paper: dict[str, Any]
+
+
+class UnarchivePaperRequest(BaseModel):
+    title: str
+    date: str
+
+
 class RestoreBackupRequest(BaseModel):
     path: str
 
@@ -384,6 +393,84 @@ def export_papers(req: FetchRequest) -> StreamingResponse:
             )
         },
     )
+
+
+# --- Archive ---
+
+ARCHIVE_DIR: Path = BASE_DIR / "data" / "archive"
+
+
+def _load_archive() -> dict[str, list[dict[str, Any]]]:
+    """Load the full archive. Returns {date_str: [paper, ...]}."""
+    archive_file: Path = ARCHIVE_DIR / "archive.json"
+    if not archive_file.exists():
+        return {}
+    with open(archive_file, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _save_archive(archive: dict[str, list[dict[str, Any]]]) -> None:
+    """Persist the archive to disk."""
+    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+    archive_file: Path = ARCHIVE_DIR / "archive.json"
+    with open(archive_file, "w", encoding="utf-8") as fh:
+        json.dump(archive, fh, indent=2, ensure_ascii=False)
+
+
+@app.post("/api/papers/archive")
+def archive_paper(req: ArchivePaperRequest) -> StatusResponse:
+    """Archive a paper's metadata under today's date."""
+    archive: dict[str, list[dict[str, Any]]] = _load_archive()
+    today: str = datetime.now().strftime("%Y-%m-%d")
+
+    # Avoid duplicates (same title on the same date)
+    papers_today: list[dict[str, Any]] = archive.get(today, [])
+    if any(p["title"] == req.paper.get("title") for p in papers_today):
+        return StatusResponse(status="already_archived")
+
+    entry: dict[str, Any] = {
+        **req.paper,
+        "archived_at": datetime.now().isoformat(),
+    }
+    papers_today.append(entry)
+    archive[today] = papers_today
+    _save_archive(archive)
+    return StatusResponse(status="ok")
+
+
+@app.get("/api/papers/archive")
+def list_archived_papers() -> dict[str, Any]:
+    """Return all archived papers grouped by date, plus a flat set of titles."""
+    archive: dict[str, list[dict[str, Any]]] = _load_archive()
+    # Build a set of all archived titles for quick client-side lookup
+    all_titles: list[str] = []
+    total: int = 0
+    for papers in archive.values():
+        for p in papers:
+            all_titles.append(p["title"])
+            total += 1
+    return {
+        "archive": archive,
+        "archived_titles": all_titles,
+        "total": total,
+    }
+
+
+@app.delete("/api/papers/archive")
+def unarchive_paper(req: UnarchivePaperRequest) -> StatusResponse:
+    """Remove a paper from the archive by title and date."""
+    archive: dict[str, list[dict[str, Any]]] = _load_archive()
+    papers: list[dict[str, Any]] = archive.get(req.date, [])
+    original_len: int = len(papers)
+    papers = [p for p in papers if p["title"] != req.title]
+    if len(papers) == original_len:
+        raise HTTPException(status_code=404, detail="Paper not found in archive")
+    if papers:
+        archive[req.date] = papers
+    else:
+        archive.pop(req.date, None)
+    _save_archive(archive)
+    return StatusResponse(status="ok")
 
 
 # --- Models ---

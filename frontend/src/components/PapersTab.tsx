@@ -9,8 +9,8 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import { fetchPapers, exportPapersCSV } from "@/lib/api";
-import type { Settings, FetchResult, DataSources } from "@/types";
+import { fetchPapers, exportPapersCSV, archivePaper } from "@/lib/api";
+import type { Settings, FetchResult, DataSources, Paper } from "@/types";
 import PaperCard from "./PaperCard";
 import Statistics from "./Statistics";
 
@@ -46,6 +46,8 @@ interface PapersTabProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
   error: string | null;
   setError: Dispatch<SetStateAction<string | null>>;
+  archivedTitles: Set<string>;
+  setArchivedTitles: Dispatch<SetStateAction<Set<string>>>;
 }
 
 export default function PapersTab({
@@ -56,6 +58,8 @@ export default function PapersTab({
   setLoading,
   error,
   setError,
+  archivedTitles,
+  setArchivedTitles,
 }: PapersTabProps) {
   const searchSettings = settings.search_settings || ({} as Settings["search_settings"]);
 
@@ -146,6 +150,19 @@ export default function PapersTab({
       console.error("Export failed:", e);
     }
   };
+
+  // ---------- archive ----------
+  const handleArchive = useCallback(
+    async (paper: Paper) => {
+      try {
+        await archivePaper(paper);
+        setArchivedTitles((prev) => new Set(prev).add(paper.title));
+      } catch (e) {
+        console.error("Archive failed:", e);
+      }
+    },
+    [setArchivedTitles],
+  );
 
   const toggleSource = (key: keyof DataSources): void =>
     setSources((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -372,7 +389,12 @@ export default function PapersTab({
           {!loading && filteredPapers.length > 0 && (
             <div className="space-y-4">
               {filteredPapers.map((paper, idx) => (
-                <PaperCard key={`${paper.title}-${idx}`} paper={paper} />
+                <PaperCard
+                  key={`${paper.title}-${idx}`}
+                  paper={paper}
+                  isArchived={archivedTitles.has(paper.title)}
+                  onArchive={handleArchive}
+                />
               ))}
             </div>
           )}

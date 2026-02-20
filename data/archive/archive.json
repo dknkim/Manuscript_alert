@@ -1,0 +1,42 @@
+{
+  "2026-02-19": [
+    {
+      "title": "Predicting onset of symptomatic Alzheimer's disease with plasma p-tau217 clocks.",
+      "authors": "Kellen K Petersen, Marta Milà-Alomà, Yan Li...",
+      "abstract": "Predicting not just if, but also when, cognitively unimpaired individuals are likely to develop onset of Alzheimer's disease (AD) symptoms would be useful to clinical trials and, eventually, clinical practice. Although clock models based on amyloid and tau positron emission tomography have shown promise in predicting the onset of AD symptoms, a model based on plasma biomarkers would be more accessible. Using longitudinal plasma %p-tau217 (the ratio of phosphorylated to non-phosphorylated tau at position 217) from two independent cohorts (n = 258 and n = 345), clock models were used to estimate the age at plasma %p-tau217 positivity. The estimated age at plasma %p-tau217 positivity was associated with the age at onset of AD symptoms (adjusted R",
+      "published": "2026-02-19",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41714746/",
+      "source": "PubMed",
+      "relevance_score": 23.1,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "amyloid",
+        "tau",
+        "plasma"
+      ],
+      "journal": "Nature medicine",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": true,
+      "archived_at": "2026-02-19T22:21:30.363672"
+    },
+    {
+      "title": "Deep learning models identify brain changes during the progression of Alzheimer's disease.",
+      "authors": "Jinhui Sun, Jing-Dong J Han, Weiyang Chen",
+      "abstract": "Alzheimer's disease (AD) is an irreversible neurodegenerative disorder whose progression is closely associated with time. However, most diagnostic models are based on single time-point data, overlooking longitudinal disease characteristics. Structural magnetic resonance imaging (sMRI) has been widely utilized in the study of AD. To address the need for multi-time series analysis in longitudinal AD research and the integration of features from different brain tissues, we propose a Multi-Branch Fusion Channel Attention Network (MBFCA-Net) for disease diagnosis. This network leverages the temporal correlations across longitudinal scans for effective AD detection. We further conduct retrospective interpretability analysis to quantify the contributions of brain regions across disease stages. This enables a detailed investigation of dynamic changes in brain regions associated with AD and normal aging. The results indicate that the importance of regions such as the amygdala, parahippocampal gyrus, and temporal lobe undergoes dynamic changes throughout the progression of AD. Furthermore, AD-related voxel clusters exhibit a developmental trend, shifting from the hippocampus to the temporal lobe and transitioning from a dispersed to a more aggregated distribution. Our study provides novel insights into the longitudinal patterns of AD-related changes, offering valuable contributions to early diagnosis and pathological understanding of the disease.",
+      "published": "2026-02-19",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41714635/",
+      "source": "PubMed",
+      "relevance_score": 15.6,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "brain"
+      ],
+      "journal": "NPJ systems biology and applications",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": true,
+      "archived_at": "2026-02-19T22:21:33.846821"
+    }
+  ]
+}

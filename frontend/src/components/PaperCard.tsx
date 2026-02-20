@@ -21,9 +21,11 @@ function scoreColor(score: number): string {
 
 interface PaperCardProps {
   paper: Paper;
+  isArchived: boolean;
+  onArchive: (paper: Paper) => void;
 }
 
-export default function PaperCard({ paper }: PaperCardProps) {
+export default function PaperCard({ paper, isArchived, onArchive }: PaperCardProps) {
   const [expanded, setExpanded] = useState<boolean>(false);
   const badge = SOURCE_COLORS[paper.source] || "bg-gray-500";
   const colors = scoreColor(paper.relevance_score);
@@ -118,7 +120,7 @@ export default function PaperCard({ paper }: PaperCardProps) {
           )}
         </div>
 
-        {/* Score + badge column */}
+        {/* Score + badge + archive column */}
         <div className="flex flex-col items-center gap-3 flex-shrink-0 w-24">
           <span
             className={`inline-block px-3 py-1 rounded-full text-xs font-bold text-white ${badge}`}
@@ -133,6 +135,18 @@ export default function PaperCard({ paper }: PaperCardProps) {
             </span>
             <span className="text-[10px] text-gray-400 mt-0.5">Score</span>
           </div>
+          <button
+            onClick={() => onArchive(paper)}
+            disabled={isArchived}
+            className={`w-full px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              isArchived
+                ? "bg-emerald-100 text-emerald-700 cursor-default"
+                : "bg-gray-100 text-gray-600 hover:bg-indigo-100 hover:text-indigo-700"
+            }`}
+            title={isArchived ? "Already archived" : "Archive this paper"}
+          >
+            {isArchived ? "✅ Archived" : "📌 Archive"}
+          </button>
         </div>
       </div>
     </div>

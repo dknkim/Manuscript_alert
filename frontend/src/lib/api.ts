@@ -4,6 +4,8 @@ import type {
   DataSources,
   ModelInfo,
   BackupInfo,
+  ArchiveResponse,
+  Paper,
 } from "@/types";
 
 const BASE: string = process.env.NEXT_PUBLIC_API_URL || "/api";
@@ -130,5 +132,33 @@ export async function restoreBackup(
 
 export async function createBackup(): Promise<{ status: string }> {
   const res = await request("/backups/create", { method: "POST" });
+  return res.json();
+}
+
+/* ── Archive ─────────────────────────────────────────────── */
+
+export async function archivePaper(
+  paper: Paper,
+): Promise<{ status: string }> {
+  const res = await request("/papers/archive", {
+    method: "POST",
+    body: JSON.stringify({ paper }),
+  });
+  return res.json();
+}
+
+export async function getArchivedPapers(): Promise<ArchiveResponse> {
+  const res = await request("/papers/archive");
+  return res.json();
+}
+
+export async function unarchivePaper(
+  title: string,
+  date: string,
+): Promise<{ status: string }> {
+  const res = await request("/papers/archive", {
+    method: "DELETE",
+    body: JSON.stringify({ title, date }),
+  });
   return res.json();
 }

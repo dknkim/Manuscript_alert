@@ -102,6 +102,9 @@ Manuscript_alert/
 │   ├── journal_utils.py           # Journal name utilities
 │   └── logger.py                  # Logging
 │
+├── data/
+│   └── archive/
+│       └── archive.json           # Archived papers grouped by date
 ├── KB_alz/                        # Knowledge base PDFs (Alzheimer's)
 ├── logs/                          # Application logs
 ├── docs/                          # Documentation
@@ -117,6 +120,9 @@ Manuscript_alert/
 | `PUT`    | `/api/settings`                  | Save settings              |
 | `POST`   | `/api/papers/fetch`              | Fetch and rank papers      |
 | `POST`   | `/api/papers/export`             | Export papers as CSV       |
+| `POST`   | `/api/papers/archive`            | Archive a paper            |
+| `GET`    | `/api/papers/archive`            | List archived papers       |
+| `DELETE` | `/api/papers/archive`            | Unarchive a paper          |
 | `GET`    | `/api/models`                    | List saved model presets   |
 | `POST`   | `/api/models`                    | Save a new model preset    |
 | `POST`   | `/api/models/{filename}/load`    | Load a model preset        |
@@ -212,10 +218,35 @@ User opens app
 | Model presets           | `config/models/*.json`           | JSON files       |
 | Settings backups        | `config/backups/*.py`            | Python files     |
 | Paper results           | In-memory (React state)          | Per-session      |
+| Archived papers         | `data/archive/archive.json`      | JSON (by date)   |
 | Application logs        | `logs/app.log`                   | Text log file    |
 | Knowledge base PDFs     | `KB_alz/`                        | PDF files        |
 
-### 5.2 Settings Structure
+### 5.2 Archive Structure
+
+Archived papers are stored in `data/archive/archive.json`, grouped by date:
+
+```json
+{
+  "2026-02-20": [
+    {
+      "title": "Novel PET imaging in Alzheimer's disease",
+      "authors": "Smith J, Johnson A, Brown K",
+      "abstract": "This study investigates...",
+      "published": "2026-02-18",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12345/",
+      "source": "PubMed",
+      "relevance_score": 8.5,
+      "matched_keywords": ["Alzheimer's disease", "PET"],
+      "journal": "Nature Neuroscience",
+      "is_high_impact": true,
+      "archived_at": "2026-02-20T14:30:00.000000"
+    }
+  ]
+}
+```
+
+### 5.3 Settings Structure
 
 The `config/settings.py` file contains all configurable parameters:
 
@@ -244,20 +275,28 @@ The `config/settings.py` file contains all configurable parameters:
 - Must-have keyword filter (papers must match ≥ 1 if configured)
 - Minimum keyword match threshold (≥ 2)
 
-### 6.3 User Interface
+### 6.3 Paper Archiving
+- Each paper card has an "Archive" button below the relevance score
+- Clicking archive saves the paper's full metadata (title, authors, abstract, source, score, keywords, etc.) to `data/archive/archive.json` under today's date
+- Already-archived papers show a green "✅ Archived" badge instead of the button
+- Archived state persists across sessions (stored on disk) and across tab switches (lifted to page-level React state)
+- Designed as a data collection mechanism for future scoring refinement (e.g., agent-based learning from user curation)
+
+### 6.4 User Interface
 - Tab-based navigation: Papers, Models, Settings
 - Papers tab: sidebar controls + paper list + statistics sidebar
 - Real-time search within fetched results
 - Expandable abstracts, keyword badges, source badges, relevance scores
 - High-impact journal highlighting
+- Archive button on each paper card
 - CSV export of results
 
-### 6.4 Model Presets
+### 6.5 Model Presets
 - Save current settings as a named model preset (JSON)
 - Load, preview, and delete model presets
 - Loading a model overwrites current settings and clears cached papers
 
-### 6.5 Settings Management
+### 6.6 Settings Management
 - Edit keywords, journal targets/exclusions, scoring parameters, search settings
 - Create/restore/delete settings backups
 - All settings changes take effect after clicking "Save All Settings"
@@ -324,6 +363,7 @@ The `config/settings.py` file contains all configurable parameters:
 
 These are potential improvements not currently implemented:
 
+- **Agent-Based Scoring Refinement**: Use the archived papers as labeled training data to refine relevance scoring via an AI agent that learns from user curation patterns
 - **RAG Integration**: Semantic similarity scoring using knowledge bases and embeddings
 - **Paper Caching**: Local cache of fetched papers to avoid redundant API calls
 - **Reference Manager Integration**: Export to Zotero, Mendeley, etc.

@@ -76,6 +76,12 @@ export interface BackupInfo {
   date: string;
 }
 
+export interface ArchiveResponse {
+  archive: Record<string, Paper[]>;
+  archived_titles: string[];
+  total: number;
+}
+
 export interface FlashMessage {
   text: string;
   type: "success" | "error";

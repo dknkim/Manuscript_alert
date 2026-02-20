@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getSettings } from "@/lib/api";
+import { getSettings, getArchivedPapers } from "@/lib/api";
 import type { Settings, FetchResult } from "@/types";
 import PapersTab from "@/components/PapersTab";
 import ModelsTab from "@/components/ModelsTab";
@@ -28,12 +28,24 @@ export default function Home() {
   const [papersLoading, setPapersLoading] = useState<boolean>(false);
   const [papersError, setPapersError] = useState<string | null>(null);
 
+  // Archived paper titles — survives tab switches
+  const [archivedTitles, setArchivedTitles] = useState<Set<string>>(new Set());
+
   const loadSettings = useCallback(async () => {
     try {
       const data = await getSettings();
       setSettings(data);
     } catch (err) {
       console.error("Failed to load settings:", err);
+    }
+  }, []);
+
+  const loadArchivedTitles = useCallback(async () => {
+    try {
+      const data = await getArchivedPapers();
+      setArchivedTitles(new Set(data.archived_titles));
+    } catch (err) {
+      console.error("Failed to load archived papers:", err);
     }
   }, []);
 
@@ -45,7 +57,8 @@ export default function Home() {
 
   useEffect(() => {
     loadSettings();
-  }, [loadSettings]);
+    loadArchivedTitles();
+  }, [loadSettings, loadArchivedTitles]);
 
   if (!settings) {
     return (
@@ -102,6 +115,8 @@ export default function Home() {
             setLoading={setPapersLoading}
             error={papersError}
             setError={setPapersError}
+            archivedTitles={archivedTitles}
+            setArchivedTitles={setArchivedTitles}
           />
         </div>
         <div style={{ display: activeTab === "models" ? "block" : "none" }}>

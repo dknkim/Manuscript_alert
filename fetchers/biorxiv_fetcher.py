@@ -68,7 +68,7 @@ class BioRxivFetcher:
                 else self.medrxiv_base_url
             )
             api_url = f"{base_url}/{start_str}/{end_str}"
-            response: requests.Response = requests.get(api_url, timeout=10)
+            response: requests.Response = requests.get(api_url, timeout=30)
             response.raise_for_status()
             data: dict[str, object] = response.json()
             if data.get("collection"):
@@ -206,14 +206,14 @@ class BioRxivFetcher:
         try:
             test_date: str = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
             url: str = f"{self.biorxiv_base_url}/{test_date}/{test_date}"
-            response: requests.Response = requests.get(url, timeout=10)
+            response: requests.Response = requests.get(url, timeout=30)
             status["biorxiv"] = response.status_code == 200
         except Exception:
             pass
         try:
             test_date = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
             url = f"{self.medrxiv_base_url}/{test_date}/{test_date}"
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, timeout=30)
             status["medrxiv"] = response.status_code == 200
         except Exception:
             pass
