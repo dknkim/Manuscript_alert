@@ -100,5 +100,27 @@
       "is_high_impact": false,
       "archived_at": "2026-02-20T11:12:15.914525"
     }
+  ],
+  "2026-02-24": [
+    {
+      "title": "Integration over reduction: multimodal PET and fluid biomarkers in Alzheimer's disease and beyond.",
+      "authors": "Marina Bluma, Konstantinos Chiotis, Agneta Nordberg",
+      "abstract": "Biomarker-based Alzheimer's disease (AD) diagnosis has shifted clinical practice from syndromic, dementia-stage diagnosis to a biologically defined framework anchored in amyloid positron emission tomography (PET) and cerebrospinal fluid (CSF) assays. However, binary amyloid/tau status does not capture disease complexity, stage, and the impact of co-existing neuropathologies. Here, we review in vivo human PET-fluid biomarker studies in AD and related neurological disorders.",
+      "published": "2026-02-24",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41725559/",
+      "source": "PubMed",
+      "relevance_score": 13.7,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau"
+      ],
+      "journal": "Current opinion in neurology",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-02-24T13:48:04.180915"
+    }
   ]
 }

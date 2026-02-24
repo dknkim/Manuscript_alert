@@ -8,7 +8,7 @@ A local web application that helps researchers stay updated with the latest pape
 ## 🚀 Quick Start (Single Command)
 
 ```bash
-#conda activate basic #if desired
+#conda activate your_env #if desired
 python server.py
 ```
 
@@ -18,6 +18,24 @@ That's it! The server will:
 3. Start the application at **http://localhost:8000**
 
 Papers from all sources (arXiv, bioRxiv, medRxiv, PubMed) are fetched automatically on startup.
+
+### Initial Conda environment setup (first time only)
+
+If you haven't created the `your_env` environment yet, run these commands **once**:
+
+```bash
+conda create -n your_env python=3.11 nodejs -y
+conda activate your_env
+pip install -r requirements.txt
+python server.py
+```
+
+On subsequent runs you only need:
+
+```bash
+conda activate your_env
+python server.py
+```
 
 ### Development Mode
 
