@@ -50,7 +50,7 @@ if [ ! -f "$REQ_FILE" ]; then
 fi
 
 CURRENT_HASH="$(hash_file "$REQ_FILE")"
-if ! command -v streamlit >/dev/null 2>&1; then
+if ! python -c "import fastapi" >/dev/null 2>&1; then
   NEED_INSTALL=1
 elif [ ! -f "$REQ_HASH_FILE" ]; then
   NEED_INSTALL=1

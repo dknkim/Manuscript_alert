@@ -103,24 +103,22 @@
   ],
   "2026-02-24": [
     {
-      "title": "Integration over reduction: multimodal PET and fluid biomarkers in Alzheimer's disease and beyond.",
-      "authors": "Marina Bluma, Konstantinos Chiotis, Agneta Nordberg",
-      "abstract": "Biomarker-based Alzheimer's disease (AD) diagnosis has shifted clinical practice from syndromic, dementia-stage diagnosis to a biologically defined framework anchored in amyloid positron emission tomography (PET) and cerebrospinal fluid (CSF) assays. However, binary amyloid/tau status does not capture disease complexity, stage, and the impact of co-existing neuropathologies. Here, we review in vivo human PET-fluid biomarker studies in AD and related neurological disorders.",
-      "published": "2026-02-24",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/41725559/",
+      "title": "ACR Appropriateness Criteria® Evaluation of Cardiac Masses.",
+      "authors": "Prabhakar Shantha Rajiah, Kate Hanneman, Bradley D Allen...",
+      "abstract": "This document discusses the appropriateness of imaging modalities for cardiac masses under 3 variants: 1) adult with suspected cardiac mass, initial imaging; 2) adult with known cardiac mass in echocardiography of unknown etiology, next imaging; and 3) adult with known cardiac mass and established etiology, follow-up imaging. US echocardiography transthoracic resting, MRI heart function and morphology without and with contrast, and CT heart function and morphology with contrast are usually appropriate for Variant 1. US echocardiography transesophageal, US echocardiography transthoracic resting, MRI heart function and morphology without and with contrast, CT heart function and morphology with contrast, FDG-PET/CT heart, and FDG-PET/MRI heart are usually appropriate for Variant 2. US echocardiography transthoracic resting, MRI heart function and morphology without and with contrast, MRI heart function and morphology without contrast, CT heart function and morphology with contrast, and FDG-PET/MRI heart are usually appropriate for Variant 3. The American College of Radiology Appropriateness Criteria are evidence-based guidelines for specific clinical conditions that are reviewed annually by a multidisciplinary expert panel. The guideline development and revision process support the systematic analysis of the medical literature from peer reviewed journals. Established methodology principles such as Grading of Recommendations Assessment, Development, and Evaluation or GRADE are adapted to evaluate the evidence. The RAND/UCLA Appropriateness Method User Manual provides the methodology to determine the appropriateness of imaging and treatment procedures for specific clinical scenarios. In those instances where peer reviewed literature is lacking or equivocal, experts may be the primary evidentiary source available to formulate a recommendation.",
+      "published": "2026-02-20",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41721806/",
       "source": "PubMed",
-      "relevance_score": 13.7,
+      "relevance_score": 14.4,
       "matched_keywords": [
-        "Alzheimer's disease",
         "PET",
-        "amyloid",
-        "tau"
+        "MRI"
       ],
-      "journal": "Current opinion in neurology",
+      "journal": "Journal of the American College of Radiology : JACR",
       "volume": "",
       "issue": "",
-      "is_high_impact": false,
-      "archived_at": "2026-02-24T13:48:04.180915"
+      "is_high_impact": true,
+      "archived_at": "2026-02-24T20:57:02.068129"
     }
   ]
 }

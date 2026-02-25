@@ -1,7 +1,0 @@
-[global]
-# Reduce Python cache generation
-developmentMode = false
-
-[server]
-# Reduce file watching sensitivity
-fileWatcherType = "poll"

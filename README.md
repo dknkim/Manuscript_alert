@@ -3,38 +3,25 @@
 A local web application that helps researchers stay updated with the latest papers in Alzheimer's disease and neuroimaging from PubMed, arXiv, bioRxiv, and medRxiv.
 
 ---
-## ⚡ I've only tested Mac and Linux systems with Conda ⚡
+## Tested on Mac and Linux with Conda
 
-## 🚀 Quick Start (Single Command)
+## Quick Start
 
 ```bash
-#conda activate your_env #if desired
+conda activate manuscript_alert
 python server.py
 ```
 
-That's it! The server will:
-1. Automatically install frontend dependencies (if needed)
+The server will:
+1. Install frontend dependencies (if needed)
 2. Build the React frontend (if needed)
 3. Start the application at **http://localhost:8000**
 
 Papers from all sources (arXiv, bioRxiv, medRxiv, PubMed) are fetched automatically on startup.
 
-### Initial Conda environment setup (first time only)
-
-If you haven't created the `your_env` environment yet, run these commands **once**:
-
+To stop the server, press `Ctrl+C`. To deactivate the conda environment:
 ```bash
-conda create -n your_env python=3.11 nodejs -y
-conda activate your_env
-pip install -r requirements.txt
-python server.py
-```
-
-On subsequent runs you only need:
-
-```bash
-conda activate your_env
-python server.py
+conda deactivate
 ```
 
 ### Development Mode
@@ -43,6 +30,7 @@ If you're working on the frontend separately with the Next.js dev server:
 
 ```bash
 # Terminal 1: Start the API server (skip frontend build)
+conda activate manuscript_alert
 python server.py --dev
 
 # Terminal 2: Start Next.js dev server with hot reload
@@ -51,44 +39,24 @@ cd frontend && npm run dev
 
 ---
 
-## ⚡ Running Remotely
+## Running Remotely
 
-If you are running the app on a remote server (e.g., via SSH), you will not be able to access http://localhost:8000 directly from your local browser. Use one of the following methods:
+If you are running the app on a remote server (e.g., via SSH), use one of the following methods:
 
 **Option 1: SSH Port Forwarding (Recommended)**
-1. On your local machine, run:
-   ```bash
-   ssh -L 8000:localhost:8000 your_username@remote_server_ip
-   ```
-2. Then open [http://localhost:8000](http://localhost:8000) in your local browser.
+```bash
+ssh -L 8000:localhost:8000 your_username@remote_server_ip
+```
+Then open http://localhost:8000 in your local browser.
 
-**Option 2: Access via Network/External URL**
-1. The server already binds to `0.0.0.0`, so it is accessible on all network interfaces.
-2. Open `http://<server_ip>:8000` from your local browser.
-3. Make sure your server's firewall allows inbound connections on port 8000:
-   ```bash
-   sudo ufw allow 8000
-   ```
+**Option 2: Access via Network**
+
+The server binds to `0.0.0.0`, so it is accessible on all network interfaces. Open `http://<server_ip>:8000` and make sure port 8000 is allowed through the firewall:
+```bash
+sudo ufw allow 8000
+```
 
 > **Note:** Exposing the app to the internet can have security implications. SSH port forwarding is safer for most users.
-
-### Stopping and Restarting
-- To stop: Press `Ctrl+C` in the terminal where the server is running.
-- To restart:
-  ```bash
-  python server.py
-  ```
-  The frontend is only rebuilt when source files have changed.
-
-### If Port 8000 is Already in Use
-```bash
-# Find the process
-lsof -i :8000
-# Kill it (replace <PID> with the actual PID)
-kill -9 <PID>
-# Restart
-python server.py
-```
 
 ---
 
@@ -99,6 +67,7 @@ python server.py
 - **Smart keyword matching**: Papers must match at least 2 keywords to be displayed
 - **Relevance scoring**: Papers are ranked by relevance to your research interests
 - **Journal quality filtering**: Option to show only papers from high-impact journals
+- **Paper archiving**: Save interesting papers for later reference
 - **Configurable search parameters**: Date range, search limits, and data sources
 - **Model presets**: Save and load different keyword/settings configurations
 - **Settings backup & restore**: Automatic and manual backup of settings
@@ -118,15 +87,26 @@ python server.py
 
 ### Prerequisites
 
-1. **Conda environment** (recommended):
+**Option A: Use the bootstrap script** (creates env, installs deps automatically):
+```bash
+source scripts/bootstrap_conda_env.sh
+```
+
+**Option B: Manual setup**:
+1. **Create and activate conda environment**:
    ```bash
-   conda create -n basic python=3.11 nodejs -y
-   conda activate basic
+   conda create -n manuscript_alert python=3.11 nodejs -y
+   conda activate manuscript_alert
    ```
 
 2. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
+   ```
+
+3. To deactivate when done:
+   ```bash
+   conda deactivate
    ```
 
 Frontend dependencies (npm) are installed automatically when you run `python server.py`.
@@ -142,6 +122,7 @@ Frontend dependencies (npm) are installed automatically when you run `python ser
    - Select search mode (Brief / Standard / Extended)
    - Filter by journal quality
    - Search within results
+   - Archive papers for later
    - Export to CSV
 2. **Models Tab**: Save/load keyword & settings presets for different research topics
 3. **Settings Tab**: Configure keywords, journal preferences, scoring parameters, and manage backups
@@ -216,9 +197,6 @@ Manuscript_alert/
 │   ├── settings.py                # Current application settings
 │   ├── models/                    # Saved model presets (JSON)
 │   └── backups/                   # Settings backups
-├── core/
-│   ├── paper_manager.py           # Core paper management logic
-│   └── filters.py                 # Paper filtering
 ├── fetchers/
 │   ├── arxiv_fetcher.py           # arXiv API integration
 │   ├── biorxiv_fetcher.py         # bioRxiv/medRxiv API integration
@@ -228,12 +206,12 @@ Manuscript_alert/
 ├── services/
 │   ├── settings_service.py        # Settings load/save/backup
 │   └── export_service.py          # CSV export
-├── storage/
-│   └── data_storage.py            # Local data persistence
 ├── utils/
 │   ├── constants.py               # Shared constants
 │   ├── journal_utils.py           # Journal name utilities
 │   └── logger.py                  # Logging
+├── data/
+│   └── archive/                   # Archived papers (JSON)
 ├── frontend/                      # Next.js + TypeScript application
 │   ├── package.json               # Next.js 15, React 19, TypeScript 5.7
 │   ├── tsconfig.json              # Strict TypeScript config
@@ -256,11 +234,10 @@ Manuscript_alert/
 │   │   └── types/
 │   │       └── index.ts           # Shared TypeScript interfaces
 │   └── out/                       # Built static files (auto-generated)
-├── logs/                          # Application logs
 ├── KB_alz/                        # Knowledge base PDFs
+├── logs/                          # Application logs
 ├── docs/                          # Documentation
 └── scripts/                       # Utility scripts
-    └── legacy/                    # Legacy scripts
 ```
 
 ### API Endpoints
@@ -271,6 +248,9 @@ Manuscript_alert/
 | `PUT` | `/api/settings` | Save settings |
 | `POST` | `/api/papers/fetch` | Fetch and rank papers |
 | `POST` | `/api/papers/export` | Export papers as CSV |
+| `POST` | `/api/papers/archive` | Archive a paper |
+| `GET` | `/api/papers/archive` | List archived papers |
+| `DELETE` | `/api/papers/archive` | Remove a paper from archive |
 | `GET` | `/api/models` | List saved model presets |
 | `POST` | `/api/models` | Save a new model preset |
 | `POST` | `/api/models/{filename}/load` | Load a model preset |
@@ -289,13 +269,12 @@ Manuscript_alert/
 
 **"npm: command not found"**
 ```bash
-# Install Node.js into your Conda environment
 conda install nodejs -y
 ```
 
 **"Module not found" (Python)**
 ```bash
-conda activate basic
+conda activate manuscript_alert
 pip install -r requirements.txt
 ```
 
@@ -307,11 +286,37 @@ kill -9 <PID>
 
 **Frontend not displaying**
 ```bash
-# Force a rebuild
 cd frontend && npm run build
-# Then restart
 cd .. && python server.py
 ```
+
+### Clean Reinstall
+
+**Python dependencies:**
+```bash
+conda activate manuscript_alert
+pip install --force-reinstall -r requirements.txt
+```
+
+**Frontend dependencies:**
+```bash
+rm -rf frontend/node_modules frontend/out
+npm cache clean --force
+python server.py   # will reinstall and rebuild automatically
+```
+
+**Full reset (both):**
+```bash
+conda activate manuscript_alert
+pip install --force-reinstall -r requirements.txt
+rm -rf frontend/node_modules frontend/out
+npm cache clean --force
+python server.py
+```
+
+### Stopping and Restarting
+- To stop: Press `Ctrl+C` in the terminal
+- To restart: `python server.py` (frontend is only rebuilt when source files have changed)
 
 ### Logs and Debugging
 
@@ -323,7 +328,7 @@ cd .. && python server.py
 
 ## License
 
-This project is open source, but not for commercial use. Buy me a coffee when we meet.
+This project is open source, but not for commercial use.
 
 ## Support
 

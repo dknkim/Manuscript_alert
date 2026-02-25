@@ -38,7 +38,7 @@ multiline-quotes = "double"
 
 [tool.ruff.lint.isort]
 # Import sorting configuration (PEP 8 style)
-known-first-party = ["fetchers", "processors", "storage", "utils", "services", "config"]
+known-first-party = ["fetchers", "processors", "utils", "services", "config"]
 force-single-line = false
 lines-after-imports = 2
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]

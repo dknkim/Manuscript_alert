@@ -12,7 +12,7 @@ paper_cache.json       # Cached paper data
 # Log files
 logs/
 *.log
- 
+
 # macOS & tooling
 .DS_Store
 ._.DS_Store
@@ -22,6 +22,8 @@ logs/
 
 # Claude Code settings
 .claude/
+.agents/
+skills-lock.json
 
 # Node / Frontend build artifacts
 node_modules/
