@@ -9,7 +9,7 @@ from urllib.parse import quote
 
 import requests
 
-from utils.logger import Logger
+from backend.utils.logger import Logger
 
 logger: Logger = Logger(__name__)
 

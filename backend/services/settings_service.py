@@ -8,7 +8,7 @@ import re
 from datetime import datetime
 from typing import Any
 
-from utils.logger import Logger
+from backend.utils.logger import Logger
 
 
 # Initialize logger
@@ -18,8 +18,8 @@ class SettingsService:
     """Manages application settings with persistence to source files"""
 
     def __init__(self):
-        self.settings_file = "config/settings.py"
-        self.backup_dir = "config/backups"
+        self.settings_file = "backend/config/settings.py"
+        self.backup_dir = "backend/config/backups"
         self._ensure_backup_dir()
 
     def _ensure_backup_dir(self):

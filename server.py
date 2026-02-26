@@ -25,12 +25,13 @@ from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from fetchers.arxiv_fetcher import ArxivFetcher
-from fetchers.biorxiv_fetcher import BioRxivFetcher
-from fetchers.pubmed_fetcher import PubMedFetcher
-from processors.keyword_matcher import KeywordMatcher
-from services.settings_service import SettingsService
-from utils.logger import Logger
+from backend.fetchers.arxiv_fetcher import ArxivFetcher
+from backend.fetchers.biorxiv_fetcher import BioRxivFetcher
+from backend.fetchers.pubmed_fetcher import PubMedFetcher
+from backend.processors.keyword_matcher import KeywordMatcher
+from backend.services.settings_service import SettingsService
+from backend.utils.logger import Logger
+
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -127,9 +128,7 @@ def _is_journal_excluded(journal_name: str, settings: dict[str, Any]) -> bool:
     return False
 
 
-def _get_journal_match_type(
-    journal_name: str, settings: dict[str, Any]
-) -> str | None:
+def _get_journal_match_type(journal_name: str, settings: dict[str, Any]) -> str | None:
     if not journal_name:
         return None
     journal_lower: str = journal_name.lower().strip()
@@ -245,9 +244,7 @@ def _fetch_and_rank(
             and paper.get("journal")
             and journal_scoring.get("enabled", True)
         ):
-            match_type: str | None = _get_journal_match_type(
-                paper["journal"], settings
-            )
+            match_type: str | None = _get_journal_match_type(paper["journal"], settings)
             if match_type:
                 base_boosts: dict[str, float] = {
                     "exact": 8.0,
@@ -414,7 +411,7 @@ def export_papers(req: FetchRequest) -> StreamingResponse:
 
 # --- Archive ---
 
-ARCHIVE_DIR: Path = BASE_DIR / "data" / "archive"
+ARCHIVE_DIR: Path = BASE_DIR / "backend" / "data" / "archive"
 
 
 def _load_archive() -> dict[str, list[dict[str, Any]]]:
@@ -492,7 +489,7 @@ def unarchive_paper(req: UnarchivePaperRequest) -> StatusResponse:
 
 # --- Models ---
 
-MODELS_DIR: str = "config/models"
+MODELS_DIR: str = "backend/config/models"
 
 
 @app.get("/api/models")
@@ -542,9 +539,7 @@ def load_model(filename: str) -> StatusResponse:
         loaded: dict[str, Any] = json.load(fh)
     ok: bool = settings_service.save_settings(loaded)
     if not ok:
-        raise HTTPException(
-            status_code=500, detail="Failed to apply model settings"
-        )
+        raise HTTPException(status_code=500, detail="Failed to apply model settings")
     return StatusResponse(status="ok")
 
 
@@ -590,9 +585,7 @@ def restore_backup(data: RestoreBackupRequest) -> StatusResponse:
         raise HTTPException(status_code=404, detail="Backup not found")
     ok: bool = settings_service.restore_backup(data.path)
     if not ok:
-        raise HTTPException(
-            status_code=500, detail="Failed to restore backup"
-        )
+        raise HTTPException(status_code=500, detail="Failed to restore backup")
     return StatusResponse(status="ok")
 
 
@@ -602,9 +595,7 @@ def create_backup() -> StatusResponse:
     settings: dict[str, Any] = _load_settings()
     ok: bool = settings_service.save_settings(settings)
     if not ok:
-        raise HTTPException(
-            status_code=500, detail="Failed to create backup"
-        )
+        raise HTTPException(status_code=500, detail="Failed to create backup")
     return StatusResponse(status="ok")
 
 
@@ -625,13 +616,13 @@ def delete_backup(data: RestoreBackupRequest) -> StatusResponse:
 if DIST_DIR.exists():
     next_static: Path = DIST_DIR / "_next"
     if next_static.exists():
-        app.mount(
-            "/_next", StaticFiles(directory=str(next_static)), name="next_static"
-        )
+        app.mount("/_next", StaticFiles(directory=str(next_static)), name="next_static")
 
 
 @app.get("/{full_path:path}", response_model=None)
-async def serve_frontend(request: Request, full_path: str) -> FileResponse | dict[str, str]:
+async def serve_frontend(
+    request: Request, full_path: str
+) -> FileResponse | dict[str, str]:
     """Serve the Next.js SPA — any non-API route returns index.html."""
     # If the exact file exists in out, serve it (e.g. favicon, manifest)
     file_path: Path = DIST_DIR / full_path
