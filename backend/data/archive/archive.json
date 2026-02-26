@@ -120,5 +120,28 @@
       "is_high_impact": true,
       "archived_at": "2026-02-24T20:57:02.068129"
     }
+  ],
+  "2026-02-26": [
+    {
+      "title": "Modelling the temporal evolution of plasma p-tau217, amyloid PET, tau PET and cognition.",
+      "authors": "Petrice M Cogswell, Emily S Lundt, Terry M Therneau...",
+      "abstract": "Associations of Alzheimer's disease biomarker progression with cognitive decline are important to inform patient prognosis. Of particular interest is how newly available plasma biomarkers evolve relative to cognitive decline. The goals of this work are to measure how much earlier vs later an individual's progression on plasma and PET Alzheimer's disease biomarkers is associated with earlier vs later cognitive progression and to estimate the average timeline of progression of these processes in the population. In this cohort study of 2369 Mayo Clinic Study of Aging (MCSA) and 1591 Alzheimer's Disease Neuroimaging Initiative (ADNI) participants, we fit non-linear mixed effects models to estimate how much earlier vs later each individual progresses on plasma p-tau217, amyloid PET, tau PET, and auditory verbal learning test (AVLT) sum of trials relative to the population mean (individual adjustment), the associations of these individual adjustments among biomarker pairs, and how covariates affect the timing of biomarker progression. The association of individual adjustments implies mechanistic associations and the amount of variability in cognitive decline accounted for by each biomarker. By applying cutpoints, we also estimated the relative timing that these biomarkers become abnormal in the population. Associations of individual adjustments were moderate between all biomarkers and AVLT (R=0.38-0.47) in the MCSA and stronger (R=0.74-0.81) in ADNI; plasma p-tau217 accounted for 16% of the variability in timing of AVLT decline in the MCSA and 64% in ADNI. APOE ɛ4 carriership was associated with earlier biomarker progression. AVLT became abnormal after the biomarkers up to age 90, after which AVLT was estimated to become abnormal prior to tau biomarkers. The association of the timing of plasma and PET AD biomarker progression with cognitive decline was modest in the MCSA population-based sample and stronger in the Alzheimer's disease-enriched ADNI cohort. The timing of plasma p-tau217 progression explained a similar degree of variability in AVLT progression as amyloid PET, supporting its utility as a marker of disease progression. The estimated temporal ordering of biomarkers and cognitive abnormality was as anticipated (amyloid, tau, cognition) up to the age of 90, beyond which AVLT was estimated to become abnormal prior to tau biomarkers, likely related to the effects of non-Alzheimer's disease co-pathologies.",
+      "published": "2026-02-25",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41738322/",
+      "source": "PubMed",
+      "relevance_score": 32.3,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "plasma"
+      ],
+      "journal": "Brain : a journal of neurology",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": true,
+      "archived_at": "2026-02-26T11:42:49.803711"
+    }
   ]
 }
