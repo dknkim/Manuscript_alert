@@ -12,6 +12,7 @@ import requests
 
 from backend.utils.logger import Logger
 
+
 logger: Logger = Logger(__name__)
 
 
@@ -129,9 +130,7 @@ class PubMedFetcher:
             id_list: ET.Element | None = root.find("IdList")
             if id_list is not None:
                 paper_ids: list[str] = [
-                    id_elem.text
-                    for id_elem in id_list.findall("Id")
-                    if id_elem.text
+                    id_elem.text for id_elem in id_list.findall("Id") if id_elem.text
                 ]
                 logger.info(f"Extracted {len(paper_ids)} paper IDs")
                 return paper_ids
@@ -164,9 +163,7 @@ class PubMedFetcher:
         full_query: str = f"({combined_query}) AND {date_query}"
         return full_query
 
-    def _fetch_paper_details(
-        self, paper_ids: list[str]
-    ) -> list[dict[str, object]]:
+    def _fetch_paper_details(self, paper_ids: list[str]) -> list[dict[str, object]]:
         """Fetch full details for a list of PubMed paper IDs."""
         if not paper_ids:
             logger.info("No paper IDs to fetch details for")
@@ -176,9 +173,7 @@ class PubMedFetcher:
         all_papers: list[dict[str, object]] = []
         batch_size: int = 100
         total_batches: int = (len(paper_ids) + batch_size - 1) // batch_size
-        logger.info(
-            f"Will process {total_batches} batches of {batch_size} papers each"
-        )
+        logger.info(f"Will process {total_batches} batches of {batch_size} papers each")
 
         for i in range(0, len(paper_ids), batch_size):
             batch_num: int = (i // batch_size) + 1
@@ -204,15 +199,13 @@ class PubMedFetcher:
                         self.fetch_url, params=params, timeout=10
                     )
                     response.raise_for_status()
-                    batch_papers: list[dict[str, object]] = (
-                        self._parse_pubmed_response(response.content, batch_ids)
+                    batch_papers: list[dict[str, object]] = self._parse_pubmed_response(
+                        response.content, batch_ids
                     )
                     all_papers.extend(batch_papers)
 
                     if self.consecutive_rate_limits > 0:
-                        logger.info(
-                            "Successful request - resetting rate limit counter"
-                        )
+                        logger.info("Successful request - resetting rate limit counter")
                         self.consecutive_rate_limits = max(
                             0, self.consecutive_rate_limits - 1
                         )
@@ -226,8 +219,10 @@ class PubMedFetcher:
                         self.consecutive_rate_limits += 1
                         self.last_rate_limit_time = time.time()
                         base_wait: float = self.rate_limit_delay * (2**retry) * 2
-                        jitter: float = base_wait * 0.1 * (
-                            0.5 + (hash(str(time.time())) % 100) / 100
+                        jitter: float = (
+                            base_wait
+                            * 0.1
+                            * (0.5 + (hash(str(time.time())) % 100) / 100)
                         )
                         wait_time: float = base_wait + jitter
                         logger.warning(
@@ -248,9 +243,7 @@ class PubMedFetcher:
                 ) as e:
                     if retry < max_retries - 1:
                         wait_times: list[int] = [3, 10, 30]
-                        wait_time_int: int = wait_times[
-                            min(retry, len(wait_times) - 1)
-                        ]
+                        wait_time_int: int = wait_times[min(retry, len(wait_times) - 1)]
                         logger.warning(
                             f"Connection error for PubMed batch "
                             f"{i // batch_size + 1}. "
@@ -292,9 +285,7 @@ class PubMedFetcher:
             logger.error(f"Error extracting PubMed paper data: {e}")
         return papers
 
-    def _extract_paper_info(
-        self, article: ET.Element
-    ) -> dict[str, object] | None:
+    def _extract_paper_info(self, article: ET.Element) -> dict[str, object] | None:
         """Extract structured paper info from a PubMed XML article."""
         try:
             paper: dict[str, object] = {}
@@ -353,9 +344,7 @@ class PubMedFetcher:
                     vol_elem: ET.Element | None = journal_issue.find("Volume")
                     issue_elem: ET.Element | None = journal_issue.find("Issue")
                     volume = (
-                        vol_elem.text
-                        if vol_elem is not None and vol_elem.text
-                        else ""
+                        vol_elem.text if vol_elem is not None and vol_elem.text else ""
                     )
                     issue = (
                         issue_elem.text
@@ -405,9 +394,7 @@ class PubMedFetcher:
             if mesh_list is not None:
                 mesh_terms: list[str] = []
                 for mesh_heading in mesh_list.findall("MeshHeading"):
-                    descriptor: ET.Element | None = mesh_heading.find(
-                        "DescriptorName"
-                    )
+                    descriptor: ET.Element | None = mesh_heading.find("DescriptorName")
                     if descriptor is not None and descriptor.text:
                         mesh_terms.append(descriptor.text)
                 categories_list: list[str] = paper.get("categories", [])  # type: ignore[assignment]
@@ -434,7 +421,9 @@ class PubMedFetcher:
             day_elem: ET.Element | None = pub_date.find("Day")
 
             year_raw: str | int = (
-                year_elem.text if year_elem is not None and year_elem.text else str(datetime.now().year)
+                year_elem.text
+                if year_elem is not None and year_elem.text
+                else str(datetime.now().year)
             )
             month_raw: str = (
                 month_elem.text if month_elem is not None and month_elem.text else "1"
@@ -444,14 +433,25 @@ class PubMedFetcher:
             )
 
             month_map: dict[str, str] = {
-                "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4",
-                "May": "5", "Jun": "6", "Jul": "7", "Aug": "8",
-                "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12",
+                "Jan": "1",
+                "Feb": "2",
+                "Mar": "3",
+                "Apr": "4",
+                "May": "5",
+                "Jun": "6",
+                "Jul": "7",
+                "Aug": "8",
+                "Sep": "9",
+                "Oct": "10",
+                "Nov": "11",
+                "Dec": "12",
             }
             if month_raw in month_map:
                 month_raw = month_map[month_raw]
 
-            year: int = int(year_raw) if str(year_raw).isdigit() else datetime.now().year
+            year: int = (
+                int(year_raw) if str(year_raw).isdigit() else datetime.now().year
+            )
             month: int = int(month_raw) if str(month_raw).isdigit() else 1
             day: int = int(day_raw) if str(day_raw).isdigit() else 1
             if month > 12:
@@ -480,9 +480,7 @@ class PubMedFetcher:
                     f"{self.cooldown_period}s), using {adjusted_delay:.2f}s delay"
                 )
             else:
-                logger.info(
-                    "Cooldown period expired, resuming normal rate limiting"
-                )
+                logger.info("Cooldown period expired, resuming normal rate limiting")
                 self.consecutive_rate_limits = 0
                 adjusted_delay = self.rate_limit_delay
         else:

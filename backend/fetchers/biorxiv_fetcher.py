@@ -10,6 +10,7 @@ import requests
 
 from backend.utils.logger import Logger
 
+
 logger: Logger = Logger(__name__)
 
 
@@ -57,9 +58,7 @@ class BioRxivFetcher:
             start_str: str = start_date.strftime("%Y-%m-%d")
             end_str: str = end_date.strftime("%Y-%m-%d")
             base_url: str = (
-                self.biorxiv_base_url
-                if server == "biorxiv"
-                else self.medrxiv_base_url
+                self.biorxiv_base_url if server == "biorxiv" else self.medrxiv_base_url
             )
             api_url = f"{base_url}/{start_str}/{end_str}"
             response: requests.Response = requests.get(api_url, timeout=30)
@@ -119,9 +118,7 @@ class BioRxivFetcher:
                 return True
         return False
 
-    def _process_paper(
-        self, paper: dict[str, str], server: str
-    ) -> dict[str, object]:
+    def _process_paper(self, paper: dict[str, str], server: str) -> dict[str, object]:
         """Process a raw paper dict into the standardised format."""
         processed: dict[str, object] = {
             "title": paper.get("title", "").strip(),
@@ -134,9 +131,7 @@ class BioRxivFetcher:
         authors_str: str = paper.get("authors", "")
         if authors_str:
             authors: list[str] = [
-                author.strip()
-                for author in authors_str.split(",")
-                if author.strip()
+                author.strip() for author in authors_str.split(",") if author.strip()
             ]
             processed["authors"] = authors
         else:

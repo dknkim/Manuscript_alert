@@ -1,10 +1,30 @@
 # Cloud Migration Plan
 
 ## Current State (Feb 2026)
-- **Backend**: `server.py` — monolithic FastAPI (688 lines), runs locally via `python server.py`
+- **Backend**: `server.py` → `backend/src/` (refactored from 688-line monolith into modular FastAPI routers)
 - **Frontend**: Next.js 15 + React 19, built as static export served by FastAPI
 - **Storage**: All local files — `config/settings.py`, `config/models/*.json`, `data/archive/archive.json`
 - **No auth, no shared state** — each machine has its own data
+
+## Step 0: Tests & CI (pre-migration)
+
+Establish test coverage before changing storage or deployment — so we can verify nothing breaks during migration.
+
+### Backend Tests (`tests/`)
+- **API endpoint tests** (pytest + FastAPI TestClient): health, settings CRUD, models CRUD, backups CRUD, archive CRUD
+- **Service unit tests**: journal matching, scoring logic, archive I/O
+- **No network calls** — mock fetchers (PubMed, arXiv, bioRxiv) so tests are fast and deterministic
+
+### GitHub Actions CI (`.github/workflows/ci.yml`)
+- Trigger: push to main, all PRs
+- Runner: `ubuntu-latest` (free for public repos, unlimited minutes)
+- Steps: install Python deps → ruff lint → pytest
+- Blocks merge on failure
+
+### What This Catches
+- Regressions when swapping file I/O for database calls (Step 1-2)
+- Broken API contracts when deploying to Render (Step 3)
+- Frontend/backend mismatches when splitting to Vercel + Render (Step 4)
 
 ## Target Architecture
 
@@ -42,7 +62,7 @@ Neon ─── PostgreSQL                   FREE (512 MB)
 1. Create Neon project (`manuscript-alert`)
 2. Create tables with schema above
 3. Add `psycopg2` or `asyncpg` to `requirements.txt`
-4. Add DB connection layer to `server.py` (replace file I/O with SQL)
+4. Add DB connection layer to `backend/src/services/` (replace file I/O with SQL)
 5. Migrate existing local data into Neon
 6. Remove local file storage code
 
@@ -84,5 +104,5 @@ This can be integrated after the cloud migration is complete. Render's no-timeou
 
 ## Open Questions
 - Do we need auth? (multi-user vs single shared instance)
-- Keep `server.py` auto-build of frontend, or separate build steps?
+- Keep `server.py` auto-build of frontend, or separate build steps in CI?
 - KB_alz/ PDFs (78MB) — keep local or move to cloud storage?

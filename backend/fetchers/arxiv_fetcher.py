@@ -11,6 +11,7 @@ import requests
 
 from backend.utils.logger import Logger
 
+
 logger: Logger = Logger(__name__)
 
 
@@ -98,15 +99,13 @@ class ArxivFetcher:
 
         combined_query: str = " OR ".join(keyword_queries)
         date_query: str = (
-            f'submittedDate:[{start_date.strftime("%Y%m%d")}0000 '
-            f'TO {end_date.strftime("%Y%m%d")}2359]'
+            f"submittedDate:[{start_date.strftime('%Y%m%d')}0000 "
+            f"TO {end_date.strftime('%Y%m%d')}2359]"
         )
         full_query: str = f"({combined_query}) AND {date_query}"
         return full_query
 
-    def _parse_arxiv_response(
-        self, xml_content: bytes
-    ) -> list[dict[str, object]]:
+    def _parse_arxiv_response(self, xml_content: bytes) -> list[dict[str, object]]:
         """Parse arXiv API XML response."""
         papers: list[dict[str, object]] = []
 
@@ -128,9 +127,7 @@ class ArxivFetcher:
                 )
 
                 # Abstract
-                summary_elem: ET.Element | None = entry.find(
-                    "atom:summary", namespaces
-                )
+                summary_elem: ET.Element | None = entry.find("atom:summary", namespaces)
                 paper["abstract"] = self._clean_text(
                     summary_elem.text if summary_elem is not None else ""
                 )
@@ -166,9 +163,7 @@ class ArxivFetcher:
                     elif not arxiv_id.startswith("https://"):
                         if "arxiv.org/abs/" in arxiv_id:
                             arxiv_number: str = arxiv_id.split("arxiv.org/abs/")[-1]
-                            paper["arxiv_url"] = (
-                                f"https://arxiv.org/abs/{arxiv_number}"
-                            )
+                            paper["arxiv_url"] = f"https://arxiv.org/abs/{arxiv_number}"
                         else:
                             paper["arxiv_url"] = arxiv_id
                     else:
@@ -205,9 +200,7 @@ class ArxivFetcher:
     def _parse_date(self, date_string: str) -> str:
         """Parse date string to YYYY-MM-DD format."""
         try:
-            dt: datetime = datetime.fromisoformat(
-                date_string.replace("Z", "+00:00")
-            )
+            dt: datetime = datetime.fromisoformat(date_string.replace("Z", "+00:00"))
             return dt.strftime("%Y-%m-%d")
         except Exception:
             return datetime.now().strftime("%Y-%m-%d")
