@@ -163,9 +163,12 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 ## Technical Details
 
 ### Architecture
+
+![Backend Architecture](docs/diagram/backend_architecture.jpg)
+
 - **Frontend**: Next.js 15 + React 19 + TypeScript 5.7 + Tailwind CSS 3.4
-- **Backend**: FastAPI (Python 3.10+) with type hints, Pydantic models, REST API
-- **Data Sources**: PubMed, arXiv, bioRxiv/medRxiv APIs
+- **Backend**: FastAPI (Python 3.10+) with modular routers, Pydantic models, REST API
+- **Data Sources**: PubMed, arXiv, bioRxiv/medRxiv APIs (parallel fetch)
 - **Storage**: Local file-based settings and model presets (JSON + Python)
 - **Serving**: FastAPI serves the Next.js static export (`frontend/out/`) + REST API
 
@@ -190,34 +193,44 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 ### File Structure
 ```
 Manuscript_alert/
-├── server.py                      # FastAPI backend + static file serving
+├── server.py                      # Thin entry point (imports backend)
 ├── requirements.txt               # Python dependencies
 ├── pyproject.toml                 # Ruff configuration
-├── config/
-│   ├── settings.py                # Current application settings
-│   ├── models/                    # Saved model presets (JSON)
-│   └── backups/                   # Settings backups
-├── fetchers/
-│   ├── arxiv_fetcher.py           # arXiv API integration
-│   ├── biorxiv_fetcher.py         # bioRxiv/medRxiv API integration
-│   └── pubmed_fetcher.py          # PubMed API integration
-├── processors/
-│   └── keyword_matcher.py         # Keyword matching & relevance scoring
-├── services/
-│   ├── settings_service.py        # Settings load/save/backup
-│   └── export_service.py          # CSV export
-├── utils/
-│   ├── constants.py               # Shared constants
-│   ├── journal_utils.py           # Journal name utilities
-│   └── logger.py                  # Logging
-├── data/
-│   └── archive/                   # Archived papers (JSON)
+├── backend/
+│   ├── src/                       # FastAPI app layer
+│   │   ├── main.py                # App factory, CORS, routers, static serving
+│   │   ├── config.py              # Paths, singletons, shared state
+│   │   ├── api/                   # Route modules
+│   │   │   ├── health.py          # GET /api/health
+│   │   │   ├── settings.py        # Settings GET/PUT
+│   │   │   ├── papers.py          # Fetch, export, archive
+│   │   │   ├── models.py          # Model preset CRUD
+│   │   │   └── backups.py         # Backup CRUD
+│   │   ├── models/
+│   │   │   └── schemas.py         # Pydantic request/response models
+│   │   └── services/
+│   │       ├── paper_service.py   # Fetch & rank, journal scoring
+│   │       └── archive_service.py # Archive JSON I/O
+│   ├── fetchers/                  # External API integrations
+│   │   ├── arxiv_fetcher.py
+│   │   ├── biorxiv_fetcher.py
+│   │   └── pubmed_fetcher.py
+│   ├── processors/
+│   │   └── keyword_matcher.py     # Keyword matching & relevance scoring
+│   ├── services/
+│   │   ├── settings_service.py    # Settings load/save/backup
+│   │   └── export_service.py      # CSV export
+│   ├── utils/
+│   │   ├── constants.py           # Shared constants
+│   │   ├── journal_utils.py       # Journal name utilities
+│   │   └── logger.py              # Logging
+│   ├── config/
+│   │   ├── settings.py            # Current application settings
+│   │   ├── models/                # Saved model presets (JSON)
+│   │   └── backups/               # Settings backups (gitignored)
+│   └── data/
+│       └── archive/               # Archived papers (JSON)
 ├── frontend/                      # Next.js + TypeScript application
-│   ├── package.json               # Next.js 15, React 19, TypeScript 5.7
-│   ├── tsconfig.json              # Strict TypeScript config
-│   ├── next.config.ts             # Static export (output: "export")
-│   ├── tailwind.config.ts         # Tailwind CSS config
-│   ├── postcss.config.mjs         # PostCSS + Autoprefixer
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── layout.tsx         # Root layout
@@ -234,16 +247,17 @@ Manuscript_alert/
 │   │   └── types/
 │   │       └── index.ts           # Shared TypeScript interfaces
 │   └── out/                       # Built static files (auto-generated)
+├── docs/                          # Documentation & diagrams
+├── scripts/                       # Utility scripts
 ├── KB_alz/                        # Knowledge base PDFs
-├── logs/                          # Application logs
-├── docs/                          # Documentation
-└── scripts/                       # Utility scripts
+└── logs/                          # Application logs
 ```
 
 ### API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| `GET` | `/api/health` | Health check |
 | `GET` | `/api/settings` | Get current settings |
 | `PUT` | `/api/settings` | Save settings |
 | `POST` | `/api/papers/fetch` | Fetch and rank papers |
