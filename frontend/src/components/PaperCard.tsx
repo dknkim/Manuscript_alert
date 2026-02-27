@@ -121,7 +121,7 @@ export default function PaperCard({ paper, isArchived, onArchive }: PaperCardPro
         </div>
 
         {/* Score + badge + archive column */}
-        <div className="flex flex-col items-center gap-3 flex-shrink-0 w-24">
+        <div className="flex flex-col items-center gap-3 shrink-0 w-24">
           <span
             className={`inline-block px-3 py-1 rounded-full text-xs font-bold text-white ${badge}`}
           >

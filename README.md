@@ -166,7 +166,7 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 
 ![Backend Architecture](docs/diagram/backend_architecture.jpg)
 
-- **Frontend**: Next.js 15 + React 19 + TypeScript 5.7 + Tailwind CSS 3.4
+- **Frontend**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS 4
 - **Backend**: FastAPI (Python 3.10+) with modular routers, Pydantic models, REST API
 - **Data Sources**: PubMed, arXiv, bioRxiv/medRxiv APIs (parallel fetch)
 - **Storage**: Local file-based settings and model presets (JSON + Python)
@@ -235,7 +235,7 @@ Manuscript_alert/
 │   │   ├── app/
 │   │   │   ├── layout.tsx         # Root layout
 │   │   │   ├── page.tsx           # Main page & tab navigation
-│   │   │   └── globals.css        # Tailwind directives
+│   │   │   └── globals.css        # Tailwind imports & custom styles
 │   │   ├── components/
 │   │   │   ├── PapersTab.tsx      # Papers view with sidebar controls
 │   │   │   ├── PaperCard.tsx      # Individual paper display
@@ -300,32 +300,17 @@ kill -9 <PID>
 
 **Frontend not displaying**
 ```bash
-cd frontend && npm run build
-cd .. && python server.py
+rm -rf frontend/out
+python server.py   # will rebuild automatically
 ```
 
 ### Clean Reinstall
 
-**Python dependencies:**
 ```bash
 conda activate manuscript_alert
 pip install --force-reinstall -r requirements.txt
-```
-
-**Frontend dependencies:**
-```bash
 rm -rf frontend/node_modules frontend/out
-npm cache clean --force
 python server.py   # will reinstall and rebuild automatically
-```
-
-**Full reset (both):**
-```bash
-conda activate manuscript_alert
-pip install --force-reinstall -r requirements.txt
-rm -rf frontend/node_modules frontend/out
-npm cache clean --force
-python server.py
 ```
 
 ### Stopping and Restarting

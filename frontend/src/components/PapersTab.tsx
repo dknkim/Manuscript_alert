@@ -170,7 +170,7 @@ export default function PapersTab({
   return (
     <div className="flex">
       {/* ---------- Sidebar ---------- */}
-      <aside className="w-72 flex-shrink-0 bg-white border-r border-gray-200 p-5 space-y-6 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
+      <aside className="w-72 shrink-0 bg-white border-r border-gray-200 p-5 space-y-6 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
         <div>
           <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">
             🔧 Configuration
@@ -316,7 +316,7 @@ export default function PapersTab({
               placeholder="🔍 Search within results…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
             />
           )}
 
@@ -413,7 +413,7 @@ export default function PapersTab({
 
         {/* ---------- Stats sidebar ---------- */}
         {result && filteredPapers.length > 0 && (
-          <aside className="w-72 flex-shrink-0 border-l border-gray-200 bg-white p-5 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
+          <aside className="w-72 shrink-0 border-l border-gray-200 bg-white p-5 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
             <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
               📊 Statistics
             </h2>

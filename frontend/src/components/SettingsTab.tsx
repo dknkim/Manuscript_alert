@@ -151,7 +151,7 @@ function KeywordSettings({
           value={keywordsText}
           onChange={(e) => setKeywordsText(e.target.value)}
           rows={8}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono"
           placeholder="One keyword per line"
         />
       </Card>
@@ -292,7 +292,7 @@ function JournalSettings({
           value={exact}
           onChange={(e) => setExact(e.target.value)}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono mb-4"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono mb-4"
         />
 
         <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -302,7 +302,7 @@ function JournalSettings({
           value={family}
           onChange={(e) => setFamily(e.target.value)}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono mb-4"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono mb-4"
         />
 
         <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -312,7 +312,7 @@ function JournalSettings({
           value={specific}
           onChange={(e) => setSpecific(e.target.value)}
           rows={6}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono"
         />
       </Card>
 
@@ -324,7 +324,7 @@ function JournalSettings({
           value={exclusions}
           onChange={(e) => setExclusions(e.target.value)}
           rows={8}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono"
           placeholder="One pattern per line"
         />
       </Card>
@@ -494,7 +494,7 @@ function ScoringSettings({
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
             >
               <option>Brief</option>
               <option>Standard</option>
@@ -670,7 +670,7 @@ function NumField({
         min={min}
         max={max}
         step={step}
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
       />
     </div>
   );

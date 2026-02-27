@@ -91,7 +91,7 @@ export default function Home() {
                   onClick={() => setActiveTab(tab.key)}
                   className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                     activeTab === tab.key
-                      ? "bg-white text-gray-900 shadow-sm"
+                      ? "bg-white text-gray-900 shadow-xs"
                       : "text-gray-600 hover:text-gray-900"
                   }`}
                 >

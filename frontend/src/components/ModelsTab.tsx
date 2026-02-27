@@ -163,7 +163,7 @@ export default function ModelsTab({
             value={modelName}
             onChange={(e) => setModelName(e.target.value)}
             placeholder='e.g., "AD Neuroimaging Focus"'
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
           />
           <button
             onClick={handleSave}
