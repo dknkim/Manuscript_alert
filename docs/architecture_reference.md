@@ -39,10 +39,12 @@ Storage (local files):
 
 **Key characteristics:**
 - Single process — FastAPI serves both the API and the Next.js static export
+- All Python code consolidated under `backend/src/` (fetchers, processors, services, utils)
 - Singletons instantiated at startup in `config.py` (fetchers, keyword_matcher, settings_service)
 - Paper fetch uses `concurrent.futures` for parallel source queries
 - Results cached in memory (`_fetch_cache`) for CSV export reuse
 - No auth, no external services — runs entirely offline on a single machine
+- Step 3 will move routes under `/api/v1/` prefix — current flat `/api/` routes are pre-versioning
 
 ---
 
@@ -50,22 +52,22 @@ Storage (local files):
 
 Everything from the `nextjs` branch is accounted for in the migration plan.
 
-| Component | Step | Notes |
-|-----------|------|-------|
-| 7 LangGraph ReAct agents | 6 | resolver, 3 fetchers, kb_analyst, dedup, summarizer |
-| Agent tools (6 modules) | 6 | fetcher_tools, config_tools, kb_tools, analysis_tools, summary_tools, pdf_tools |
-| Agent prompts (5 files) | 6 | Each agent has a system prompt defining its role |
-| 3-layer pipeline (pipeline.py) | 6 | Deterministic → Agents → Deterministic |
-| ToolErrorMiddleware | 6 | Wraps tools so failures return error strings instead of crashing the agent loop |
-| PDF ingestion pipeline | 7 | Download → extract text (PyMuPDF) → chunk with overlap → embed → store in Pinecone |
-| SSE streaming | 3 (shell), 6 (wired) | pipeline_helpers.py formats LangGraph events into SSE dicts |
-| Neon DB (neon.py + models.py) | 4 | asyncpg connection pool + raw SQL data access |
-| Pinecone vectorstore | 7 | Abstract base class + factory pattern + PineconeStore implementation |
-| SPECTER2 embeddings | 7 | Local model, no API key needed |
-| pydantic-settings config | 3 | `.env`-based configuration replacing hardcoded paths |
-| Frontend 3-column layout | 2 | AppShell with SearchPanel / PaperFeed / DashboardPanel |
-| KB page | 2 (shell), 7 (wired) | `/kb` route for knowledge base management |
-| pytest + CI | 1 | Backend API tests, service unit tests, GitHub Actions |
+| Component | Step | Source | Notes |
+|-----------|------|--------|-------|
+| 7 LangGraph ReAct agents | 6 | `nextjs` | resolver, 3 fetchers, kb_analyst, dedup, summarizer |
+| Agent tools (6 modules) | 6 | `nextjs` | fetcher_tools, config_tools, kb_tools, analysis_tools, summary_tools, pdf_tools |
+| Agent prompts (5 files) | 6 | `nextjs` | Each agent has a system prompt defining its role |
+| 3-layer pipeline (pipeline.py) | 6 | `nextjs` | Deterministic → Agents → Deterministic |
+| ToolErrorMiddleware | 6 | `nextjs` | Wraps tools so failures return error strings instead of crashing the agent loop |
+| PDF ingestion pipeline | 7 | `nextjs` | Download → extract text (PyMuPDF) → chunk with overlap → embed → store in Pinecone |
+| SSE streaming | 3 (shell), 6 (wired) | `nextjs` | pipeline_helpers.py formats LangGraph events into SSE dicts |
+| Neon DB (neon.py + models.py) | 4 | `nextjs` | asyncpg connection pool + raw SQL data access |
+| Pinecone vectorstore | 7 | `nextjs` | Abstract base class + factory pattern + PineconeStore implementation |
+| SPECTER2 embeddings | 7 | `nextjs` | Local model, no API key needed |
+| pydantic-settings config | 3 | `nextjs` | `.env`-based configuration replacing hardcoded paths |
+| Frontend 3-column layout | 2 | `nextjs` | AppShell with SearchPanel / PaperFeed / DashboardPanel |
+| KB page | 2 (shell), 7 (wired) | `nextjs` | `/kb` route for knowledge base management |
+| pytest + CI | 1 | new | Backend API tests, service unit tests, GitHub Actions |
 
 ---
 
@@ -173,7 +175,7 @@ No new production dependencies. Dev/test only:
 | Package | What it does | Why we need it |
 |---------|-------------|----------------|
 | `pytest` | Python test framework | Run backend unit and integration tests |
-| `httpx` | Async HTTP client (also used in Step 3) | FastAPI `TestClient` requires it for async tests |
+| `httpx` | Async HTTP client (promoted to prod dep in Step 3) | FastAPI `TestClient` requires it for async tests |
 | `pytest-asyncio` | Async test support for pytest | Test async FastAPI endpoints |
 
 ### Step 2: Frontend

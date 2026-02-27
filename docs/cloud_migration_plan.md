@@ -2,15 +2,15 @@
 
 ## Roadmap Overview
 
-| Step | What | API Keys Needed | Key Outcome |
-|------|------|-----------------|-------------|
-| **1** | Tests & CI | None | pytest + GitHub Actions, blocks regressions |
-| **2** | Frontend Redesign | None | 3-column layout, new components, fresh aesthetics |
-| **3** | Backend Restructuring | None | API versioning, pydantic-settings, SSE shell, KB stubs |
-| **4** | Neon Database | `DATABASE_URL` (free signup) | Replace local JSON/Python files with Postgres |
-| **5** | Deploy | None (free accounts) | Vercel (frontend) + Render (backend) |
-| **6** | Agent Pipeline | `ANTHROPIC_API_KEY` | LangGraph ReAct agents for intelligent paper review |
-| **7** | Pinecone + KB | `PINECONE_API_KEY` (free signup) | Semantic search over PDFs and saved papers |
+| Step | What | Size | API Keys Needed | Key Outcome |
+|------|------|------|-----------------|-------------|
+| **1** | Tests & CI | S | None | pytest + GitHub Actions, blocks regressions |
+| **2** | Frontend Redesign | XL | None | 3-column layout, new components, fresh aesthetics |
+| **3** | Backend Restructuring | L | None | API versioning, pydantic-settings, SSE shell, KB stubs |
+| **4** | Neon Database | M | `DATABASE_URL` (free signup) | Replace local JSON/Python files with Postgres |
+| **5** | Deploy | M | None (free accounts) | Vercel (frontend) + Render (backend) |
+| **6** | Agent Pipeline | XL | `ANTHROPIC_API_KEY` | LangGraph ReAct agents for intelligent paper review |
+| **7** | Pinecone + KB | L | `PINECONE_API_KEY` (free signup) | Semantic search over PDFs and saved papers |
 
 Steps 1-5 require **zero LLM API keys**. Steps 6-7 add AI features incrementally.
 

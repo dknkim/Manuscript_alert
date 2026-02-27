@@ -3,9 +3,12 @@
 A local web application that helps researchers stay updated with the latest papers in Alzheimer's disease and neuroimaging from PubMed, arXiv, bioRxiv, and medRxiv.
 
 ---
+
 ## Tested on Mac and Linux with Conda
 
 ## Quick Start
+
+**Prerequisites:** Python 3.10+ and Node.js 18+ (both included if using the Conda setup below).
 
 ```bash
 conda activate manuscript_alert
@@ -13,13 +16,15 @@ python server.py
 ```
 
 The server will:
+
 1. Install frontend dependencies (if needed)
 2. Build the React frontend (if needed)
-3. Start the application at **http://localhost:8000**
+3. Start the application at **[http://localhost:8000](http://localhost:8000)**
 
 Papers from all sources (arXiv, bioRxiv, medRxiv, PubMed) are fetched automatically on startup.
 
 To stop the server, press `Ctrl+C`. To deactivate the conda environment:
+
 ```bash
 conda deactivate
 ```
@@ -44,14 +49,17 @@ cd frontend && npm run dev
 If you are running the app on a remote server (e.g., via SSH), use one of the following methods:
 
 **Option 1: SSH Port Forwarding (Recommended)**
+
 ```bash
 ssh -L 8000:localhost:8000 your_username@remote_server_ip
 ```
-Then open http://localhost:8000 in your local browser.
+
+Then open [http://localhost:8000](http://localhost:8000) in your local browser.
 
 **Option 2: Access via Network**
 
 The server binds to `0.0.0.0`, so it is accessible on all network interfaces. Open `http://<server_ip>:8000` and make sure port 8000 is allowed through the firewall:
+
 ```bash
 sudo ufw allow 8000
 ```
@@ -88,26 +96,26 @@ sudo ufw allow 8000
 ### Prerequisites
 
 **Option A: Use the bootstrap script** (creates env, installs deps automatically):
+
 ```bash
 source scripts/bootstrap_conda_env.sh
 ```
 
 **Option B: Manual setup**:
+
 1. **Create and activate conda environment**:
-   ```bash
+  ```bash
    conda create -n manuscript_alert python=3.11 nodejs -y
    conda activate manuscript_alert
-   ```
-
+  ```
 2. **Install Python dependencies**:
-   ```bash
+  ```bash
    pip install -r requirements.txt
-   ```
-
+  ```
 3. To deactivate when done:
-   ```bash
+  ```bash
    conda deactivate
-   ```
+  ```
 
 Frontend dependencies (npm) are installed automatically when you run `python server.py`.
 
@@ -118,18 +126,19 @@ Frontend dependencies (npm) are installed automatically when you run `python ser
 ### Using the App
 
 1. **Papers Tab**: Papers are fetched automatically on load. Use the sidebar to:
-   - Toggle data sources (arXiv, bioRxiv, medRxiv, PubMed)
-   - Select search mode (Brief / Standard / Extended)
-   - Filter by journal quality
-   - Search within results
-   - Archive papers for later
-   - Export to CSV
-2. **Models Tab**: Save/load keyword & settings presets for different research topics
+  - Toggle data sources (arXiv, bioRxiv, medRxiv, PubMed)
+  - Select search mode (Brief / Standard / Extended)
+  - Filter by journal quality
+  - Search within results
+  - Archive papers for later
+  - Export to CSV
+2. **Models Tab**: Save/load keyword & settings presets for different research topics. Two presets ship by default: `AD_neuroimaging` and `Stroke_imaging`.
 3. **Settings Tab**: Configure keywords, journal preferences, scoring parameters, and manage backups
 
 ### Default Keywords
 
 The app comes with default keywords including:
+
 - Alzheimer's disease
 - PET
 - MRI
@@ -142,20 +151,24 @@ The app comes with default keywords including:
 ## Configuration
 
 ### Keywords
+
 - Add your research interests in the Settings tab
 - Papers must match at least 2 keywords to be displayed
 - Keywords are saved automatically
 
 ### Date Range
+
 - Configurable in the Settings tab (default: 7 days back)
 - Longer ranges may take more time to search
 
 ### Search Modes
+
 - **Brief**: Fastest — PubMed: 1000, Others: 500 papers
 - **Standard**: Balanced — PubMed: 2500, Others: 1000 papers
 - **Extended**: Comprehensive — All sources: 5000 papers
 
 ### Journal Quality Filter
+
 When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Science, Radiology, Brain, Alzheimer's & Dementia, etc.).
 
 ---
@@ -164,7 +177,7 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 
 ### Architecture
 
-![Backend Architecture](docs/diagram/backend_architecture.jpg)
+Backend Architecture
 
 - **Frontend**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS 4
 - **Backend**: FastAPI (Python 3.10+) with modular routers, Pydantic models, REST API
@@ -175,6 +188,7 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 ### Dependencies
 
 **Python** (`requirements.txt`):
+
 - `fastapi` — Web framework / API server
 - `uvicorn` — ASGI server
 - `pandas` — Data manipulation / CSV export
@@ -185,19 +199,21 @@ When enabled, shows only papers from relevant journals (e.g., Nature, JAMA, Scie
 - `ruff` — Python linter
 
 **Frontend** (`frontend/package.json`):
+
 - `next` — React framework (static export)
 - `react` / `react-dom` — UI library
 - `typescript` — Type-safe JavaScript
 - `tailwindcss` — Utility-first CSS
 
 ### File Structure
+
 ```
 Manuscript_alert/
 ├── server.py                      # Thin entry point (imports backend)
 ├── requirements.txt               # Python dependencies
 ├── pyproject.toml                 # Ruff configuration
 ├── backend/
-│   ├── src/                       # FastAPI app layer
+│   ├── src/                       # All Python code lives here
 │   │   ├── main.py                # App factory, CORS, routers, static serving
 │   │   ├── config.py              # Paths, singletons, shared state
 │   │   ├── api/                   # Route modules
@@ -208,22 +224,21 @@ Manuscript_alert/
 │   │   │   └── backups.py         # Backup CRUD
 │   │   ├── models/
 │   │   │   └── schemas.py         # Pydantic request/response models
-│   │   └── services/
-│   │       ├── paper_service.py   # Fetch & rank, journal scoring
-│   │       └── archive_service.py # Archive JSON I/O
-│   ├── fetchers/                  # External API integrations
-│   │   ├── arxiv_fetcher.py
-│   │   ├── biorxiv_fetcher.py
-│   │   └── pubmed_fetcher.py
-│   ├── processors/
-│   │   └── keyword_matcher.py     # Keyword matching & relevance scoring
-│   ├── services/
-│   │   ├── settings_service.py    # Settings load/save/backup
-│   │   └── export_service.py      # CSV export
-│   ├── utils/
-│   │   ├── constants.py           # Shared constants
-│   │   ├── journal_utils.py       # Journal name utilities
-│   │   └── logger.py              # Logging
+│   │   ├── services/
+│   │   │   ├── paper_service.py   # Fetch & rank, journal scoring
+│   │   │   ├── archive_service.py # Archive JSON I/O
+│   │   │   ├── settings_service.py# Settings load/save/backup
+│   │   │   └── export_service.py  # CSV/JSON/BibTeX export
+│   │   ├── fetchers/              # External API integrations
+│   │   │   ├── arxiv_fetcher.py
+│   │   │   ├── biorxiv_fetcher.py
+│   │   │   └── pubmed_fetcher.py
+│   │   ├── processors/
+│   │   │   └── keyword_matcher.py # Keyword matching & relevance scoring
+│   │   └── utils/
+│   │       ├── constants.py       # Shared constants
+│   │       ├── journal_utils.py   # Journal name utilities
+│   │       └── logger.py          # Logging
 │   ├── config/
 │   │   ├── settings.py            # Current application settings
 │   │   ├── models/                # Saved model presets (JSON)
@@ -255,25 +270,27 @@ Manuscript_alert/
 
 ### API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/health` | Health check |
-| `GET` | `/api/settings` | Get current settings |
-| `PUT` | `/api/settings` | Save settings |
-| `POST` | `/api/papers/fetch` | Fetch and rank papers |
-| `POST` | `/api/papers/export` | Export papers as CSV |
-| `POST` | `/api/papers/archive` | Archive a paper |
-| `GET` | `/api/papers/archive` | List archived papers |
-| `DELETE` | `/api/papers/archive` | Remove a paper from archive |
-| `GET` | `/api/models` | List saved model presets |
-| `POST` | `/api/models` | Save a new model preset |
-| `POST` | `/api/models/{filename}/load` | Load a model preset |
-| `GET` | `/api/models/{filename}/preview` | Preview a model preset |
-| `DELETE` | `/api/models/{filename}` | Delete a model preset |
-| `GET` | `/api/backups` | List settings backups |
-| `POST` | `/api/backups/create` | Create a settings backup |
-| `POST` | `/api/backups/restore` | Restore a settings backup |
-| `DELETE` | `/api/backups` | Delete a settings backup |
+
+| Method   | Endpoint                         | Description                 |
+| -------- | -------------------------------- | --------------------------- |
+| `GET`    | `/api/health`                    | Health check                |
+| `GET`    | `/api/settings`                  | Get current settings        |
+| `PUT`    | `/api/settings`                  | Save settings               |
+| `POST`   | `/api/papers/fetch`              | Fetch and rank papers       |
+| `POST`   | `/api/papers/export`             | Export papers as CSV        |
+| `POST`   | `/api/papers/archive`            | Archive a paper             |
+| `GET`    | `/api/papers/archive`            | List archived papers        |
+| `DELETE` | `/api/papers/archive`            | Remove a paper from archive |
+| `GET`    | `/api/models`                    | List saved model presets    |
+| `POST`   | `/api/models`                    | Save a new model preset     |
+| `POST`   | `/api/models/{filename}/load`    | Load a model preset         |
+| `GET`    | `/api/models/{filename}/preview` | Preview a model preset      |
+| `DELETE` | `/api/models/{filename}`         | Delete a model preset       |
+| `GET`    | `/api/backups`                   | List settings backups       |
+| `POST`   | `/api/backups/create`            | Create a settings backup    |
+| `POST`   | `/api/backups/restore`           | Restore a settings backup   |
+| `DELETE` | `/api/backups`                   | Delete a settings backup    |
+
 
 ---
 
@@ -282,23 +299,27 @@ Manuscript_alert/
 ### Common Issues
 
 **"npm: command not found"**
+
 ```bash
 conda install nodejs -y
 ```
 
 **"Module not found" (Python)**
+
 ```bash
 conda activate manuscript_alert
 pip install -r requirements.txt
 ```
 
 **Port 8000 already in use**
+
 ```bash
 lsof -i :8000
 kill -9 <PID>
 ```
 
 **Frontend not displaying**
+
 ```bash
 rm -rf frontend/out
 python server.py   # will rebuild automatically
@@ -314,6 +335,7 @@ python server.py   # will reinstall and rebuild automatically
 ```
 
 ### Stopping and Restarting
+
 - To stop: Press `Ctrl+C` in the terminal
 - To restart: `python server.py` (frontend is only rebuilt when source files have changed)
 
@@ -338,6 +360,7 @@ This project is open source, but not for commercial use.
 ## Support
 
 For issues or questions:
+
 1. Check the troubleshooting section above
 2. Review the logs in the terminal and `logs/app.log`
 3. Create an issue in the project repository
