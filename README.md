@@ -325,6 +325,12 @@ python server.py   # will reinstall and rebuild automatically
 
 ---
 
+## Roadmap
+
+See [docs/cloud_migration_plan.md](docs/cloud_migration_plan.md) for the cloud migration roadmap and [docs/architecture_reference.md](docs/architecture_reference.md) for detailed technical reference.
+
+---
+
 ## License
 
 This project is open source, but not for commercial use.

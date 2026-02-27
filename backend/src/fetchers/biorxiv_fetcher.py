@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 import requests
 
-from backend.utils.logger import Logger
+from backend.src.utils.logger import Logger
 
 
 logger: Logger = Logger(__name__)

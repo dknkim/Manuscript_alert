@@ -8,7 +8,7 @@ import re
 from datetime import datetime
 from typing import Any
 
-from backend.utils.logger import Logger
+from backend.src.utils.logger import Logger
 
 
 # Initialize logger

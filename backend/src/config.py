@@ -5,11 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from backend.fetchers.arxiv_fetcher import ArxivFetcher
-from backend.fetchers.biorxiv_fetcher import BioRxivFetcher
-from backend.fetchers.pubmed_fetcher import PubMedFetcher
-from backend.processors.keyword_matcher import KeywordMatcher
-from backend.services.settings_service import SettingsService
+from backend.src.fetchers.arxiv_fetcher import ArxivFetcher
+from backend.src.fetchers.biorxiv_fetcher import BioRxivFetcher
+from backend.src.fetchers.pubmed_fetcher import PubMedFetcher
+from backend.src.processors.keyword_matcher import KeywordMatcher
+from backend.src.services.settings_service import SettingsService
 
 
 # ---------------------------------------------------------------------------
