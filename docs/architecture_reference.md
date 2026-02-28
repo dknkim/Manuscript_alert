@@ -46,6 +46,12 @@ Storage (local files):
 - No auth, no external services — runs entirely offline on a single machine
 - Step 3 will move routes under `/api/v1/` prefix — current flat `/api/` routes are pre-versioning
 
+**Target state** (after Steps 1-7):
+```
+Vercel (frontend) → Render (FastAPI + LangGraph agents) → Neon (Postgres) + Pinecone (vectors)
+```
+SSE streaming replaces polling; `/api/v1/` prefix; pydantic-settings config; agent mode optional (classic mode still works without API keys). Full target diagram in [cloud_migration_plan.md](cloud_migration_plan.md#target-architecture).
+
 ---
 
 ## Architectural Audit (vs `nextjs` branch)
@@ -309,6 +315,8 @@ CREATE TABLE kb_documents (
 );
 CREATE INDEX idx_kb_documents_project_id ON kb_documents (project_id);
 ```
+
+> **Schema sync:** This SQL is the reference copy. When Step 4 is implemented, the bootstrap script in `backend/src/db/neon.py` must match this schema. Update both places together.
 
 ---
 

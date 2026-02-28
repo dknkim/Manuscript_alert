@@ -4,8 +4,6 @@ A local web application that helps researchers stay updated with the latest pape
 
 ---
 
-## Tested on Mac and Linux with Conda
-
 ## Quick Start
 
 **Prerequisites:** Python 3.10+ and Node.js 18+ (both included if using the Conda setup below).
@@ -85,7 +83,8 @@ sudo ufw allow 8000
 
 ## System Requirements
 
-- macOS or Linux
+Tested on macOS and Linux with Conda.
+
 - Python 3.10+
 - Node.js 18+ (with npm)
 - Conda (recommended) or venv
@@ -184,6 +183,7 @@ Backend Architecture
 - **Data Sources**: PubMed, arXiv, bioRxiv/medRxiv APIs (parallel fetch)
 - **Storage**: Local file-based settings and model presets (JSON + Python)
 - **Serving**: FastAPI serves the Next.js static export (`frontend/out/`) + REST API
+- **Dev mode**: `--dev` flag skips frontend build; run Next.js dev server separately on port 3000
 
 ### Dependencies
 
@@ -227,7 +227,7 @@ Manuscript_alert/
 │   │   ├── services/
 │   │   │   ├── paper_service.py   # Fetch & rank, journal scoring
 │   │   │   ├── archive_service.py # Archive JSON I/O
-│   │   │   ├── settings_service.py# Settings load/save/backup
+│   │   │   ├── settings_service.py # Settings load/save/backup
 │   │   │   └── export_service.py  # CSV/JSON/BibTeX export
 │   │   ├── fetchers/              # External API integrations
 │   │   │   ├── arxiv_fetcher.py
@@ -349,7 +349,7 @@ python server.py   # will reinstall and rebuild automatically
 
 ## Roadmap
 
-See [docs/cloud_migration_plan.md](docs/cloud_migration_plan.md) for the cloud migration roadmap and [docs/architecture_reference.md](docs/architecture_reference.md) for detailed technical reference.
+The project is moving toward a cloud-hosted stack (Vercel + Render + Neon) with an LLM-powered agent pipeline — currently local-only, no external services required. See [docs/cloud_migration_plan.md](docs/cloud_migration_plan.md) for the full roadmap and [docs/architecture_reference.md](docs/architecture_reference.md) for detailed technical reference.
 
 ---
 

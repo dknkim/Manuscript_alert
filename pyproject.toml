@@ -43,6 +43,10 @@ force-single-line = false
 lines-after-imports = 2
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
 [tool.ruff.format]
 # Use double quotes for strings
 quote-style = "double"
