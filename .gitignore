@@ -35,3 +35,7 @@ frontend/dist/
 frontend/out/
 frontend/.next/
 frontend/.env.development
+
+# Playwright visual regression baselines (platform-specific, regenerate locally)
+frontend/e2e/*-snapshots/
+frontend/test-results/
