@@ -72,9 +72,7 @@ class ExportService:
                 else "Unknown"
             )
             year: str = paper["published"][:4] if paper["published"] else "YYYY"
-            title_word: str = (
-                paper["title"].split()[0] if paper["title"] else "Paper"
-            )
+            title_word: str = paper["title"].split()[0] if paper["title"] else "Paper"
             cite_key: str = f"{first_author}{year}{title_word}"
 
             entry_type: str = "@article" if paper.get("journal") else "@misc"

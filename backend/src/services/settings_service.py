@@ -14,6 +14,7 @@ from backend.src.utils.logger import Logger
 # Initialize logger
 logger = Logger(__name__)
 
+
 class SettingsService:
     """Manages application settings with persistence to source files"""
 
@@ -35,7 +36,9 @@ class SettingsService:
             import importlib.util
 
             logger.debug(f"Loading settings from: {self.settings_file}")
-            spec = importlib.util.spec_from_file_location("settings", self.settings_file)
+            spec = importlib.util.spec_from_file_location(
+                "settings", self.settings_file
+            )
             settings_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(settings_module)
 
@@ -47,10 +50,13 @@ class SettingsService:
                 "keyword_scoring": settings_module.KEYWORD_SCORING,
                 "search_settings": settings_module.DEFAULT_SEARCH_SETTINGS,
                 "ui_settings": settings_module.UI_SETTINGS,
-                "must_have_keywords": getattr(settings_module, "MUST_HAVE_KEYWORDS", []),
+                "must_have_keywords": getattr(
+                    settings_module, "MUST_HAVE_KEYWORDS", []
+                ),
             }
 
-            logger.info(f"Settings loaded successfully: {len(settings_dict['keywords'])} keywords")
+            kw_count = len(settings_dict["keywords"])
+            logger.info(f"Settings loaded: {kw_count} keywords")
             logger.info("<<< SettingsService.load_settings() returning")
             return settings_dict
         except Exception as e:
@@ -79,11 +85,24 @@ class SettingsService:
                     "3_keywords": 2.8,
                     "2_keywords": 1.3,
                     "1_keyword": 0.5,
-                }
+                },
             },
             "target_journals": {
-                "exact_matches": ["jama", "nature", "science", "radiology", "ajnr", "the lancet"],
-                "family_matches": ["jama ", "nature ", "science ", "npj ", "the lancet"],
+                "exact_matches": [
+                    "jama",
+                    "nature",
+                    "science",
+                    "radiology",
+                    "ajnr",
+                    "the lancet",
+                ],
+                "family_matches": [
+                    "jama ",
+                    "nature ",
+                    "science ",
+                    "npj ",
+                    "the lancet",
+                ],
                 "specific_journals": [
                     "american journal of neuroradiology",
                     "alzheimer's & dementia",
@@ -98,19 +117,45 @@ class SettingsService:
                 ],
             },
             "journal_exclusions": [
-                "abdominal", "pediatric", "cardiovascular and interventional",
-                "interventional", "emergency", "skeletal", "clinical", "academic",
-                "investigative", "case reports", "oral surgery", "korean journal of",
-                "the neuroradiology", "japanese journal of", "brain research",
-                "brain and behavior", "brain imaging and behavior", "brain stimulation",
-                "brain connectivity", "brain and cognition", "brain, behavior, and immunity",
-                "metabolic brain disease", "neuroscience letters", "neuroscience bulletin",
-                "neuroscience methods", "neuroscience research", "neuroscience and biobehavioral",
-                "clinical neuroscience", "neuropsychiatry", "ibro neuroscience",
-                "acs chemical neuroscience", "proceedings of the national academy",
-                "life science alliance", "life sciences", "animal science",
-                "biomaterials science", "veterinary medical science",
-                "philosophical transactions", "annals of the new york academy",
+                "abdominal",
+                "pediatric",
+                "cardiovascular and interventional",
+                "interventional",
+                "emergency",
+                "skeletal",
+                "clinical",
+                "academic",
+                "investigative",
+                "case reports",
+                "oral surgery",
+                "korean journal of",
+                "the neuroradiology",
+                "japanese journal of",
+                "brain research",
+                "brain and behavior",
+                "brain imaging and behavior",
+                "brain stimulation",
+                "brain connectivity",
+                "brain and cognition",
+                "brain, behavior, and immunity",
+                "metabolic brain disease",
+                "neuroscience letters",
+                "neuroscience bulletin",
+                "neuroscience methods",
+                "neuroscience research",
+                "neuroscience and biobehavioral",
+                "clinical neuroscience",
+                "neuropsychiatry",
+                "ibro neuroscience",
+                "acs chemical neuroscience",
+                "proceedings of the national academy",
+                "life science alliance",
+                "life sciences",
+                "animal science",
+                "biomaterials science",
+                "veterinary medical science",
+                "philosophical transactions",
+                "annals of the new york academy",
             ],
             "keyword_scoring": {
                 "high_priority": {
@@ -196,13 +241,17 @@ class SettingsService:
         replacement = f"DEFAULT_KEYWORDS = {keywords_str}"
         return re.sub(pattern, replacement, content, flags=re.DOTALL)
 
-    def _update_journal_scoring(self, content: str, journal_scoring: dict[str, Any]) -> str:
+    def _update_journal_scoring(
+        self, content: str, journal_scoring: dict[str, Any]
+    ) -> str:
         """Update the JOURNAL_SCORING section"""
         scoring_str = self._dict_to_python_string(journal_scoring, "JOURNAL_SCORING")
         pattern = r"JOURNAL_SCORING = \{.*?\}"
         return re.sub(pattern, scoring_str, content, flags=re.DOTALL)
 
-    def _update_target_journals(self, content: str, target_journals: dict[str, list[str]]) -> str:
+    def _update_target_journals(
+        self, content: str, target_journals: dict[str, list[str]]
+    ) -> str:
         """Update the TARGET_JOURNALS section"""
         journals_str = self._dict_to_python_string(target_journals, "TARGET_JOURNALS")
         pattern = r"TARGET_JOURNALS = \{.*?\}"
@@ -211,9 +260,11 @@ class SettingsService:
     def _update_journal_exclusions(self, content: str, exclusions: list[str]) -> str:
         """Update the JOURNAL_EXCLUSIONS section"""
         # Create a simple list format
-        exclusions_str = "[\n" + "\n".join([f'    "{ex}",' for ex in exclusions]) + "\n]"
+        exclusions_str = (
+            "[\n" + "\n".join([f'    "{ex}",' for ex in exclusions]) + "\n]"
+        )
 
-        # Use a more specific pattern that matches the entire JOURNAL_EXCLUSIONS assignment
+        # Use a more specific pattern to match JOURNAL_EXCLUSIONS
         pattern = r"JOURNAL_EXCLUSIONS = \[.*?\]"
         replacement = f"JOURNAL_EXCLUSIONS = {exclusions_str}"
 
@@ -221,8 +272,6 @@ class SettingsService:
         if not re.search(pattern, content, flags=re.DOTALL):
             # Find the start and end of the JOURNAL_EXCLUSIONS section
             start_pattern = r"JOURNAL_EXCLUSIONS = \["
-            end_pattern = r"\]"
-
             start_match = re.search(start_pattern, content)
             if start_match:
                 start_pos = start_match.start()
@@ -239,21 +288,31 @@ class SettingsService:
                             break
 
                 # Replace the entire section
-                content = content[:start_pos] + f"JOURNAL_EXCLUSIONS = {exclusions_str}" + content[end_pos:]
+                content = (
+                    content[:start_pos]
+                    + f"JOURNAL_EXCLUSIONS = {exclusions_str}"
+                    + content[end_pos:]
+                )
         else:
             content = re.sub(pattern, replacement, content, flags=re.DOTALL)
 
         return content
 
-    def _update_keyword_scoring(self, content: str, keyword_scoring: dict[str, Any]) -> str:
+    def _update_keyword_scoring(
+        self, content: str, keyword_scoring: dict[str, Any]
+    ) -> str:
         """Update the KEYWORD_SCORING section"""
         scoring_str = self._dict_to_python_string(keyword_scoring, "KEYWORD_SCORING")
         pattern = r"KEYWORD_SCORING = \{.*?\}"
         return re.sub(pattern, scoring_str, content, flags=re.DOTALL)
 
-    def _update_search_settings(self, content: str, search_settings: dict[str, Any]) -> str:
+    def _update_search_settings(
+        self, content: str, search_settings: dict[str, Any]
+    ) -> str:
         """Update the DEFAULT_SEARCH_SETTINGS section"""
-        settings_str = self._dict_to_python_string(search_settings, "DEFAULT_SEARCH_SETTINGS")
+        settings_str = self._dict_to_python_string(
+            search_settings, "DEFAULT_SEARCH_SETTINGS"
+        )
         pattern = r"DEFAULT_SEARCH_SETTINGS = \{.*?\}"
         return re.sub(pattern, settings_str, content, flags=re.DOTALL)
 
@@ -286,7 +345,14 @@ class SettingsService:
                     items.append(f"{key_str}: {val_str}")
 
                 indent_str = " " * (indent + 4)
-                return "{\n" + indent_str + (",\n" + indent_str).join(items) + "\n" + " " * indent + "}"
+                return (
+                    "{\n"
+                    + indent_str
+                    + (",\n" + indent_str).join(items)
+                    + "\n"
+                    + " " * indent
+                    + "}"
+                )
 
             elif isinstance(value, list):
                 if not value:
@@ -303,7 +369,14 @@ class SettingsService:
                         items.append(str(item))
 
                 indent_str = " " * (indent + 4)
-                return "[\n" + indent_str + (",\n" + indent_str).join(items) + "\n" + " " * indent + "]"
+                return (
+                    "[\n"
+                    + indent_str
+                    + (",\n" + indent_str).join(items)
+                    + "\n"
+                    + " " * indent
+                    + "]"
+                )
 
             elif isinstance(value, str):
                 return f'"{value}"'
@@ -350,9 +423,13 @@ UI_SETTINGS = {ui_settings}
         keywords_str = self._format_list(settings.get("keywords", []))
         journal_scoring_str = self._format_dict(settings.get("journal_scoring", {}))
         target_journals_str = self._format_dict(settings.get("target_journals", {}))
-        journal_exclusions_str = self._format_list(settings.get("journal_exclusions", []))
+        journal_exclusions_str = self._format_list(
+            settings.get("journal_exclusions", [])
+        )
         keyword_scoring_str = self._format_dict(settings.get("keyword_scoring", {}))
-        must_have_keywords_str = self._format_list(settings.get("must_have_keywords", []))
+        must_have_keywords_str = self._format_list(
+            settings.get("must_have_keywords", [])
+        )
         search_settings_str = self._format_dict(settings.get("search_settings", {}))
         ui_settings_str = self._format_dict(settings.get("ui_settings", {}))
 
@@ -398,7 +475,14 @@ UI_SETTINGS = {ui_settings}
                     items.append(f"{key_str}: {val_str}")
 
                 indent_str = " " * (indent + 4)
-                return "{\n" + indent_str + (",\n" + indent_str).join(items) + "\n" + " " * indent + "}"
+                return (
+                    "{\n"
+                    + indent_str
+                    + (",\n" + indent_str).join(items)
+                    + "\n"
+                    + " " * indent
+                    + "}"
+                )
 
             elif isinstance(value, list):
                 return self._format_list(value)

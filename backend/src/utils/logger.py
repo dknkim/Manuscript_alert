@@ -2,7 +2,7 @@
 Custom logging module with colored console output and rotating file handlers.
 
 Features:
-    - Color-coded console output (DEBUG=Cyan, INFO=Green, WARNING=Yellow, ERROR=Red, CRITICAL=Magenta)
+    - Color-coded console output (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     - Rotating file handler (default: 10 MB per file, 10 backup files)
     - Plain text output to log files (no ANSI color codes)
     - Thread-safe logger caching
@@ -18,17 +18,18 @@ from __future__ import annotations
 import logging
 import os
 from logging.handlers import RotatingFileHandler
+from typing import ClassVar
 
 
 class ColoredFormatter(logging.Formatter):
     """Custom formatter with ANSI colors for console output."""
 
-    COLORS: dict[str, str] = {
-        "DEBUG": "\033[36m",      # Cyan
-        "INFO": "\033[32m",       # Green
-        "WARNING": "\033[33m",    # Yellow
-        "ERROR": "\033[31m",      # Red
-        "CRITICAL": "\033[35m",   # Magenta
+    COLORS: ClassVar[dict[str, str]] = {
+        "DEBUG": "\033[36m",  # Cyan
+        "INFO": "\033[32m",  # Green
+        "WARNING": "\033[33m",  # Yellow
+        "ERROR": "\033[31m",  # Red
+        "CRITICAL": "\033[35m",  # Magenta
     }
     RESET: str = "\033[0m"
 
@@ -40,10 +41,10 @@ class ColoredFormatter(logging.Formatter):
 
 
 class Logger:
-    """Thin wrapper around :class:`logging.Logger` with rotating file + coloured console."""
+    """Wrapper around logging.Logger with rotating file + coloured console."""
 
-    _loggers: dict[str, logging.Logger] = {}
-    _initialized: set[str] = set()
+    _loggers: ClassVar[dict[str, logging.Logger]] = {}
+    _initialized: ClassVar[set[str]] = set()
 
     def __init__(
         self,

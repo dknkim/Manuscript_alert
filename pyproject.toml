@@ -8,6 +8,12 @@ target-version = "py311"
 # Enable auto-fixing
 fix = true
 
+# Exclude auto-generated / runtime files from linting and formatting
+exclude = [
+    "backend/config/backups/",
+    "backend/config/settings.py",
+]
+
 [tool.ruff.lint]
 # Enable specific rules
 select = [
