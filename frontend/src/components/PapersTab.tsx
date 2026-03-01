@@ -169,6 +169,8 @@ export default function PapersTab({
         onExport={handleExport}
         archivedTitles={archivedTitles}
         onArchive={handleArchive}
+        displayState={{ sources: [], phases: [] }}
+        isStreaming={false}
       />
 
       <DashboardPanel

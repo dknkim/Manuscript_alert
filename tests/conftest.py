@@ -195,27 +195,33 @@ def client(
 ) -> TestClient:
     """
     TestClient with config module monkeypatched to use temp dirs
-    and a mock settings service.
+    and a mock settings service.  Patches both legacy and v1 routes.
     """
     import backend.src.api.backups as api_backups
     import backend.src.api.models as api_models
     import backend.src.api.settings as api_settings
     import backend.src.config as cfg
     import backend.src.services.archive_service as arch_svc
+    from backend.src.api import deps
 
     # Patch config-level singletons / paths
     monkeypatch.setattr(cfg, "settings_service", patched_settings_service)
     monkeypatch.setattr(cfg, "MODELS_DIR", tmp_models_dir)
     monkeypatch.setattr(cfg, "ARCHIVE_DIR", tmp_archive_dir)
 
-    # Patch per-module references that were imported at module load time
+    # Patch per-module references that were imported at module load time (legacy routes)
     monkeypatch.setattr(api_settings, "settings_service", patched_settings_service)
     monkeypatch.setattr(api_models, "settings_service", patched_settings_service)
     monkeypatch.setattr(api_models, "MODELS_DIR", tmp_models_dir)
     monkeypatch.setattr(api_backups, "settings_service", patched_settings_service)
     monkeypatch.setattr(arch_svc, "ARCHIVE_DIR", tmp_archive_dir)
 
-    # Null the fetch cache
+    # Patch v1 dependency injection singletons
+    monkeypatch.setattr(deps, "_settings_service", patched_settings_service)
+    monkeypatch.setattr(deps, "MODELS_DIR", tmp_models_dir)
+    monkeypatch.setattr(deps, "ARCHIVE_DIR", tmp_archive_dir)
+
+    # Null the fetch caches
     monkeypatch.setattr(cfg, "_fetch_cache", None)
 
     from backend.src.main import app

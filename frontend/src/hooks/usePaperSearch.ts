@@ -1,11 +1,6 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import {
-  fetchPapers,
-  exportPapersCSV,
-  archivePaper,
-  getArchivedPapers,
-} from "@/lib/api";
-import type { FetchResult, DataSources, Paper } from "@/types";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { exportPapersCSV, archivePaper, getArchivedPapers } from "@/lib/api";
+import type { DataSources, Paper } from "@/types";
 
 const ALL_SOURCES: DataSources = {
   arxiv: true,
@@ -16,13 +11,7 @@ const ALL_SOURCES: DataSources = {
 
 const DEFAULT_SEARCH_MODE = "Brief (PubMed: 1000, Others: 500)";
 
-export function usePaperSearch(
-  keywords: string[],
-  defaultSources?: DataSources,
-) {
-  const [result, setResult] = useState<FetchResult | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export function usePaperSearch(defaultSources?: DataSources) {
   const [sources, setSources] = useState<DataSources>(ALL_SOURCES);
   const [searchMode, setSearchMode] = useState(DEFAULT_SEARCH_MODE);
   const [highImpactOnly, setHighImpactOnly] = useState(false);
@@ -44,55 +33,6 @@ export function usePaperSearch(
       .then((data) => setArchivedTitles(new Set(data.archived_titles)))
       .catch((err) => console.error("Failed to load archived papers:", err));
   }, []);
-
-  const fetch = useCallback(
-    async (overrideSources?: DataSources) => {
-      const srcs = overrideSources || sources;
-      if (!Object.values(srcs).some(Boolean)) {
-        setError("Please select at least one data source.");
-        return;
-      }
-      if (keywords.length === 0) {
-        setError("No keywords configured. Add keywords in Settings.");
-        return;
-      }
-      setLoading(true);
-      setError(null);
-      try {
-        setResult(await fetchPapers(srcs, searchMode));
-      } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "Unknown error");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [sources, searchMode, keywords],
-  );
-
-  // Auto-fetch on first load using current sources
-  const didAutoFetch = useRef(false);
-  useEffect(() => {
-    if (!didAutoFetch.current && keywords.length > 0 && !result) {
-      didAutoFetch.current = true;
-      fetch();
-    }
-  }, [keywords, fetch, result]);
-
-  const filteredPapers = useMemo(() => {
-    if (!result) return [];
-    let papers = result.papers || [];
-    if (highImpactOnly) papers = papers.filter((p) => p.is_high_impact);
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      papers = papers.filter(
-        (p) =>
-          p.title.toLowerCase().includes(q) ||
-          p.abstract.toLowerCase().includes(q) ||
-          p.authors.toLowerCase().includes(q),
-      );
-    }
-    return papers;
-  }, [result, highImpactOnly, searchQuery]);
 
   const exportCSV = useCallback(async () => {
     try {
@@ -122,10 +62,6 @@ export function usePaperSearch(
   }, []);
 
   return {
-    result,
-    filteredPapers,
-    loading,
-    error,
     sources,
     searchMode,
     highImpactOnly,
@@ -135,7 +71,6 @@ export function usePaperSearch(
     setHighImpactOnly,
     setSearchQuery,
     toggleSource,
-    fetch,
     exportCSV,
     archive,
   };

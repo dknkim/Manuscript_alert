@@ -35,9 +35,11 @@ describe("PapersTab", () => {
     expect(screen.getByText(/No papers loaded yet/)).toBeInTheDocument();
   });
 
-  it("shows loading spinner when loading", () => {
+  it("shows loading skeleton when loading", () => {
     render(<PapersTab {...defaultProps()} loading={true} />);
-    expect(screen.getByText(/Fetching papers from/)).toBeInTheDocument();
+    // Skeleton cards have animate-pulse class during loading
+    const skeletons = document.querySelectorAll(".animate-pulse");
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
   it("shows error message when error is set", () => {

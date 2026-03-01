@@ -41,7 +41,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse(mockSettings));
     const result = await getSettings();
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/settings",
+      "/api/v1/settings",
       expect.objectContaining({ headers: expect.any(Object) }),
     );
     expect(result.keywords).toEqual(mockSettings.keywords);
@@ -51,7 +51,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ status: "ok" }));
     const result = await saveSettings(mockSettings);
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/settings",
+      "/api/v1/settings",
       expect.objectContaining({ method: "PUT" }),
     );
     expect(result.status).toBe("ok");
@@ -64,7 +64,7 @@ describe("API client", () => {
     const sources = { pubmed: true, arxiv: false, biorxiv: false, medrxiv: false };
     await fetchPapers(sources, "Brief");
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/papers/fetch",
+      "/api/v1/papers/fetch",
       expect.objectContaining({ method: "POST" }),
     );
   });
@@ -73,7 +73,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse([]));
     await listModels();
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/models",
+      "/api/v1/models",
       expect.objectContaining({ headers: expect.any(Object) }),
     );
   });
@@ -82,7 +82,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ status: "ok", filename: "Test.json" }));
     await saveModel("Test");
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/models",
+      "/api/v1/models",
       expect.objectContaining({ method: "POST" }),
     );
   });
@@ -91,7 +91,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ status: "ok" }));
     await loadModel("Test.json");
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/models/Test.json/load",
+      "/api/v1/models/Test.json/load",
       expect.objectContaining({ method: "POST" }),
     );
   });
@@ -100,7 +100,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ status: "ok" }));
     await deleteModel("Test.json");
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/models/Test.json",
+      "/api/v1/models/Test.json",
       expect.objectContaining({ method: "DELETE" }),
     );
   });
@@ -109,7 +109,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse([]));
     await listBackups();
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/backups",
+      "/api/v1/backups",
       expect.objectContaining({ headers: expect.any(Object) }),
     );
   });
@@ -118,7 +118,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ status: "ok" }));
     await archivePaper(mockPaperHighImpact);
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/papers/archive",
+      "/api/v1/papers/archive",
       expect.objectContaining({ method: "POST" }),
     );
   });
@@ -127,7 +127,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ archive: {}, archived_titles: [], total: 0 }));
     await getArchivedPapers();
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/papers/archive",
+      "/api/v1/papers/archive",
       expect.objectContaining({ headers: expect.any(Object) }),
     );
   });
@@ -136,7 +136,7 @@ describe("API client", () => {
     mockFetch.mockReturnValue(jsonResponse({ status: "ok" }));
     await unarchivePaper("Test Paper", "2026-02-27");
     expect(mockFetch).toHaveBeenCalledWith(
-      "/api/papers/archive",
+      "/api/v1/papers/archive",
       expect.objectContaining({ method: "DELETE" }),
     );
   });

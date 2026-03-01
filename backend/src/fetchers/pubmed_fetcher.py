@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 import time
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from datetime import datetime
 from urllib.parse import quote
 
@@ -37,6 +38,7 @@ class PubMedFetcher:
         keywords: list[str],
         brief_mode: bool = False,
         extended_mode: bool = False,
+        on_progress: Callable[[int, int, int], None] | None = None,
     ) -> list[dict[str, object]]:
         """Fetch papers from PubMed API."""
         try:
@@ -48,7 +50,9 @@ class PubMedFetcher:
                 logger.info("PubMed: No paper IDs found")
                 return []
             logger.info(f"PubMed: Found {len(paper_ids)} paper IDs")
-            papers: list[dict[str, object]] = self._fetch_paper_details(paper_ids)
+            papers: list[dict[str, object]] = self._fetch_paper_details(
+                paper_ids, on_progress=on_progress
+            )
             return papers
         except Exception as e:
             logger.error(f"Error fetching papers from PubMed: {e}")
@@ -163,7 +167,11 @@ class PubMedFetcher:
         full_query: str = f"({combined_query}) AND {date_query}"
         return full_query
 
-    def _fetch_paper_details(self, paper_ids: list[str]) -> list[dict[str, object]]:
+    def _fetch_paper_details(
+        self,
+        paper_ids: list[str],
+        on_progress: Callable[[int, int, int], None] | None = None,
+    ) -> list[dict[str, object]]:
         """Fetch full details for a list of PubMed paper IDs."""
         if not paper_ids:
             logger.info("No paper IDs to fetch details for")
@@ -213,6 +221,8 @@ class PubMedFetcher:
                         f"Batch {batch_num}/{total_batches} completed - "
                         f"got {len(batch_papers)} papers (total: {len(all_papers)})"
                     )
+                    if on_progress is not None:
+                        on_progress(batch_num, total_batches, len(all_papers))
                     break
                 except requests.exceptions.HTTPError as e:
                     if e.response.status_code == 429:

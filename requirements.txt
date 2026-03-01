@@ -7,6 +7,12 @@ lxml>=4.9.0
 feedparser>=6.0.0
 ruff>=0.8.0
 
+# Step 3: Backend Restructuring
+pydantic-settings>=2.0.0
+sse-starlette>=2.0.0
+python-dotenv>=1.0.0
+python-multipart>=0.0.9
+
 # Testing
 pytest>=8.0.0
 httpx>=0.27.0

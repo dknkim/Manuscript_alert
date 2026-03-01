@@ -8,7 +8,7 @@ import type {
   Paper,
 } from "@/types";
 
-const BASE: string = process.env.NEXT_PUBLIC_API_URL || "/api";
+const BASE: string = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
 /* ── helpers ──────────────────────────────────────────────── */
 

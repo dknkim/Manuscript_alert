@@ -11,6 +11,12 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.src.api import backups, health, models, papers, settings
+from backend.src.api.v1 import backups as v1_backups
+from backend.src.api.v1 import health as v1_health
+from backend.src.api.v1 import kb as v1_kb
+from backend.src.api.v1 import models as v1_models
+from backend.src.api.v1 import papers as v1_papers
+from backend.src.api.v1 import settings as v1_settings
 from backend.src.config import DIST_DIR, FRONTEND_DIR
 
 
@@ -30,11 +36,20 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 # Routers
 # ---------------------------------------------------------------------------
+# Legacy routes (/api/) — kept for backward compatibility
 app.include_router(health.router)
 app.include_router(settings.router)
 app.include_router(papers.router)
 app.include_router(models.router)
 app.include_router(backups.router)
+
+# Versioned routes (/api/v1/)
+app.include_router(v1_health.router)
+app.include_router(v1_settings.router)
+app.include_router(v1_papers.router)
+app.include_router(v1_models.router)
+app.include_router(v1_backups.router)
+app.include_router(v1_kb.router)
 
 # ---------------------------------------------------------------------------
 # Static file serving (Next.js export)

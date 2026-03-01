@@ -1,7 +1,9 @@
 "use client";
 
 import type { Paper, FetchResult, DataSources } from "@/types";
+import type { DisplayState } from "@/hooks/useAgentStream";
 import PaperCard from "@/components/PaperCard";
+import AgentActivityStream from "@/components/features/AgentActivityStream";
 
 interface PaperFeedProps {
   result: FetchResult | null;
@@ -14,6 +16,8 @@ interface PaperFeedProps {
   onExport: () => void;
   archivedTitles: Set<string>;
   onArchive: (paper: Paper) => void;
+  displayState: DisplayState;
+  isStreaming: boolean;
 }
 
 export default function PaperFeed({
@@ -27,7 +31,11 @@ export default function PaperFeed({
   onExport,
   archivedTitles,
   onArchive,
+  displayState,
+  isStreaming,
 }: PaperFeedProps) {
+  const hasActivity = displayState.sources.length > 0 || isStreaming;
+
   return (
     <div className="flex-1 p-6 space-y-4 min-w-0">
       <div className="flex items-center justify-between">
@@ -41,6 +49,14 @@ export default function PaperFeed({
           </button>
         )}
       </div>
+
+      {/* SSE activity stream */}
+      {hasActivity && (
+        <AgentActivityStream
+          displayState={displayState}
+          isStreaming={isStreaming}
+        />
+      )}
 
       {/* Search within results */}
       {result && (
@@ -98,18 +114,10 @@ export default function PaperFeed({
         </p>
       )}
 
-      {/* Loading — skeleton cards */}
+      {/* Loading — skeleton cards below activity stream */}
       {loading && (
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
-            Fetching papers from{" "}
-            {Object.entries(sources)
-              .filter(([, v]) => v)
-              .map(([k]) => k.toUpperCase())
-              .join(", ")}
-            …
-          </p>
-          {Array.from({ length: 5 }).map((_, i) => (
+          {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
               className="bg-surface-raised rounded-xl border border-border p-5 animate-pulse"
@@ -119,16 +127,10 @@ export default function PaperFeed({
                   <div className="h-5 bg-surface-inset rounded w-4/5" />
                   <div className="h-3 bg-surface-inset rounded w-3/5" />
                   <div className="h-3 bg-surface-inset rounded w-2/5" />
-                  <div className="mt-3 space-y-2">
-                    <div className="h-3 bg-surface-inset rounded w-full" />
-                    <div className="h-3 bg-surface-inset rounded w-full" />
-                    <div className="h-3 bg-surface-inset rounded w-3/4" />
-                  </div>
                 </div>
                 <div className="flex flex-col items-center gap-3 w-24">
                   <div className="h-7 w-16 bg-surface-inset rounded-full" />
                   <div className="h-14 w-16 bg-surface-inset rounded-xl" />
-                  <div className="h-8 w-full bg-surface-inset rounded-lg" />
                 </div>
               </div>
             </div>
@@ -137,7 +139,7 @@ export default function PaperFeed({
       )}
 
       {/* Empty state */}
-      {!loading && !result && (
+      {!loading && !result && !hasActivity && (
         <div className="text-center py-20 text-text-muted">
           <p className="text-4xl mb-3">📄</p>
           <p className="text-lg font-medium">No papers loaded yet</p>

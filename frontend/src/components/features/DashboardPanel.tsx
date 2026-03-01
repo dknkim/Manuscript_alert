@@ -13,7 +13,6 @@ function StatsSkeleton() {
   return (
     <div className="p-5 space-y-6 animate-pulse">
       <div className="h-4 bg-surface-inset rounded w-24" />
-      {/* Overview skeleton */}
       <div className="space-y-3">
         <div className="h-4 bg-surface-inset rounded w-20" />
         <div className="flex justify-between">
@@ -29,7 +28,6 @@ function StatsSkeleton() {
           <div className="h-5 bg-surface-inset rounded w-10" />
         </div>
       </div>
-      {/* Sources skeleton */}
       <div className="space-y-3">
         <div className="h-4 bg-surface-inset rounded w-16" />
         <div className="flex justify-between">
@@ -45,7 +43,6 @@ function StatsSkeleton() {
           <div className="h-4 bg-surface-inset rounded w-8" />
         </div>
       </div>
-      {/* Journal Quality skeleton */}
       <div className="space-y-3">
         <div className="h-4 bg-surface-inset rounded w-28" />
         <div className="flex justify-between">

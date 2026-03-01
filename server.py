@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     if dev_mode:
         # Start Next.js dev server with API proxy pointed at this backend
-        env = {**os.environ, "NEXT_PUBLIC_API_URL": "http://localhost:8000/api"}
+        env = {**os.environ, "NEXT_PUBLIC_API_URL": "http://localhost:8000/api/v1"}
         next_proc = subprocess.Popen(
             ["npm", "run", "dev"],
             cwd=os.path.join(os.path.dirname(__file__), "frontend"),
