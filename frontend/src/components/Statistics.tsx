@@ -34,36 +34,36 @@ export default function Statistics({ papers, allPapers }: StatisticsProps) {
   // Avg + max score
   const scores = allPapers.map((p) => p.relevance_score);
   const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
-  const max = Math.max(...scores).toFixed(0);
+  const max = Math.max(...scores).toFixed(1);
 
   return (
     <div className="space-y-5">
-      <Section title="📈 Overview" defaultOpen>
+      <Section title="Overview" defaultOpen>
         <Metric label="Total Papers" value={allPapers.length} />
         <Metric label="Avg Score" value={avg} />
         <Metric label="Max Score" value={max} />
       </Section>
 
-      <Section title="📊 Sources" defaultOpen>
+      <Section title="Sources" defaultOpen>
         {Object.entries(sourceCounts).map(([src, count]) => (
           <div key={src} className="flex justify-between text-sm py-0.5">
-            <span className="font-medium text-gray-700">{src}</span>
-            <span className="text-gray-500">{count}</span>
+            <span className="font-medium text-text-secondary">{src}</span>
+            <span className="text-text-muted">{count}</span>
           </div>
         ))}
       </Section>
 
       {highImpact > 0 && (
-        <Section title="🏆 Journal Quality" defaultOpen>
+        <Section title="Journal Quality" defaultOpen>
           <Metric label="Relevant Journals" value={highImpact} />
         </Section>
       )}
 
-      <Section title="🔍 Top Keywords">
+      <Section title="Top Keywords">
         {topKeywords.map(([kw, count]) => (
           <div key={kw} className="flex justify-between text-sm py-0.5">
-            <span className="font-medium text-gray-700">{kw}</span>
-            <span className="text-gray-500">{count}</span>
+            <span className="font-medium text-text-secondary">{kw}</span>
+            <span className="text-text-muted">{count}</span>
           </div>
         ))}
       </Section>
@@ -82,8 +82,8 @@ function Metric({
 }) {
   return (
     <div className="flex justify-between items-baseline py-1">
-      <span className="text-sm text-gray-500">{label}</span>
-      <span className="text-xl font-bold text-gray-900">{value}</span>
+      <span className="text-sm text-text-muted">{label}</span>
+      <span className="text-xl font-bold text-text-primary">{value}</span>
     </div>
   );
 }
@@ -99,14 +99,16 @@ function Section({
 }) {
   const [open, setOpen] = useState<boolean>(defaultOpen);
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 hover:bg-gray-100 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-2.5 bg-surface-inset hover:bg-surface transition-colors"
       >
-        <span className="text-sm font-semibold text-gray-700">{title}</span>
+        <span className="text-sm font-semibold text-text-secondary">
+          {title}
+        </span>
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${
+          className={`w-4 h-4 text-text-muted transition-transform ${
             open ? "rotate-180" : ""
           }`}
           fill="none"

@@ -331,7 +331,7 @@ CREATE INDEX idx_kb_documents_project_id ON kb_documents (project_id);
 - `tests/test_backups.py` → backup CRUD
 - `tests/test_keyword_matcher.py` → keyword matching & scoring unit tests
 - `tests/test_journal_utils.py` → journal name matching unit tests
-- `.github/workflows/ci.yml` → ruff lint + pytest on push/PR
+- `.github/workflows/regression-tests.yml` → ruff lint + pytest + frontend tests + E2E on push/PR
 
 ### Step 2: Frontend Redesign (port from `nextjs`)
 - `frontend/src/lib/utils.ts` → `cn()` utility (clsx + tailwind-merge)

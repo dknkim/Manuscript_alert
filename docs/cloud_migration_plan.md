@@ -78,7 +78,7 @@ Pinecone ─── Vector Store               FREE (2 GB)
 - **Service unit tests**: journal matching, scoring logic, archive I/O
 - **No network calls** — mock fetchers so tests are fast and deterministic
 
-### GitHub Actions CI (`.github/workflows/ci.yml`)
+### GitHub Actions CI (`.github/workflows/regression-tests.yml`)
 - Trigger: push to main, all PRs
 - Runner: `ubuntu-latest`
 - Steps: install Python deps → ruff lint → pytest
@@ -152,7 +152,15 @@ Pinecone ─── Vector Store               FREE (2 GB)
    - `DATABASE_URL`, `PINECONE_API_KEY`, `ANTHROPIC_API_KEY` all optional at this stage
 3. **Dependency injection**: Port `deps.py` pattern — services injected via FastAPI `Depends()`
 4. **Pydantic models**: Port `Paper`, `ReviewRequest`, `SearchResponse`, `KBProject`, `KBDocument`, `AgentStep`
-5. **SSE endpoint shell**: Add `POST /api/v1/papers/review` — initially wraps classic search
+5. **SSE streaming with progress**: Add `POST /api/v1/papers/review` as an SSE endpoint that wraps the classic fetch but streams real-time progress events:
+   - `source_start` / `source_complete` — when each fetcher (PubMed, arXiv, bioRxiv) starts/finishes, with paper counts
+   - `batch_progress` — PubMed batch progress (e.g., "batch 3/10, 300 papers so far")
+   - `source_error` — when a source fails (e.g., bioRxiv timeout)
+   - `scoring` — when keyword matching / ranking begins
+   - `complete` — final results payload
+   - Frontend `AgentActivityStream` component wired to display these events
+   - Frontend `useAgentStream` hook consumes the SSE stream
+   - `SearchPanel` mode switch toggles between `/papers/fetch` (classic JSON) and `/papers/review` (SSE stream)
 6. **KB API stubs**: Add `/api/v1/kb/` routes — return 503 until Step 7
 
 ### New Backend Dependencies

@@ -45,14 +45,21 @@ if DIST_DIR.exists():
         app.mount("/_next", StaticFiles(directory=str(next_static)), name="next_static")
 
 
-@app.get("/{full_path:path}", response_model=None)
+@app.api_route("/{full_path:path}", methods=["GET", "HEAD"], response_model=None)
 async def serve_frontend(
     request: Request, full_path: str
 ) -> FileResponse | dict[str, str]:
-    """Serve the Next.js SPA — any non-API route returns index.html."""
+    """Serve the Next.js SPA — any non-API route returns index.html.
+
+    HEAD support is needed for Next.js Link prefetching.
+    """
+    # Try exact file first, then route HTML (e.g. /models → models.html)
     file_path: Path = DIST_DIR / full_path
     if file_path.is_file():
         return FileResponse(str(file_path))
+    html_path: Path = DIST_DIR / f"{full_path}.html"
+    if html_path.is_file():
+        return FileResponse(str(html_path))
     index: Path = DIST_DIR / "index.html"
     if index.exists():
         return FileResponse(str(index))

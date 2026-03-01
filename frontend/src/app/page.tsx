@@ -1,137 +1,62 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { getSettings, getArchivedPapers } from "@/lib/api";
-import type { Settings, FetchResult } from "@/types";
-import PapersTab from "@/components/PapersTab";
-import ModelsTab from "@/components/ModelsTab";
-import SettingsTab from "@/components/SettingsTab";
+import { useSettings } from "@/hooks/useSettings";
+import { usePaperSearch } from "@/hooks/usePaperSearch";
+import SearchPanel from "@/components/features/SearchPanel";
+import PaperFeed from "@/components/features/PaperFeed";
+import DashboardPanel from "@/components/features/DashboardPanel";
+import Spinner from "@/components/ui/Spinner";
 
-interface TabDef {
-  key: string;
-  label: string;
-  icon: string;
-}
-
-const TABS: TabDef[] = [
-  { key: "papers", label: "Papers", icon: "📚" },
-  { key: "models", label: "Models", icon: "🤖" },
-  { key: "settings", label: "Settings", icon: "⚙️" },
-];
-
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<string>("papers");
-  const [settings, setSettings] = useState<Settings | null>(null);
-
-  // Lifted paper state — survives tab switches
-  const [papersResult, setPapersResult] = useState<FetchResult | null>(null);
-  const [papersLoading, setPapersLoading] = useState<boolean>(false);
-  const [papersError, setPapersError] = useState<string | null>(null);
-
-  // Archived paper titles — survives tab switches
-  const [archivedTitles, setArchivedTitles] = useState<Set<string>>(new Set());
-
-  const loadSettings = useCallback(async () => {
-    try {
-      const data = await getSettings();
-      setSettings(data);
-    } catch (err) {
-      console.error("Failed to load settings:", err);
-    }
-  }, []);
-
-  const loadArchivedTitles = useCallback(async () => {
-    try {
-      const data = await getArchivedPapers();
-      setArchivedTitles(new Set(data.archived_titles));
-    } catch (err) {
-      console.error("Failed to load archived papers:", err);
-    }
-  }, []);
-
-  // Reload settings AND clear papers (e.g. after saving settings or loading a model)
-  const handleSettingsChange = useCallback(async () => {
-    await loadSettings();
-    setPapersResult(null); // clear stale papers so they re-fetch with new config
-  }, [loadSettings]);
-
-  useEffect(() => {
-    loadSettings();
-    loadArchivedTitles();
-  }, [loadSettings, loadArchivedTitles]);
+export default function PapersPage() {
+  const { settings } = useSettings();
+  const keywords = settings?.keywords || [];
+  const search = usePaperSearch(
+    keywords,
+    settings?.search_settings?.default_sources,
+  );
 
   if (!settings) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Spinner size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-[1440px] mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Manuscript Alert System
-              </h1>
-              <p className="text-sm text-gray-500 mt-0.5">
-                Stay updated with the latest PubMed, arXiv, bioRxiv, and
-                medRxiv papers
-              </p>
-            </div>
-            {/* Tab navigation */}
-            <nav className="flex gap-1 bg-gray-100 rounded-lg p-1">
-              {TABS.map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    activeTab === tab.key
-                      ? "bg-white text-gray-900 shadow-xs"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  <span className="mr-1.5">{tab.icon}</span>
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
-      </header>
+    <div className="flex">
+      <SearchPanel
+        sources={search.sources}
+        searchMode={search.searchMode}
+        highImpactOnly={search.highImpactOnly}
+        loading={search.loading}
+        keywords={keywords}
+        mode="classic"
+        onSourceToggle={search.toggleSource}
+        onSearchModeChange={search.setSearchMode}
+        onHighImpactChange={search.setHighImpactOnly}
+        onModeChange={() => {}}
+        onFetch={() => search.fetch()}
+      />
 
-      {/* Content — all tabs stay mounted, only visibility toggles */}
-      <main className="max-w-[1440px] mx-auto">
-        <div style={{ display: activeTab === "papers" ? "block" : "none" }}>
-          <PapersTab
-            settings={settings}
-            result={papersResult}
-            setResult={setPapersResult}
-            loading={papersLoading}
-            setLoading={setPapersLoading}
-            error={papersError}
-            setError={setPapersError}
-            archivedTitles={archivedTitles}
-            setArchivedTitles={setArchivedTitles}
-          />
-        </div>
-        <div style={{ display: activeTab === "models" ? "block" : "none" }}>
-          <ModelsTab
-            settings={settings}
-            onSettingsChange={handleSettingsChange}
-          />
-        </div>
-        <div style={{ display: activeTab === "settings" ? "block" : "none" }}>
-          <SettingsTab
-            settings={settings}
-            onSettingsChange={handleSettingsChange}
-          />
-        </div>
-      </main>
+      <PaperFeed
+        result={search.result}
+        papers={search.filteredPapers}
+        loading={search.loading}
+        error={search.error}
+        sources={search.sources}
+        searchQuery={search.searchQuery}
+        onSearchQueryChange={search.setSearchQuery}
+        onExport={search.exportCSV}
+        archivedTitles={search.archivedTitles}
+        onArchive={search.archive}
+      />
+
+      <DashboardPanel
+        papers={search.filteredPapers}
+        allPapers={search.result?.papers || []}
+        loading={search.loading}
+      />
     </div>
   );
 }

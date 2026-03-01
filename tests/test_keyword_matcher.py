@@ -56,7 +56,7 @@ def test_keyword_scoring_priorities(sample_paper: dict[str, Any]) -> None:
 
 
 def test_title_weighting(sample_paper: dict[str, Any]) -> None:
-    """Keywords in the title get extra weight (title is tripled in searchable text)."""
+    """Keywords in the title get extra weight via explicit title bonus."""
     matcher = KeywordMatcher()
     # "Amyloid" is in the title of sample_paper
     score_title, _ = matcher.calculate_relevance(sample_paper, ["amyloid"])

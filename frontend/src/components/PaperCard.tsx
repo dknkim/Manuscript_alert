@@ -1,23 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 import type { Paper } from "@/types";
-
-const SOURCE_COLORS: Record<string, string> = {
-  PubMed: "bg-orange-500",
-  arXiv: "bg-red-700",
-  BioRxiv: "bg-emerald-600",
-  Biorxiv: "bg-emerald-600",
-  MedRxiv: "bg-blue-600",
-  Medrxiv: "bg-blue-600",
-};
-
-function scoreColor(score: number): string {
-  if (score >= 7.5) return "text-green-600 border-green-500";
-  if (score >= 5) return "text-amber-500 border-amber-400";
-  if (score >= 2.5) return "text-orange-600 border-orange-400";
-  return "text-red-600 border-red-500";
-}
+import SourceBadge from "@/components/ui/SourceBadge";
+import ScoreIndicator, {
+  scoreAccentBorder,
+} from "@/components/ui/ScoreIndicator";
 
 interface PaperCardProps {
   paper: Paper;
@@ -25,10 +14,12 @@ interface PaperCardProps {
   onArchive: (paper: Paper) => void;
 }
 
-export default function PaperCard({ paper, isArchived, onArchive }: PaperCardProps) {
+export default function PaperCard({
+  paper,
+  isArchived,
+  onArchive,
+}: PaperCardProps) {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const badge = SOURCE_COLORS[paper.source] || "bg-gray-500";
-  const colors = scoreColor(paper.relevance_score);
 
   const abstract =
     !expanded && paper.abstract.length > 300
@@ -37,12 +28,20 @@ export default function PaperCard({ paper, isArchived, onArchive }: PaperCardPro
 
   return (
     <div
-      className={`bg-white rounded-xl border ${
+      className={`relative bg-surface-raised rounded-xl border-l-4 border ${
         paper.is_high_impact
-          ? "border-amber-400 shadow-md shadow-amber-100"
-          : "border-gray-200"
-      } p-5 transition-all hover:shadow-md`}
+          ? "border-amber-400 dark:border-amber-600 shadow-md shadow-amber-100/50 dark:shadow-amber-900/20"
+          : "border-border"
+      } ${scoreAccentBorder(paper.relevance_score)} p-5 transition-all hover:shadow-md`}
     >
+      {/* Card-level "Relevant" tag — PubMed target journal match only
+          (arXiv/bioRxiv/medRxiv are preprints, is_high_impact is always false) */}
+      {paper.is_high_impact && (
+        <span className="absolute -top-3 right-6 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-400 dark:bg-amber-600 text-white shadow-sm">
+          Relevant
+        </span>
+      )}
+
       <div className="flex gap-5">
         {/* Main content */}
         <div className="flex-1 min-w-0">
@@ -51,54 +50,53 @@ export default function PaperCard({ paper, isArchived, onArchive }: PaperCardPro
               href={paper.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors leading-snug"
+              className="text-lg font-semibold text-text-primary hover:text-accent transition-colors leading-snug"
+              onClick={(e) => e.stopPropagation()}
             >
               {paper.title}
             </a>
           ) : (
-            <h3 className="text-lg font-semibold text-gray-900 leading-snug">
+            <h3 className="text-lg font-semibold text-text-primary leading-snug">
               {paper.title}
             </h3>
           )}
 
           {/* Meta */}
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-muted">
             <span>{paper.authors}</span>
-            <span className="text-gray-300">|</span>
+            <span className="text-border">|</span>
             <span>{paper.published}</span>
           </div>
 
           {/* Journal */}
           {paper.journal && (
             <div className="mt-1.5 text-sm">
-              <span className="text-gray-600 font-medium">
+              <span className="text-text-secondary font-medium">
                 {paper.journal}
               </span>
               {paper.volume && (
-                <span className="text-gray-400">
+                <span className="text-text-muted">
                   , Vol.&nbsp;{paper.volume}
                 </span>
               )}
               {paper.issue && (
-                <span className="text-gray-400">
+                <span className="text-text-muted">
                   , Issue&nbsp;{paper.issue}
-                </span>
-              )}
-              {paper.is_high_impact && (
-                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                  ⭐ Relevant Journal
                 </span>
               )}
             </div>
           )}
 
           {/* Abstract */}
-          <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          <p className="mt-3 text-sm text-text-secondary leading-relaxed">
             {abstract}
             {paper.abstract.length > 300 && (
               <button
-                onClick={() => setExpanded(!expanded)}
-                className="ml-1 text-indigo-600 hover:text-indigo-800 font-medium"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded(!expanded);
+                }}
+                className="ml-1 text-accent hover:text-accent-hover font-medium"
               >
                 {expanded ? "Show less" : "Show more"}
               </button>
@@ -111,7 +109,7 @@ export default function PaperCard({ paper, isArchived, onArchive }: PaperCardPro
               {paper.matched_keywords.map((kw) => (
                 <span
                   key={kw}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700"
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent-subtle text-accent-text"
                 >
                   {kw}
                 </span>
@@ -122,30 +120,26 @@ export default function PaperCard({ paper, isArchived, onArchive }: PaperCardPro
 
         {/* Score + badge + archive column */}
         <div className="flex flex-col items-center gap-3 shrink-0 w-24">
-          <span
-            className={`inline-block px-3 py-1 rounded-full text-xs font-bold text-white ${badge}`}
-          >
-            {paper.source}
-          </span>
-          <div
-            className={`flex flex-col items-center justify-center border-2 rounded-xl px-3 py-2 ${colors}`}
-          >
-            <span className="text-2xl font-bold leading-none">
-              {paper.relevance_score.toFixed(1)}
-            </span>
-            <span className="text-[10px] text-gray-400 mt-0.5">Score</span>
-          </div>
+          <SourceBadge source={paper.source} />
+          <ScoreIndicator score={paper.relevance_score} />
           <button
-            onClick={() => onArchive(paper)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onArchive(paper);
+            }}
             disabled={isArchived}
-            className={`w-full px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            className={`w-full px-2 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
               isArchived
-                ? "bg-emerald-100 text-emerald-700 cursor-default"
-                : "bg-gray-100 text-gray-600 hover:bg-indigo-100 hover:text-indigo-700"
+                ? "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 cursor-default"
+                : "bg-surface-inset text-text-secondary hover:bg-accent-subtle hover:text-accent-text"
             }`}
             title={isArchived ? "Already archived" : "Archive this paper"}
           >
-            {isArchived ? "✅ Archived" : "📌 Archive"}
+            {isArchived ? (
+              <><BookmarkCheck className="size-3.5" /> Archived</>
+            ) : (
+              <><Bookmark className="size-3.5" /> Archive</>
+            )}
           </button>
         </div>
       </div>

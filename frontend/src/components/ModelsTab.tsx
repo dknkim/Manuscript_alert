@@ -130,10 +130,10 @@ export default function ModelsTab({
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div>
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-text-primary">
           🤖 Model Management
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-text-muted mt-1">
           Save and manage different configuration presets for different research
           scenarios.
         </p>
@@ -144,8 +144,8 @@ export default function ModelsTab({
         <div
           className={`px-4 py-3 rounded-lg text-sm ${
             msg.type === "error"
-              ? "bg-red-50 border border-red-200 text-red-700"
-              : "bg-green-50 border border-green-200 text-green-700"
+              ? "bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300"
+              : "bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
           }`}
         >
           {msg.text}
@@ -153,8 +153,8 @@ export default function ModelsTab({
       )}
 
       {/* Save new model */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">
+      <div className="bg-surface-raised rounded-xl border border-border p-5">
+        <h3 className="text-sm font-semibold text-text-primary mb-3">
           Save Current Settings as Model
         </h3>
         <div className="flex gap-3">
@@ -163,11 +163,11 @@ export default function ModelsTab({
             value={modelName}
             onChange={(e) => setModelName(e.target.value)}
             placeholder='e.g., "AD Neuroimaging Focus"'
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
+            className="flex-1 px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden"
           />
           <button
             onClick={handleSave}
-            className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors"
+            className="px-5 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
           >
             💾 Save
           </button>
@@ -175,28 +175,28 @@ export default function ModelsTab({
       </div>
 
       {/* Existing models */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">
+      <div className="bg-surface-raised rounded-xl border border-border p-5">
+        <h3 className="text-sm font-semibold text-text-primary mb-3">
           Load Existing Models
-          <span className="ml-2 text-gray-400 font-normal">
+          <span className="ml-2 text-text-muted font-normal">
             ({models.length})
           </span>
         </h3>
 
         {models.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">
+          <p className="text-sm text-text-muted py-4 text-center">
             No saved models yet. Save your current settings to get started.
           </p>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-border">
             {models.map((m) => (
               <div
                 key={m.filename}
                 className="flex items-center justify-between py-3"
               >
                 <div>
-                  <p className="text-sm font-medium text-gray-800">{m.name}</p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-sm font-medium text-text-primary">{m.name}</p>
+                  <p className="text-xs text-text-muted">
                     Modified: {m.modified}
                   </p>
                 </div>
@@ -222,46 +222,46 @@ export default function ModelsTab({
 
       {/* Preview modal */}
       {previewData && (
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-surface-raised rounded-xl border border-border p-5">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-700">
+            <h3 className="text-sm font-semibold text-text-primary">
               Preview: {previewName}
             </h3>
             <button
               onClick={() => setPreviewData(null)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-text-muted hover:text-text-secondary"
             >
               ✕
             </button>
           </div>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="font-medium text-gray-600 mb-1">Keywords</p>
-              <p className="text-gray-500">
+              <p className="font-medium text-text-secondary mb-1">Keywords</p>
+              <p className="text-text-muted">
                 {(previewData.keywords || []).length} keywords:{" "}
                 {(previewData.keywords || []).slice(0, 5).join(", ")}
                 {(previewData.keywords || []).length > 5 ? "…" : ""}
               </p>
             </div>
             <div>
-              <p className="font-medium text-gray-600 mb-1">
+              <p className="font-medium text-text-secondary mb-1">
                 Journal Exclusions
               </p>
-              <p className="text-gray-500">
+              <p className="text-text-muted">
                 {(previewData.journal_exclusions || []).length} patterns
               </p>
             </div>
             <div>
-              <p className="font-medium text-gray-600 mb-1">Search Settings</p>
-              <p className="text-gray-500">
+              <p className="font-medium text-text-secondary mb-1">Search Settings</p>
+              <p className="text-text-muted">
                 Days back:{" "}
                 {previewData.search_settings?.days_back || "N/A"} | Mode:{" "}
                 {previewData.search_settings?.search_mode || "N/A"}
               </p>
             </div>
             <div>
-              <p className="font-medium text-gray-600 mb-1">Target Journals</p>
-              <p className="text-gray-500">
+              <p className="font-medium text-text-secondary mb-1">Target Journals</p>
+              <p className="text-text-muted">
                 {(previewData.target_journals?.exact_matches || [])
                   .slice(0, 3)
                   .join(", ")}
@@ -275,18 +275,18 @@ export default function ModelsTab({
       )}
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">
+      <div className="bg-surface-raised rounded-xl border border-border p-5">
+        <h3 className="text-sm font-semibold text-text-primary mb-3">
           Quick Actions
         </h3>
         <div className="flex gap-3">
           <button
             onClick={handleExport}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 border border-border rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-inset transition-colors"
           >
             📋 Export Settings JSON
           </button>
-          <label className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
+          <label className="px-4 py-2 border border-border rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-inset transition-colors cursor-pointer">
             📤 Import Settings
             <input
               type="file"
@@ -313,9 +313,9 @@ function Btn({
   color: "indigo" | "gray" | "red";
 }) {
   const colors: Record<string, string> = {
-    indigo: "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
-    gray: "bg-gray-50 text-gray-700 hover:bg-gray-100",
-    red: "bg-red-50 text-red-700 hover:bg-red-100",
+    indigo: "bg-accent-subtle text-accent-text hover:bg-accent-subtle/80",
+    gray: "bg-surface-inset text-text-secondary hover:bg-surface-inset/80",
+    red: "bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900",
   };
   return (
     <button

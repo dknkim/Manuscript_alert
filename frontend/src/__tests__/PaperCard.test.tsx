@@ -40,25 +40,26 @@ describe("PaperCard", () => {
     expect(screen.getByText(/Issue\s*2/)).toBeInTheDocument();
   });
 
-  it("shows 'Relevant Journal' badge for high-impact papers", () => {
+  it("shows 'Relevant' badge for high-impact PubMed papers", () => {
     render(
       <PaperCard paper={mockPaperHighImpact} isArchived={false} onArchive={vi.fn()} />,
     );
-    expect(screen.getByText(/Relevant Journal/)).toBeInTheDocument();
+    expect(screen.getByText("Relevant")).toBeInTheDocument();
   });
 
-  it("does not show 'Relevant Journal' badge for non-high-impact papers", () => {
+  it("does not show wrapper for non-high-impact papers", () => {
     render(
       <PaperCard paper={mockPaperLowScore} isArchived={false} onArchive={vi.fn()} />,
     );
-    expect(screen.queryByText(/Relevant Journal/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Relevant")).not.toBeInTheDocument();
   });
 
-  it("displays relevance score", () => {
+  it("displays score", () => {
     render(
       <PaperCard paper={mockPaperHighImpact} isArchived={false} onArchive={vi.fn()} />,
     );
     expect(screen.getByText("8.5")).toBeInTheDocument();
+    expect(screen.getByText("Score")).toBeInTheDocument();
   });
 
   it("displays source badge", () => {

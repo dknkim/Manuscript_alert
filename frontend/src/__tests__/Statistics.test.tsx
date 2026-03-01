@@ -26,8 +26,8 @@ describe("Statistics", () => {
 
   it("shows max score", () => {
     render(<Statistics papers={papers} allPapers={papers} />);
-    // max = 9 (toFixed(0) of 8.5 → "9") — wait, Math.max(8.5,5.5,2.0)=8.5 → "9"
-    expect(screen.getByText("9")).toBeInTheDocument();
+    // max = Math.max(8.5, 5.5, 2.0) = 8.5
+    expect(screen.getByText("8.5")).toBeInTheDocument();
   });
 
   it("shows source breakdown", () => {

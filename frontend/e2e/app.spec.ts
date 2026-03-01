@@ -12,45 +12,50 @@ import { test, expect } from "@playwright/test";
 test.describe("App loading", () => {
   test("loads homepage and shows title", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h1")).toContainText("Manuscript Alert System");
+    await expect(page.locator("h1")).toContainText("Manuscript Alert");
   });
 
-  test("shows 3 tab buttons", async ({ page }) => {
+  test("shows navigation links", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("button", { name: "📚Papers" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "🤖Models" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "⚙️Settings" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Papers" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Models" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Settings" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Knowledge Base" }),
+    ).toBeVisible();
   });
 
-  test("Papers tab is active by default", async ({ page }) => {
+  test("Papers page is shown by default", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "Recent Papers" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Configuration/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Recent Papers" }),
+    ).toBeVisible();
   });
 });
 
-test.describe("Tab navigation", () => {
-  test("switches to Models tab", async ({ page }) => {
+test.describe("Route navigation", () => {
+  test("navigates to Models page", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "🤖Models" }).click();
+    await page.getByRole("link", { name: "Models" }).click();
     await expect(page.getByText("Model Management")).toBeVisible();
   });
 
-  test("switches to Settings tab", async ({ page }) => {
+  test("navigates to Settings page", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "⚙️Settings" }).click();
+    await page.getByRole("link", { name: "Settings" }).click();
     await expect(page.getByText("Application Settings")).toBeVisible();
   });
 
-  test("switches back to Papers tab", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("button", { name: "⚙️Settings" }).click();
-    await page.getByRole("button", { name: "📚Papers" }).click();
-    await expect(page.getByRole("heading", { name: "Recent Papers" })).toBeVisible();
+  test("navigates back to Papers page", async ({ page }) => {
+    await page.goto("/settings");
+    await page.getByRole("link", { name: "Papers" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Recent Papers" }),
+    ).toBeVisible();
   });
 });
 
-test.describe("Papers tab", () => {
+test.describe("Papers page", () => {
   test("shows data source checkboxes", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByLabel("arXiv")).toBeVisible();
@@ -68,7 +73,10 @@ test.describe("Papers tab", () => {
 
   test("shows fetch button", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("button", { name: /Fetch Papers/ })).toBeVisible();
+    // Button may show "Fetching…" during auto-fetch or "Fetch Papers" after
+    await expect(
+      page.getByRole("button", { name: /Fetch/ }),
+    ).toBeVisible();
   });
 
   test("shows keywords preview", async ({ page }) => {
@@ -77,43 +85,52 @@ test.describe("Papers tab", () => {
   });
 });
 
-test.describe("Settings tab", () => {
+test.describe("Settings page", () => {
   test("shows 4 sub-tabs", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("button", { name: "⚙️Settings" }).click();
-    await expect(page.getByRole("button", { name: "🔍 Keywords" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "📰 Journals" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "📊 Scoring" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "💾 Backup" })).toBeVisible();
+    await page.goto("/settings");
+    await expect(
+      page.getByRole("button", { name: "🔍 Keywords" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "📰 Journals" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "📊 Scoring" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "💾 Backup" }),
+    ).toBeVisible();
   });
 
   test("switches between settings sub-tabs", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("button", { name: "⚙️Settings" }).click();
+    await page.goto("/settings");
 
     // Default: Keywords
     await expect(page.getByText("Research Keywords")).toBeVisible();
 
     // Switch to Journals
-    await page.getByRole("button", { name: "📰 Journals" }).click();
+    await page.getByRole("button", { name: /Journals/ }).click();
     await expect(page.getByText("Target Journals")).toBeVisible();
 
     // Switch to Scoring
-    await page.getByRole("button", { name: "📊 Scoring" }).click();
-    await expect(page.getByRole("heading", { name: "Journal Impact Scoring" })).toBeVisible();
+    await page.getByRole("button", { name: /Scoring/ }).click();
+    await expect(
+      page.getByRole("heading", { name: "Journal Impact Scoring" }),
+    ).toBeVisible();
 
     // Switch to Backup
-    await page.getByRole("button", { name: "💾 Backup" }).click();
+    await page.getByRole("button", { name: /Backup/ }).click();
     await expect(page.getByText("Available Backups")).toBeVisible();
   });
 });
 
-test.describe("Models tab", () => {
+test.describe("Models page", () => {
   test("shows model management UI", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("button", { name: "🤖Models" }).click();
+    await page.goto("/models");
     await expect(page.getByText("Model Management")).toBeVisible();
-    await expect(page.getByText("Save Current Settings as Model")).toBeVisible();
+    await expect(
+      page.getByText("Save Current Settings as Model"),
+    ).toBeVisible();
     await expect(page.getByText("Quick Actions")).toBeVisible();
   });
 });
@@ -132,18 +149,16 @@ test.describe("Visual regression", () => {
     });
   });
 
-  test("settings tab layout", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("button", { name: "⚙️Settings" }).click();
+  test("settings page layout", async ({ page }) => {
+    await page.goto("/settings");
     await expect(page.getByText("Research Keywords")).toBeVisible();
     await expect(page).toHaveScreenshot("settings-tab.png", {
       maxDiffPixelRatio: 0.02,
     });
   });
 
-  test("models tab layout", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("button", { name: "🤖Models" }).click();
+  test("models page layout", async ({ page }) => {
+    await page.goto("/models");
     await expect(page.getByText("Model Management")).toBeVisible();
     await expect(page).toHaveScreenshot("models-tab.png", {
       maxDiffPixelRatio: 0.02,

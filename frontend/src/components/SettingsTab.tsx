@@ -8,6 +8,9 @@ import {
   createBackup,
 } from "@/lib/api";
 import type { Settings, BackupInfo, FlashMessage } from "@/types";
+import Card from "@/components/ui/Card";
+import Flash from "@/components/ui/Flash";
+import Toggle from "@/components/ui/Toggle";
 
 interface SubTab {
   key: string;
@@ -35,25 +38,25 @@ export default function SettingsTab({
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-text-primary">
           ⚙️ Application Settings
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-text-muted mt-1">
           Configure keywords, journal selections, and scoring parameters.
           Changes persist across runs.
         </p>
       </div>
 
       {/* Sub-tab nav */}
-      <div className="flex gap-1 border-b border-gray-200">
+      <div className="flex gap-1 border-b border-border">
         {SUB_TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setSub(t.key)}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
               sub === t.key
-                ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                ? "border-accent text-accent"
+                : "border-transparent text-text-muted hover:text-text-secondary"
             }`}
           >
             {t.label}
@@ -151,7 +154,7 @@ function KeywordSettings({
           value={keywordsText}
           onChange={(e) => setKeywordsText(e.target.value)}
           rows={8}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono"
+          className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden font-mono"
           placeholder="One keyword per line"
         />
       </Card>
@@ -174,7 +177,7 @@ function KeywordSettings({
         {allKeywords.filter(
           (k) => !highPriority.includes(k) && !mediumPriority.includes(k),
         ).length > 0 && (
-          <p className="text-sm text-gray-400 mt-2">
+          <p className="text-sm text-text-muted mt-2">
             Default priority:{" "}
             {allKeywords
               .filter(
@@ -205,7 +208,7 @@ function KeywordSettings({
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors"
+        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
         💾 Save Keywords Configuration
       </button>
@@ -285,34 +288,34 @@ function JournalSettings({
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
       <Card title="Target Journals">
-        <label className="block text-sm font-medium text-gray-600 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Exact Matches (highest priority)
         </label>
         <textarea
           value={exact}
           onChange={(e) => setExact(e.target.value)}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono mb-4"
+          className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden font-mono mb-4"
         />
 
-        <label className="block text-sm font-medium text-gray-600 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Family Matches (medium priority)
         </label>
         <textarea
           value={family}
           onChange={(e) => setFamily(e.target.value)}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono mb-4"
+          className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden font-mono mb-4"
         />
 
-        <label className="block text-sm font-medium text-gray-600 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Specific Journals (lower priority)
         </label>
         <textarea
           value={specific}
           onChange={(e) => setSpecific(e.target.value)}
           rows={6}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono"
+          className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden font-mono"
         />
       </Card>
 
@@ -324,14 +327,14 @@ function JournalSettings({
           value={exclusions}
           onChange={(e) => setExclusions(e.target.value)}
           rows={8}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden font-mono"
+          className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden font-mono"
           placeholder="One pattern per line"
         />
       </Card>
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors"
+        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
         💾 Save Journal Configuration
       </button>
@@ -451,9 +454,9 @@ function ScoringSettings({
             type="checkbox"
             checked={enabled}
             onChange={() => setEnabled(!enabled)}
-            className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            className="rounded border-border text-accent focus:ring-accent"
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-text-secondary">
             Enable Journal Impact Scoring
           </span>
         </label>
@@ -488,13 +491,13 @@ function ScoringSettings({
             step={1}
           />
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
               Default Search Mode
             </label>
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
+              className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden"
             >
               <option>Brief</option>
               <option>Standard</option>
@@ -523,7 +526,7 @@ function ScoringSettings({
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors"
+        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
         💾 Save Scoring Configuration
       </button>
@@ -582,23 +585,23 @@ function BackupSettings() {
 
       <Card title="Available Backups">
         {backups.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">
+          <p className="text-sm text-text-muted py-4 text-center">
             No backups found. Backups are created automatically when you save
             settings.
           </p>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-border">
             {backups.map((b, i) => (
               <div
                 key={b.path}
                 className="flex items-center justify-between py-2.5"
               >
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-text-secondary">
                   Backup {i + 1}: {b.date}
                 </span>
                 <button
                   onClick={() => handleRestore(b.path)}
-                  className="px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-md text-xs font-medium transition-colors"
+                  className="px-3 py-1.5 bg-accent-subtle text-accent-text hover:bg-accent-subtle/80 rounded-md text-xs font-medium transition-colors"
                 >
                   Restore
                 </button>
@@ -611,7 +614,7 @@ function BackupSettings() {
       <Card title="Create Manual Backup">
         <button
           onClick={handleCreate}
-          className="px-5 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="px-5 py-2 border border-border rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-inset transition-colors"
         >
           📁 Create Backup Now
         </button>
@@ -621,27 +624,8 @@ function BackupSettings() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Shared helpers / UI atoms
+   Local helpers
    ───────────────────────────────────────────────────────────── */
-
-function Card({
-  title,
-  desc,
-  children,
-}: {
-  title: string;
-  desc?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
-      <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
-      {desc && <p className="text-xs text-gray-400 mt-0.5 mb-3">{desc}</p>}
-      {!desc && <div className="h-3" />}
-      {children}
-    </div>
-  );
-}
 
 function NumField({
   label,
@@ -660,7 +644,7 @@ function NumField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-600 mb-1">
+      <label className="block text-sm font-medium text-text-secondary mb-1">
         {label}
       </label>
       <input
@@ -670,31 +654,9 @@ function NumField({
         min={min}
         max={max}
         step={step}
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-hidden"
+        className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden"
       />
     </div>
-  );
-}
-
-function Toggle({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <label className="flex items-center gap-2 cursor-pointer">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={() => onChange(!checked)}
-        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-      />
-      <span className="text-sm text-gray-700">{label}</span>
-    </label>
   );
 }
 
@@ -723,7 +685,7 @@ function MultiSelect({
 
   return (
     <div className="mb-3">
-      <label className="block text-sm font-medium text-gray-600 mb-1.5">
+      <label className="block text-sm font-medium text-text-secondary mb-1.5">
         {label}
       </label>
       <div className="flex flex-wrap gap-1.5">
@@ -735,8 +697,8 @@ function MultiSelect({
               onClick={() => toggle(opt)}
               className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors border ${
                 active
-                  ? "bg-indigo-100 text-indigo-700 border-indigo-300"
-                  : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100"
+                  ? "bg-accent-subtle text-accent-text border-accent/30"
+                  : "bg-surface-inset text-text-muted border-border hover:bg-surface-inset/80"
               }`}
             >
               {active && "✓ "}
@@ -745,33 +707,9 @@ function MultiSelect({
           );
         })}
         {available.length === 0 && (
-          <span className="text-xs text-gray-400">No options available</span>
+          <span className="text-xs text-text-muted">No options available</span>
         )}
       </div>
-    </div>
-  );
-}
-
-function Flash({
-  msg,
-  onClear,
-}: {
-  msg: FlashMessage | null;
-  onClear: () => void;
-}) {
-  if (!msg) return null;
-  return (
-    <div
-      className={`px-4 py-3 rounded-lg text-sm flex items-center justify-between ${
-        msg.type === "error"
-          ? "bg-red-50 border border-red-200 text-red-700"
-          : "bg-green-50 border border-green-200 text-green-700"
-      }`}
-    >
-      <span>{msg.text}</span>
-      <button onClick={onClear} className="ml-2 opacity-50 hover:opacity-100">
-        ✕
-      </button>
     </div>
   );
 }

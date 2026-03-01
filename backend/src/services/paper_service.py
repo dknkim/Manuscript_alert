@@ -204,6 +204,7 @@ def fetch_and_rank(
             "is_high_impact": (
                 is_high_impact_journal(paper.get("journal", ""), settings)
                 if paper.get("source") == "PubMed"
+                # arXiv/bioRxiv/medRxiv are preprints, not published in journals
                 else False
             ),
         }

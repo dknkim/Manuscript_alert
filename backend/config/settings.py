@@ -129,7 +129,7 @@ DEFAULT_SEARCH_SETTINGS = {
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
-        "arxiv": False,
+        "arxiv": True,
         "biorxiv": True,
         "medrxiv": True,
     },
