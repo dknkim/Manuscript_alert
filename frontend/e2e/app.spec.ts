@@ -75,7 +75,7 @@ test.describe("Papers page", () => {
     await page.goto("/");
     // Button may show "Fetching…" during auto-fetch or "Fetch Papers" after
     await expect(
-      page.getByRole("button", { name: /Fetch/ }),
+      page.getByRole("button", { name: /Fetch/ }).first(),
     ).toBeVisible();
   });
 

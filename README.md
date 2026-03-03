@@ -6,34 +6,31 @@ A local web application that helps researchers stay updated with the latest pape
 
 ## Quick Start
 
-**Prerequisites:** Python 3.10+ and Node.js 18+ (both included if using the Conda setup below).
+> **First time?** Complete the [Installation](#installation) steps below before running.
 
 ```bash
-conda activate manuscript_alert
+# Activate your environment
+conda activate manuscript_alert   # or: source .venv/bin/activate
+
+# Start the app
 python server.py
 ```
 
 The server will:
 
-1. Install frontend dependencies (if needed)
-2. Build the React frontend (if needed)
-3. Start the application at **[http://localhost:8000](http://localhost:8000)**
+1. Build the React frontend (if needed)
+2. Start the application at **[http://localhost:8000](http://localhost:8000)**
 
 Papers from all sources (arXiv, bioRxiv, medRxiv, PubMed) are fetched automatically on startup.
 
-To stop the server, press `Ctrl+C`. To deactivate the conda environment:
-
-```bash
-conda deactivate
-```
+To stop the server, press `Ctrl+C`.
 
 ### Development Mode
 
-If you're working on the frontend separately with the Next.js dev server:
+For frontend work with hot-reload:
 
 ```bash
 # Terminal 1: Start the API server (skip frontend build)
-conda activate manuscript_alert
 python server.py --dev
 
 # Terminal 2: Start Next.js dev server with hot reload
@@ -94,29 +91,54 @@ Tested on macOS and Linux with Conda.
 
 ### Prerequisites
 
-**Option A: Use the bootstrap script** (creates env, installs deps automatically):
+- **Python 3.10+** (3.11 recommended)
+- **Node.js 18+** with npm
+- **Git**
+
+### Option A: Conda (recommended)
+
+Use the bootstrap script — it creates the environment and installs all dependencies automatically:
 
 ```bash
 source scripts/bootstrap_conda_env.sh
 ```
 
-**Option B: Manual setup**:
+Or set it up manually:
 
-1. **Create and activate conda environment**:
-  ```bash
-   conda create -n manuscript_alert python=3.11 nodejs -y
-   conda activate manuscript_alert
-  ```
-2. **Install Python dependencies**:
-  ```bash
-   pip install -r requirements.txt
-  ```
-3. To deactivate when done:
-  ```bash
-   conda deactivate
-  ```
+```bash
+conda create -n manuscript_alert python=3.11 nodejs -y
+conda activate manuscript_alert
+pip install -r requirements.txt
+cd frontend && npm install && cd ..
+```
 
-Frontend dependencies (npm) are installed automatically when you run `python server.py`.
+### Option B: Without Conda (venv / system Python)
+
+If you already have Python and Node.js on your system:
+
+```bash
+# 1. Clone and enter the repo
+git clone <repo-url>
+cd Manuscript_alert
+
+# 2. Create a virtual environment
+python -m venv .venv
+source .venv/bin/activate        # Linux / macOS
+# .venv\Scripts\activate         # Windows
+
+# 3. Install Python dependencies
+pip install -r requirements.txt
+
+# 4. Install frontend dependencies
+cd frontend && npm install && cd ..
+```
+
+### Verify the setup
+
+```bash
+python -c "import fastapi; print('Backend OK')"
+node -v   # should print v18+
+```
 
 ---
 
@@ -301,14 +323,20 @@ Manuscript_alert/
 **"npm: command not found"**
 
 ```bash
-conda install nodejs -y
+conda install nodejs -y          # Conda users
+# or install Node.js from https://nodejs.org
 ```
 
 **"Module not found" (Python)**
 
 ```bash
-conda activate manuscript_alert
 pip install -r requirements.txt
+```
+
+**"Module not found" (Frontend / npm)**
+
+```bash
+cd frontend && npm install && cd ..
 ```
 
 **Port 8000 already in use**
@@ -328,10 +356,10 @@ python server.py   # will rebuild automatically
 ### Clean Reinstall
 
 ```bash
-conda activate manuscript_alert
 pip install --force-reinstall -r requirements.txt
 rm -rf frontend/node_modules frontend/out
-python server.py   # will reinstall and rebuild automatically
+cd frontend && npm install && cd ..
+python server.py   # will rebuild frontend automatically
 ```
 
 ### Stopping and Restarting
