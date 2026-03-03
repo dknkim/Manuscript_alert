@@ -143,5 +143,47 @@
       "is_high_impact": true,
       "archived_at": "2026-02-26T11:42:49.803711"
     }
+  ],
+  "2026-03-03": [
+    {
+      "title": "A path to preventing cognitive impairment due to Alzheimer's disease: initiatives beginning in the USA.",
+      "authors": "Eric M Reiman, Robert C Alexander, Jessica B Langbaum...",
+      "abstract": "Antibody therapies can remove amyloid plaques from the brain and slow cognitive decline in people with Alzheimer's disease who are mildly impaired. These drugs are now being evaluated in participants who are cognitively unimpaired but positive for a biomarker of Alzheimer's disease for their safety, tolerability, disease-modifying and cognitive preserving effects, and ability to avert the onset of cognitive impairment. If these studies are successful, and the drugs get regulatory approval, they could accelerate the evaluation and approval of related Alzheimer's disease-modifying treatments in people who are unimpaired with or without a biomarker of the disease. Preclinical Alzheimer's disease therapies that modify the underlying disease in people who are unimpaired with a biomarker of Alzheimer's disease and primary prevention therapies that avert the onset of amyloid plaques in those with a negative test have the potential to substantially prevent ensuing biological and clinical manifestations of Alzheimer's disease. In this Policy View, we assess the challenges and opportunities that trials of these drug treatments will bring, and consider the blood tests, cognitive assessments, and post-marketing strategies needed to enable the approval, affordability, health-care insurance coverage, and equitable use. Our recommendations are intended for consideration in the USA, and relevant refinement in other countries.",
+      "published": "2026-03-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41722593/",
+      "source": "PubMed",
+      "relevance_score": 17.8,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "amyloid",
+        "brain"
+      ],
+      "journal": "The Lancet. Neurology",
+      "volume": "25",
+      "issue": "3",
+      "is_high_impact": true,
+      "archived_at": "2026-03-03T11:07:59.937230"
+    },
+    {
+      "title": "Head-to-head comparison of brain-derived pTau217 and total pTau217 for brain amyloid and tau pathology classification.",
+      "authors": "Yuanbing Jiang, Wenyue Zheng, Zengjie Xia...",
+      "abstract": "Phosphorylated-tau 217 (pTau217) is currently the most promising blood-based biomarker for accurately detecting Alzheimer's disease (AD) pathology. However, interference from peripheral tau species in the kidneys or peripheral nerves can hinder diagnostic precision. Recently developed brain-derived pTau217 (BD-pTau217) assays emerge as highly specific tools for detecting AD-related pathological changes in the brain. In this study, we conducted a head-to-head comparison of the NULISAqpcr BD-pTau217 assay and Simoa ALZpath total p-Tau217 assay in two independent, amyloid-PET-characterized Chinese cohorts. Our results demonstrate a strong correlation between BD-pTau217 and total pTau217 (ρ = 0.89 to 0.90), with BD-pTau217 showing significantly reduced interference from kidney dysfunction, as evidenced by weaker associations with blood levels of urea (ρ",
+      "published": "2026-03-10",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41770931/",
+      "source": "PubMed",
+      "relevance_score": 16.7,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "brain"
+      ],
+      "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+      "volume": "123",
+      "issue": "10",
+      "is_high_impact": false,
+      "archived_at": "2026-03-03T11:08:40.485343"
+    }
   ]
 }
