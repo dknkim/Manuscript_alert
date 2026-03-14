@@ -185,5 +185,25 @@
       "is_high_impact": false,
       "archived_at": "2026-03-03T11:08:40.485343"
     }
+  ],
+  "2026-03-13": [
+    {
+      "title": "Machine-learning prediction and risk stratification of 12-month cognitive decline in Alzheimer's disease using routine clinical and MRI data.",
+      "authors": "Yinghui Geng, Huijun Zhang",
+      "abstract": "Early identification of patients with Alzheimer's disease (AD) who will experience near-term cognitive decline can support trial enrichment and risk-stratified follow-up. Using the Alzheimer's Disease Neuroimaging Initiative (ADNI), we developed two prognostic models for 12-month Mini-Mental State Examination (MMSE) decrease (≥ 3 points): (i) a clinical logistic-regression model and (ii) a random-forest model combining clinical variables with MRI-derived volumetric measures. In 306 participants with baseline AD and complete 12-month MMSE (mean age 74.8 years; baseline MMSE 23.1), 131 (42.8%) declined. Five-fold stratified cross-validation with within-fold preprocessing and imputation was used for internal validation. The clinical model achieved an area under the ROC curve (AUC) of 0.755, while the random-forest model achieved an AUC of 0.773 and provided higher net benefit across threshold probabilities of 0.20-0.80 in decision-curve analysis. Risk stratification using pre-specified cut-offs (< 0.25, 0.25-0.50, ≥ 0.50) yielded monotonic observed decline rates (13.2%, 35.3%, 67.2%). These findings suggest that a transparent two-model framework based on ADNI data provides moderate prognostic accuracy and clinically interpretable three-tier risk stratification; however, external validation and local recalibration are required before clinical implementation.",
+      "published": "2026-03-12",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41820490/",
+      "source": "PubMed",
+      "relevance_score": 9.2,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "MRI"
+      ],
+      "journal": "Scientific reports",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-03-13T21:11:17.629549"
+    }
   ]
 }
