@@ -82,15 +82,6 @@ export default function PaperFeed({
         </div>
       )}
 
-      {/* API errors */}
-      {result?.errors?.length ? (
-        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 px-4 py-3 rounded-lg text-sm">
-          {result.errors.map((e, i) => (
-            <div key={i}>{e}</div>
-          ))}
-        </div>
-      ) : null}
-
       {/* Must-have info */}
       {result?.must_have_keywords?.length ? (
         <div className="bg-accent-subtle border border-accent/20 text-accent-text px-4 py-3 rounded-lg text-sm">

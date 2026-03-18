@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from datetime import datetime
 from urllib.parse import quote
 
@@ -29,24 +30,12 @@ class ArxivFetcher:
         keywords: list[str],
         brief_mode: bool = False,
         extended_mode: bool = False,
+        meta: dict[str, int] | None = None,
+        on_step: Callable[[str], None] | None = None,
     ) -> list[dict[str, object]]:
-        """
-        Fetch papers from arXiv API based on date range and keywords.
-
-        Args:
-            start_date: Start date for search
-            end_date: End date for search
-            keywords: List of keywords to search for
-            brief_mode: If True, limit results for faster retrieval
-            extended_mode: If True, fetch more results for comprehensive coverage
-
-        Returns:
-            List of paper dictionaries
-        """
-        # Build search query
+        """Fetch papers from arXiv API based on date range and keywords."""
         search_query: str = self._build_search_query(keywords, start_date, end_date)
 
-        # Set max results based on mode
         if brief_mode:
             max_results = 500
         elif extended_mode:
@@ -54,7 +43,6 @@ class ArxivFetcher:
         else:
             max_results = self.max_results
 
-        # Prepare API parameters
         params: dict[str, str | int] = {
             "search_query": search_query,
             "start": 0,
@@ -62,6 +50,9 @@ class ArxivFetcher:
             "sortBy": "submittedDate",
             "sortOrder": "descending",
         }
+
+        if on_step:
+            on_step(f"Querying API with {len(keywords)} keywords")
 
         try:
             response: requests.Response = requests.get(
@@ -72,17 +63,30 @@ class ArxivFetcher:
             papers: list[dict[str, object]] = self._parse_arxiv_response(
                 response.content
             )
+            if on_step:
+                on_step(f"{len(papers):,} results from API")
+
             filtered_papers: list[dict[str, object]] = self._filter_by_date(
                 papers, start_date, end_date
+            )
+            if on_step and len(filtered_papers) != len(papers):
+                on_step(f"{len(filtered_papers):,} after date filter")
+
+            if meta is not None:
+                meta["api_results"] = len(papers)
+                meta["after_date_filter"] = len(filtered_papers)
+            logger.info(
+                f"arXiv: {len(papers)} from API (keyword search) · "
+                f"{len(filtered_papers)} after date filter"
             )
             return filtered_papers
 
         except requests.RequestException as e:
             logger.error(f"Error fetching papers from arXiv: {e}")
-            return []
+            raise
         except Exception as e:
             logger.error(f"Error processing arXiv response: {e}")
-            return []
+            raise
 
     def _build_search_query(
         self,

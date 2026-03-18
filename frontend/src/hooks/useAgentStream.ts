@@ -16,6 +16,8 @@ export interface SourceNode {
   source: string;
   status: "fetching" | "complete" | "error";
   papersFound?: number;
+  /** Chain-of-thought steps emitted during fetch. */
+  steps: string[];
   /** Batch progress (PubMed only) — inline metadata, not a separate row. */
   batch?: number;
   totalBatches?: number;
@@ -122,7 +124,22 @@ export function useAgentStream(): UseAgentStreamReturn {
                 sources: upsertSource(prev.sources, data.source, () => ({
                   source: data.source,
                   status: "fetching",
+                  steps: [],
                 })),
+              }));
+              break;
+
+            case "source_step":
+              setDisplay((prev) => ({
+                ...prev,
+                sources: upsertSource(
+                  prev.sources,
+                  data.source,
+                  (existing) => ({
+                    ...(existing || { source: data.source, status: "fetching" as const }),
+                    steps: [...(existing?.steps || []), data.message],
+                  }),
+                ),
               }));
               break;
 
@@ -133,7 +150,7 @@ export function useAgentStream(): UseAgentStreamReturn {
                   prev.sources,
                   data.source,
                   (existing) => ({
-                    ...(existing || { source: data.source }),
+                    ...(existing || { source: data.source, steps: [] }),
                     status: "fetching" as const,
                     batch: data.batch,
                     totalBatches: data.total,
@@ -146,22 +163,32 @@ export function useAgentStream(): UseAgentStreamReturn {
             case "source_complete":
               setDisplay((prev) => ({
                 ...prev,
-                sources: upsertSource(prev.sources, data.source, () => ({
-                  source: data.source,
-                  status: "complete",
-                  papersFound: data.count,
-                })),
+                sources: upsertSource(
+                  prev.sources,
+                  data.source,
+                  (existing) => ({
+                    source: data.source,
+                    status: "complete" as const,
+                    papersFound: data.count,
+                    steps: existing?.steps || [],
+                  }),
+                ),
               }));
               break;
 
             case "source_error":
               setDisplay((prev) => ({
                 ...prev,
-                sources: upsertSource(prev.sources, data.source, () => ({
-                  source: data.source,
-                  status: "error",
-                  errorMessage: data.error,
-                })),
+                sources: upsertSource(
+                  prev.sources,
+                  data.source,
+                  (existing) => ({
+                    source: data.source,
+                    status: "error" as const,
+                    errorMessage: data.error,
+                    steps: existing?.steps || [],
+                  }),
+                ),
               }));
               break;
 

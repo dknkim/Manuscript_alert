@@ -115,14 +115,7 @@ describe("PapersTab", () => {
     expect(screen.getByLabelText(/Relevant Journals Only/)).toBeInTheDocument();
   });
 
-  it("shows API errors when present", () => {
-    const resultWithErrors = {
-      ...mockFetchResult,
-      errors: ["pubmed: timeout after 30s"],
-    };
-    render(<PapersTab {...defaultProps()} result={resultWithErrors} />);
-    expect(screen.getByText(/pubmed: timeout after 30s/)).toBeInTheDocument();
-  });
+  // API errors are now shown in AgentActivityStream, not in PapersTab
 
   it("shows must-have keywords info when present", () => {
     const resultWithMustHave = {

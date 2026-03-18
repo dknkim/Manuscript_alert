@@ -224,6 +224,26 @@ def fetch_and_rank(
     return ranked, errors
 
 
+def _friendly_error(error: str) -> str:
+    """Convert raw exception text to a short human-readable reason."""
+    lower = error.lower()
+    if "timed out" in lower or "timeout" in lower:
+        return "Connection timed out"
+    if "refused" in lower:
+        return "Server unavailable"
+    if "reset" in lower:
+        return "Connection reset"
+    if "429" in lower or "rate limit" in lower:
+        return "Rate limited by API"
+    if "503" in error or "502" in error:
+        return "Server temporarily unavailable"
+    if "500" in error:
+        return "Server error"
+    if "404" in error:
+        return "API endpoint not found"
+    return "Fetch failed"
+
+
 async def fetch_and_rank_with_progress(
     settings: dict[str, Any],
     data_sources: dict[str, bool],
@@ -231,8 +251,8 @@ async def fetch_and_rank_with_progress(
 ) -> AsyncGenerator[dict[str, Any], None]:
     """Yield SSE progress events while fetching and ranking papers.
 
-    Each blocking fetcher call runs in a thread so the event loop can
-    flush SSE events between sources.
+    All sources are fetched in parallel. Each blocking fetcher call runs
+    in a thread so the event loop can flush SSE events as they arrive.
 
     Events: source_start, source_complete, source_error, scoring, complete.
     """
@@ -250,114 +270,135 @@ async def fetch_and_rank_with_progress(
 
     all_papers: list[dict[str, Any]] = []
     fetch_errors: list[str] = []
+    event_queue: asyncio.Queue[dict[str, Any]] = asyncio.Queue()
+    loop = asyncio.get_running_loop()
 
-    # arXiv — simple source (no batch progress)
-    if data_sources.get("arxiv"):
-        yield events.source_start("arXiv")
+    # ------------------------------------------------------------------
+    # Helper: create an on_step callback that pushes to the event queue
+    # ------------------------------------------------------------------
+    def _make_on_step(name: str) -> Any:
+        def _on_step(msg: str) -> None:
+            loop.call_soon_threadsafe(
+                event_queue.put_nowait,
+                events.source_step(name, msg),
+            )
+
+        return _on_step
+
+    # ------------------------------------------------------------------
+    # Generic source runner — emits start/complete/error into the queue
+    # ------------------------------------------------------------------
+    async def _run_source(
+        name: str,
+        fetch_fn: Any,
+    ) -> None:
+        await event_queue.put(events.source_start(name))
         try:
-            papers: list[dict[str, Any]] = await asyncio.to_thread(
+            papers: list[dict[str, Any]] = await fetch_fn()
+            all_papers.extend(papers)
+            await event_queue.put(events.source_complete(name, len(papers)))
+        except Exception as e:
+            friendly = _friendly_error(str(e))
+            fetch_errors.append(f"{name}: {friendly}")
+            await event_queue.put(events.source_error(name, friendly))
+
+    # ------------------------------------------------------------------
+    # Build parallel tasks for every enabled source
+    # ------------------------------------------------------------------
+    tasks: list[asyncio.Task[None]] = []
+
+    if data_sources.get("arxiv"):
+
+        async def _fetch_arxiv() -> list[dict[str, Any]]:
+            return await asyncio.to_thread(
                 arxiv_fetcher.fetch_papers,
                 start_date,
                 end_date,
                 keywords,
                 brief_mode,
                 extended_mode,
+                on_step=_make_on_step("arXiv"),
             )
-            all_papers.extend(papers)
-            yield events.source_complete("arXiv", len(papers))
-        except Exception as e:
-            fetch_errors.append(f"arXiv: {e}")
-            yield events.source_error("arXiv", str(e))
 
-    # PubMed — with batch-level progress via asyncio.Queue
+        tasks.append(asyncio.create_task(_run_source("arXiv", _fetch_arxiv)))
+
     if data_sources.get("pubmed"):
-        yield events.source_start("PubMed")
-        progress_queue: asyncio.Queue[dict[str, Any]] = asyncio.Queue()
-        loop = asyncio.get_running_loop()
 
         def _pubmed_on_progress(batch: int, total: int, papers_so_far: int) -> None:
-            evt = events.batch_progress("PubMed", batch, total, papers_so_far)
-            loop.call_soon_threadsafe(progress_queue.put_nowait, evt)
+            loop.call_soon_threadsafe(
+                event_queue.put_nowait,
+                events.batch_progress("PubMed", batch, total, papers_so_far),
+            )
 
-        sentinel: dict[str, Any] = {"event": "_done"}
-
-        async def _run_pubmed() -> list[dict[str, Any]]:
-            try:
-                result = await asyncio.to_thread(
-                    pubmed_fetcher.fetch_papers,
-                    start_date,
-                    end_date,
-                    keywords,
-                    brief_mode,
-                    extended_mode,
-                    on_progress=_pubmed_on_progress,
-                )
-                return result
-            finally:
-                loop.call_soon_threadsafe(progress_queue.put_nowait, sentinel)
-
-        task = asyncio.create_task(_run_pubmed())
-
-        # Drain progress events until the fetch finishes
-        while True:
-            try:
-                evt = await asyncio.wait_for(progress_queue.get(), timeout=0.5)
-            except TimeoutError:
-                if task.done():
-                    break
-                continue
-            if evt is sentinel:
-                break
-            yield evt
-
-        try:
-            pubmed_papers = await task
-            all_papers.extend(pubmed_papers)
-            yield events.source_complete("PubMed", len(pubmed_papers))
-        except Exception as e:
-            fetch_errors.append(f"PubMed: {e}")
-            yield events.source_error("PubMed", str(e))
-
-    # bioRxiv + medRxiv — single fetcher, separate SSE events per source
-    biorxiv_enabled = data_sources.get("biorxiv")
-    medrxiv_enabled = data_sources.get("medrxiv")
-    if biorxiv_enabled or medrxiv_enabled:
-        if biorxiv_enabled:
-            yield events.source_start("bioRxiv")
-        if medrxiv_enabled:
-            yield events.source_start("medRxiv")
-        try:
-            raw: list[dict[str, Any]] = await asyncio.to_thread(
-                biorxiv_fetcher.fetch_papers,
+        async def _fetch_pubmed() -> list[dict[str, Any]]:
+            return await asyncio.to_thread(
+                pubmed_fetcher.fetch_papers,
                 start_date,
                 end_date,
                 keywords,
                 brief_mode,
                 extended_mode,
+                on_progress=_pubmed_on_progress,
+                on_step=_make_on_step("PubMed"),
             )
-            bio = (
-                [p for p in raw if p.get("source") == "biorxiv"]
-                if biorxiv_enabled
-                else []
-            )
-            med = (
-                [p for p in raw if p.get("source") == "medrxiv"]
-                if medrxiv_enabled
-                else []
-            )
-            all_papers.extend(bio + med)
-            if biorxiv_enabled:
-                yield events.source_complete("bioRxiv", len(bio))
-            if medrxiv_enabled:
-                yield events.source_complete("medRxiv", len(med))
-        except Exception as e:
-            fetch_errors.append(f"bioRxiv/medRxiv: {e}")
-            if biorxiv_enabled:
-                yield events.source_error("bioRxiv", str(e))
-            if medrxiv_enabled:
-                yield events.source_error("medRxiv", str(e))
 
+        tasks.append(asyncio.create_task(_run_source("PubMed", _fetch_pubmed)))
+
+    if data_sources.get("biorxiv"):
+
+        async def _fetch_biorxiv() -> list[dict[str, Any]]:
+            return await asyncio.to_thread(
+                biorxiv_fetcher._fetch_from_server,
+                "biorxiv",
+                start_date,
+                end_date,
+                keywords,
+                brief_mode,
+                extended_mode,
+                on_step=_make_on_step("bioRxiv"),
+            )
+
+        tasks.append(asyncio.create_task(_run_source("bioRxiv", _fetch_biorxiv)))
+
+    if data_sources.get("medrxiv"):
+
+        async def _fetch_medrxiv() -> list[dict[str, Any]]:
+            return await asyncio.to_thread(
+                biorxiv_fetcher._fetch_from_server,
+                "medrxiv",
+                start_date,
+                end_date,
+                keywords,
+                brief_mode,
+                extended_mode,
+                on_step=_make_on_step("medRxiv"),
+            )
+
+        tasks.append(asyncio.create_task(_run_source("medRxiv", _fetch_medrxiv)))
+
+    # ------------------------------------------------------------------
+    # Drain events from the queue while tasks run in parallel
+    # ------------------------------------------------------------------
+    sentinel: dict[str, Any] = {"event": "_all_done"}
+
+    async def _await_all() -> None:
+        await asyncio.gather(*tasks)
+        await event_queue.put(sentinel)
+
+    gather_task = asyncio.create_task(_await_all())
+
+    while True:
+        evt = await event_queue.get()
+        if evt is sentinel:
+            break
+        yield evt
+
+    # Ensure the gather task is fully resolved (propagates any unexpected errors)
+    await gather_task
+
+    # ------------------------------------------------------------------
     # Scoring phase (CPU-bound but fast — no need for a thread)
+    # ------------------------------------------------------------------
     criteria = ["Keyword relevance scoring"]
     journal_scoring_cfg = settings.get("journal_scoring", {})
     if journal_scoring_cfg.get("enabled", True):

@@ -36,8 +36,8 @@ function SourceIcon({ status }: { status: SourceNode["status"] }) {
   }
 }
 
-/** Right-aligned detail: batch progress, paper count, or error. */
-function SourceDetail({ node }: { node: SourceNode }) {
+/** Right-aligned summary: paper count, batch progress, or error. */
+function SourceSummary({ node }: { node: SourceNode }) {
   if (node.status === "error") {
     return (
       <span className="text-red-400/80 truncate text-right">
@@ -52,7 +52,7 @@ function SourceDetail({ node }: { node: SourceNode }) {
       </span>
     );
   }
-  // Fetching — show batch progress if available
+  // Fetching — show batch progress if available (PubMed)
   if (node.batch != null && node.totalBatches != null) {
     return (
       <span className="text-text-muted tabular-nums whitespace-nowrap">
@@ -62,6 +62,23 @@ function SourceDetail({ node }: { node: SourceNode }) {
     );
   }
   return null;
+}
+
+/** Chain-of-thought steps for a source. */
+function SourceSteps({ steps }: { steps: string[] }) {
+  if (steps.length === 0) return null;
+  return (
+    <div className="ml-5.5 pl-3 border-l border-border mt-0.5 mb-1 space-y-0.5">
+      {steps.map((step, i) => (
+        <div
+          key={i}
+          className="text-[11px] leading-tight text-text-secondary"
+        >
+          {step}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -165,9 +182,13 @@ export default function AgentActivityStream({
             </>
           ) : (
             <>
-              <CheckCircle className="h-3.5 w-3.5 text-green-500" />
-              {completeSources.length} source
-              {completeSources.length !== 1 && "s"} &middot;{" "}
+              {errorCount > 0 ? (
+                <AlertCircle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+              ) : (
+                <CheckCircle className="h-3.5 w-3.5 text-green-500" />
+              )}
+              {completeSources.length + errorCount} source
+              {completeSources.length + errorCount !== 1 && "s"} &middot;{" "}
               {totalPapers.toLocaleString()} papers fetched
               {errorCount > 0 && (
                 <span className="text-red-400">
@@ -190,34 +211,38 @@ export default function AgentActivityStream({
         style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
       >
         <div className="overflow-hidden">
-          <div className="px-4 pb-3 pt-2 border-t border-border space-y-0.5">
-            {/* ---- Source rows ---- */}
+          <div className="px-4 pb-3 pt-2 border-t border-border space-y-0">
+            {/* ---- Source rows with chain-of-thought ---- */}
             {sources.map((node) => (
-              <div
-                key={node.source}
-                className={`flex items-center justify-between gap-3 py-0.5 text-xs transition-opacity duration-200 ${
-                  node.status === "complete" && isStreaming
-                    ? "opacity-50"
-                    : "opacity-100"
-                }`}
-              >
-                <span className="flex items-center gap-2 shrink-0">
-                  <SourceIcon status={node.status} />
-                  <span
-                    className={
-                      node.status === "error"
-                        ? "text-red-400"
-                        : "text-text-secondary"
-                    }
-                  >
-                    {node.source}
+              <div key={node.source}>
+                {/* Source header row */}
+                <div
+                  className={`flex items-center justify-between gap-3 py-1 text-xs transition-opacity duration-200 ${
+                    node.status === "complete" && isStreaming
+                      ? "opacity-50"
+                      : "opacity-100"
+                  }`}
+                >
+                  <span className="flex items-center gap-2 shrink-0">
+                    <SourceIcon status={node.status} />
+                    <span
+                      className={
+                        node.status === "error"
+                          ? "text-red-400"
+                          : "text-text-secondary"
+                      }
+                    >
+                      {node.source}
+                    </span>
                   </span>
-                </span>
-                <SourceDetail node={node} />
+                  <SourceSummary node={node} />
+                </div>
+                {/* Chain-of-thought steps */}
+                <SourceSteps steps={node.steps} />
               </div>
             ))}
 
-            {/* ---- Phase section (scoring + filtering chain-of-thought) ---- */}
+            {/* ---- Phase section (scoring + filtering) ---- */}
             {phases.length > 0 && (
               <div className="mt-1.5 pt-1.5 border-t border-dashed border-border/50 space-y-1">
                 {phases.map((node) => (

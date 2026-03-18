@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import concurrent.futures
 import time
+from collections.abc import Callable
 from datetime import datetime, timedelta
 
 import requests
@@ -35,12 +36,16 @@ class BioRxivFetcher:
     ) -> list[dict[str, object]]:
         """Fetch papers from both bioRxiv and medRxiv in parallel."""
         args = (start_date, end_date, keywords, brief_mode, extended_mode)
+        all_papers: list[dict[str, object]] = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             future_bio = executor.submit(self._fetch_from_server, "biorxiv", *args)
             future_med = executor.submit(self._fetch_from_server, "medrxiv", *args)
-            biorxiv_papers = future_bio.result()
-            medrxiv_papers = future_med.result()
-        return biorxiv_papers + medrxiv_papers
+            for future in [future_bio, future_med]:
+                try:
+                    all_papers.extend(future.result())
+                except Exception:
+                    pass  # Already logged in _fetch_from_server
+        return all_papers
 
     def _fetch_from_server(
         self,
@@ -50,6 +55,8 @@ class BioRxivFetcher:
         keywords: list[str],
         brief_mode: bool = False,
         extended_mode: bool = False,
+        meta: dict[str, int] | None = None,
+        on_step: Callable[[str], None] | None = None,
     ) -> list[dict[str, object]]:
         """Fetch papers from a single bioRxiv/medRxiv server."""
         papers: list[dict[str, object]] = []
@@ -61,11 +68,22 @@ class BioRxivFetcher:
                 self.biorxiv_base_url if server == "biorxiv" else self.medrxiv_base_url
             )
             api_url = f"{base_url}/{start_str}/{end_str}"
+            if on_step:
+                on_step(f"Querying API for {start_str} to {end_str}")
             response: requests.Response = requests.get(api_url, timeout=30)
             response.raise_for_status()
             data: dict[str, object] = response.json()
+            messages: dict[str, object] = data.get("messages", [{}])  # type: ignore[assignment]
+            total_available: int = 0
+            if isinstance(messages, list) and messages:
+                total_available = int(messages[0].get("total", 0))  # type: ignore[union-attr]
             if data.get("collection"):
                 raw_papers: list[dict[str, str]] = data["collection"]  # type: ignore[assignment]
+                if on_step:
+                    on_step(
+                        f"{total_available:,} papers in date range"
+                        f" · {len(raw_papers)} returned"
+                    )
                 if brief_mode:
                     max_results = 500
                 elif extended_mode:
@@ -80,6 +98,16 @@ class BioRxivFetcher:
                             paper, server
                         )
                         papers.append(processed_paper)
+                if on_step:
+                    on_step(f"{len(papers)} matched keywords")
+                if meta is not None:
+                    meta["total_available"] = total_available
+                    meta["page_returned"] = len(raw_papers)
+                logger.info(
+                    f"{server}: {total_available:,} available · "
+                    f"{len(raw_papers)} scanned · "
+                    f"{len(papers)} matched keywords"
+                )
         except requests.RequestException as e:
             if (
                 hasattr(e, "response")
@@ -94,10 +122,12 @@ class BioRxivFetcher:
                 logger.error(f"Error fetching papers from {server}: {e}")
             if api_url:
                 logger.info(f"URL attempted: {api_url}")
+            raise
         except Exception as e:
             logger.error(f"Error processing {server} response: {e}")
             if api_url:
                 logger.info(f"URL attempted: {api_url}")
+            raise
         return papers
 
     def _paper_matches_keywords(

@@ -21,8 +21,15 @@ def source_start(source: str) -> dict[str, Any]:
     return {"event": "source_start", "data": {"source": source}}
 
 
-def source_complete(source: str, count: int) -> dict[str, Any]:
-    return {"event": "source_complete", "data": {"source": source, "count": count}}
+def source_complete(source: str, count: int, detail: str = "") -> dict[str, Any]:
+    return {
+        "event": "source_complete",
+        "data": {"source": source, "count": count, "detail": detail},
+    }
+
+
+def source_step(source: str, message: str) -> dict[str, Any]:
+    return {"event": "source_step", "data": {"source": source, "message": message}}
 
 
 def source_error(source: str, error: str) -> dict[str, Any]:

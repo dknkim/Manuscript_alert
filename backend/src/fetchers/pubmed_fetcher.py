@@ -39,24 +39,41 @@ class PubMedFetcher:
         brief_mode: bool = False,
         extended_mode: bool = False,
         on_progress: Callable[[int, int, int], None] | None = None,
+        meta: dict[str, int] | None = None,
+        on_step: Callable[[str], None] | None = None,
     ) -> list[dict[str, object]]:
         """Fetch papers from PubMed API."""
         try:
+            if on_step:
+                on_step(f"Searching with {len(keywords)} keywords")
             logger.info("PubMed: Searching for papers...")
             paper_ids: list[str] = self._search_papers(
                 start_date, end_date, keywords, brief_mode, extended_mode
             )
             if not paper_ids:
                 logger.info("PubMed: No paper IDs found")
+                if on_step:
+                    on_step("No papers found")
                 return []
+            total_count = getattr(self, "_last_total_count", len(paper_ids))
+            if on_step:
+                if total_count > len(paper_ids):
+                    on_step(f"{total_count:,} matched · fetching {len(paper_ids):,}")
+                else:
+                    on_step(f"{len(paper_ids):,} papers matched")
             logger.info(f"PubMed: Found {len(paper_ids)} paper IDs")
             papers: list[dict[str, object]] = self._fetch_paper_details(
                 paper_ids, on_progress=on_progress
             )
+            if on_step:
+                on_step(f"Fetched {len(papers):,} paper details")
+            if meta is not None:
+                meta["total_found"] = total_count
+                meta["fetched"] = len(papers)
             return papers
         except Exception as e:
             logger.error(f"Error fetching papers from PubMed: {e}")
-            return []
+            raise
 
     def _search_papers(
         self,
@@ -92,6 +109,7 @@ class PubMedFetcher:
                 if count_elem is not None and count_elem.text
                 else 0
             )
+            self._last_total_count = total_count
             logger.info(f"Found {total_count} total papers in PubMed")
 
             if brief_mode:
