@@ -37,35 +37,28 @@ describe("Statistics", () => {
     expect(screen.getByText("BioRxiv")).toBeInTheDocument();
   });
 
-  it("shows journal quality section when high-impact papers exist", () => {
+  it("shows relevant journals metric when high-impact papers exist", () => {
     render(<Statistics papers={papers} allPapers={papers} />);
-    expect(screen.getByText(/Journal Quality/)).toBeInTheDocument();
     expect(screen.getByText("Relevant Journals")).toBeInTheDocument();
   });
 
-  it("hides journal quality section when no high-impact papers", () => {
+  it("hides relevant journals metric when no high-impact papers", () => {
     const lowPapers = [mockPaperLowScore, mockPaperMedScore];
     render(<Statistics papers={lowPapers} allPapers={lowPapers} />);
-    expect(screen.queryByText(/Journal Quality/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Relevant Journals")).not.toBeInTheDocument();
   });
 
-  it("shows top keywords section (collapsed by default)", async () => {
-    const user = userEvent.setup();
+  it("shows keywords visible by default (flat layout)", () => {
     render(<Statistics papers={papers} allPapers={papers} />);
-
-    // Top Keywords section exists but is collapsed
-    const btn = screen.getByText(/Top Keywords/);
-    expect(btn).toBeInTheDocument();
-
-    // Expand it
-    await user.click(btn);
-    // Should show keyword names from our mock papers
+    // Keywords are visible without clicking — no accordion
     expect(screen.getByText("dementia")).toBeInTheDocument();
   });
 
-  it("overview section is open by default", () => {
+  it("all stats visible without clicking (flat layout)", () => {
     render(<Statistics papers={papers} allPapers={papers} />);
-    // Avg Score metric visible without clicking
     expect(screen.getByText("Avg Score")).toBeInTheDocument();
+    expect(screen.getByText("Score Summary")).toBeInTheDocument();
+    expect(screen.getByText("Sources")).toBeInTheDocument();
+    expect(screen.getByText("Top Keywords")).toBeInTheDocument();
   });
 });
