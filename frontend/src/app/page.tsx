@@ -92,6 +92,8 @@ export default function PapersPage() {
         papers={activePapers}
         allPapers={stream.result?.papers || []}
         loading={stream.isStreaming}
+        highImpactOnly={search.highImpactOnly}
+        onHighImpactChange={search.setHighImpactOnly}
       />
     </div>
   );

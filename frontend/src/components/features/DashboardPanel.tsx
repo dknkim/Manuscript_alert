@@ -7,6 +7,8 @@ interface DashboardPanelProps {
   papers: Paper[];
   allPapers: Paper[];
   loading: boolean;
+  highImpactOnly?: boolean;
+  onHighImpactChange?: (value: boolean) => void;
 }
 
 function StatsSkeleton() {
@@ -58,6 +60,8 @@ export default function DashboardPanel({
   papers,
   allPapers,
   loading,
+  highImpactOnly,
+  onHighImpactChange,
 }: DashboardPanelProps) {
   const hasData = allPapers.length > 0;
 
@@ -70,7 +74,7 @@ export default function DashboardPanel({
           <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4">
             Statistics
           </h2>
-          <Statistics papers={papers} allPapers={allPapers} />
+          <Statistics papers={papers} allPapers={allPapers} highImpactOnly={highImpactOnly} onHighImpactChange={onHighImpactChange} />
         </div>
       ) : (
         <div className="p-5 text-center text-text-muted">
