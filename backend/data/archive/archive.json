@@ -228,5 +228,28 @@
       "is_high_impact": false,
       "archived_at": "2026-03-19T17:29:06.210067"
     }
+  ],
+  "2026-03-23": [
+    {
+      "title": "Predicting future cognitive impairment in preclinical Alzheimer's disease using amyloid PET and MRI: a multisite machine learning study",
+      "authors": "Yang, B.; Earnest, T.; Bilgel...",
+      "abstract": "Predicting the likelihood of developing Alzheimers disease (AD) dementia in at-risk individuals is important for the design of and optimal recruitment for clinical trials of disease-modifying therapies. Machine learning (ML) has been shown to excel in this task; however, there remains a lack of models developed specifically for the preclinical AD population, who display early signs of abnormal brain amyloidosis but remain cognitively unimpaired. Here, we trained and evaluated ML classifiers to predict whether individuals with preclinical AD will progress to mild cognitive impairment or dementia within multiple fixed time windows, ranging from one to five years. Models were trained on regional imaging features extracted from amyloid positron emission tomography and magnetic resonance imaging pooled across seven independent sites and from two amyloid radiotracers ([18F]-florbetapir and [11C]-Pittsburgh-compound-B). Out-of-sample generalizability was evaluated via a leave-one-site-out and leave-one-tracer-out cross-validation. Classifiers achieved an out-of-sample receiver operating characteristic area-under-the-curve of 0.66 or greater when applied to all except one hold-out sites and 0.72 or greater when applied to each hold-out radiotracer. Additionally, when applying our models in a retroactive cohort enrichment analysis on A4 clinical trial data, we observed increased statistical power of detecting differences in amyloid accumulation between placebo and treatment arms after enrichment by ML stratifications. As emerging investigations of new disease-modifying therapies for AD increasingly focus on asymptomatic, preclinical populations, our findings underscore the potential applicability of ML-based patient stratification for recruiting more homogeneous cohorts and improving statistical power for detecting treatment effects for future clinical trials.\n\nHighlightsO_LIMachine learning can predict future cognitive impairment in preclinical Alzheimers\nC_LIO_LIModels achieved high out-of-sample ROC-AUC on external sites and PET tracers\nC_LIO_LIModels were able to distinguish cognitively stable from decliners in the A4 cohort\nC_LIO_LIML cohort enrichment enhanced secondary treatment effect detection in the A4 cohort\nC_LI",
+      "published": "2026-03-16",
+      "url": "https://doi.org/10.1101/2025.10.15.25337507",
+      "source": "Medrxiv",
+      "relevance_score": 19.7,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "brain",
+        "MRI"
+      ],
+      "journal": "",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-03-23T09:22:33.806737"
+    }
   ]
 }
