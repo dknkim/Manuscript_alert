@@ -251,5 +251,46 @@
       "is_high_impact": false,
       "archived_at": "2026-03-23T09:22:33.806737"
     }
+  ],
+  "2026-03-30": [
+    {
+      "title": "Longitudinal trajectories of divergent cortical tau patterns in preclinical Alzheimer's disease.",
+      "authors": "Christina B Young, Jintao Sheng, Joseph R Winer...",
+      "abstract": "Approximately 10% of clinically unimpaired individuals with abnormal amyloid (A+; preclinical Alzheimer's disease) have \"divergent\" cortical tau pathology (A+TCortical+), defined as greater than expected tau in cortical regions relative to medial temporal lobe and/or cortical asymmetry on tau PET in addition to or instead of traditional medial temporal lobe tau burden. Although these A+TCortical+ individuals have subtle cognitive deficits at baseline, the longitudinal imaging and clinical outcomes are unknown. We aimed to characterize longitudinal trajectories of A+TCortical+ individuals compared to other biomarker-defined clinically unimpaired groups given that identifying those at highest risk for decline is critical for informing prevention trials and understanding early disease mechanisms. In this longitudinal study, we examined tau PET, MRI, cognitive, and functional data from 395 clinically unimpaired participants, ages 65 to 85 years, enrolled in the Anti-Amyloid Treatment in Asymptomatic AD (A4) Study. Participants had 2-5 flortaucipir scans over a mean (standard deviation) follow-up period of 4.7 (1.6) years. Change in regional and voxelwise tau patterns, atrophy, cognition, and functioning were examined. Longitudinal trajectories from A+TCortical+ (n=34) were compared to preclinical Alzheimer's disease with elevated tau PET signal in medial temporal lobe only (A+TMTL+, n=102), preclinical Alzheimer's disease without significant tau (A+TMTL-, n=210), and those without amyloid or tau (A-TMTL-, n=49). Cortical tau accumulation was fastest in A+TCortical+ (0.018-0.034 standardized uptake value ratios per year), whereas medial temporal lobe tau accumulation was comparable across A+TCortical+, A+TMTL+, and A+TMTL- groups (0.010-0.013 standardized uptake value ratios per year). Tau continued to accumulate in affected regions and contralateral homotopic regions in A+TCortical+ participants with asymmetrical tau at baseline such that asymmetrical patterns were maintained over time. Younger A+TCortical+ participants had an especially fast cortical accumulation rate. The A+TCortical+ group showed significantly greater neurodegeneration and faster clinical decline (Clinical Dementia Rating Scale Sum of Boxes = 0.610 points per year; Mini-Mental State Examination = -0.780 points per year) than all other biomarker-defined subgroups (Clinical Dementia Rating Scale Sum of Boxes = 0.048-0.182 points per year; Mini-Mental State Examination = -0.189-0.006 points per year). In summary, individuals with divergent cortical tau patterns continue to accumulate cortical tau at a faster rate, show greater neurodegeneration, and have faster cognitive and functional decline than other preclinical Alzheimer's disease subgroups. Clinical trials and research examining tau progression and clinical decline in preclinical Alzheimer's disease without subtyping may be disproportionately influenced by this small, high-risk subgroup.",
+      "published": "2026-03-26",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41885175/",
+      "source": "PubMed",
+      "relevance_score": 30,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "MRI"
+      ],
+      "journal": "Brain : a journal of neurology",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": true,
+      "archived_at": "2026-03-30T11:55:17.536303"
+    },
+    {
+      "title": "Amyloid-related imaging abnormalities (ARIA) in Alzheimer's disease: from pathophysiology to individualized risk assessment.",
+      "authors": "Jonathan Merkel, Robert Perneczky, Frank Jessen...",
+      "abstract": "",
+      "published": "2026-03-28",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41904593/",
+      "source": "PubMed",
+      "relevance_score": 9.6,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "amyloid"
+      ],
+      "journal": "Alzheimer's research & therapy",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-03-30T11:56:50.562442"
+    }
   ]
 }
