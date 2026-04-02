@@ -292,5 +292,44 @@
       "is_high_impact": false,
       "archived_at": "2026-03-30T11:56:50.562442"
     }
+  ],
+  "2026-04-01": [
+    {
+      "title": "Integration of plasma eMTBR-tau243 and p-tau217 in the diagnosis and stratification of Alzheimer's disease: a prospective cohort study.",
+      "authors": "Niklas Mattsson-Carlgren, Sebastian Palmqvist, Kanta Horie...",
+      "abstract": "Alzheimer's disease pathology can be accurately identified with blood biomarkers (core 1 biomarkers), including plasma p-tau217 tests. Biomarkers that change longitudinally after diagnosis (core 2 biomarkers) can increase confidence that Alzheimer's disease pathology is contributing to cognitive symptoms. Plasma eMTBR-tau243 reflects tau tangle pathology and is a promising core 2 biomarker. We aimed to examine whether, among patients positive for plasma p-tau217, plasma eMTBR-tau243 improves classification of established Alzheimer's disease and predicts cognitive decline and tau tangle accumulation.",
+      "published": "2026-04-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41864233/",
+      "source": "PubMed",
+      "relevance_score": 22.2,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "tau",
+        "plasma"
+      ],
+      "journal": "The Lancet. Neurology",
+      "volume": "25",
+      "issue": "4",
+      "is_high_impact": true,
+      "archived_at": "2026-04-01T20:55:33.075680"
+    },
+    {
+      "title": "Combining p-tau217 and digital cognitive testing to predict cognitive decline.",
+      "authors": "Hairin Kim, Daniel Soberanes, Roos J Jutten...",
+      "abstract": "We investigated whether a multi-day learning curve (MDLC), derived from remote digital cognitive assessments over 1 week, adds prognostic value to plasma phosphorylated tau at threonine 217 (p-tau217) for predicting cognitive decline in cognitively unimpaired (CU) older adults.",
+      "published": "2026-04-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41913058/",
+      "source": "PubMed",
+      "relevance_score": 10.5,
+      "matched_keywords": [
+        "tau",
+        "plasma"
+      ],
+      "journal": "Alzheimer's & dementia : the journal of the Alzheimer's Association",
+      "volume": "22",
+      "issue": "4",
+      "is_high_impact": true,
+      "archived_at": "2026-04-01T20:56:15.268670"
+    }
   ]
 }
