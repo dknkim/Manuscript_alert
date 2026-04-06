@@ -331,5 +331,27 @@
       "is_high_impact": true,
       "archived_at": "2026-04-01T20:56:15.268670"
     }
+  ],
+  "2026-04-05": [
+    {
+      "title": "Amyloid pathology drives cognitive decline in Alzheimer's Disease through impairing neurovascular coupling: An [¹⁸F]-Florbetapir PET/MRI Study.",
+      "authors": "Xinqing Hao, Xiulin Wang, Ruichen Liu...",
+      "abstract": "Neurovascular coupling (NVC) impairment is implicated in Alzheimer's disease (AD), but its relationship with amyloid-β (Aβ) pathology and diagnostic value remain unclear. We examined Aβ-related NVC changes and their mediating role in cognitive decline.",
+      "published": "2026-04-02",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41935672/",
+      "source": "PubMed",
+      "relevance_score": 18.5,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "MRI"
+      ],
+      "journal": "Brain research bulletin",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-04-05T17:34:16.452177"
+    }
   ]
 }
