@@ -59,6 +59,16 @@ def get_current_user_id(
         user_id: str | None = payload.get("sub")
         if not user_id:
             raise HTTPException(status_code=401, detail="Invalid token: missing sub claim")
+
+        # Ensure the user row exists — required by FK constraints on settings/papers/model_presets.
+        # Clerk includes the email in the JWT; fall back to a unique placeholder if absent.
+        from backend.src.db import models as db_models
+        from backend.src.db.neon import get_pool
+        pool = get_pool()
+        if pool is not None:
+            email: str = payload.get("email") or f"{user_id}@clerk"
+            await db_models.get_or_create_user(pool, user_id, email)
+
         return user_id
     except PyJWKClientError as exc:
         raise HTTPException(status_code=401, detail=f"JWKS error: {exc}") from exc
