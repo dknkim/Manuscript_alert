@@ -4,6 +4,7 @@ import {
   EventStreamContentType,
 } from "@microsoft/fetch-event-source";
 import type { DataSources, FetchResult } from "@/types";
+import { getAuthToken } from "@/lib/api";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
@@ -48,7 +49,7 @@ interface UseAgentStreamReturn {
   isStreaming: boolean;
   result: FetchResult | null;
   error: string | null;
-  startStream: (dataSources: DataSources, searchMode: string) => void;
+  startStream: (dataSources: DataSources, searchMode: string) => Promise<void>;
   reset: () => void;
 }
 
@@ -85,16 +86,21 @@ export function useAgentStream(): UseAgentStreamReturn {
   }, []);
 
   const startStream = useCallback(
-    (dataSources: DataSources, searchMode: string) => {
+    async (dataSources: DataSources, searchMode: string) => {
       reset();
       setIsStreaming(true);
 
       const ctrl = new AbortController();
       abortRef.current = ctrl;
 
+      const token = await getAuthToken();
+
       fetchEventSource(`${BASE}/papers/review`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           data_sources: dataSources,
           search_mode: searchMode,

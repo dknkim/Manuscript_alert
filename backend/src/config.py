@@ -18,6 +18,12 @@ class AppConfig(BaseSettings):
     database_url: str = ""
     anthropic_api_key: str = ""
     pinecone_api_key: str = ""
+    # Step 3: Clerk auth — paste your JWKS URL from Clerk dashboard → API Keys → Advanced
+    clerk_jwks_url: str = ""
+    # Step 5: CORS — comma-separated list of allowed origins in production
+    # e.g. "https://your-app.vercel.app,https://your-app.onrender.com"
+    # Defaults to localhost for local dev.
+    allowed_origins: str = "http://localhost:3000,http://localhost:8000"
 
     model_config = SettingsConfigDict(
         env_file=".env",

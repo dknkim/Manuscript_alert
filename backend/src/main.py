@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import subprocess
+from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import AsyncGenerator
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,17 +19,32 @@ from backend.src.api.v1 import kb as v1_kb
 from backend.src.api.v1 import models as v1_models
 from backend.src.api.v1 import papers as v1_papers
 from backend.src.api.v1 import settings as v1_settings
-from backend.src.config import DIST_DIR, FRONTEND_DIR
+from backend.src.config import DIST_DIR, FRONTEND_DIR, get_app_config
+
+
+# ---------------------------------------------------------------------------
+# Lifespan — DB pool init/close
+# ---------------------------------------------------------------------------
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
+    from backend.src.db import neon
+
+    pool = await neon.create_pool()
+    if pool:
+        await neon.bootstrap(pool)
+        await neon.migrate_local_data(pool)
+    yield
+    await neon.close_pool()
 
 
 # ---------------------------------------------------------------------------
 # App
 # ---------------------------------------------------------------------------
-app: FastAPI = FastAPI(title="Manuscript Alert System API")
+app: FastAPI = FastAPI(title="Manuscript Alert System API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=get_app_config().allowed_origins.split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

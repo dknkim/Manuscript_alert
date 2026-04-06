@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Settings, Database, BookOpen, Moon, Sun } from "lucide-react";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
+
+const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 const NAV_ITEMS = [
   { href: "/", label: "Papers", icon: FileText },
@@ -12,6 +15,13 @@ const NAV_ITEMS = [
   { href: "/settings", label: "Settings", icon: Settings },
   { href: "/kb", label: "Knowledge Base", icon: BookOpen, disabled: true },
 ] as const;
+
+/** Only mounted when ClerkProvider is present — safe to call useAuth() here. */
+function UserAvatar() {
+  const { isSignedIn } = useAuth();
+  if (!isSignedIn) return null;
+  return <UserButton />;
+}
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -84,6 +94,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               >
                 {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
+              {hasClerk && <UserAvatar />}
             </div>
           </div>
         </div>

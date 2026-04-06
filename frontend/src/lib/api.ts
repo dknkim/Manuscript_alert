@@ -10,14 +10,34 @@ import type {
 
 const BASE: string = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
+/* ── Auth token injection ─────────────────────────────────── */
+
+type TokenGetter = () => Promise<string | null>;
+let _getToken: TokenGetter | null = null;
+
+/** Called once by ClerkTokenProvider after Clerk initializes. */
+export function initClerkTokenGetter(fn: TokenGetter) {
+  _getToken = fn;
+}
+
+/** Returns the current Clerk JWT, or null if auth is not configured. */
+export async function getAuthToken(): Promise<string | null> {
+  return _getToken ? _getToken() : null;
+}
+
 /* ── helpers ──────────────────────────────────────────────── */
 
 async function request(
   url: string,
   options: RequestInit = {},
 ): Promise<Response> {
+  const token = await getAuthToken();
   const res = await fetch(`${BASE}${url}`, {
-    headers: { "Content-Type": "application/json", ...options.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string>),
+    },
     ...options,
   });
   if (!res.ok) {

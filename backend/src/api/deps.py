@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import asyncpg
+
 from backend.src.config import (
     ARCHIVE_DIR,
     MODELS_DIR,
@@ -55,3 +57,9 @@ def get_models_dir() -> Path:
 
 def get_archive_dir() -> Path:
     return ARCHIVE_DIR
+
+
+def get_db_pool() -> asyncpg.Pool | None:
+    """Return the Neon connection pool, or None if DATABASE_URL is not set."""
+    from backend.src.db.neon import get_pool
+    return get_pool()

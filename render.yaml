@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: manuscript-alert-api
+    runtime: python
+    pythonVersion: "3.11.0"
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.src.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+
+    envVars:
+      # ── Required ─────────────────────────────────────────────────────────────
+      # Neon database connection string (Neon dashboard → Connect)
+      - key: DATABASE_URL
+        sync: false
+
+      # Comma-separated list of allowed frontend origins
+      # e.g. https://your-app.vercel.app (fill in after Vercel deploy)
+      - key: ALLOWED_ORIGINS
+        sync: false
+
+      # ── Clerk auth (Step 3) ──────────────────────────────────────────────────
+      # Clerk dashboard → API Keys → Advanced → JWKS URL
+      - key: CLERK_JWKS_URL
+        sync: false
+      # Clerk dashboard → API Keys → Secret key (starts with sk_)
+      - key: CLERK_SECRET_KEY
+        sync: false
+
+      # ── Future steps (leave blank for now) ──────────────────────────────────
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY
+        sync: false
