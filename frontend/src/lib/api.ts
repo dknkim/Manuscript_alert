@@ -15,13 +15,23 @@ const BASE: string = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 type TokenGetter = () => Promise<string | null>;
 let _getToken: TokenGetter | null = null;
 
+// Resolves when ClerkTokenProvider registers the getter (i.e. Clerk is loaded).
+// API calls wait on this so they never fire before the token is available.
+let _clerkReady: Promise<void>;
+let _clerkReadyResolve: (() => void) | null = null;
+_clerkReady = new Promise<void>((res) => { _clerkReadyResolve = res; });
+
 /** Called once by ClerkTokenProvider after Clerk initializes. */
 export function initClerkTokenGetter(fn: TokenGetter) {
   _getToken = fn;
+  _clerkReadyResolve?.();
 }
 
 /** Returns the current Clerk JWT, or null if auth is not configured. */
 export async function getAuthToken(): Promise<string | null> {
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return null;
+  // Wait for Clerk to initialize (typically <300 ms), with a 5 s safety timeout.
+  await Promise.race([_clerkReady, new Promise<void>((r) => setTimeout(r, 5000))]);
   return _getToken ? _getToken() : null;
 }
 
