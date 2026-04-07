@@ -1,5 +1,5 @@
 # Manuscript Alert System for AD and Neuroimaging
-
+## We are actively working on this project. Please find "local_v1" branch for the local version 
 A local web application that helps researchers stay updated with the latest papers in Alzheimer's disease and neuroimaging from PubMed, arXiv, bioRxiv, and medRxiv.
 
 ---
