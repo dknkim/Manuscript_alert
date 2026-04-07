@@ -29,7 +29,7 @@ def _get_jwks_client() -> PyJWKClient | None:
     return _jwks_client
 
 
-def get_current_user_id(
+async def get_current_user_id(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer),
 ) -> str | None:
     """
