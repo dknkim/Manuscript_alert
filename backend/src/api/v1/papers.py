@@ -30,6 +30,7 @@ from backend.src.services.paper_service import (
 )
 from backend.src.services.settings_service import SettingsService
 
+
 router = APIRouter(prefix="/api/v1/papers", tags=["papers"])
 
 SettingsSvc = Annotated[SettingsService, Depends(get_settings_service)]
@@ -40,21 +41,28 @@ _fetch_cache: dict[str, Any] | None = None
 
 
 @router.post("/fetch")
-async def fetch_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: CurrentUser) -> dict[str, Any]:
+async def fetch_papers(
+    req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: CurrentUser
+) -> dict[str, Any]:
     global _fetch_cache
     settings: dict[str, Any] = (
-        (await db.get_settings(pool, user) if pool else None) or svc.load_settings()
-    )
+        await db.get_settings(pool, user) if pool else None
+    ) or svc.load_settings()
     papers, errors = fetch_and_rank(settings, req.data_sources, req.search_mode)
 
     must_have: list[str] = settings.get("must_have_keywords", [])
     filtered: list[dict[str, Any]] = [
-        p for p in papers
+        p
+        for p in papers
         if len(p["matched_keywords"]) >= 2
         and (not must_have or any(mk in p["matched_keywords"] for mk in must_have))
     ]
 
-    _fetch_cache = {"data_sources": req.data_sources, "search_mode": req.search_mode, "filtered": filtered}
+    _fetch_cache = {
+        "data_sources": req.data_sources,
+        "search_mode": req.search_mode,
+        "filtered": filtered,
+    }
 
     return {
         "papers": filtered[:50],
@@ -66,11 +74,13 @@ async def fetch_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: 
 
 
 @router.post("/review")
-async def review_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: CurrentUser) -> EventSourceResponse:
+async def review_papers(
+    req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: CurrentUser
+) -> EventSourceResponse:
     """SSE endpoint — streams progress events during fetch and rank."""
     settings: dict[str, Any] = (
-        (await db.get_settings(pool, user) if pool else None) or svc.load_settings()
-    )
+        await db.get_settings(pool, user) if pool else None
+    ) or svc.load_settings()
 
     async def event_generator() -> AsyncGenerator[dict[str, str], None]:
         async for evt in fetch_and_rank_with_progress(settings, req.data_sources, req.search_mode):
@@ -80,7 +90,9 @@ async def review_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user:
 
 
 @router.post("/export")
-async def export_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: CurrentUser) -> StreamingResponse:
+async def export_papers(
+    req: FetchRequest, svc: SettingsSvc, pool: DBPool, user: CurrentUser
+) -> StreamingResponse:
     global _fetch_cache
     if (
         _fetch_cache is not None
@@ -90,12 +102,13 @@ async def export_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user:
         filtered = _fetch_cache["filtered"]
     else:
         settings: dict[str, Any] = (
-            (await db.get_settings(pool, user) if pool else None) or svc.load_settings()
-        )
+            await db.get_settings(pool, user) if pool else None
+        ) or svc.load_settings()
         papers, _ = fetch_and_rank(settings, req.data_sources, req.search_mode)
         must_have: list[str] = settings.get("must_have_keywords", [])
         filtered = [
-            p for p in papers
+            p
+            for p in papers
             if len(p["matched_keywords"]) >= 2
             and (not must_have or any(mk in p["matched_keywords"] for mk in must_have))
         ]
@@ -106,12 +119,18 @@ async def export_papers(req: FetchRequest, svc: SettingsSvc, pool: DBPool, user:
     return StreamingResponse(
         iter([buf.getvalue()]),
         media_type="text/csv",
-        headers={"Content-Disposition": f"attachment; filename=papers_{datetime.now().strftime('%Y%m%d')}.csv"},
+        headers={
+            "Content-Disposition": (
+                f"attachment; filename=papers_{datetime.now().strftime('%Y%m%d')}.csv"
+            )
+        },
     )
 
 
 @router.post("/archive")
-async def archive_paper(req: ArchivePaperRequest, pool: DBPool, user: CurrentUser) -> StatusResponse:
+async def archive_paper(
+    req: ArchivePaperRequest, pool: DBPool, user: CurrentUser
+) -> StatusResponse:
     if pool is not None:
         status = await db.archive_paper(pool, req.paper, user)
         return StatusResponse(status=status)
@@ -140,7 +159,9 @@ async def list_archived_papers(pool: DBPool, user: CurrentUser) -> dict[str, Any
 
 
 @router.delete("/archive")
-async def unarchive_paper(req: UnarchivePaperRequest, pool: DBPool, user: CurrentUser) -> StatusResponse:
+async def unarchive_paper(
+    req: UnarchivePaperRequest, pool: DBPool, user: CurrentUser
+) -> StatusResponse:
     if pool is not None:
         found = await db.unarchive_paper(pool, req.title, user)
         if not found:

@@ -11,6 +11,7 @@ from jwt import PyJWKClient, PyJWKClientError
 
 from backend.src.config import get_app_config
 
+
 _jwks_client: PyJWKClient | None = None
 _jwks_client_url: str = ""
 
@@ -64,6 +65,7 @@ async def get_current_user_id(
         # Clerk includes the email in the JWT; fall back to a unique placeholder if absent.
         from backend.src.db import models as db_models
         from backend.src.db.neon import get_pool
+
         pool = get_pool()
         if pool is not None:
             email: str = payload.get("email") or f"{user_id}@clerk"

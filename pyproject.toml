@@ -1,6 +1,6 @@
 [tool.ruff]
 # Line length
-line-length = 88
+line-length = 100
 
 # Python version target
 target-version = "py311"
@@ -30,7 +30,9 @@ select = [
 ]
 
 # Ignore specific rules
-ignore = []
+ignore = [
+    "B008",  # FastAPI Depends() in default arguments is intentional
+]
 
 # Always fix these issues automatically
 fixable = ["ALL"]

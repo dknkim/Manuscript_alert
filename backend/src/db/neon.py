@@ -10,6 +10,7 @@ import asyncpg
 
 from backend.src.config import ARCHIVE_DIR, MODELS_DIR, get_app_config
 
+
 if TYPE_CHECKING:
     pass
 
@@ -129,10 +130,9 @@ async def _migrate_settings(pool: asyncpg.Pool) -> None:
     # Load from local settings.py via SettingsService
     try:
         from backend.src.services.settings_service import SettingsService
+
         data = SettingsService().load_settings()
-        await pool.execute(
-            "INSERT INTO settings (user_id, data) VALUES (NULL, $1)", data
-        )
+        await pool.execute("INSERT INTO settings (user_id, data) VALUES (NULL, $1)", data)
         logger.info("Migrated local settings.py → settings table")
     except Exception as exc:
         logger.warning(f"Could not migrate settings: {exc}")
@@ -144,6 +144,7 @@ async def _migrate_model_presets(pool: asyncpg.Pool) -> None:
         return
 
     import os
+
     if not MODELS_DIR.exists():
         return
     migrated = 0
@@ -156,7 +157,8 @@ async def _migrate_model_presets(pool: asyncpg.Pool) -> None:
                 data = json.load(fh)
             await pool.execute(
                 "INSERT INTO model_presets (user_id, name, data) VALUES (NULL, $1, $2)",
-                name, data,
+                name,
+                data,
             )
             migrated += 1
         except Exception as exc:
@@ -180,7 +182,8 @@ async def _migrate_archive(pool: asyncpg.Pool) -> None:
         for _date, papers in archive.items():
             for paper in papers:
                 await pool.execute(
-                    "INSERT INTO papers (user_id, title, source, archived, data) VALUES (NULL, $1, $2, true, $3)",
+                    "INSERT INTO papers (user_id, title, source, archived, data)"
+                    " VALUES (NULL, $1, $2, true, $3)",
                     paper.get("title", ""),
                     paper.get("source"),
                     paper,
