@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  PLAYWRIGHT_BASE_URL: http://localhost:8000
+  PLAYWRIGHT_BASE_URL: http://localhost:3000
 
 jobs:
   test:
@@ -53,20 +53,28 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: frontend
+        env:
+          # Bake the backend API URL into the bundle so E2E tests can reach it.
+          NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
 
       # E2E (visual regression is opt-in: VR=1)
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
         working-directory: frontend
 
-      - name: Start backend server
-        run: python server.py &
+      - name: Start backend
+        run: uvicorn backend.src.main:app --host 0.0.0.0 --port 8000 &
 
-      - name: Wait for server
+      - name: Start frontend server
+        run: npx next start -p 3000 &
+        working-directory: frontend
+
+      - name: Wait for servers
         run: |
-          for i in $(seq 1 10); do
-            curl -s $PLAYWRIGHT_BASE_URL/api/health && break
-            sleep 1
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/api/health && \
+            curl -sf http://localhost:3000 && break
+            sleep 2
           done
 
       - name: E2E tests
