@@ -13,6 +13,7 @@ from backend.src.db import models as db
 from backend.src.models.schemas import SaveSettingsRequest, StatusResponse
 from backend.src.services.settings_service import SettingsService
 
+
 router = APIRouter(prefix="/api/v1", tags=["settings"])
 
 SettingsSvc = Annotated[SettingsService, Depends(get_settings_service)]

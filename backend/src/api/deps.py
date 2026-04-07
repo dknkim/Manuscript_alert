@@ -62,4 +62,5 @@ def get_archive_dir() -> Path:
 def get_db_pool() -> asyncpg.Pool | None:
     """Return the Neon connection pool, or None if DATABASE_URL is not set."""
     from backend.src.db.neon import get_pool
+
     return get_pool()

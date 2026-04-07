@@ -58,9 +58,7 @@ class KeywordMatcher:
                 matched_keywords.append(keyword)
                 keyword_counts[keyword] = matches
 
-        relevance_score: float = self._calculate_score(
-            keyword_counts, paper, keyword_scoring
-        )
+        relevance_score: float = self._calculate_score(keyword_counts, paper, keyword_scoring)
 
         result: tuple[float, list[str]] = (relevance_score, matched_keywords)
         self._score_cache[cache_key] = result
@@ -106,9 +104,7 @@ class KeywordMatcher:
         if pattern_key not in self._compiled_patterns:
             flags: int = 0 if self.case_sensitive else re.IGNORECASE
             if " " in search_keyword:
-                self._compiled_patterns[pattern_key] = re.compile(
-                    re.escape(search_keyword), flags
-                )
+                self._compiled_patterns[pattern_key] = re.compile(re.escape(search_keyword), flags)
             else:
                 self._compiled_patterns[pattern_key] = re.compile(
                     r"\b" + re.escape(search_keyword) + r"\b", flags
@@ -138,12 +134,8 @@ class KeywordMatcher:
         medium_priority_boost: float = 1.2
 
         if keyword_scoring:
-            high_priority_config: dict[str, object] = keyword_scoring.get(
-                "high_priority", {}
-            )  # type: ignore[assignment]
-            medium_priority_config: dict[str, object] = keyword_scoring.get(
-                "medium_priority", {}
-            )  # type: ignore[assignment]
+            high_priority_config: dict[str, object] = keyword_scoring.get("high_priority", {})  # type: ignore[assignment]
+            medium_priority_config: dict[str, object] = keyword_scoring.get("medium_priority", {})  # type: ignore[assignment]
             high_priority_keywords = set(
                 high_priority_config.get("keywords", [])  # type: ignore[arg-type]
             )
@@ -200,9 +192,7 @@ class KeywordMatcher:
                 else:
                     keyword_bonus += 0.5
 
-        final_score: float = (
-            base_score + occurrence_bonus + (title_bonus * 0.2) + keyword_bonus
-        )
+        final_score: float = base_score + occurrence_bonus + (title_bonus * 0.2) + keyword_bonus
         return round(final_score, 1)
 
     def search_papers(

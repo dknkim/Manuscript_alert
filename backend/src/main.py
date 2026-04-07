@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import subprocess
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncGenerator
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -78,9 +78,7 @@ if DIST_DIR.exists():
 
 
 @app.api_route("/{full_path:path}", methods=["GET", "HEAD"], response_model=None)
-async def serve_frontend(
-    request: Request, full_path: str
-) -> FileResponse | dict[str, str]:
+async def serve_frontend(request: Request, full_path: str) -> FileResponse | dict[str, str]:
     """Serve the Next.js SPA — any non-API route returns index.html.
 
     HEAD support is needed for Next.js Link prefetching.

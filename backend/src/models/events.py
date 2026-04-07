@@ -36,9 +36,7 @@ def source_error(source: str, error: str) -> dict[str, Any]:
     return {"event": "source_error", "data": {"source": source, "error": error}}
 
 
-def batch_progress(
-    source: str, batch: int, total: int, papers_so_far: int
-) -> dict[str, Any]:
+def batch_progress(source: str, batch: int, total: int, papers_so_far: int) -> dict[str, Any]:
     return {
         "event": "batch_progress",
         "data": {

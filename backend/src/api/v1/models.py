@@ -17,6 +17,7 @@ from backend.src.db import models as db
 from backend.src.models.schemas import SaveModelRequest, StatusResponse
 from backend.src.services.settings_service import SettingsService
 
+
 router = APIRouter(prefix="/api/v1/models", tags=["models"])
 
 ModelsDir = Annotated[Path, Depends(get_models_dir)]
@@ -25,7 +26,9 @@ DBPool = Annotated[asyncpg.Pool | None, Depends(get_db_pool)]
 
 
 @router.get("")
-async def list_models(models_dir: ModelsDir, pool: DBPool, user: CurrentUser) -> list[dict[str, str]]:
+async def list_models(
+    models_dir: ModelsDir, pool: DBPool, user: CurrentUser
+) -> list[dict[str, str]]:
     if pool is not None:
         return await db.list_model_presets(pool, user)
     # File-based fallback
@@ -35,11 +38,13 @@ async def list_models(models_dir: ModelsDir, pool: DBPool, user: CurrentUser) ->
         if f.endswith(".json"):
             path = os.path.join(models_dir, f)
             mod_time = os.path.getmtime(path)
-            result.append({
-                "name": f.replace(".json", "").replace("_", " "),
-                "filename": f,
-                "modified": datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M"),
-            })
+            result.append(
+                {
+                    "name": f.replace(".json", "").replace("_", " "),
+                    "filename": f,
+                    "modified": datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M"),
+                }
+            )
     return result
 
 
@@ -92,7 +97,9 @@ async def load_model(
 
 
 @router.get("/{filename}/preview")
-async def preview_model(filename: str, models_dir: ModelsDir, pool: DBPool, user: CurrentUser) -> dict[str, Any]:
+async def preview_model(
+    filename: str, models_dir: ModelsDir, pool: DBPool, user: CurrentUser
+) -> dict[str, Any]:
     db_name = filename.replace(".json", "")
 
     if pool is not None:
@@ -110,7 +117,9 @@ async def preview_model(filename: str, models_dir: ModelsDir, pool: DBPool, user
 
 
 @router.delete("/{filename}")
-async def delete_model(filename: str, models_dir: ModelsDir, pool: DBPool, user: CurrentUser) -> StatusResponse:
+async def delete_model(
+    filename: str, models_dir: ModelsDir, pool: DBPool, user: CurrentUser
+) -> StatusResponse:
     db_name = filename.replace(".json", "")
 
     if pool is not None:

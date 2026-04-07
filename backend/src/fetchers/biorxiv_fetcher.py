@@ -64,9 +64,7 @@ class BioRxivFetcher:
         try:
             start_str: str = start_date.strftime("%Y-%m-%d")
             end_str: str = end_date.strftime("%Y-%m-%d")
-            base_url: str = (
-                self.biorxiv_base_url if server == "biorxiv" else self.medrxiv_base_url
-            )
+            base_url: str = self.biorxiv_base_url if server == "biorxiv" else self.medrxiv_base_url
             api_url = f"{base_url}/{start_str}/{end_str}"
             if on_step:
                 on_step(f"Querying API for {start_str} to {end_str}")
@@ -81,8 +79,7 @@ class BioRxivFetcher:
                 raw_papers: list[dict[str, str]] = data["collection"]  # type: ignore[assignment]
                 if on_step:
                     on_step(
-                        f"{total_available:,} papers in date range"
-                        f" · {len(raw_papers)} returned"
+                        f"{total_available:,} papers in date range · {len(raw_papers)} returned"
                     )
                 if brief_mode:
                     max_results = 500
@@ -94,9 +91,7 @@ class BioRxivFetcher:
                     if i >= max_results:
                         break
                     if self._paper_matches_keywords(paper, keywords):
-                        processed_paper: dict[str, object] = self._process_paper(
-                            paper, server
-                        )
+                        processed_paper: dict[str, object] = self._process_paper(paper, server)
                         papers.append(processed_paper)
                 if on_step:
                     on_step(f"{len(papers)} matched keywords")
@@ -109,15 +104,9 @@ class BioRxivFetcher:
                     f"{len(papers)} matched keywords"
                 )
         except requests.RequestException as e:
-            if (
-                hasattr(e, "response")
-                and e.response is not None
-                and e.response.status_code == 429
-            ):
+            if hasattr(e, "response") and e.response is not None and e.response.status_code == 429:
                 self.consecutive_rate_limits += 1
-                logger.warning(
-                    f"Rate limited by {server} (#{self.consecutive_rate_limits}): {e}"
-                )
+                logger.warning(f"Rate limited by {server} (#{self.consecutive_rate_limits}): {e}")
             else:
                 logger.error(f"Error fetching papers from {server}: {e}")
             if api_url:
@@ -130,9 +119,7 @@ class BioRxivFetcher:
             raise
         return papers
 
-    def _paper_matches_keywords(
-        self, paper: dict[str, str], keywords: list[str]
-    ) -> bool:
+    def _paper_matches_keywords(self, paper: dict[str, str], keywords: list[str]) -> bool:
         """Check if a paper matches any of the given keywords."""
         if not keywords:
             return True
@@ -204,9 +191,7 @@ class BioRxivFetcher:
         current_time: float = time.time()
         time_since_last: float = current_time - self.last_request_time
 
-        adjusted_delay: float = self.rate_limit_delay * (
-            1 + self.consecutive_rate_limits * 0.5
-        )
+        adjusted_delay: float = self.rate_limit_delay * (1 + self.consecutive_rate_limits * 0.5)
 
         if time_since_last < adjusted_delay:
             sleep_time: float = adjusted_delay - time_since_last

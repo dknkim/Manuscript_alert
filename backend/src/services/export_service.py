@@ -67,9 +67,7 @@ class ExportService:
 
         for _, paper in papers_df.iterrows():
             first_author: str = (
-                paper["authors"].split(",")[0].split()[-1]
-                if paper["authors"]
-                else "Unknown"
+                paper["authors"].split(",")[0].split()[-1] if paper["authors"] else "Unknown"
             )
             year: str = paper["published"][:4] if paper["published"] else "YYYY"
             title_word: str = paper["title"].split()[0] if paper["title"] else "Paper"

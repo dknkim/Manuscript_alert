@@ -25,9 +25,7 @@ def is_journal_excluded(journal_name: str, settings: dict[str, Any]) -> bool:
     if not journal_name:
         return False
     journal_lower: str = journal_name.lower()
-    exclusion_patterns: list[str] | dict[str, list[str]] = settings.get(
-        "journal_exclusions", []
-    )
+    exclusion_patterns: list[str] | dict[str, list[str]] = settings.get("journal_exclusions", [])
     if isinstance(exclusion_patterns, list):
         for pattern in exclusion_patterns:
             if pattern.lower() in journal_lower:
@@ -127,9 +125,7 @@ def fetch_and_rank(
 
     errors: list[str] = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        futures = [
-            executor.submit(fn) for fn in (_fetch_arxiv, _fetch_biorxiv, _fetch_pubmed)
-        ]
+        futures = [executor.submit(fn) for fn in (_fetch_arxiv, _fetch_biorxiv, _fetch_pubmed)]
         for future in concurrent.futures.as_completed(futures):
             rtype, rdata = future.result()
             if rtype.endswith("_error"):
@@ -164,9 +160,7 @@ def fetch_and_rank(
                     "specific": 5.0,
                 }
                 relevance_score += base_boosts.get(match_type, 0)
-                boosts: dict[str, float] = journal_scoring.get(
-                    "high_impact_journal_boost", {}
-                )
+                boosts: dict[str, float] = journal_scoring.get("high_impact_journal_boost", {})
                 n: int = len(matched_keywords)
                 if n >= 5:
                     relevance_score += boosts.get("5_or_more_keywords", 5.1)
@@ -181,9 +175,7 @@ def fetch_and_rank(
 
         authors: list[str] | str = paper.get("authors", [])
         if isinstance(authors, list):
-            authors_str: str = ", ".join(authors[:3]) + (
-                "..." if len(authors) > 3 else ""
-            )
+            authors_str: str = ", ".join(authors[:3]) + ("..." if len(authors) > 3 else "")
         else:
             authors_str = str(authors)
 
@@ -444,9 +436,7 @@ def _rank_papers(
 
     ranked: list[dict[str, Any]] = []
     for paper in all_papers:
-        score, matched = keyword_matcher.calculate_relevance(
-            paper, keywords, keyword_scoring
-        )
+        score, matched = keyword_matcher.calculate_relevance(paper, keywords, keyword_scoring)
 
         if (
             paper.get("source") == "PubMed"

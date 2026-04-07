@@ -36,9 +36,7 @@ class SettingsService:
             import importlib.util
 
             logger.debug(f"Loading settings from: {self.settings_file}")
-            spec = importlib.util.spec_from_file_location(
-                "settings", self.settings_file
-            )
+            spec = importlib.util.spec_from_file_location("settings", self.settings_file)
             settings_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(settings_module)
 
@@ -50,9 +48,7 @@ class SettingsService:
                 "keyword_scoring": settings_module.KEYWORD_SCORING,
                 "search_settings": settings_module.DEFAULT_SEARCH_SETTINGS,
                 "ui_settings": settings_module.UI_SETTINGS,
-                "must_have_keywords": getattr(
-                    settings_module, "MUST_HAVE_KEYWORDS", []
-                ),
+                "must_have_keywords": getattr(settings_module, "MUST_HAVE_KEYWORDS", []),
             }
 
             kw_count = len(settings_dict["keywords"])
@@ -241,17 +237,13 @@ class SettingsService:
         replacement = f"DEFAULT_KEYWORDS = {keywords_str}"
         return re.sub(pattern, replacement, content, flags=re.DOTALL)
 
-    def _update_journal_scoring(
-        self, content: str, journal_scoring: dict[str, Any]
-    ) -> str:
+    def _update_journal_scoring(self, content: str, journal_scoring: dict[str, Any]) -> str:
         """Update the JOURNAL_SCORING section"""
         scoring_str = self._dict_to_python_string(journal_scoring, "JOURNAL_SCORING")
         pattern = r"JOURNAL_SCORING = \{.*?\}"
         return re.sub(pattern, scoring_str, content, flags=re.DOTALL)
 
-    def _update_target_journals(
-        self, content: str, target_journals: dict[str, list[str]]
-    ) -> str:
+    def _update_target_journals(self, content: str, target_journals: dict[str, list[str]]) -> str:
         """Update the TARGET_JOURNALS section"""
         journals_str = self._dict_to_python_string(target_journals, "TARGET_JOURNALS")
         pattern = r"TARGET_JOURNALS = \{.*?\}"
@@ -260,9 +252,7 @@ class SettingsService:
     def _update_journal_exclusions(self, content: str, exclusions: list[str]) -> str:
         """Update the JOURNAL_EXCLUSIONS section"""
         # Create a simple list format
-        exclusions_str = (
-            "[\n" + "\n".join([f'    "{ex}",' for ex in exclusions]) + "\n]"
-        )
+        exclusions_str = "[\n" + "\n".join([f'    "{ex}",' for ex in exclusions]) + "\n]"
 
         # Use a more specific pattern to match JOURNAL_EXCLUSIONS
         pattern = r"JOURNAL_EXCLUSIONS = \[.*?\]"
@@ -298,21 +288,15 @@ class SettingsService:
 
         return content
 
-    def _update_keyword_scoring(
-        self, content: str, keyword_scoring: dict[str, Any]
-    ) -> str:
+    def _update_keyword_scoring(self, content: str, keyword_scoring: dict[str, Any]) -> str:
         """Update the KEYWORD_SCORING section"""
         scoring_str = self._dict_to_python_string(keyword_scoring, "KEYWORD_SCORING")
         pattern = r"KEYWORD_SCORING = \{.*?\}"
         return re.sub(pattern, scoring_str, content, flags=re.DOTALL)
 
-    def _update_search_settings(
-        self, content: str, search_settings: dict[str, Any]
-    ) -> str:
+    def _update_search_settings(self, content: str, search_settings: dict[str, Any]) -> str:
         """Update the DEFAULT_SEARCH_SETTINGS section"""
-        settings_str = self._dict_to_python_string(
-            search_settings, "DEFAULT_SEARCH_SETTINGS"
-        )
+        settings_str = self._dict_to_python_string(search_settings, "DEFAULT_SEARCH_SETTINGS")
         pattern = r"DEFAULT_SEARCH_SETTINGS = \{.*?\}"
         return re.sub(pattern, settings_str, content, flags=re.DOTALL)
 
@@ -423,13 +407,9 @@ UI_SETTINGS = {ui_settings}
         keywords_str = self._format_list(settings.get("keywords", []))
         journal_scoring_str = self._format_dict(settings.get("journal_scoring", {}))
         target_journals_str = self._format_dict(settings.get("target_journals", {}))
-        journal_exclusions_str = self._format_list(
-            settings.get("journal_exclusions", [])
-        )
+        journal_exclusions_str = self._format_list(settings.get("journal_exclusions", []))
         keyword_scoring_str = self._format_dict(settings.get("keyword_scoring", {}))
-        must_have_keywords_str = self._format_list(
-            settings.get("must_have_keywords", [])
-        )
+        must_have_keywords_str = self._format_list(settings.get("must_have_keywords", []))
         search_settings_str = self._format_dict(settings.get("search_settings", {}))
         ui_settings_str = self._format_dict(settings.get("ui_settings", {}))
 

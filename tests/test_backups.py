@@ -54,7 +54,5 @@ def test_delete_backup(client: TestClient) -> None:
 
 
 def test_delete_backup_not_found(client: TestClient) -> None:
-    resp = client.request(
-        "DELETE", "/api/backups", json={"path": "/tmp/nonexistent.py"}
-    )
+    resp = client.request("DELETE", "/api/backups", json={"path": "/tmp/nonexistent.py"})
     assert resp.status_code == 404

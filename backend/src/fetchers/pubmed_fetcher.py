@@ -105,9 +105,7 @@ class PubMedFetcher:
             count_root: ET.Element = ET.fromstring(count_response.content)
             count_elem: ET.Element | None = count_root.find("Count")
             total_count: int = (
-                int(count_elem.text)
-                if count_elem is not None and count_elem.text
-                else 0
+                int(count_elem.text) if count_elem is not None and count_elem.text else 0
             )
             self._last_total_count = total_count
             logger.info(f"Found {total_count} total papers in PubMed")
@@ -143,9 +141,7 @@ class PubMedFetcher:
         }
         try:
             logger.info("Making PubMed search request...")
-            response: requests.Response = requests.get(
-                self.search_url, params=params, timeout=10
-            )
+            response: requests.Response = requests.get(self.search_url, params=params, timeout=10)
             response.raise_for_status()
             logger.info("PubMed search response received")
             root: ET.Element = ET.fromstring(response.content)
@@ -172,16 +168,12 @@ class PubMedFetcher:
         keyword_queries: list[str] = []
         for keyword in keywords:
             _escaped_keyword: str = quote(keyword)
-            keyword_query: str = (
-                f'("{keyword}"[Title/Abstract] OR "{keyword}"[MeSH Terms])'
-            )
+            keyword_query: str = f'("{keyword}"[Title/Abstract] OR "{keyword}"[MeSH Terms])'
             keyword_queries.append(keyword_query)
         combined_query: str = " OR ".join(keyword_queries)
         start_str: str = start_date.strftime("%Y/%m/%d")
         end_str: str = end_date.strftime("%Y/%m/%d")
-        date_query: str = (
-            f'("{start_str}"[Date - Publication] : "{end_str}"[Date - Publication])'
-        )
+        date_query: str = f'("{start_str}"[Date - Publication] : "{end_str}"[Date - Publication])'
         full_query: str = f"({combined_query}) AND {date_query}"
         return full_query
 
@@ -205,8 +197,7 @@ class PubMedFetcher:
             batch_num: int = (i // batch_size) + 1
             batch_ids: list[str] = paper_ids[i : i + batch_size]
             logger.info(
-                f"Processing batch {batch_num}/{total_batches} "
-                f"({len(batch_ids)} papers)..."
+                f"Processing batch {batch_num}/{total_batches} ({len(batch_ids)} papers)..."
             )
             id_string: str = ",".join(batch_ids)
             params: dict[str, str] = {
@@ -232,9 +223,7 @@ class PubMedFetcher:
 
                     if self.consecutive_rate_limits > 0:
                         logger.info("Successful request - resetting rate limit counter")
-                        self.consecutive_rate_limits = max(
-                            0, self.consecutive_rate_limits - 1
-                        )
+                        self.consecutive_rate_limits = max(0, self.consecutive_rate_limits - 1)
                     logger.info(
                         f"Batch {batch_num}/{total_batches} completed - "
                         f"got {len(batch_papers)} papers (total: {len(all_papers)})"
@@ -248,9 +237,7 @@ class PubMedFetcher:
                         self.last_rate_limit_time = time.time()
                         base_wait: float = self.rate_limit_delay * (2**retry) * 2
                         jitter: float = (
-                            base_wait
-                            * 0.1
-                            * (0.5 + (hash(str(time.time())) % 100) / 100)
+                            base_wait * 0.1 * (0.5 + (hash(str(time.time())) % 100) / 100)
                         )
                         wait_time: float = base_wait + jitter
                         logger.warning(
@@ -260,10 +247,7 @@ class PubMedFetcher:
                         )
                         time.sleep(wait_time)
                     else:
-                        logger.error(
-                            f"HTTP error fetching PubMed batch "
-                            f"{i // batch_size + 1}: {e}"
-                        )
+                        logger.error(f"HTTP error fetching PubMed batch {i // batch_size + 1}: {e}")
                         break
                 except (
                     requests.exceptions.ConnectionError,
@@ -287,8 +271,7 @@ class PubMedFetcher:
                         break
                 except Exception as e:
                     logger.error(
-                        f"Unexpected error fetching PubMed batch "
-                        f"{i // batch_size + 1}: {e}"
+                        f"Unexpected error fetching PubMed batch {i // batch_size + 1}: {e}"
                     )
                     break
         return all_papers
@@ -326,18 +309,12 @@ class PubMedFetcher:
 
             # Title
             title_elem: ET.Element | None = article_elem.find("ArticleTitle")
-            paper["title"] = self._clean_text(
-                title_elem.text if title_elem is not None else ""
-            )
+            paper["title"] = self._clean_text(title_elem.text if title_elem is not None else "")
 
             # Abstract
-            abstract_elem: ET.Element | None = article_elem.find(
-                "Abstract/AbstractText"
-            )
+            abstract_elem: ET.Element | None = article_elem.find("Abstract/AbstractText")
             paper["abstract"] = (
-                self._clean_text(abstract_elem.text or "")
-                if abstract_elem is not None
-                else ""
+                self._clean_text(abstract_elem.text or "") if abstract_elem is not None else ""
             )
 
             # Authors
@@ -371,14 +348,8 @@ class PubMedFetcher:
                 if journal_issue is not None:
                     vol_elem: ET.Element | None = journal_issue.find("Volume")
                     issue_elem: ET.Element | None = journal_issue.find("Issue")
-                    volume = (
-                        vol_elem.text if vol_elem is not None and vol_elem.text else ""
-                    )
-                    issue = (
-                        issue_elem.text
-                        if issue_elem is not None and issue_elem.text
-                        else ""
-                    )
+                    volume = vol_elem.text if vol_elem is not None and vol_elem.text else ""
+                    issue = issue_elem.text if issue_elem is not None and issue_elem.text else ""
             if not journal_name:
                 medline_ta: ET.Element | None = medline_citation.find(
                     "MedlineJournalInfo/MedlineTA"
@@ -390,9 +361,7 @@ class PubMedFetcher:
             paper["issue"] = issue
 
             # Published date
-            pub_date: ET.Element | None = article_elem.find(
-                "Journal/JournalIssue/PubDate"
-            )
+            pub_date: ET.Element | None = article_elem.find("Journal/JournalIssue/PubDate")
             if pub_date is not None:
                 paper["published"] = self._parse_pubmed_date(pub_date)
             else:
@@ -409,9 +378,7 @@ class PubMedFetcher:
                 paper["arxiv_url"] = ""
 
             # DOI
-            doi_elem: ET.Element | None = article_elem.find(
-                './/ELocationID[@EIdType="doi"]'
-            )
+            doi_elem: ET.Element | None = article_elem.find('.//ELocationID[@EIdType="doi"]')
             paper["doi"] = doi_elem.text if doi_elem is not None else ""
 
             paper["source"] = "PubMed"
@@ -453,12 +420,8 @@ class PubMedFetcher:
                 if year_elem is not None and year_elem.text
                 else str(datetime.now().year)
             )
-            month_raw: str = (
-                month_elem.text if month_elem is not None and month_elem.text else "1"
-            )
-            day_raw: str = (
-                day_elem.text if day_elem is not None and day_elem.text else "1"
-            )
+            month_raw: str = month_elem.text if month_elem is not None and month_elem.text else "1"
+            day_raw: str = day_elem.text if day_elem is not None and day_elem.text else "1"
 
             month_map: dict[str, str] = {
                 "Jan": "1",
@@ -477,9 +440,7 @@ class PubMedFetcher:
             if month_raw in month_map:
                 month_raw = month_map[month_raw]
 
-            year: int = (
-                int(year_raw) if str(year_raw).isdigit() else datetime.now().year
-            )
+            year: int = int(year_raw) if str(year_raw).isdigit() else datetime.now().year
             month: int = int(month_raw) if str(month_raw).isdigit() else 1
             day: int = int(day_raw) if str(day_raw).isdigit() else 1
             if month > 12:
@@ -500,9 +461,7 @@ class PubMedFetcher:
         if self.consecutive_rate_limits > 0:
             time_since_rate_limit: float = current_time - self.last_rate_limit_time
             if time_since_rate_limit < self.cooldown_period:
-                adjusted_delay = self.rate_limit_delay * (
-                    1 + self.consecutive_rate_limits
-                )
+                adjusted_delay = self.rate_limit_delay * (1 + self.consecutive_rate_limits)
                 logger.info(
                     f"In cooldown period ({time_since_rate_limit:.1f}s/"
                     f"{self.cooldown_period}s), using {adjusted_delay:.2f}s delay"
@@ -531,9 +490,7 @@ class PubMedFetcher:
                 "tool": "scientific_alert_system",
                 "email": "research@example.com",
             }
-            response: requests.Response = requests.get(
-                self.search_url, params=params, timeout=10
-            )
+            response: requests.Response = requests.get(self.search_url, params=params, timeout=10)
             return response.status_code == 200
         except Exception:
             return False

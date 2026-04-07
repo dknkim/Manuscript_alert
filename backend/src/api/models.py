@@ -29,9 +29,7 @@ def list_models() -> list[dict[str, str]]:
                 {
                     "name": f.replace(".json", "").replace("_", " "),
                     "filename": f,
-                    "modified": datetime.fromtimestamp(mod_time).strftime(
-                        "%Y-%m-%d %H:%M"
-                    ),
+                    "modified": datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M"),
                 }
             )
     return models
@@ -41,9 +39,7 @@ def list_models() -> list[dict[str, str]]:
 def save_model(req: SaveModelRequest) -> dict[str, str]:
     """Save current settings as a named model."""
     os.makedirs(MODELS_DIR, exist_ok=True)
-    clean: str = "".join(
-        c for c in req.name if c.isalnum() or c in (" ", "-", "_")
-    ).rstrip()
+    clean: str = "".join(c for c in req.name if c.isalnum() or c in (" ", "-", "_")).rstrip()
     if not clean:
         raise HTTPException(status_code=400, detail="Invalid model name")
     path: str = os.path.join(MODELS_DIR, f"{clean.replace(' ', '_')}.json")

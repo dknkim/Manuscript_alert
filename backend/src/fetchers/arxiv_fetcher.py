@@ -55,14 +55,10 @@ class ArxivFetcher:
             on_step(f"Querying API with {len(keywords)} keywords")
 
         try:
-            response: requests.Response = requests.get(
-                self.base_url, params=params, timeout=10
-            )
+            response: requests.Response = requests.get(self.base_url, params=params, timeout=10)
             response.raise_for_status()
 
-            papers: list[dict[str, object]] = self._parse_arxiv_response(
-                response.content
-            )
+            papers: list[dict[str, object]] = self._parse_arxiv_response(response.content)
             if on_step:
                 on_step(f"{len(papers):,} results from API")
 
@@ -126,9 +122,7 @@ class ArxivFetcher:
 
                 # Title
                 title_elem: ET.Element | None = entry.find("atom:title", namespaces)
-                paper["title"] = self._clean_text(
-                    title_elem.text if title_elem is not None else ""
-                )
+                paper["title"] = self._clean_text(title_elem.text if title_elem is not None else "")
 
                 # Abstract
                 summary_elem: ET.Element | None = entry.find("atom:summary", namespaces)
@@ -138,21 +132,15 @@ class ArxivFetcher:
 
                 # Authors
                 authors: list[str] = []
-                author_elems: list[ET.Element] = entry.findall(
-                    "atom:author", namespaces
-                )
+                author_elems: list[ET.Element] = entry.findall("atom:author", namespaces)
                 for author_elem in author_elems:
-                    name_elem: ET.Element | None = author_elem.find(
-                        "atom:name", namespaces
-                    )
+                    name_elem: ET.Element | None = author_elem.find("atom:name", namespaces)
                     if name_elem is not None and name_elem.text:
                         authors.append(name_elem.text.strip())
                 paper["authors"] = authors
 
                 # Published date
-                published_elem: ET.Element | None = entry.find(
-                    "atom:published", namespaces
-                )
+                published_elem: ET.Element | None = entry.find("atom:published", namespaces)
                 if published_elem is not None and published_elem.text:
                     paper["published"] = self._parse_date(published_elem.text)
                 else:
@@ -177,9 +165,7 @@ class ArxivFetcher:
 
                 # Categories
                 categories: list[str] = []
-                category_elems: list[ET.Element] = entry.findall(
-                    "atom:category", namespaces
-                )
+                category_elems: list[ET.Element] = entry.findall("atom:category", namespaces)
                 for cat_elem in category_elems:
                     term: str | None = cat_elem.get("term")
                     if term:
@@ -219,9 +205,7 @@ class ArxivFetcher:
         filtered_papers: list[dict[str, object]] = []
         for paper in papers:
             try:
-                paper_date: datetime = datetime.strptime(
-                    str(paper["published"]), "%Y-%m-%d"
-                )
+                paper_date: datetime = datetime.strptime(str(paper["published"]), "%Y-%m-%d")
                 if start_date.date() <= paper_date.date() <= end_date.date():
                     filtered_papers.append(paper)
             except Exception:
