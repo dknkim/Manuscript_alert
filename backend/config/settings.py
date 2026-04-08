@@ -12,6 +12,7 @@ DEFAULT_KEYWORDS = [
     "plasma",
     "brain",
     "MRI",
+    "dementia",
 ]
 
 # Journal scoring configuration
@@ -22,39 +23,39 @@ JOURNAL_SCORING = {
         "4_keywords": 3.7,
         "3_keywords": 2.8,
         "2_keywords": 0.9999999999999999,
-        "1_keyword": 0.10000000000000003,
-    },
+        "1_keyword": 0.10000000000000003
+    }
 }
 
 # Target journal patterns with priority levels
 TARGET_JOURNALS = {
     "exact_matches": [
-        "jama",
-        "nature",
-        "science",
-        "radiology",
-        "ajnr",
-        "the lancet",
-    ],
+    "jama",
+    "nature",
+    "science",
+    "radiology",
+    "ajnr",
+    "the lancet",
+],
     "family_matches": [
-        "jama",
-        "nature",
-        "science",
-        "npj",
-        "the lancet",
-    ],
+    "jama",
+    "nature",
+    "science",
+    "npj",
+    "the lancet",
+],
     "specific_journals": [
-        "american journal of neuroradiology",
-        "alzheimer's & dementia",
-        "alzheimers dement",
-        "ebiomedicine",
-        "journal of magnetic resonance imaging",
-        "magnetic resonance in medicine",
-        "radiology",
-        "jmri",
-        "j magn reson imaging",
-        "brain : a journal of neurology",
-    ],
+    "american journal of neuroradiology",
+    "alzheimer's & dementia",
+    "alzheimers dement",
+    "ebiomedicine",
+    "journal of magnetic resonance imaging",
+    "magnetic resonance in medicine",
+    "radiology",
+    "jmri",
+    "j magn reson imaging",
+    "brain : a journal of neurology",
+]
 }
 
 # Simplified journal exclusions - all patterns apply to all journal types
@@ -101,21 +102,22 @@ JOURNAL_EXCLUSIONS = [
 KEYWORD_SCORING = {
     "high_priority": {
         "keywords": [
-            "Alzheimer's disease",
-            "amyloid",
-            "tau",
-        ],
-        "boost": 1.5,
+    "Alzheimer's disease",
+    "amyloid",
+    "tau",
+],
+        "boost": 1.5
     },
     "medium_priority": {
         "keywords": [
-            "PET",
-            "brain",
-            "plasma",
-            "MRI",
-        ],
-        "boost": 1.2,
-    },
+    "PET",
+    "brain",
+    "plasma",
+    "MRI",
+    "dementia",
+],
+        "boost": 1.2
+    }
 }
 
 # Must-have keywords (required filter - papers must match at least one)
@@ -124,16 +126,16 @@ MUST_HAVE_KEYWORDS = []
 # Default search settings
 DEFAULT_SEARCH_SETTINGS = {
     "days_back": 8,
-    "search_mode": "Brief",
+    "search_mode": "Standard",
     "min_keyword_matches": 2,
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
         "arxiv": True,
         "biorxiv": True,
-        "medrxiv": True,
+        "medrxiv": True
     },
-    "journal_quality_filter": False,
+    "journal_quality_filter": False
 }
 
 # UI settings
@@ -142,5 +144,5 @@ UI_SETTINGS = {
     "show_abstracts": True,
     "show_keywords": True,
     "show_relevance_scores": True,
-    "papers_per_page": 50,
+    "papers_per_page": 50
 }

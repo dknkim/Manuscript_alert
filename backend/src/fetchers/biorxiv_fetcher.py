@@ -67,47 +67,70 @@ class BioRxivFetcher:
             base_url: str = (
                 self.biorxiv_base_url if server == "biorxiv" else self.medrxiv_base_url
             )
-            api_url = f"{base_url}/{start_str}/{end_str}"
+            total_available: int = 0
+            total_scanned: int = 0
+
             if on_step:
                 on_step(f"Querying API for {start_str} to {end_str}")
-            response: requests.Response = requests.get(api_url, timeout=30)
-            response.raise_for_status()
-            data: dict[str, object] = response.json()
-            messages: dict[str, object] = data.get("messages", [{}])  # type: ignore[assignment]
-            total_available: int = 0
-            if isinstance(messages, list) and messages:
-                total_available = int(messages[0].get("total", 0))  # type: ignore[union-attr]
-            if data.get("collection"):
-                raw_papers: list[dict[str, str]] = data["collection"]  # type: ignore[assignment]
+
+            if brief_mode:
+                # Single page, no pagination
+                api_url = f"{base_url}/{start_str}/{end_str}/0"
+                response: requests.Response = requests.get(api_url, timeout=30)
+                response.raise_for_status()
+                data: dict[str, object] = response.json()
+                messages: dict[str, object] = data.get("messages", [{}])  # type: ignore[assignment]
+                if isinstance(messages, list) and messages:
+                    total_available = int(messages[0].get("total", 0))  # type: ignore[union-attr]
+                raw_papers: list[dict[str, str]] = data.get("collection", [])  # type: ignore[assignment]
                 if on_step:
                     on_step(
                         f"{total_available:,} papers in date range"
                         f" · {len(raw_papers)} returned"
                     )
-                if brief_mode:
-                    max_results = 500
-                elif extended_mode:
-                    max_results = 5000
-                else:
-                    max_results = self.max_results
-                for i, paper in enumerate(raw_papers):
-                    if i >= max_results:
-                        break
+                for paper in raw_papers:
+                    total_scanned += 1
                     if self._paper_matches_keywords(paper, keywords):
-                        processed_paper: dict[str, object] = self._process_paper(
-                            paper, server
+                        papers.append(self._process_paper(paper, server))
+            else:
+                max_results = 1000 if extended_mode else 500
+                cursor: int = 0
+                while total_scanned < max_results:
+                    api_url = f"{base_url}/{start_str}/{end_str}/{cursor}"
+                    response = requests.get(api_url, timeout=30)
+                    response.raise_for_status()
+                    data = response.json()
+                    messages = data.get("messages", [{}])  # type: ignore[assignment]
+                    if isinstance(messages, list) and messages:
+                        total_available = int(messages[0].get("total", 0))  # type: ignore[union-attr]
+                    raw_papers = data.get("collection", [])  # type: ignore[assignment]
+                    if not raw_papers:
+                        break
+                    if cursor == 0 and on_step:
+                        on_step(
+                            f"{total_available:,} papers in date range"
+                            f" · fetching in pages"
                         )
-                        papers.append(processed_paper)
-                if on_step:
-                    on_step(f"{len(papers)} matched keywords")
-                if meta is not None:
-                    meta["total_available"] = total_available
-                    meta["page_returned"] = len(raw_papers)
-                logger.info(
-                    f"{server}: {total_available:,} available · "
-                    f"{len(raw_papers)} scanned · "
-                    f"{len(papers)} matched keywords"
-                )
+                    for paper in raw_papers:
+                        if total_scanned >= max_results:
+                            break
+                        total_scanned += 1
+                        if self._paper_matches_keywords(paper, keywords):
+                            papers.append(self._process_paper(paper, server))
+                    cursor += len(raw_papers)
+                    if cursor >= total_available:
+                        break
+
+            if on_step:
+                on_step(f"{len(papers)} matched keywords")
+            if meta is not None:
+                meta["total_available"] = total_available
+                meta["page_returned"] = total_scanned
+            logger.info(
+                f"{server}: {total_available:,} available · "
+                f"{total_scanned} scanned · "
+                f"{len(papers)} matched keywords"
+            )
         except requests.RequestException as e:
             if (
                 hasattr(e, "response")

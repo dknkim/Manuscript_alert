@@ -353,5 +353,49 @@
       "is_high_impact": false,
       "archived_at": "2026-04-05T17:34:16.452177"
     }
+  ],
+  "2026-04-07": [
+    {
+      "title": "A unified model for staging amyloid and tau pathology in Alzheimer's disease",
+      "authors": "Earnest, T. W.; Yang, B. Y.; Chowdhury...",
+      "abstract": "Biological staging models are a key tool for assessing the severity of Alzheimers disease (AD), supporting personalized medicine and playing a critical role in clinical trial design. Recently, researchers have leveraged positron emission tomography (PET) to inform data-driven staging models of brain pathology related to AD. However, most approaches have focused on staging either amyloid or tau progressions separately, while both pathologies constitute defining factors of AD. Here, we aimed to derive a data-driven staging model which encompasses the spatial spread of both amyloid and tau. We assembled a large sample (n=3,293) of individuals with both amyloid and tau PET imaging stemming from 8 neuroimaging studies of AD and aging. We applied unsupervised machine learning to estimate brain areas which showed coordinated pathological accumulation across our sample, and we used these regions to inform a data-driven model for staging amyloid and tau. The resulting six stage model showed two stages of amyloid progression followed by four stages of tau spread, which were associated with cross-sectional and longitudinal assessments of cognitive decline. Comparison of our biological staging model with clinical disease stages recommended by the Alzheimers Association showed evidence of heterogenous symptom profiles. Replication of results in holdout data demonstrated the generalizability and prognostic value of our staging model. Together, these findings establish a comprehensive and rigorously validated biological staging model that jointly characterizes amyloid and tau progression, advances beyond global or anatomically predefined summaries, and provides a scalable framework for studying disease heterogeneity and progression in AD.\n\nOne Sentence SummaryUsing PET imaging from a large sample of individuals (n=3,293), we derive a data-driven model for staging amyloid and tau pathology.",
+      "published": "2026-03-31",
+      "url": "https://doi.org/10.64898/2026.03.30.26349752",
+      "source": "Medrxiv",
+      "relevance_score": 21,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "brain"
+      ],
+      "journal": "",
+      "volume": "",
+      "issue": "",
+      "is_high_impact": false,
+      "archived_at": "2026-04-07T20:44:03.366726"
+    },
+    {
+      "title": "Decoupling Alzheimer Disease Pathologic Abnormalities at PET with Improved Clinical Relevance by Interpretable Adversarial Decomposition Learning.",
+      "authors": "Cheng Tang, Xun Sun, Anqi Tang...",
+      "abstract": "Background Template-based PET metrics quantify Alzheimer disease (AD) amyloid-β (Aβ) and tau burden but compress whole-brain data into a single scalar, overlooking disease heterogeneity and sometimes causing imaging-clinical discordance. Artificial intelligence (AI) approaches capture richer patterns but often lack biologic interpretability. Purpose To develop and validate an interpretable deep-learning framework that separates AD-specific abnormalities from physiologic uptake using pathophysiologic constraints, generating a clinically meaningful AI biomarker. Materials and Methods In this retrospective study, Aβ and tau PET scans from the Alzheimer's Disease Neuroimaging Initiative, Australian Imaging Biomarkers and Lifestyle study, Global Alzheimer's Association Interactive Network, and the authors' center were analyzed. An adversarial decomposition learning (ADL) network generated voxel-level pathologic maps and an AD adversarial decomposition (ADAD) score. Discriminatory performance for clinical AD versus cognitively normal individuals was evaluated using the area under the curve (AUC). Clinical relevance was assessed with cognitive, hippocampal volume, cerebrospinal fluid (CSF), and neuropathologic measures using longitudinal mixed-effects models and Spearman correlations. Results The study included 7457 Aβ PET scans from 3595 patients (median age, 71.4 years; IQR, 65.7-77.0 years; 1637 female patients) and 1894 tau PET scans from 1127 patients (median age, 72.0 years; IQR, 66.9-78.5 years; 545 female patients). External testing AUCs were 0.94 (95% CI: 0.89, 0.98) for Aβ and 0.98 (95% CI: 0.95, 1.00) for tau. ADL generated interpretable pathologic attribution maps that correlated with expert rankings (Aβ and tau, Spearman ρ = 0.79 and 0.63, respectively). Although Centiloid and CenTauRz showed numerically higher correlations with postmortem neuropathologic structure and stronger associations with CSF biomarkers, the ADAD score demonstrated independent baseline and longitudinal associations with cognitive outcomes and hippocampal atrophy after adjustment. Conclusion Pathophysiologic-constrained ADL provided interpretable, personalized pathologic maps and an AI-derived ADAD score that more closely linked PET pathologic abnormalities with multimodal clinical measures. © RSNA, 2026",
+      "published": "2026-04-01",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41944723/",
+      "source": "PubMed",
+      "relevance_score": 26,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "brain"
+      ],
+      "journal": "Radiology",
+      "volume": "319",
+      "issue": "1",
+      "is_high_impact": true,
+      "archived_at": "2026-04-07T20:47:41.743078"
+    }
   ]
 }
