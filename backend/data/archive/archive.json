@@ -397,5 +397,30 @@
       "is_high_impact": true,
       "archived_at": "2026-04-07T20:47:41.743078"
     }
+  ],
+  "2026-04-09": [
+    {
+      "title": "Biological classification of memory clinic patients.",
+      "authors": "Sophie E Mastenbroek, Lyduine E Collij, Toomas Erik Anijärv...",
+      "abstract": "Neurodegenerative diseases have traditionally been defined in vivo based on clinical symptoms. However, the development of biomarkers has enabled a shift towards in vivo biological definitions. There is now a need to characterize memory clinic populations using multi-dimensional biomarker information. Here, we employed a data-driven approach to develop a biological framework for categorizing individuals in a heterogeneous memory clinic cohort based on the presence, extent and sequence of several common pathologies. We studied 1677 individuals, including subjective cognitive decline (SCD, n = 255), mild cognitive impairment (MCI, n = 400), all cause dementia (n = 393) and cognitively normal controls (n = 625) from the BioFINDER-2 cohort [median age (interquartile range) = 72.0 (16.2) years; 50.3% female]. The Subtype and Stage Inference (SuStaIn) model was applied to biomarkers of amyloid-β (Aβ) (CSF Aβ42/Aβ40), tau (temporal meta-region of interest PET), neuronal α-synuclein [CSF seed amplification assay (SAA)], vascular pathology [MRI-based white matter hyperintensities (WMHs)] and regional atrophy (MRI-based cortical thickness) to identify biomarker-based clusters across the entire dataset. We then applied this framework to cognitively symptomatic individuals (n = 788) to compare clinical symptoms, disease progression rate and brain changes (atrophy and functional connectivity) across profiles. We identified five biomarker clusters reflecting established clinico-pathological entities, closely corresponding to (i) Alzheimer's disease [AD, n = 317 (40.2%)]; (ii) α-synuclein disease [αSyn, n = 123 (15.6%)]; (iii) vascular disease [Vascular, n = 67 (8.5%)]; (iv) mixed AD and Vascular [Mixed, n = 207 (26.3%)]; and (v) a heterogenous group of individuals characterized by atrophy without any of the major brain pathologies, here termed 'non-vascular, Alzheimer's, and synuclein pathology' [NOVAS, n = 74 (9.4%)]. The AD profile was characterized by global cognitive impairment and cortical atrophy in AD-associated regions. The αSyn profile was associated with visuospatial and executive dysfunction, motor impairment, hallucinations and functional connectivity disruptions throughout the brain, despite less overall atrophy compared to all others. The Vascular profile showed language and motor impairments, and both the Vascular and Mixed profiles demonstrated atrophy in cingulate and subcortical regions, alongside reduced periventricular white matter integrity. The NOVAS profile was older, demonstrated pronounced hippocampal and amygdala atrophy and baseline memory deficits, possibly reflecting neurodegenerative diseases for which currently no robust biomarkers are available, such as primary tauopathies and TDP-43 proteinopathies [e.g. limbic-predominant age-related TDP-43 encephalopathy (LATE)]. In longitudinal analyses, the AD profile showed the fastest global cognitive decline, while αSyn demonstrated an accelerated decline in language and executive and visuospatial functioning. To conclude, classifying individuals using a multimodal biomarker approach can provide valuable diagnostic and prognostic insights, with potential implications for clinical trials.",
+      "published": "2026-04-07",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41157967/",
+      "source": "PubMed",
+      "relevance_score": 24,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "brain",
+        "MRI",
+        "dementia"
+      ],
+      "journal": "Brain : a journal of neurology",
+      "volume": "149",
+      "issue": "4",
+      "is_high_impact": true,
+      "archived_at": "2026-04-09T17:24:52.358833"
+    }
   ]
 }
