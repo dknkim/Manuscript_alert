@@ -422,5 +422,27 @@
       "is_high_impact": true,
       "archived_at": "2026-04-09T17:24:52.358833"
     }
+  ],
+  "2026-04-13": [
+    {
+      "title": "Trajectories of plasma and CSF MTBR-tau243 and phosphorylated-tau species across the Alzheimer's disease continuum.",
+      "authors": "Lyduine E Collij, Gemma Salvadó, Kanta Horie...",
+      "abstract": "To efficiently implement plasma and cerebrospinal fluid (CSF) biomarkers for staging and prognosis of Alzheimer disease (AD), we must understand their dynamics across disease progression. We analyzed participants from the Swedish BioFINDER-2 study with mass spectrometry measurements of plasma and CSF tau species, including eMTBR-tau243/MTBR-tau243 and phosphorylation occupancies (%p-tau). Disease duration was estimated using Aβ-PET and tau-PET with the SILA algorithm. Bootstrapped LOESS models showed that %p-tau217 changes earliest, increasing just before Aβ-PET positivity. Other p-tau species changed later, with smaller dynamic ranges and earlier ceiling effects. %p-tau205 and MTBR-tau243 changes aligned with tau-PET positivity onset, while MTBR-tau243-especially plasma eMTBR-tau243-tracked cortical tau burden in later stages. Non-phosphorylated mid-region tau may serve as a late-stage biomarker. Taken together, concurrent assessments of plasma or CSF %p-tau217, %p-tau205, and (e)MTBR-tau243 provides information about different biological events in the disease cascade, which can benefit clinical trials and patient management in clinical practice.",
+      "published": "2026-04-09",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41957377/",
+      "source": "PubMed",
+      "relevance_score": 27.3,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "tau",
+        "plasma"
+      ],
+      "journal": "Nature communications",
+      "volume": "17",
+      "issue": "1",
+      "is_high_impact": true,
+      "archived_at": "2026-04-13T10:07:11.778426"
+    }
   ]
 }
