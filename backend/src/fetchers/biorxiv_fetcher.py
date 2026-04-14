@@ -68,7 +68,7 @@ class BioRxivFetcher:
             api_url = f"{base_url}/{start_str}/{end_str}"
             if on_step:
                 on_step(f"Querying API for {start_str} to {end_str}")
-            response: requests.Response = requests.get(api_url, timeout=30)
+            response: requests.Response = requests.get(api_url, timeout=15)
             response.raise_for_status()
             data: dict[str, object] = response.json()
             messages: dict[str, object] = data.get("messages", [{}])  # type: ignore[assignment]
