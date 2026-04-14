@@ -2,17 +2,17 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { exportPapersCSV, archivePaper, getArchivedPapers } from "@/lib/api";
 import type { DataSources, Paper } from "@/types";
 
-const ALL_SOURCES: DataSources = {
-  arxiv: true,
-  biorxiv: true,
-  medrxiv: true,
+const DEFAULT_SOURCES: DataSources = {
   pubmed: true,
+  arxiv: false,
+  biorxiv: false,
+  medrxiv: false,
 };
 
 const DEFAULT_SEARCH_MODE = "Brief (PubMed: 1000, Others: 500)";
 
 export function usePaperSearch(defaultSources?: DataSources) {
-  const [sources, setSources] = useState<DataSources>(ALL_SOURCES);
+  const [sources, setSources] = useState<DataSources>(DEFAULT_SOURCES);
   const [searchMode, setSearchMode] = useState(DEFAULT_SEARCH_MODE);
   const [highImpactOnly, setHighImpactOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

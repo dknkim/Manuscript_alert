@@ -12,6 +12,8 @@ DEFAULT_KEYWORDS = [
     "plasma",
     "brain",
     "MRI",
+    "foundation",
+    "LLM",
 ]
 
 # Journal scoring configuration
@@ -113,6 +115,7 @@ KEYWORD_SCORING = {
             "brain",
             "plasma",
             "MRI",
+            "foundation",
         ],
         "boost": 1.2,
     },
@@ -129,9 +132,9 @@ DEFAULT_SEARCH_SETTINGS = {
     "max_results_display": 50,
     "default_sources": {
         "pubmed": True,
-        "arxiv": True,
-        "biorxiv": True,
-        "medrxiv": True,
+        "arxiv": False,
+        "biorxiv": False,
+        "medrxiv": False,
     },
     "journal_quality_filter": False,
 }
