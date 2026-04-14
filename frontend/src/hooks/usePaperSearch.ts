@@ -18,11 +18,13 @@ export function usePaperSearch(defaultSources?: DataSources) {
   const [searchQuery, setSearchQuery] = useState("");
   const [archivedTitles, setArchivedTitles] = useState<Set<string>>(new Set());
 
-  // Sync sources once when settings defaults arrive
+  // Sync sources once when settings defaults arrive.
+  // sourcesReady starts false so the auto-fetch waits until defaultSources
+  // has been applied (avoids firing with the stale DEFAULT_SOURCES value).
   const sourcesInitialized = useRef(false);
-  const [sourcesReady, setSourcesReady] = useState(!defaultSources);
+  const [sourcesReady, setSourcesReady] = useState(false);
   useEffect(() => {
-    if (!sourcesInitialized.current && defaultSources) {
+    if (!sourcesInitialized.current && defaultSources !== undefined) {
       sourcesInitialized.current = true;
       setSources(defaultSources);
       setSourcesReady(true);

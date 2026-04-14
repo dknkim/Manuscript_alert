@@ -13,7 +13,12 @@ import type { Paper } from "@/types";
 export default function PapersPage() {
   const { settings } = useSettings();
   const keywords = settings?.keywords || [];
-  const search = usePaperSearch(settings?.search_settings?.default_sources);
+  // Resolve to undefined while settings are loading, then always a defined value.
+  // This ensures usePaperSearch knows when settings have actually arrived.
+  const defaultSources = settings
+    ? (settings.search_settings?.default_sources ?? { pubmed: true, arxiv: false, biorxiv: false, medrxiv: false })
+    : undefined;
+  const search = usePaperSearch(defaultSources);
   const stream = useAgentStream();
   const [mode, setMode] = useState<"classic" | "agent">("classic");
 
