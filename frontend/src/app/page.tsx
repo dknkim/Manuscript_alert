@@ -17,15 +17,15 @@ export default function PapersPage() {
   const stream = useAgentStream();
   const [mode, setMode] = useState<"classic" | "agent">("classic");
 
-  // Auto-fetch once when keywords become available
+  // Auto-fetch once when both keywords and sources are ready
   const didAutoFetch = useRef(false);
   useEffect(() => {
-    if (!didAutoFetch.current && keywords.length > 0) {
+    if (!didAutoFetch.current && keywords.length > 0 && search.sourcesReady) {
       didAutoFetch.current = true;
       stream.startStream(search.sources, search.searchMode);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keywords.length]);
+  }, [keywords.length, search.sourcesReady]);
 
   const handleFetch = () => {
     stream.startStream(search.sources, search.searchMode);

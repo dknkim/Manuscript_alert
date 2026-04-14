@@ -20,10 +20,12 @@ export function usePaperSearch(defaultSources?: DataSources) {
 
   // Sync sources once when settings defaults arrive
   const sourcesInitialized = useRef(false);
+  const [sourcesReady, setSourcesReady] = useState(!defaultSources);
   useEffect(() => {
     if (!sourcesInitialized.current && defaultSources) {
       sourcesInitialized.current = true;
       setSources(defaultSources);
+      setSourcesReady(true);
     }
   }, [defaultSources]);
 
@@ -63,6 +65,7 @@ export function usePaperSearch(defaultSources?: DataSources) {
 
   return {
     sources,
+    sourcesReady,
     searchMode,
     highImpactOnly,
     searchQuery,
