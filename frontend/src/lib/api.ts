@@ -59,22 +59,47 @@ export async function getAuthToken(options?: {
 
 async function fetchWithAuth(
   url: string,
-  options: RequestInit = {},
+  options: RequestInit & { timeoutMs?: number } = {},
   token?: string | null,
 ): Promise<Response> {
-  return fetch(`${BASE}${url}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers as Record<string, string>),
-    },
-    ...options,
-  });
+  const { timeoutMs, signal, ...requestInit } = options;
+  const controller = timeoutMs ? new AbortController() : null;
+  const timeoutId = controller
+    ? window.setTimeout(() => controller.abort(new Error("Request timed out")), timeoutMs)
+    : null;
+
+  if (controller && signal) {
+    if (signal.aborted) {
+      controller.abort(signal.reason);
+    } else {
+      signal.addEventListener(
+        "abort",
+        () => controller.abort(signal.reason),
+        { once: true },
+      );
+    }
+  }
+
+  try {
+    return await fetch(`${BASE}${url}`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(requestInit.headers as Record<string, string>),
+      },
+      ...requestInit,
+      signal: controller?.signal ?? signal,
+    });
+  } finally {
+    if (timeoutId !== null) {
+      window.clearTimeout(timeoutId);
+    }
+  }
 }
 
 async function request(
   url: string,
-  options: RequestInit = {},
+  options: RequestInit & { timeoutMs?: number } = {},
 ): Promise<Response> {
   let token = await getAuthToken({ waitForClerk: true, timeoutMs: 250 });
   let res = await fetchWithAuth(url, options, token);
@@ -100,8 +125,10 @@ async function request(
 
 /* ── Settings ─────────────────────────────────────────────── */
 
-export async function getSettings(): Promise<Settings> {
-  const res = await request("/settings");
+export async function getSettings(options?: {
+  timeoutMs?: number;
+}): Promise<Settings> {
+  const res = await request("/settings", { timeoutMs: options?.timeoutMs });
   return res.json();
 }
 
