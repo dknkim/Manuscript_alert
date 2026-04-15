@@ -14,6 +14,7 @@ const BASE: string = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
 type TokenGetter = () => Promise<string | null>;
 let _getToken: TokenGetter | null = null;
+let _isClerkReady = false;
 
 // Resolves when ClerkTokenProvider registers the getter (i.e. Clerk is loaded).
 // API calls wait on this so they never fire before the token is available.
@@ -24,25 +25,44 @@ _clerkReady = new Promise<void>((res) => { _clerkReadyResolve = res; });
 /** Called once by ClerkTokenProvider after Clerk initializes. */
 export function initClerkTokenGetter(fn: TokenGetter) {
   _getToken = fn;
+  _isClerkReady = true;
   _clerkReadyResolve?.();
 }
 
+export async function waitForClerkReady(timeoutMs = 5000): Promise<boolean> {
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return false;
+  if (_isClerkReady) return true;
+
+  await Promise.race([
+    _clerkReady.then(() => {
+      _isClerkReady = true;
+    }),
+    new Promise<void>((resolve) => setTimeout(resolve, timeoutMs)),
+  ]);
+
+  return _isClerkReady;
+}
+
 /** Returns the current Clerk JWT, or null if auth is not configured. */
-export async function getAuthToken(): Promise<string | null> {
+export async function getAuthToken(options?: {
+  waitForClerk?: boolean;
+  timeoutMs?: number;
+}): Promise<string | null> {
   if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return null;
-  // Wait for Clerk to initialize (typically <300 ms), with a 5 s safety timeout.
-  await Promise.race([_clerkReady, new Promise<void>((r) => setTimeout(r, 5000))]);
+  if (options?.waitForClerk) {
+    await waitForClerkReady(options.timeoutMs);
+  }
   return _getToken ? _getToken() : null;
 }
 
 /* ── helpers ──────────────────────────────────────────────── */
 
-async function request(
+async function fetchWithAuth(
   url: string,
   options: RequestInit = {},
+  token?: string | null,
 ): Promise<Response> {
-  const token = await getAuthToken();
-  const res = await fetch(`${BASE}${url}`, {
+  return fetch(`${BASE}${url}`, {
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -50,6 +70,27 @@ async function request(
     },
     ...options,
   });
+}
+
+async function request(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
+  let token = await getAuthToken({ waitForClerk: true, timeoutMs: 250 });
+  let res = await fetchWithAuth(url, options, token);
+
+  if (
+    res.status === 401 &&
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+    !_isClerkReady
+  ) {
+    const isReady = await waitForClerkReady();
+    if (isReady) {
+      token = await getAuthToken();
+      res = await fetchWithAuth(url, options, token);
+    }
+  }
+
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(err.detail || "Request failed");

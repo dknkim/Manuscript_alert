@@ -4,7 +4,7 @@ import {
   EventStreamContentType,
 } from "@microsoft/fetch-event-source";
 import type { DataSources, FetchResult } from "@/types";
-import { getAuthToken } from "@/lib/api";
+import { getAuthToken, waitForClerkReady } from "@/lib/api";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
@@ -76,9 +76,11 @@ export function useAgentStream(): UseAgentStreamReturn {
   const [result, setResult] = useState<FetchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const hasRetriedAuthRef = useRef(false);
 
   const reset = useCallback(() => {
     abortRef.current?.abort();
+    hasRetriedAuthRef.current = false;
     setDisplay(EMPTY_DISPLAY);
     setIsStreaming(false);
     setResult(null);
@@ -89,11 +91,12 @@ export function useAgentStream(): UseAgentStreamReturn {
     async (dataSources: DataSources, searchMode: string) => {
       reset();
       setIsStreaming(true);
+      hasRetriedAuthRef.current = false;
 
       const ctrl = new AbortController();
       abortRef.current = ctrl;
 
-      const token = await getAuthToken();
+      const token = await getAuthToken({ waitForClerk: true, timeoutMs: 250 });
 
       fetchEventSource(`${BASE}/papers/review`, {
         method: "POST",
@@ -109,6 +112,21 @@ export function useAgentStream(): UseAgentStreamReturn {
         openWhenHidden: true,
 
         async onopen(response) {
+          if (
+            response.status === 401 &&
+            process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+            !hasRetriedAuthRef.current
+          ) {
+            hasRetriedAuthRef.current = true;
+            ctrl.abort();
+
+            const isReady = await waitForClerkReady();
+            if (isReady) {
+              await startStream(dataSources, searchMode);
+              return;
+            }
+          }
+
           if (
             response.ok &&
             response.headers.get("content-type")?.includes(EventStreamContentType)
