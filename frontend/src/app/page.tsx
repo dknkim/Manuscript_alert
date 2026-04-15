@@ -13,24 +13,33 @@ import type { Paper } from "@/types";
 export default function PapersPage() {
   const { settings, loading, error, reload } = useSettings();
   const keywords = settings?.keywords || [];
+  const settingsSignature = useMemo(
+    () => JSON.stringify(settings ?? null),
+    [settings],
+  );
   // Resolve to undefined while settings are loading, then always a defined value.
   // This ensures usePaperSearch knows when settings have actually arrived.
   const defaultSources = settings
     ? (settings.search_settings?.default_sources ?? { pubmed: true, arxiv: false, biorxiv: false, medrxiv: false })
     : undefined;
   const search = usePaperSearch(defaultSources);
-  const stream = useAgentStream();
+  const stream = useAgentStream(settings ? settingsSignature : undefined);
   const [mode, setMode] = useState<"classic" | "agent">("classic");
 
   // Auto-fetch once when both keywords and sources are ready
   const didAutoFetch = useRef(false);
   useEffect(() => {
-    if (!didAutoFetch.current && keywords.length > 0 && search.sourcesReady) {
+    if (
+      !didAutoFetch.current &&
+      keywords.length > 0 &&
+      search.sourcesReady &&
+      !stream.result
+    ) {
       didAutoFetch.current = true;
       stream.startStream(search.sources, search.searchMode);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keywords.length, search.sourcesReady]);
+  }, [keywords.length, search.sourcesReady, stream.result]);
 
   const handleFetch = () => {
     stream.startStream(search.sources, search.searchMode);

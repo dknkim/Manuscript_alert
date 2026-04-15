@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { useEffect } from "react";
 import {
   fetchEventSource,
   EventStreamContentType,
@@ -54,6 +55,13 @@ interface UseAgentStreamReturn {
 }
 
 const EMPTY_DISPLAY: DisplayState = { sources: [], phases: [] };
+const STORAGE_PREFIX = "papers-stream-cache:";
+
+interface StreamSnapshot {
+  displayState: DisplayState;
+  result: FetchResult | null;
+  error: string | null;
+}
 
 /** Update or insert a source node, preserving insertion order. */
 function upsertSource(
@@ -70,13 +78,52 @@ function upsertSource(
   return [...sources, updater(undefined)];
 }
 
-export function useAgentStream(): UseAgentStreamReturn {
+export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
   const [display, setDisplay] = useState<DisplayState>(EMPTY_DISPLAY);
   const [isStreaming, setIsStreaming] = useState(false);
   const [result, setResult] = useState<FetchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const hasRetriedAuthRef = useRef(false);
+  const hydratedKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!cacheKey || hydratedKeyRef.current === cacheKey) return;
+    hydratedKeyRef.current = cacheKey;
+
+    const raw = window.sessionStorage.getItem(`${STORAGE_PREFIX}${cacheKey}`);
+    if (!raw) return;
+
+    try {
+      const snapshot = JSON.parse(raw) as StreamSnapshot;
+      setDisplay(snapshot.displayState ?? EMPTY_DISPLAY);
+      setResult(snapshot.result ?? null);
+      setError(snapshot.error ?? null);
+      setIsStreaming(false);
+    } catch (err) {
+      console.error("Failed to restore papers cache:", err);
+      window.sessionStorage.removeItem(`${STORAGE_PREFIX}${cacheKey}`);
+    }
+  }, [cacheKey]);
+
+  useEffect(() => {
+    if (!cacheKey || isStreaming) return;
+
+    if (!result && !error && display.sources.length === 0 && display.phases.length === 0) {
+      window.sessionStorage.removeItem(`${STORAGE_PREFIX}${cacheKey}`);
+      return;
+    }
+
+    const snapshot: StreamSnapshot = {
+      displayState: display,
+      result,
+      error,
+    };
+    window.sessionStorage.setItem(
+      `${STORAGE_PREFIX}${cacheKey}`,
+      JSON.stringify(snapshot),
+    );
+  }, [cacheKey, display, error, isStreaming, result]);
 
   const reset = useCallback(() => {
     abortRef.current?.abort();
@@ -85,7 +132,10 @@ export function useAgentStream(): UseAgentStreamReturn {
     setIsStreaming(false);
     setResult(null);
     setError(null);
-  }, []);
+    if (cacheKey) {
+      window.sessionStorage.removeItem(`${STORAGE_PREFIX}${cacheKey}`);
+    }
+  }, [cacheKey]);
 
   const startStream = useCallback(
     async (dataSources: DataSources, searchMode: string) => {
