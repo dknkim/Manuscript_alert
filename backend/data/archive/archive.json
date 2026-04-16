@@ -444,5 +444,28 @@
       "is_high_impact": true,
       "archived_at": "2026-04-13T10:07:11.778426"
     }
+  ],
+  "2026-04-16": [
+    {
+      "title": "Plasma phosphorylated tau 217 and longitudinal trajectories of Aβ, tau, and cognition in cognitively unimpaired older adults.",
+      "authors": "Hyun-Sik Yang, Juliana A U Anzai, Wai-Ying Wendy Yau...",
+      "abstract": "Plasma phosphorylated tau 217 (pTau217) is an excellent biomarker of Alzheimer's disease (AD) pathology, but it remains uncertain whether pTau217 can predict amyloid-β (Aβ) and tau accumulation prior to Aβ positron emission tomography (PET) positivity. Here, we leverage data from a well-characterized prospective cohort of cognitively unimpaired older adults to examine mass spectrometry-based plasma %pTau217 (pTau217/non-phosphorylated-Tau217×100) relative to changes in Aβ/tau PET and cognition. A higher baseline %pTau217 was associated with faster Aβ and tau accumulation on PET, which then led to greater cognitive decline. Among individuals Aβ PET-negative at baseline, higher %pTau217 levels presaged increases in Aβ and tau PET signals. Together, our results suggest that very low %pTau217 in cognitively unimpaired older adults is associated with a minimal risk of AD pathology accumulation and cognitive decline.",
+      "published": "2026-04-14",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41980948/",
+      "source": "PubMed",
+      "relevance_score": 28.2,
+      "matched_keywords": [
+        "Alzheimer's disease",
+        "PET",
+        "amyloid",
+        "tau",
+        "plasma"
+      ],
+      "journal": "Nature communications",
+      "volume": "17",
+      "issue": "1",
+      "is_high_impact": true,
+      "archived_at": "2026-04-16T14:59:14.806872"
+    }
   ]
 }
