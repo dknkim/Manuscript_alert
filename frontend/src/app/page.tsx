@@ -10,8 +10,11 @@ import DashboardPanel from "@/components/features/DashboardPanel";
 import Spinner from "@/components/ui/Spinner";
 import type { Paper } from "@/types";
 
+const AUTO_RETRY_SECONDS = 20;
+
 export default function PapersPage() {
-  const { settings, loading, error, reload } = useSettings();
+  const { settings, loading, error, warmingUp, reload } = useSettings();
+  const [retryCountdown, setRetryCountdown] = useState(0);
   const keywords = settings?.keywords || [];
   const settingsSignature = useMemo(
     () => JSON.stringify(settings ?? null),
@@ -25,6 +28,20 @@ export default function PapersPage() {
   const search = usePaperSearch(defaultSources);
   const stream = useAgentStream(settings ? settingsSignature : undefined);
   const [mode, setMode] = useState<"classic" | "agent">("classic");
+
+  // Auto-retry when error is shown
+  useEffect(() => {
+    if (!error) { setRetryCountdown(0); return; }
+    setRetryCountdown(AUTO_RETRY_SECONDS);
+    const interval = setInterval(() => {
+      setRetryCountdown((prev) => {
+        if (prev <= 1) { clearInterval(interval); void reload(); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   // Auto-fetch once when both keywords and sources are ready
   const didAutoFetch = useRef(false);
@@ -65,8 +82,13 @@ export default function PapersPage() {
 
   if (loading && !settings) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
         <Spinner size="lg" />
+        {warmingUp && (
+          <p className="text-sm text-text-muted animate-pulse">
+            Server is waking up, please wait…
+          </p>
+        )}
       </div>
     );
   }
@@ -81,11 +103,16 @@ export default function PapersPage() {
           <p className="mt-2 text-sm text-text-muted">
             {error || "The API did not return settings in time."}
           </p>
+          <p className="mt-1 text-xs text-text-muted">
+            {retryCountdown > 0
+              ? `Retrying automatically in ${retryCountdown}s…`
+              : "Retrying…"}
+          </p>
           <button
-            onClick={() => void reload()}
+            onClick={() => { setRetryCountdown(0); void reload(); }}
             className="mt-4 inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
           >
-            Retry
+            Retry Now
           </button>
         </div>
       </div>
