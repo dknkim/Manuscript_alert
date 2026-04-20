@@ -130,6 +130,15 @@ healthCheckPath: /api/v1/health
 - **Spins down after 15 minutes of inactivity** — first request after idle takes ~30 seconds to wake up. This is normal on the free tier.
 - 512 MB RAM
 
+### Keep-alive workflow (`.github/workflows/keep-alive.yml`)
+A GitHub Actions cron workflow pings `/api/v1/health` every 10 minutes during Pacific waking hours (6am–11pm), using a DST-safe UTC window. This keeps the backend warm so users don't hit the ~30s cold start. Overnight the service sleeps, using roughly 540 of the 750 monthly compute-hours — safe headroom.
+
+- **Runs on GitHub Actions runners**, not on Render or inside our backend. Our backend just serves the existing health endpoint.
+- **Cost: $0.** Public repo → unlimited GH Actions minutes. Render free tier → time-based, not per-request.
+- **To disable:** delete the workflow file, or comment out the `schedule:` block (leaving `workflow_dispatch:` so it can still be triggered manually).
+- **To test:** Actions tab → "Keep Render Backend Warm" → Run workflow.
+- **Cadence:** cron `*/10 0-6,13-23 * * *` — fires every 10 min during UTC hours 13:00–23:59 and 00:00–06:59 (18 hours/day total). This covers 6am–11pm in both PST (UTC-8) and PDT (UTC-7), so no edits needed at DST transitions. Cron is clock-aligned (fires at :00, :10, :20, …). GH scheduler jitter can delay runs 0–15 min under load, so occasional cold starts during the ping window are possible but rare.
+
 ### Environment variables set on Render
 
 | Variable | What it is |

@@ -1,4 +1,4 @@
-"""Tests for the /api/papers endpoints — fetch, archive, export."""
+"""Tests for the /api/v1/papers endpoints — fetch, archive, export."""
 
 from __future__ import annotations
 
@@ -11,10 +11,10 @@ from fastapi.testclient import TestClient
 # ---------------------------------------------------------------------------
 # Fetch
 # ---------------------------------------------------------------------------
-def test_fetch_papers_no_sources(client: TestClient) -> None:
+def test_v1_fetch_papers_no_sources(client: TestClient) -> None:
     """Fetch with all sources disabled returns empty results."""
     resp = client.post(
-        "/api/papers/fetch",
+        "/api/v1/papers/fetch",
         json={
             "data_sources": {
                 "pubmed": False,
@@ -66,13 +66,13 @@ def _mock_pubmed_papers() -> list[dict[str, Any]]:
     ]
 
 
-def test_fetch_papers_with_mock_pubmed(client: TestClient) -> None:
+def test_v1_fetch_papers_with_mock_pubmed(client: TestClient) -> None:
     """Fetch with mocked PubMed returns scored/filtered results."""
     with patch("backend.src.services.paper_service.pubmed_fetcher") as mock_fetcher:
         mock_fetcher.fetch_papers.return_value = _mock_pubmed_papers()
 
         resp = client.post(
-            "/api/papers/fetch",
+            "/api/v1/papers/fetch",
             json={
                 "data_sources": {
                     "pubmed": True,
@@ -85,9 +85,7 @@ def test_fetch_papers_with_mock_pubmed(client: TestClient) -> None:
         )
     assert resp.status_code == 200
     data = resp.json()
-    # The first paper should match multiple keywords; the second should be filtered out
     assert data["total_before_filter"] == 2
-    # Filtered papers must have >=2 keyword matches
     for paper in data["papers"]:
         assert len(paper["matched_keywords"]) >= 2
 
@@ -95,54 +93,49 @@ def test_fetch_papers_with_mock_pubmed(client: TestClient) -> None:
 # ---------------------------------------------------------------------------
 # Archive CRUD
 # ---------------------------------------------------------------------------
-def test_archive_and_list(client: TestClient, sample_paper: dict[str, Any]) -> None:
+def test_v1_archive_and_list(client: TestClient, sample_paper: dict[str, Any]) -> None:
     """Archive a paper, then list it."""
-    # Archive
-    resp = client.post("/api/papers/archive", json={"paper": sample_paper})
+    resp = client.post("/api/v1/papers/archive", json={"paper": sample_paper})
     assert resp.status_code == 200
     assert resp.json()["status"] == "ok"
 
-    # List
-    resp2 = client.get("/api/papers/archive")
+    resp2 = client.get("/api/v1/papers/archive")
     assert resp2.status_code == 200
     data = resp2.json()
     assert data["total"] == 1
     assert sample_paper["title"] in data["archived_titles"]
 
 
-def test_archive_duplicate(client: TestClient, sample_paper: dict[str, Any]) -> None:
+def test_v1_archive_duplicate(client: TestClient, sample_paper: dict[str, Any]) -> None:
     """Archiving the same paper twice returns already_archived."""
-    client.post("/api/papers/archive", json={"paper": sample_paper})
-    resp = client.post("/api/papers/archive", json={"paper": sample_paper})
+    client.post("/api/v1/papers/archive", json={"paper": sample_paper})
+    resp = client.post("/api/v1/papers/archive", json={"paper": sample_paper})
     assert resp.json()["status"] == "already_archived"
 
 
-def test_unarchive_paper(client: TestClient, sample_paper: dict[str, Any]) -> None:
+def test_v1_unarchive_paper(client: TestClient, sample_paper: dict[str, Any]) -> None:
     """Archive then unarchive a paper."""
-    client.post("/api/papers/archive", json={"paper": sample_paper})
+    client.post("/api/v1/papers/archive", json={"paper": sample_paper})
 
-    # Get today's date key
-    archive_resp = client.get("/api/papers/archive")
+    archive_resp = client.get("/api/v1/papers/archive")
     archive_data = archive_resp.json()["archive"]
     date_key = next(iter(archive_data.keys()))
 
-    # Unarchive
     resp = client.request(
         "DELETE",
-        "/api/papers/archive",
+        "/api/v1/papers/archive",
         json={"title": sample_paper["title"], "date": date_key},
     )
     assert resp.status_code == 200
 
-    # Verify gone
-    resp2 = client.get("/api/papers/archive")
+    resp2 = client.get("/api/v1/papers/archive")
     assert resp2.json()["total"] == 0
 
 
-def test_unarchive_not_found(client: TestClient) -> None:
+def test_v1_unarchive_not_found(client: TestClient) -> None:
     resp = client.request(
         "DELETE",
-        "/api/papers/archive",
+        "/api/v1/papers/archive",
         json={"title": "Nonexistent Paper", "date": "2026-01-01"},
     )
     assert resp.status_code == 404
@@ -151,14 +144,13 @@ def test_unarchive_not_found(client: TestClient) -> None:
 # ---------------------------------------------------------------------------
 # Export
 # ---------------------------------------------------------------------------
-def test_export_csv(client: TestClient) -> None:
+def test_v1_export_csv(client: TestClient) -> None:
     """Export returns a CSV response."""
     with patch("backend.src.services.paper_service.pubmed_fetcher") as mock_fetcher:
         mock_fetcher.fetch_papers.return_value = _mock_pubmed_papers()
 
-        # First fetch to populate cache
         client.post(
-            "/api/papers/fetch",
+            "/api/v1/papers/fetch",
             json={
                 "data_sources": {
                     "pubmed": True,
@@ -170,9 +162,8 @@ def test_export_csv(client: TestClient) -> None:
             },
         )
 
-        # Export with same params (should hit cache)
         resp = client.post(
-            "/api/papers/export",
+            "/api/v1/papers/export",
             json={
                 "data_sources": {
                     "pubmed": True,

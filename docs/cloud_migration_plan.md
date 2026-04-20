@@ -4,26 +4,29 @@
 
 | Step | What | Size | Status | API Keys Needed | Key Outcome |
 |------|------|------|--------|-----------------|-------------|
-| **1** | Tests & CI | S | Not started | None | pytest + GitHub Actions, blocks regressions |
-| **2** | Frontend Redesign | XL | Not started | None | 3-column layout, new components, fresh aesthetics |
-| **3** | Backend Restructuring | L | Not started | None | API versioning, pydantic-settings, SSE shell, KB stubs |
-| **4** | Neon Database | M | Not started | `DATABASE_URL` (free signup) | Replace local JSON/Python files with Postgres |
-| **5** | Deploy | M | Not started | None (free accounts) | Vercel (frontend) + Render (backend) |
-| **6** | Agent Pipeline | XL | Not started | `ANTHROPIC_API_KEY` | LangGraph ReAct agents for intelligent paper review |
-| **7** | Pinecone + KB | L | Not started | `PINECONE_API_KEY` (free signup) | Semantic search over PDFs and saved papers |
+| **1** | Tests & CI | S | ✅ Done | None | pytest + GitHub Actions, blocks regressions |
+| **2** | Frontend Redesign | XL | ✅ Done | None | 3-column layout, new components, fresh aesthetics |
+| **3** | Backend Restructuring | L | ✅ Done | None (Clerk added) | API versioning, pydantic-settings, SSE, KB stubs, Clerk auth |
+| **4** | Neon Database | M | ✅ Done | `DATABASE_URL` | Replace local JSON/Python files with Postgres |
+| **5** | Deploy | M | ✅ Done | None (free accounts) | Vercel (frontend) + Render (backend) |
+| **6** | Mobile Responsive Support | M | Not started | None | Usable layout on phones/tablets before adding AI features |
+| **7** | Agent Pipeline | XL | Not started | `ANTHROPIC_API_KEY` | LangGraph ReAct agents for intelligent paper review |
+| **8** | Pinecone + KB | L | Not started | `PINECONE_API_KEY` (free signup) | Semantic search over PDFs and saved papers |
 
-Steps 1-5 require **zero LLM API keys**. Steps 6-7 add AI features incrementally.
+Steps 1-6 require **zero LLM API keys**. Steps 7-8 add AI features incrementally.
 
 For detailed architecture, ReAct loop diagrams, and full dependency reference, see [architecture_reference.md](architecture_reference.md).
 
 ---
 
-## Current State (Feb 2026)
+## Current State (Apr 2026)
 
-- **Backend**: `server.py` → `backend/src/` (modular FastAPI routers, services, Pydantic schemas)
-- **Frontend**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS 4, static export served by FastAPI
-- **Storage**: All local files — `config/settings.py`, `config/models/*.json`, `data/archive/archive.json`
-- **No auth, no external services** — runs entirely offline on a single machine
+- **Backend**: `server.py` → `backend/src/` (modular FastAPI routers under `/api/v1/`, services, Pydantic schemas, SSE progress streaming)
+- **Frontend**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS 4, deployed to Vercel (SSR, not static export)
+- **Storage**: Neon Postgres (cloud). Local file fallback when `DATABASE_URL` is unset
+- **Auth**: Clerk (Google/GitHub OAuth). JWT verified on every backend request; per-user data isolation via `users` table
+- **Hosting**: Vercel (frontend) + Render free tier (backend, ~30 s cold start) + Neon (database)
+- **Known gap**: essentially no responsive styles (~3 `sm:`/`md:` usages across the frontend, no viewport meta) — addressed in Step 6
 
 ## Reference: `nextjs` Branch
 
@@ -67,7 +70,9 @@ Pinecone ─── Vector Store               FREE (2 GB)
 
 ---
 
-## Step 1: Tests & CI
+## Step 1: Tests & CI ✅
+
+**What shipped**: 60 pytest tests across health/settings/papers/models/backups/journal_utils/keyword_matcher plus `/api/v1/` variants. `.github/workflows/regression-tests.yml` runs ruff check + ruff format check + pytest + frontend vitest + `npm run build` + Playwright E2E (chromium) against a live backend/frontend pair. Exceeds the original plan which only required lint + pytest.
 
 **Goal**: Establish test coverage before any major changes. Tests first = safe refactoring.
 
@@ -92,7 +97,13 @@ Pinecone ─── Vector Store               FREE (2 GB)
 
 ---
 
-## Step 2: Frontend Redesign
+## Step 2: Frontend Redesign ✅
+
+**What shipped**: All deps installed (`lucide-react`, `clsx`, `tailwind-merge`, `@microsoft/fetch-event-source`). `cn()` utility in `lib/utils.ts`. Routes: `/`, `/settings`, `/models`, `/kb`, `/sign-in`. UI primitives: `Card`, `Toggle`, `ModeSwitch`, `SourceBadge`, `ScoreIndicator`, `Spinner`, `Flash`. Feature components: `SearchPanel`, `PaperFeed`, `PaperCard`, `DashboardPanel`, `AgentActivityStream`. Hooks: `useSettings`, `usePaperSearch`, `useAgentStream`, `useKnowledgeBase`. Dark mode via `AppShell` toggle with `localStorage` persistence.
+
+**Deviations**:
+- `PaperDetailDrawer` from the plan was merged into `DashboardPanel`'s right column rather than built as a separate drawer component.
+- Mobile/tablet responsive collapse from sub-step 2b was **not** implemented — promoted to its own Step 6.
 
 **Goal**: Port the `nextjs` branch UI structure into `main`, redesign with fresh aesthetics.
 
@@ -139,7 +150,15 @@ Pinecone ─── Vector Store               FREE (2 GB)
 
 ---
 
-## Step 3: Backend Restructuring
+## Step 3: Backend Restructuring ✅
+
+**What shipped**: All `/api/v1/` routes (`health`, `settings`, `papers`, `models`, `backups`, `kb`) live alongside legacy `/api/` routes. `pydantic-settings` reads `.env` with `.env.example` committed. DI via `backend/src/api/deps.py` (`get_db_pool`, `get_settings_service`). Full SSE implementation in `backend/src/api/v1/papers.py` via `sse-starlette`, with every event type from the plan (`source_start`, `source_complete`, `source_error`, `batch_progress`, `scoring`, `complete`) defined in `backend/src/models/events.py`. Frontend `useAgentStream` + `AgentActivityStream` consume the stream. KB stubs return 503.
+
+**Deviations** (additions beyond plan):
+- **Clerk auth added.** JWT middleware in `backend/src/api/auth.py` verifies tokens via `CLERK_JWKS_URL`; `CurrentUser` dependency injected into every data route. Frontend wires `ClerkProvider` + `proxy.ts` (renamed per Next.js 16 convention) + `/sign-in` route. The plan deferred auth to "post-deploy if needed" — pulling it forward was a conscious choice to enable multi-user cloud deployment.
+- New deps beyond plan: `PyJWT`, `cryptography` (for Clerk JWT verification).
+
+**Loose end** (resolved Apr 2026): legacy `/api/*` routes fully removed. 5 route files deleted (`health.py`, `settings.py`, `papers.py`, `models.py`, `backups.py`), 5 legacy test files deleted, 5 ported to `/api/v1/` counterparts, plus new SSE test coverage for `/api/v1/papers/review` (5 tests). Test count: 60 → 62 after net delete/port. `backend/src/main.py` now registers `/api/v1/` routers only.
 
 **Goal**: Align backend with `nextjs` branch patterns, prepare for cloud services.
 
@@ -177,7 +196,11 @@ Pinecone ─── Vector Store               FREE (2 GB)
 
 ---
 
-## Step 4: Neon Database
+## Step 4: Neon Database ✅
+
+**What shipped**: `backend/src/db/neon.py` (asyncpg pool, schema bootstrap, one-time data migration from local files) and `backend/src/db/models.py` (all SQL queries). Local file fallback preserved: when `DATABASE_URL` is unset, services read/write the original local paths. Auto-creates `users` row on first authenticated request.
+
+**Deviation** (beyond plan): added a `users` table (not listed in the original schema) to support Clerk-based per-user data isolation. All data tables (`settings`, `settings_versions`, `model_presets`, `papers`) key off `user_id`.
 
 **Goal**: Replace local file storage with Neon Postgres.
 
@@ -208,7 +231,11 @@ Full schema in [architecture_reference.md](architecture_reference.md#database-sc
 
 ---
 
-## Step 5: Deploy
+## Step 5: Deploy ✅
+
+**What shipped**: `render.yaml` blueprint (uvicorn on `$PORT`, health check at `/api/v1/health`, env vars for `DATABASE_URL`, `ALLOWED_ORIGINS`, `CLERK_JWKS_URL`, `CLERK_SECRET_KEY`, and placeholders for `ANTHROPIC_API_KEY` / `PINECONE_API_KEY`). `frontend/next.config.ts` no longer uses `output: "export"` (Vercel handles SSR). CORS reads `ALLOWED_ORIGINS` from env. Full walkthrough in `docs/deployment_guide.md`.
+
+**Observed pain**: Render free tier's ~30 s cold start bleeds into first-load UX. Recent commits (`ccc61fb`, `e8f1d30`, `2e8d7f9`) added retry/auto-retry and graceful degradation in the frontend. A keep-alive pinger hitting `/api/v1/health` every 10 minutes remains an open option.
 
 **Goal**: Frontend on Vercel, backend on Render, database on Neon.
 
@@ -238,7 +265,62 @@ Full schema in [architecture_reference.md](architecture_reference.md#database-sc
 
 ---
 
-## Step 6: Agent Pipeline
+## Step 6: Mobile Responsive Support
+
+**Goal**: Make the deployed site usable on phones and tablets. The app is live on Vercel — anyone sharing a paper link on Slack, email, or their phone currently lands on a broken desktop layout.
+
+**No API keys needed. No external services.**
+
+### Why here, before agents
+Agents (Step 7) introduce long-running SSE streams and richer activity UI — both amplify mobile friction if the underlying layout is broken. Fixing the foundation now means Step 7 frontend work targets a layout that already works at every size.
+
+### Current gaps
+- `AppShell` header nav renders all items as inline pills — overflows on narrow screens
+- Main page's 3-column layout (SearchPanel / PaperFeed / DashboardPanel) has no collapse behavior
+- Settings/Models tables and forms are desktop-shaped
+- Touch targets on icon buttons and toggles are below 44×44
+- No `viewport` meta in `app/layout.tsx`
+- No mobile viewport coverage in Playwright E2E
+- Whole codebase has ~3 `sm:`/`md:` Tailwind usages — effectively zero responsive design
+
+### Sub-steps
+
+#### 6a: Foundations
+- Add `viewport` export in `app/layout.tsx` (`width=device-width, initial-scale=1`, `themeColor` light/dark)
+- Audit touch targets: icon buttons to ≥40×40, primary controls to ≥44 height
+- Document breakpoint usage (`sm` 640, `md` 768, `lg` 1024, `xl` 1280) — default Tailwind is fine, just commit to using it consistently
+
+#### 6b: Navigation
+- Collapse `AppShell` nav to a hamburger drawer on `<md` (use `lucide-react` `Menu` icon)
+- Compact title block on narrow screens; keep theme toggle + `UserButton` accessible
+- Ensure active route state still reads clearly in drawer form
+
+#### 6c: Layout collapse
+- `/` page: stack SearchPanel → PaperFeed → DashboardPanel vertically on `<lg`, 2-column on `md`, 3-column on `lg+`
+- DashboardPanel's selected-paper detail: full-screen sheet on mobile rather than a sidebar column
+- `PaperCard`: reduce horizontal padding on small screens, wrap metadata rows, keep score badge prominent
+
+#### 6d: Forms and tables
+- Settings / Models pages: stack form fields, make tables horizontally scrollable with a visible scroll hint
+- Keyword chips and source toggles: widen tap area, preserve spacing so fingers don't cross-tap
+
+#### 6e: Streaming UX on mobile
+- `AgentActivityStream`: collapsed-by-default on mobile with a compact "3 sources active" header; expand on tap
+- Verify `@microsoft/fetch-event-source` reconnect behavior when the browser backgrounds the tab on iOS Safari
+
+#### 6f: Testing
+- Add Playwright projects for `iPhone 14` and `iPad Mini` viewports in `playwright.config.ts`
+- Visual regression snapshots at each breakpoint (keep the existing `VR=1` opt-in pattern, don't block CI)
+- One round of manual QA on real iOS Safari + Android Chrome before marking this step done
+
+### Decisions
+- **PWA manifest + install prompt?** Defer. No clear demand, adds icons/service-worker surface for little gain at v1.
+- **Bottom tab bar vs hamburger?** Hamburger — only 4 nav items, bottom bar eats scarce vertical space on already-cramped mobile screens.
+- **Tablet portrait: 2-column or 3-column?** 2-column on `md` (tablets in portrait), 3-column only at `lg+` (1024 px +).
+
+---
+
+## Step 7: Agent Pipeline
 
 **Goal**: Port LangGraph ReAct agent system from `nextjs` branch.
 
@@ -273,8 +355,7 @@ Full ReAct loop diagram in [architecture_reference.md](architecture_reference.md
 - `langgraph` — cyclic ReAct agent orchestration
 
 ### Frontend Integration
-- Wire `AgentActivityStream` component (shell from Step 2) to real SSE endpoint
-- `useAgentStream` hook consumes SSE events
+- `AgentActivityStream` + `useAgentStream` already consume Step 3's progress-event stream — the Step 7 work is adding richer agent-step events on top of the existing SSE channel, not building the stream from scratch
 - Mode switch (classic/agent) toggles between `/papers/search` and `/papers/review`
 
 ### Notes
@@ -285,7 +366,7 @@ Full ReAct loop diagram in [architecture_reference.md](architecture_reference.md
 
 ---
 
-## Step 7: Pinecone + Knowledge Base
+## Step 8: Pinecone + Knowledge Base
 
 **Goal**: Enable semantic search over uploaded PDFs and saved papers.
 
@@ -307,8 +388,7 @@ See [architecture_reference.md](architecture_reference.md#how-pinecone--specter2
 - `numpy` — embedding math (cosine similarity, normalization)
 
 ### Frontend Integration
-- Wire `/kb` page to real API endpoints (stubs from Step 3)
-- `useKnowledgeBase` hook for project CRUD, PDF upload, search
+- `/kb` route already exists (disabled in nav); `useKnowledgeBase` hook is scaffolded. Step 8 work is wiring them to the real API once the 503 stubs are replaced
 - KB project selector in SearchPanel (for agent mode)
 
 ### Considerations
@@ -321,10 +401,15 @@ See [architecture_reference.md](architecture_reference.md#how-pinecone--specter2
 
 ## Open Questions
 
+### Resolved during Steps 3–5
+- **Auth**: went with Clerk + multi-user isolation in Neon (pulled forward from "post-deploy if needed"). Each logged-in user gets their own `users` row and data scope.
+- **`server.py` auto-build**: kept for local dev; CI uses separate `npm run build`.
+- **Models tab**: kept, DB-backed via `model_presets` table.
+
+### Still open
 | Question | Affects | Recommendation |
 |----------|---------|----------------|
-| Auth: multi-user vs single shared instance? | Steps 4-5 | **Single-user for MVP** (Steps 1-5). Add optional auth post-deploy if needed. Avoids scope creep. |
-| KB_alz/ PDFs (78 MB): keep local or move to cloud storage (S3/R2)? | Step 7 | **Keep local for now.** Revisit when KB is implemented in Step 7. Cloud storage only needed if multi-user. |
-| Keep `server.py` auto-build for local dev, or separate build steps in CI? | Step 5 | **Both.** Keep auto-build for local dev convenience. CI uses separate `npm run build` step. |
-| Models tab: DB-backed feature, or superseded by agent pipeline? | Steps 2, 4 | **Keep and port to DB.** Useful for saving keyword/settings presets regardless of agent mode. |
-| Render cold start (~30s): acceptable, or upgrade to paid? | Step 5 | **Start free.** 30s cold start is fine for a personal research tool. Upgrade only if it becomes a real pain point. |
+| KB_alz/ PDFs (78 MB): keep local or move to cloud storage (S3/R2)? | Step 8 | **Keep local for now.** Revisit when KB is implemented. Cloud storage only worth it if usage grows beyond a single researcher. |
+| Render cold start (~30 s): live with it, or add keep-alive pinger, or upgrade to paid? | Step 5 follow-up | Cheapest fix is a cron pinger hitting `/api/v1/health` every 10 min — closes the papercut without paid tier. Worth doing before Step 7 so agent runs don't start with a cold backend. |
+| ~~Remove legacy `/api/*` routes?~~ | ~~Step 3 cleanup~~ | ✅ Resolved Apr 2026 — legacy routes + tests removed, ports + SSE coverage added. |
+| `PaperDetailDrawer` as its own component vs embedded in `DashboardPanel`? | Step 2 / Step 6 | Revisit during Step 6 — a mobile bottom sheet is a natural place to split this out. |

@@ -12,10 +12,10 @@ pytest
 pytest -v
 
 # Single file
-pytest tests/test_papers.py
+pytest tests/test_v1_papers.py
 
 # Single test
-pytest tests/test_papers.py::test_archive_and_list
+pytest tests/test_v1_papers.py::test_v1_archive_and_list
 
 # With coverage (if pytest-cov is installed)
 pytest --cov=backend
@@ -25,14 +25,16 @@ pytest --cov=backend
 
 ```
 tests/
-├── conftest.py              # Shared fixtures (auto-discovered by pytest)
-├── test_health.py           # GET /api/health
-├── test_settings.py         # GET/PUT /api/settings
-├── test_papers.py           # Fetch, archive, export endpoints
-├── test_models.py           # Model preset CRUD
-├── test_backups.py          # Backup CRUD
-├── test_keyword_matcher.py  # KeywordMatcher scoring & search
-└── test_journal_utils.py    # Journal name matching utilities
+├── conftest.py                 # Shared fixtures (auto-discovered by pytest)
+├── test_v1_health.py           # GET /api/v1/health
+├── test_v1_settings.py         # GET/PUT /api/v1/settings
+├── test_v1_papers.py           # Fetch, archive, export endpoints
+├── test_v1_papers_sse.py       # SSE /api/v1/papers/review stream
+├── test_v1_models.py           # Model preset CRUD
+├── test_v1_backups.py          # Backup CRUD
+├── test_v1_kb.py               # KB stub endpoints (503 until Step 8)
+├── test_keyword_matcher.py     # KeywordMatcher scoring & search
+└── test_journal_utils.py       # Journal name matching utilities
 ```
 
 ## About conftest.py

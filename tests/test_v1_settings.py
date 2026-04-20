@@ -22,3 +22,8 @@ def test_v1_put_settings(client: TestClient, mock_settings: dict[str, Any]) -> N
 
     r2 = client.get("/api/v1/settings")
     assert r2.json()["keywords"] == ["test_keyword"]
+
+
+def test_v1_put_settings_empty(client: TestClient) -> None:
+    r = client.put("/api/v1/settings", json={"settings": {}})
+    assert r.status_code == 200

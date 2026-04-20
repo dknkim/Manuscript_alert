@@ -193,13 +193,7 @@ def client(
     tmp_models_dir: Path,
     tmp_archive_dir: Path,
 ) -> TestClient:
-    """
-    TestClient with config module monkeypatched to use temp dirs
-    and a mock settings service.  Patches both legacy and v1 routes.
-    """
-    import backend.src.api.backups as api_backups
-    import backend.src.api.models as api_models
-    import backend.src.api.settings as api_settings
+    """TestClient with config + v1 DI singletons pointed at temp dirs."""
     import backend.src.config as cfg
     import backend.src.services.archive_service as arch_svc
     from backend.src.api import deps
@@ -208,12 +202,6 @@ def client(
     monkeypatch.setattr(cfg, "settings_service", patched_settings_service)
     monkeypatch.setattr(cfg, "MODELS_DIR", tmp_models_dir)
     monkeypatch.setattr(cfg, "ARCHIVE_DIR", tmp_archive_dir)
-
-    # Patch per-module references that were imported at module load time (legacy routes)
-    monkeypatch.setattr(api_settings, "settings_service", patched_settings_service)
-    monkeypatch.setattr(api_models, "settings_service", patched_settings_service)
-    monkeypatch.setattr(api_models, "MODELS_DIR", tmp_models_dir)
-    monkeypatch.setattr(api_backups, "settings_service", patched_settings_service)
     monkeypatch.setattr(arch_svc, "ARCHIVE_DIR", tmp_archive_dir)
 
     # Patch v1 dependency injection singletons
