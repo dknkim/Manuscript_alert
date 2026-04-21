@@ -84,11 +84,9 @@ export default function PapersPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
         <Spinner size="lg" />
-        {warmingUp && (
-          <p className="text-sm text-text-muted animate-pulse">
-            Server is waking up, please wait…
-          </p>
-        )}
+        <p className="text-sm text-text-muted animate-pulse">
+          Server is waking up, please wait…
+        </p>
       </div>
     );
   }
