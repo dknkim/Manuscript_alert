@@ -1,27 +1,69 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { BookOpen, BookmarkX, ExternalLink } from "lucide-react";
+import { BookOpen, BookmarkX, ExternalLink, RefreshCw } from "lucide-react";
 import { getArchivedPapers, unarchivePaper } from "@/lib/api";
 import type { Paper, ArchiveResponse } from "@/types";
 import Spinner from "@/components/ui/Spinner";
 
+const RETRY_DELAYS_MS = [3000, 6000, 12000, 20000];
+const TIMEOUT_MS = 20000;
+
+async function fetchWithRetry(): Promise<ArchiveResponse> {
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+      try {
+        const res = await getArchivedPapers();
+        clearTimeout(timer);
+        return res;
+      } finally {
+        clearTimeout(timer);
+      }
+    } catch (err) {
+      if (attempt < RETRY_DELAYS_MS.length) {
+        await new Promise((resolve) =>
+          window.setTimeout(resolve, RETRY_DELAYS_MS[attempt]),
+        );
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error("Failed to load archive");
+}
+
 export default function KnowledgeBasePage() {
   const [data, setData] = useState<ArchiveResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [warmingUp, setWarmingUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setWarmingUp(false);
+
+    // Optimistically try once; if it fails, show warming-up and retry
     try {
       const res = await getArchivedPapers();
+      setData(res);
+      setLoading(false);
+      return;
+    } catch {
+      setWarmingUp(true);
+    }
+
+    try {
+      const res = await fetchWithRetry();
       setData(res);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load archive");
     } finally {
       setLoading(false);
+      setWarmingUp(false);
     }
   }, []);
 
@@ -62,17 +104,24 @@ export default function KnowledgeBasePage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
         <Spinner size="lg" />
-        <p className="text-sm text-text-muted">Loading archived papers…</p>
+        <p className="text-sm text-text-muted animate-pulse">
+          {warmingUp ? "Server is waking up, please wait…" : "Loading archived papers…"}
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
-          {error}
-        </div>
+      <div className="max-w-4xl mx-auto p-6 flex flex-col items-center gap-4 py-20">
+        <p className="text-sm text-text-muted">{error}</p>
+        <button
+          onClick={load}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-surface-raised border border-border text-text-secondary hover:text-text-primary transition-colors"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Retry
+        </button>
       </div>
     );
   }
@@ -94,6 +143,15 @@ export default function KnowledgeBasePage() {
             </p>
           )}
         </div>
+        {data && (
+          <button
+            onClick={load}
+            className="p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-surface-inset transition-colors"
+            title="Refresh"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {isEmpty ? (
