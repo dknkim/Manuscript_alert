@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Settings, Database, BookOpen, Moon, Sun } from "lucide-react";
@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
 
 const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-const NAV_ITEMS = [
+const NAV_ITEMS: { href: string; label: string; icon: React.ElementType }[] = [
   { href: "/", label: "Papers", icon: FileText },
   { href: "/models", label: "Models", icon: Database },
   { href: "/settings", label: "Settings", icon: Settings },
   { href: "/kb", label: "Knowledge Base", icon: BookOpen },
-] as const;
+];
 
 /** Only mounted when ClerkProvider is present — safe to call useAuth() here. */
 function UserAvatar() {
@@ -59,8 +59,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex items-center gap-3">
               <nav className="flex gap-1 bg-surface-inset rounded-lg p-1">
-                {NAV_ITEMS.map(({ href, label, icon: Icon, ...rest }) => {
-                  const isDisabled = "disabled" in rest && rest.disabled;
+                {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
                   const active =
                     href === "/"
                       ? pathname === "/"
@@ -68,18 +67,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   return (
                     <Link
                       key={href}
-                      href={isDisabled ? "#" : href}
-                      onClick={isDisabled ? (e) => e.preventDefault() : undefined}
+                      href={href}
                       className={cn(
                         "flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all",
                         active
                           ? "bg-surface-raised text-text-primary shadow-xs"
                           : "text-text-secondary hover:text-text-primary",
-                        isDisabled && "opacity-50 cursor-not-allowed hover:text-text-secondary",
                       )}
-                      tabIndex={isDisabled ? -1 : undefined}
-                      aria-disabled={isDisabled || undefined}
-                      title={isDisabled ? "Coming soon" : undefined}
                     >
                       <Icon className="h-4 w-4" />
                       {label}
