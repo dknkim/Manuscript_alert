@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Papers", icon: FileText },
   { href: "/models", label: "Models", icon: Database },
   { href: "/settings", label: "Settings", icon: Settings },
-  { href: "/kb", label: "Knowledge Base", icon: BookOpen, disabled: true },
+  { href: "/kb", label: "Knowledge Base", icon: BookOpen },
 ] as const;
 
 /** Only mounted when ClerkProvider is present — safe to call useAuth() here. */
