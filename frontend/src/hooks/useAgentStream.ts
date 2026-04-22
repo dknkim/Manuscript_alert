@@ -56,11 +56,13 @@ interface UseAgentStreamReturn {
 
 const EMPTY_DISPLAY: DisplayState = { sources: [], phases: [] };
 const STORAGE_PREFIX = "papers-stream-cache:";
+const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 
 interface StreamSnapshot {
   displayState: DisplayState;
   result: FetchResult | null;
   error: string | null;
+  cachedAt?: number;
 }
 
 /** Update or insert a source node, preserving insertion order. */
@@ -96,6 +98,10 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
 
     try {
       const snapshot = JSON.parse(raw) as StreamSnapshot;
+      if (snapshot.cachedAt && Date.now() - snapshot.cachedAt > CACHE_TTL_MS) {
+        window.sessionStorage.removeItem(`${STORAGE_PREFIX}${cacheKey}`);
+        return;
+      }
       setDisplay(snapshot.displayState ?? EMPTY_DISPLAY);
       setResult(snapshot.result ?? null);
       setError(snapshot.error ?? null);
@@ -118,6 +124,7 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
       displayState: display,
       result,
       error,
+      cachedAt: Date.now(),
     };
     window.sessionStorage.setItem(
       `${STORAGE_PREFIX}${cacheKey}`,
@@ -314,7 +321,9 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
         },
 
         onerror(err) {
-          if (ctrl.signal.aborted) return;
+          // Intentional abort (e.g. after "complete" event) — must throw or
+          // fetchEventSource will retry, causing an infinite fetch loop.
+          if (ctrl.signal.aborted) throw err;
           setError(err instanceof Error ? err.message : "Stream error");
           setIsStreaming(false);
           throw err; // stop retrying

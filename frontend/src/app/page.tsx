@@ -35,6 +35,11 @@ export default function PapersPage() {
     const t = window.setTimeout(() => setServerWakingUp(true), 5000);
     return () => window.clearTimeout(t);
   }, [stream.isStreaming]);
+  // Only show the waking-up message when no events have arrived yet —
+  // if sources/phases are populating, the server is awake and actively fetching.
+  const isServerWakingUp = serverWakingUp &&
+    stream.displayState.sources.length === 0 &&
+    stream.displayState.phases.length === 0;
 
   // Auto-retry when error is shown
   useEffect(() => {
@@ -142,7 +147,7 @@ export default function PapersPage() {
         onArchive={search.archive}
         displayState={stream.displayState}
         isStreaming={stream.isStreaming}
-        serverWakingUp={serverWakingUp}
+        serverWakingUp={isServerWakingUp}
       />
 
       <DashboardPanel
