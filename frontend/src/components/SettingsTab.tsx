@@ -172,7 +172,7 @@ export default function SettingsTab({
       </div>
 
       {/* Sub-tab nav */}
-      <div className="flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-border overflow-x-auto">
         {SUB_TABS.map((t) => (
           <button
             key={t.key}
@@ -610,7 +610,7 @@ function ScoringSettings({
         </label>
 
         {enabled && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <NumField label="5+ keywords" value={b5} onChange={setB5} />
             <NumField label="4 keywords" value={b4} onChange={setB4} />
             <NumField label="3 keywords" value={b3} onChange={setB3} />
@@ -621,7 +621,7 @@ function ScoringSettings({
       </Card>
 
       <Card title="Search Configuration">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <NumField
             label="Days Back"
             value={daysBack}
@@ -664,7 +664,7 @@ function ScoringSettings({
       </Card>
 
       <Card title="Default Data Sources">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Toggle label="PubMed" checked={sPubmed} onChange={setSPubmed} />
           <Toggle label="arXiv" checked={sArxiv} onChange={setSArxiv} />
           <Toggle label="bioRxiv" checked={sBiorxiv} onChange={setSBiorxiv} />

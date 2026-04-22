@@ -9,6 +9,7 @@ import type { SlotKey } from "@/hooks/useModelSlots";
 import SearchPanel from "@/components/features/SearchPanel";
 import PaperFeed from "@/components/features/PaperFeed";
 import DashboardPanel from "@/components/features/DashboardPanel";
+import MobileDrawer from "@/components/ui/MobileDrawer";
 import type { Paper } from "@/types";
 
 const AUTO_RETRY_SECONDS = 20;
@@ -30,6 +31,8 @@ export default function PapersPage() {
   const search = usePaperSearch(defaultSources);
   const stream = useAgentStream(settings ? settingsSignature : undefined);
   const [mode, setMode] = useState<"classic" | "agent">("classic");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
 
   // Show waking message in PaperFeed after 5s of streaming
   const [serverWakingUp, setServerWakingUp] = useState(false);
@@ -121,56 +124,71 @@ export default function PapersPage() {
     );
   }
 
+  const searchPanelProps = {
+    sources: search.sources,
+    searchMode: search.searchMode,
+    highImpactOnly: search.highImpactOnly,
+    loading: stream.isStreaming,
+    keywords,
+    mode,
+    onSourceToggle: search.toggleSource,
+    onSearchModeChange: search.setSearchMode,
+    onHighImpactChange: search.setHighImpactOnly,
+    onModeChange: setMode,
+    onFetch: handleFetch,
+    configuredSlots: slots.configuredSlots,
+    activeSlot: slots.activeSlot,
+    slotBusy: slots.busy,
+    onSlotSwitch: (k: SlotKey) => {
+      void slots.switchSlot(k).then(() => {
+        void stream.startStream(search.sources, search.searchMode);
+      });
+    },
+  };
+  const dashboardPanelProps = {
+    papers: activePapers,
+    allPapers: stream.result?.papers || [],
+    loading: stream.isStreaming,
+    highImpactOnly: search.highImpactOnly,
+    onHighImpactChange: search.setHighImpactOnly,
+  };
+
   return (
-    <div className="flex">
-      <SearchPanel
-        sources={search.sources}
-        searchMode={search.searchMode}
-        highImpactOnly={search.highImpactOnly}
-        loading={stream.isStreaming}
-        keywords={keywords}
-        mode={mode}
-        onSourceToggle={search.toggleSource}
-        onSearchModeChange={search.setSearchMode}
-        onHighImpactChange={search.setHighImpactOnly}
-        onModeChange={setMode}
-        onFetch={handleFetch}
-        configuredSlots={slots.configuredSlots}
-        activeSlot={slots.activeSlot}
-        slotBusy={slots.busy}
-        onSlotSwitch={(k: SlotKey) => {
-          void slots.switchSlot(k).then(() => {
-            // After the slot's settings are loaded into DB and React state is
-            // refreshed, kick off a new paper fetch so results match the new
-            // keyword set immediately without requiring a manual click.
-            void stream.startStream(search.sources, search.searchMode);
-          });
-        }}
-      />
+    <>
+      <MobileDrawer side="left" open={filterOpen} title="Filters" onClose={() => setFilterOpen(false)}>
+        <SearchPanel {...searchPanelProps} />
+      </MobileDrawer>
+      <MobileDrawer side="right" open={statsOpen} title="Stats" onClose={() => setStatsOpen(false)}>
+        <DashboardPanel {...dashboardPanelProps} />
+      </MobileDrawer>
 
-      <PaperFeed
-        result={stream.result}
-        papers={activePapers}
-        loading={stream.isStreaming}
-        error={stream.error}
-        sources={search.sources}
-        searchQuery={search.searchQuery}
-        onSearchQueryChange={search.setSearchQuery}
-        onExport={search.exportCSV}
-        archivedTitles={search.archivedTitles}
-        onArchive={search.archive}
-        displayState={stream.displayState}
-        isStreaming={stream.isStreaming}
-        serverWakingUp={isServerWakingUp}
-      />
+      <div className="flex">
+        <div className="hidden lg:block">
+          <SearchPanel {...searchPanelProps} />
+        </div>
 
-      <DashboardPanel
-        papers={activePapers}
-        allPapers={stream.result?.papers || []}
-        loading={stream.isStreaming}
-        highImpactOnly={search.highImpactOnly}
-        onHighImpactChange={search.setHighImpactOnly}
-      />
-    </div>
+        <PaperFeed
+          result={stream.result}
+          papers={activePapers}
+          loading={stream.isStreaming}
+          error={stream.error}
+          sources={search.sources}
+          searchQuery={search.searchQuery}
+          onSearchQueryChange={search.setSearchQuery}
+          onExport={search.exportCSV}
+          archivedTitles={search.archivedTitles}
+          onArchive={search.archive}
+          displayState={stream.displayState}
+          isStreaming={stream.isStreaming}
+          serverWakingUp={isServerWakingUp}
+          onOpenFilters={() => setFilterOpen(true)}
+          onOpenStats={() => setStatsOpen(true)}
+        />
+
+        <div className="hidden lg:block">
+          <DashboardPanel {...dashboardPanelProps} />
+        </div>
+      </div>
+    </>
   );
 }

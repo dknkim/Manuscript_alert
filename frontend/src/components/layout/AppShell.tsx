@@ -49,16 +49,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="max-w-[1440px] mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-text-primary tracking-tight">
+              <h1 className="text-xl lg:text-2xl font-bold text-text-primary tracking-tight">
                 Manuscript Alert
               </h1>
-              <p className="text-sm text-text-muted mt-0.5">
+              <p className="hidden lg:block text-sm text-text-muted mt-0.5">
                 Research paper monitoring across PubMed, arXiv, bioRxiv &amp;
                 medRxiv
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <nav className="flex gap-1 bg-surface-inset rounded-lg p-1">
+              <nav className="hidden lg:flex gap-1 bg-surface-inset rounded-lg p-1">
                 {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
                   const active =
                     href === "/"
@@ -93,7 +93,30 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <main className="max-w-[1440px] mx-auto">{children}</main>
+      {/* Bottom tab bar — mobile only */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface-raised border-t border-border">
+        <div className="flex justify-around py-1">
+          {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+            const shortLabel = href === "/kb" ? "KB" : label;
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex flex-col items-center gap-0.5 px-4 py-2 text-xs font-medium transition-colors",
+                  active ? "text-accent" : "text-text-secondary",
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                {shortLabel}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      <main className="max-w-[1440px] mx-auto pb-16 lg:pb-0">{children}</main>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { SlidersHorizontal, BarChart2 } from "lucide-react";
 import type { Paper, FetchResult, DataSources } from "@/types";
 import type { DisplayState } from "@/hooks/useAgentStream";
 import PaperCard from "@/components/PaperCard";
@@ -19,6 +20,8 @@ interface PaperFeedProps {
   displayState: DisplayState;
   isStreaming: boolean;
   serverWakingUp?: boolean;
+  onOpenFilters?: () => void;
+  onOpenStats?: () => void;
 }
 
 export default function PaperFeed({
@@ -35,11 +38,35 @@ export default function PaperFeed({
   displayState,
   isStreaming,
   serverWakingUp,
+  onOpenFilters,
+  onOpenStats,
 }: PaperFeedProps) {
   const hasActivity = displayState.sources.length > 0 || isStreaming;
 
   return (
-    <div className="flex-1 p-6 space-y-4 min-w-0">
+    <div className="flex-1 p-3 lg:p-6 space-y-4 min-w-0">
+      {/* Mobile toolbar */}
+      {(onOpenFilters || onOpenStats) && (
+        <div className="lg:hidden flex gap-2">
+          {onOpenFilters && (
+            <button
+              onClick={onOpenFilters}
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm text-text-secondary hover:text-text-primary transition-colors"
+            >
+              <SlidersHorizontal className="h-4 w-4" /> Filters
+            </button>
+          )}
+          {onOpenStats && (
+            <button
+              onClick={onOpenStats}
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm text-text-secondary hover:text-text-primary transition-colors"
+            >
+              <BarChart2 className="h-4 w-4" /> Stats
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-text-primary">Recent Papers</h2>
         {result && (
