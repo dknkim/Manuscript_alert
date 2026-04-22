@@ -1,13 +1,10 @@
 name: Keep Render Backend Warm
 
 on:
-  schedule:
-    # Every 10 minutes during Pacific waking hours (6am-11pm), DST-safe.
-    # UTC 13-23 + 0-6 covers the 6am-11pm window in both PST (UTC-8) and
-    # PDT (UTC-7). Extra hour of warmth at one end in each mode is harmless.
-    # Cron is clock-aligned: fires at :00, :10, :20, :30, :40, :50.
-    # ~540 compute-hours/month on Render free tier (750 hr/mo budget).
-    - cron: "*/10 0-6,13-23 * * *"
+  # schedule disabled — cron-job.org handles keep-alive more reliably.
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   - cron: "*/10 0-6,13-23 * * *"
   workflow_dispatch: # allow manual firing from Actions tab
 
 jobs:

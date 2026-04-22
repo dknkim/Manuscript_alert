@@ -29,6 +29,22 @@ export default function PapersPage() {
   const stream = useAgentStream(settings ? settingsSignature : undefined);
   const [mode, setMode] = useState<"classic" | "agent">("classic");
 
+  // Delay spinner to avoid flash on fast loads
+  const [showSpinner, setShowSpinner] = useState(false);
+  useEffect(() => {
+    if (!loading) { setShowSpinner(false); return; }
+    const t = window.setTimeout(() => setShowSpinner(true), 500);
+    return () => window.clearTimeout(t);
+  }, [loading]);
+
+  // Show waking message in PaperFeed after 5s of streaming
+  const [serverWakingUp, setServerWakingUp] = useState(false);
+  useEffect(() => {
+    if (!stream.isStreaming) { setServerWakingUp(false); return; }
+    const t = window.setTimeout(() => setServerWakingUp(true), 5000);
+    return () => window.clearTimeout(t);
+  }, [stream.isStreaming]);
+
   // Auto-retry when error is shown
   useEffect(() => {
     if (!error) { setRetryCountdown(0); return; }
@@ -81,12 +97,10 @@ export default function PapersPage() {
   }, [stream.result, search.highImpactOnly, search.searchQuery]);
 
   if (loading && !settings) {
+    if (!showSpinner) return null;
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="text-sm text-text-muted animate-pulse">
-          Server is waking up, please wait…
-        </p>
       </div>
     );
   }
@@ -146,6 +160,7 @@ export default function PapersPage() {
         onArchive={search.archive}
         displayState={stream.displayState}
         isStreaming={stream.isStreaming}
+        serverWakingUp={serverWakingUp}
       />
 
       <DashboardPanel

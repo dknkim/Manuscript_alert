@@ -18,6 +18,7 @@ interface PaperFeedProps {
   onArchive: (paper: Paper) => void;
   displayState: DisplayState;
   isStreaming: boolean;
+  serverWakingUp?: boolean;
 }
 
 export default function PaperFeed({
@@ -33,6 +34,7 @@ export default function PaperFeed({
   onArchive,
   displayState,
   isStreaming,
+  serverWakingUp,
 }: PaperFeedProps) {
   const hasActivity = displayState.sources.length > 0 || isStreaming;
 
@@ -103,6 +105,14 @@ export default function PaperFeed({
             </span>
           )}
         </p>
+      )}
+
+      {/* Waking up banner */}
+      {loading && serverWakingUp && (
+        <div className="flex items-center gap-2 text-sm text-text-muted animate-pulse">
+          <span className="h-3 w-3 rounded-full border-2 border-text-muted border-t-transparent animate-spin" />
+          Server is waking up, please wait…
+        </div>
       )}
 
       {/* Loading — skeleton cards below activity stream */}

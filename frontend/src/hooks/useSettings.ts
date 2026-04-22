@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { getSettings } from "@/lib/api";
 import type { Settings } from "@/types";
 
-const SETTINGS_TIMEOUT_MS = 20000;
-const SETTINGS_RETRY_DELAYS_MS = [3000, 6000, 12000, 20000];
+const SETTINGS_TIMEOUT_MS = 8000;
+const SETTINGS_RETRY_DELAYS_MS = [3000, 3000, 3000, 3000, 3000];
+const CACHE_KEY = "ms_settings_v1";
 
 export function useSettings() {
   const [settings, setSettings] = useState<Settings | null>(null);
@@ -27,6 +28,7 @@ export function useSettings() {
         setError(null);
         setLoading(false);
         setWarmingUp(false);
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(next)); } catch { /* quota */ }
         return;
       } catch (err) {
         const message =
@@ -54,6 +56,13 @@ export function useSettings() {
   }, [loadSettings]);
 
   useEffect(() => {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        setSettings(JSON.parse(cached) as Settings);
+        setLoading(false);
+      }
+    } catch { /* ignore */ }
     void loadSettings(true);
   }, [loadSettings]);
 
