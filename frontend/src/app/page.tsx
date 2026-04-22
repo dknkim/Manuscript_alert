@@ -7,7 +7,6 @@ import { useAgentStream } from "@/hooks/useAgentStream";
 import SearchPanel from "@/components/features/SearchPanel";
 import PaperFeed from "@/components/features/PaperFeed";
 import DashboardPanel from "@/components/features/DashboardPanel";
-import Spinner from "@/components/ui/Spinner";
 import type { Paper } from "@/types";
 
 const AUTO_RETRY_SECONDS = 20;
@@ -28,14 +27,6 @@ export default function PapersPage() {
   const search = usePaperSearch(defaultSources);
   const stream = useAgentStream(settings ? settingsSignature : undefined);
   const [mode, setMode] = useState<"classic" | "agent">("classic");
-
-  // Delay spinner to avoid flash on fast loads
-  const [showSpinner, setShowSpinner] = useState(false);
-  useEffect(() => {
-    if (!loading) { setShowSpinner(false); return; }
-    const t = window.setTimeout(() => setShowSpinner(true), 500);
-    return () => window.clearTimeout(t);
-  }, [loading]);
 
   // Show waking message in PaperFeed after 5s of streaming
   const [serverWakingUp, setServerWakingUp] = useState(false);
@@ -96,16 +87,7 @@ export default function PapersPage() {
     return filtered;
   }, [stream.result, search.highImpactOnly, search.searchQuery]);
 
-  if (loading && !settings) {
-    if (!showSpinner) return null;
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
-
-  if (!settings) {
+  if (!settings && !loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh] px-6">
         <div className="max-w-md w-full rounded-xl border border-border bg-surface-raised p-6 text-center">
