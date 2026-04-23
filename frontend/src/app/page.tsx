@@ -61,17 +61,16 @@ export default function PapersPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
-  // Auto-fetch once when both keywords and sources are ready
+  // Auto-fetch once when both keywords and sources are ready.
+  // Mark didAutoFetch even when a cached result exists so that a manual CTA
+  // click (which clears result via reset()) doesn't re-trigger this guard.
   const didAutoFetch = useRef(false);
   useEffect(() => {
-    if (
-      !didAutoFetch.current &&
-      keywords.length > 0 &&
-      search.sourcesReady &&
-      !stream.result
-    ) {
+    if (!didAutoFetch.current && keywords.length > 0 && search.sourcesReady) {
       didAutoFetch.current = true;
-      stream.startStream(search.sources, search.searchMode);
+      if (!stream.result) {
+        stream.startStream(search.sources, search.searchMode);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keywords.length, search.sourcesReady, stream.result]);

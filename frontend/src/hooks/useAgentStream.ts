@@ -330,9 +330,15 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
         },
 
         onclose() {
+          // Abort first so onerror (triggered by the throw) skips setError.
+          ctrl.abort();
           setIsStreaming(false);
           throw new Error("done"); // prevent fetchEventSource from retrying
         },
+      }).catch((err: unknown) => {
+        // "done" is thrown by onclose on every clean stream end — not a real error.
+        if (err instanceof Error && err.message === "done") return;
+        // All genuine errors are already handled in onerror above.
       });
     },
     [reset],
