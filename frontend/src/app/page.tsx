@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useSettings } from "@/hooks/useSettings";
 import { usePaperSearch } from "@/hooks/usePaperSearch";
 import { useAgentStream } from "@/hooks/useAgentStream";
+import { useModelSlots } from "@/hooks/useModelSlots";
+import type { SlotKey } from "@/hooks/useModelSlots";
 import SearchPanel from "@/components/features/SearchPanel";
 import PaperFeed from "@/components/features/PaperFeed";
 import DashboardPanel from "@/components/features/DashboardPanel";
@@ -13,6 +15,7 @@ const AUTO_RETRY_SECONDS = 20;
 
 export default function PapersPage() {
   const { settings, loading, error, warmingUp, reload } = useSettings();
+  const slots = useModelSlots(reload);
   const [retryCountdown, setRetryCountdown] = useState(0);
   const keywords = settings?.keywords || [];
   const settingsSignature = useMemo(
@@ -132,6 +135,10 @@ export default function PapersPage() {
         onHighImpactChange={search.setHighImpactOnly}
         onModeChange={setMode}
         onFetch={handleFetch}
+        configuredSlots={slots.configuredSlots}
+        activeSlot={slots.activeSlot}
+        slotBusy={slots.busy}
+        onSlotSwitch={(k: SlotKey) => void slots.switchSlot(k)}
       />
 
       <PaperFeed

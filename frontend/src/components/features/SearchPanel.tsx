@@ -2,6 +2,8 @@
 
 import type { DataSources } from "@/types";
 import ModeSwitch from "@/components/ui/ModeSwitch";
+import { MODEL_SLOTS } from "@/hooks/useModelSlots";
+import type { SlotKey } from "@/hooks/useModelSlots";
 
 interface SearchMode {
   value: string;
@@ -39,6 +41,10 @@ interface SearchPanelProps {
   onHighImpactChange: (v: boolean) => void;
   onModeChange: (mode: "classic" | "agent") => void;
   onFetch: () => void;
+  configuredSlots?: Set<string>;
+  activeSlot?: string | null;
+  slotBusy?: boolean;
+  onSlotSwitch?: (slotKey: SlotKey) => void;
 }
 
 export default function SearchPanel({
@@ -53,6 +59,10 @@ export default function SearchPanel({
   onHighImpactChange,
   onModeChange,
   onFetch,
+  configuredSlots = new Set<string>(),
+  activeSlot = null,
+  slotBusy = false,
+  onSlotSwitch,
 }: SearchPanelProps) {
   return (
     <aside className="w-72 shrink-0 bg-surface-raised border-r border-border p-5 space-y-6 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
@@ -178,6 +188,45 @@ export default function SearchPanel({
             </span>
           )}
         </div>
+      </div>
+
+      {/* Model slot switcher */}
+      <div>
+        <h3 className="text-xs font-semibold text-text-muted uppercase mb-2">
+          Model Slots
+        </h3>
+        <div className="grid grid-cols-3 gap-1.5">
+          {MODEL_SLOTS.map((slot) => {
+            const isConfigured = configuredSlots.has(slot.key);
+            const isActive = activeSlot === slot.key;
+            return (
+              <button
+                key={slot.key}
+                disabled={!isConfigured || slotBusy || !onSlotSwitch}
+                onClick={() => onSlotSwitch?.(slot.key)}
+                title={
+                  isConfigured
+                    ? `Switch to ${slot.displayName}`
+                    : `${slot.displayName} not configured yet`
+                }
+                className={`py-1.5 rounded-md text-xs font-medium transition-colors text-center ${
+                  isActive
+                    ? "bg-accent text-white shadow-sm"
+                    : isConfigured
+                      ? "bg-surface-inset text-text-secondary border border-border hover:bg-surface-inset/80"
+                      : "bg-surface-inset text-text-muted border border-border opacity-40 cursor-not-allowed"
+                }`}
+              >
+                {slot.displayName}
+              </button>
+            );
+          })}
+        </div>
+        {[...configuredSlots].length === 0 && (
+          <p className="text-xs text-text-muted mt-1.5">
+            Save slots in Settings.
+          </p>
+        )}
       </div>
     </aside>
   );

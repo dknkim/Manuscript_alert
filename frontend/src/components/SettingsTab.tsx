@@ -11,6 +11,7 @@ import type { Settings, BackupInfo, FlashMessage } from "@/types";
 import Card from "@/components/ui/Card";
 import Flash from "@/components/ui/Flash";
 import Toggle from "@/components/ui/Toggle";
+import { useModelSlots, MODEL_SLOTS } from "@/hooks/useModelSlots";
 
 interface SubTab {
   key: string;
@@ -34,6 +35,23 @@ export default function SettingsTab({
   onSettingsChange,
 }: SettingsTabProps) {
   const [sub, setSub] = useState<string>("keywords");
+  const slots = useModelSlots();
+  const [slotMsg, setSlotMsg] = useState<FlashMessage | null>(null);
+
+  const handleSaveToSlot = async (slotKey: (typeof MODEL_SLOTS)[number]["key"]): Promise<void> => {
+    try {
+      await slots.saveToSlot(slotKey);
+      const slot = MODEL_SLOTS.find((s) => s.key === slotKey)!;
+      setSlotMsg({ type: "success", text: `Configuration saved to ${slot.displayName}.` });
+      setTimeout(() => setSlotMsg(null), 3000);
+    } catch (e: unknown) {
+      setSlotMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Unknown error",
+      });
+      setTimeout(() => setSlotMsg(null), 3000);
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -45,6 +63,54 @@ export default function SettingsTab({
           Configure keywords, journal selections, and scoring parameters.
           Changes persist across runs.
         </p>
+      </div>
+
+      {/* Model slot saves */}
+      <div className="bg-surface-raised rounded-xl border border-border p-4">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="text-sm font-semibold text-text-primary">Model Slots</h3>
+          {slots.activeSlot && (
+            <span className="text-xs text-text-muted">
+              Active: {MODEL_SLOTS.find((s) => s.key === slots.activeSlot)?.displayName}
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-text-muted mb-3">
+          Save the current configuration to a slot for quick switching from the main page.
+        </p>
+        {slotMsg && (
+          <div
+            className={`mb-3 px-3 py-2 rounded-lg text-xs ${
+              slotMsg.type === "error"
+                ? "bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300"
+                : "bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
+            }`}
+          >
+            {slotMsg.text}
+          </div>
+        )}
+        <div className="flex gap-2 flex-wrap">
+          {MODEL_SLOTS.map((slot) => {
+            const isConfigured = slots.configuredSlots.has(slot.key);
+            const isActive = slots.activeSlot === slot.key;
+            return (
+              <button
+                key={slot.key}
+                disabled={slots.busy}
+                onClick={() => void handleSaveToSlot(slot.key)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors border disabled:opacity-50 ${
+                  isActive
+                    ? "border-accent bg-accent-subtle text-accent-text"
+                    : isConfigured
+                      ? "border-border bg-surface text-text-secondary hover:bg-surface-inset"
+                      : "border-border bg-surface text-text-secondary hover:bg-surface-inset"
+                }`}
+              >
+                {isConfigured ? "Overwrite" : "Save to"} {slot.displayName}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Sub-tab nav */}
