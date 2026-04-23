@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   saveSettings,
+  saveModel,
   listBackups,
   restoreBackup,
   createBackup,
@@ -12,6 +13,7 @@ import Card from "@/components/ui/Card";
 import Flash from "@/components/ui/Flash";
 import Toggle from "@/components/ui/Toggle";
 import { useModelSlots, MODEL_SLOTS } from "@/hooks/useModelSlots";
+import type { SlotKey } from "@/hooks/useModelSlots";
 
 interface SubTab {
   key: string;
@@ -35,23 +37,45 @@ export default function SettingsTab({
   onSettingsChange,
 }: SettingsTabProps) {
   const [sub, setSub] = useState<string>("keywords");
-  const slots = useModelSlots();
+  const [editingSlot, setEditingSlot] = useState<SlotKey | null>(null);
+  const slots = useModelSlots(onSettingsChange);
   const [slotMsg, setSlotMsg] = useState<FlashMessage | null>(null);
 
-  const handleSaveToSlot = async (slotKey: (typeof MODEL_SLOTS)[number]["key"]): Promise<void> => {
+  // After a sub-tab saves to active settings, also save to the selected slot.
+  const handleChange = useCallback(async () => {
+    await onSettingsChange();
+    if (editingSlot) {
+      try {
+        await slots.saveToSlot(editingSlot);
+      } catch (e: unknown) {
+        setSlotMsg({
+          type: "error",
+          text: `Settings saved but failed to update ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}: ${e instanceof Error ? e.message : "Unknown error"}`,
+        });
+        setTimeout(() => setSlotMsg(null), 4000);
+      }
+    }
+  }, [editingSlot, onSettingsChange, slots.saveToSlot]);
+
+  const handleSelectSlot = async (slotKey: SlotKey): Promise<void> => {
+    if (slots.busy) return;
     try {
-      await slots.saveToSlot(slotKey);
-      const slot = MODEL_SLOTS.find((s) => s.key === slotKey)!;
-      setSlotMsg({ type: "success", text: `Configuration saved to ${slot.displayName}.` });
-      setTimeout(() => setSlotMsg(null), 3000);
+      // Load this slot's settings if it's configured and not already active.
+      if (slots.configuredSlots.has(slotKey) && slots.activeSlot !== slotKey) {
+        await slots.switchSlot(slotKey);
+      }
+      setEditingSlot(slotKey);
+      setSlotMsg(null);
     } catch (e: unknown) {
       setSlotMsg({
         type: "error",
-        text: e instanceof Error ? e.message : "Unknown error",
+        text: e instanceof Error ? e.message : "Failed to load slot",
       });
       setTimeout(() => setSlotMsg(null), 3000);
     }
   };
+
+  const editingSlotLabel = MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName;
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -60,27 +84,24 @@ export default function SettingsTab({
           ⚙️ Application Settings
         </h2>
         <p className="text-sm text-text-muted mt-1">
-          Configure keywords, journal selections, and scoring parameters.
-          Changes persist across runs.
+          Select a model slot to configure, then edit keywords, journals, and
+          scoring below.
         </p>
       </div>
 
-      {/* Model slot saves */}
-      <div className="bg-surface-raised rounded-xl border border-border p-4">
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="text-sm font-semibold text-text-primary">Model Slots</h3>
-          {slots.activeSlot && (
-            <span className="text-xs text-text-muted">
-              Active: {MODEL_SLOTS.find((s) => s.key === slots.activeSlot)?.displayName}
-            </span>
-          )}
-        </div>
-        <p className="text-xs text-text-muted mb-3">
-          Save the current configuration to a slot for quick switching from the main page.
+      {/* Slot picker */}
+      <div className="bg-surface-raised rounded-xl border border-border p-5">
+        <h3 className="text-sm font-semibold text-text-primary mb-0.5">
+          Which model would you like to configure?
+        </h3>
+        <p className="text-xs text-text-muted mb-4">
+          Selecting a slot loads its settings for editing. Each save will update
+          both the slot and your active configuration.
         </p>
+
         {slotMsg && (
           <div
-            className={`mb-3 px-3 py-2 rounded-lg text-xs ${
+            className={`mb-4 px-3 py-2 rounded-lg text-xs ${
               slotMsg.type === "error"
                 ? "bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300"
                 : "bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
@@ -89,28 +110,65 @@ export default function SettingsTab({
             {slotMsg.text}
           </div>
         )}
-        <div className="flex gap-2 flex-wrap">
+
+        <div className="grid grid-cols-3 gap-3">
           {MODEL_SLOTS.map((slot) => {
             const isConfigured = slots.configuredSlots.has(slot.key);
-            const isActive = slots.activeSlot === slot.key;
+            const isEditing = editingSlot === slot.key;
             return (
               <button
                 key={slot.key}
                 disabled={slots.busy}
-                onClick={() => void handleSaveToSlot(slot.key)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors border disabled:opacity-50 ${
-                  isActive
-                    ? "border-accent bg-accent-subtle text-accent-text"
+                onClick={() => void handleSelectSlot(slot.key)}
+                className={`p-4 rounded-xl border text-left transition-all disabled:opacity-50 ${
+                  isEditing
+                    ? "border-accent ring-2 ring-accent/20 bg-accent-subtle"
                     : isConfigured
-                      ? "border-border bg-surface text-text-secondary hover:bg-surface-inset"
-                      : "border-border bg-surface text-text-secondary hover:bg-surface-inset"
+                      ? "border-border bg-surface hover:border-accent/50 hover:bg-surface-inset"
+                      : "border-dashed border-border bg-surface hover:border-accent/50 hover:bg-surface-inset"
                 }`}
               >
-                {isConfigured ? "Overwrite" : "Save to"} {slot.displayName}
+                <p
+                  className={`text-sm font-semibold ${
+                    isEditing ? "text-accent-text" : "text-text-primary"
+                  }`}
+                >
+                  {slot.displayName}
+                </p>
+                <p className="text-xs text-text-muted mt-0.5">
+                  {isConfigured ? "Configured" : "Not set up yet"}
+                </p>
+                {isEditing && (
+                  <p className="text-xs text-accent font-medium mt-1">
+                    ✓ Editing now
+                  </p>
+                )}
               </button>
             );
           })}
         </div>
+
+        {editingSlot ? (
+          <div className="mt-3 flex items-center justify-between">
+            <p className="text-xs text-text-muted">
+              Saves below will also update{" "}
+              <span className="font-medium text-text-primary">
+                {editingSlotLabel}
+              </span>
+              .
+            </p>
+            <button
+              onClick={() => setEditingSlot(null)}
+              className="text-xs text-text-muted hover:text-text-secondary transition-colors"
+            >
+              Clear selection
+            </button>
+          </div>
+        ) : (
+          <p className="mt-3 text-xs text-text-muted">
+            No slot selected — saves will only update your active configuration.
+          </p>
+        )}
       </div>
 
       {/* Sub-tab nav */}
@@ -131,13 +189,25 @@ export default function SettingsTab({
       </div>
 
       {sub === "keywords" && (
-        <KeywordSettings settings={settings} onChange={onSettingsChange} />
+        <KeywordSettings
+          settings={settings}
+          onChange={handleChange}
+          editingSlot={editingSlot}
+        />
       )}
       {sub === "journals" && (
-        <JournalSettings settings={settings} onChange={onSettingsChange} />
+        <JournalSettings
+          settings={settings}
+          onChange={handleChange}
+          editingSlot={editingSlot}
+        />
       )}
       {sub === "scoring" && (
-        <ScoringSettings settings={settings} onChange={onSettingsChange} />
+        <ScoringSettings
+          settings={settings}
+          onChange={handleChange}
+          editingSlot={editingSlot}
+        />
       )}
       {sub === "backup" && <BackupSettings />}
     </div>
@@ -151,9 +221,11 @@ export default function SettingsTab({
 function KeywordSettings({
   settings,
   onChange,
+  editingSlot,
 }: {
   settings: Settings;
   onChange: () => Promise<void>;
+  editingSlot: SlotKey | null;
 }) {
   const [keywordsText, setKeywordsText] = useState<string>(
     (settings.keywords || []).join("\n"),
@@ -276,7 +348,10 @@ function KeywordSettings({
         onClick={handleSave}
         className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
-        💾 Save Keywords Configuration
+        💾{" "}
+        {editingSlot
+          ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+          : "Save Keywords Configuration"}
       </button>
     </div>
   );
@@ -289,9 +364,11 @@ function KeywordSettings({
 function JournalSettings({
   settings,
   onChange,
+  editingSlot,
 }: {
   settings: Settings;
   onChange: () => Promise<void>;
+  editingSlot: SlotKey | null;
 }) {
   const tj = settings.target_journals || {
     exact_matches: [],
@@ -402,7 +479,10 @@ function JournalSettings({
         onClick={handleSave}
         className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
-        💾 Save Journal Configuration
+        💾{" "}
+        {editingSlot
+          ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+          : "Save Journal Configuration"}
       </button>
     </div>
   );
@@ -415,9 +495,11 @@ function JournalSettings({
 function ScoringSettings({
   settings,
   onChange,
+  editingSlot,
 }: {
   settings: Settings;
   onChange: () => Promise<void>;
+  editingSlot: SlotKey | null;
 }) {
   const js = settings.journal_scoring || { enabled: true, high_impact_journal_boost: {} };
   const [enabled, setEnabled] = useState<boolean>(js.enabled ?? true);
@@ -594,7 +676,10 @@ function ScoringSettings({
         onClick={handleSave}
         className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
-        💾 Save Scoring Configuration
+        💾{" "}
+        {editingSlot
+          ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+          : "Save Scoring Configuration"}
       </button>
     </div>
   );
