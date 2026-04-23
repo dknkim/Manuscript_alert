@@ -138,7 +138,14 @@ export default function PapersPage() {
         configuredSlots={slots.configuredSlots}
         activeSlot={slots.activeSlot}
         slotBusy={slots.busy}
-        onSlotSwitch={(k: SlotKey) => void slots.switchSlot(k)}
+        onSlotSwitch={(k: SlotKey) => {
+          void slots.switchSlot(k).then(() => {
+            // After the slot's settings are loaded into DB and React state is
+            // refreshed, kick off a new paper fetch so results match the new
+            // keyword set immediately without requiring a manual click.
+            void stream.startStream(search.sources, search.searchMode);
+          });
+        }}
       />
 
       <PaperFeed

@@ -202,7 +202,7 @@ export default function SearchPanel({
             return (
               <button
                 key={slot.key}
-                disabled={!isConfigured || slotBusy || !onSlotSwitch}
+                disabled={!isConfigured || slotBusy || loading || !onSlotSwitch}
                 onClick={() => onSlotSwitch?.(slot.key)}
                 title={
                   isConfigured
