@@ -6,6 +6,7 @@ import { usePaperSearch } from "@/hooks/usePaperSearch";
 import { useAgentStream } from "@/hooks/useAgentStream";
 import { useModelSlots } from "@/hooks/useModelSlots";
 import type { SlotKey } from "@/hooks/useModelSlots";
+import { useSlotNames } from "@/hooks/useSlotNames";
 import SearchPanel from "@/components/features/SearchPanel";
 import PaperFeed from "@/components/features/PaperFeed";
 import DashboardPanel from "@/components/features/DashboardPanel";
@@ -17,6 +18,7 @@ const AUTO_RETRY_SECONDS = 20;
 export default function PapersPage() {
   const { settings, loading, error, warmingUp, reload } = useSettings();
   const slots = useModelSlots(reload);
+  const { slotNames } = useSlotNames();
   const [retryCountdown, setRetryCountdown] = useState(0);
   const keywords = settings?.keywords || [];
   const settingsSignature = useMemo(
@@ -138,6 +140,7 @@ export default function PapersPage() {
     configuredSlots: slots.configuredSlots,
     activeSlot: slots.activeSlot,
     slotBusy: slots.busy,
+    slotNames,
     onSlotSwitch: (k: SlotKey) => {
       void slots.switchSlot(k).then(() => {
         void stream.startStream(search.sources, search.searchMode);

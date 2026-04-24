@@ -44,6 +44,7 @@ interface SearchPanelProps {
   configuredSlots?: Set<string> | undefined; // undefined = still loading
   activeSlot?: string | null;
   slotBusy?: boolean;
+  slotNames?: Record<string, string>;
   onSlotSwitch?: (slotKey: SlotKey) => void;
 }
 
@@ -62,6 +63,7 @@ export default function SearchPanel({
   configuredSlots = undefined,
   activeSlot = null,
   slotBusy = false,
+  slotNames = {},
   onSlotSwitch,
 }: SearchPanelProps) {
   return (
@@ -195,11 +197,13 @@ export default function SearchPanel({
         <h3 className="text-xs font-semibold text-text-muted uppercase mb-2">
           Model Slots
         </h3>
-        <div className="grid grid-cols-3 gap-1.5">
+        <div className="flex flex-col gap-1">
           {MODEL_SLOTS.map((slot) => {
             const slotsLoading = configuredSlots === undefined;
             const isConfigured = !slotsLoading && configuredSlots.has(slot.key);
             const isActive = activeSlot === slot.key;
+            const displayName =
+              slotNames[slot.key]?.trim() || slot.displayName;
             return (
               <button
                 key={slot.key}
@@ -209,10 +213,10 @@ export default function SearchPanel({
                   slotsLoading
                     ? "Loading model slots…"
                     : isConfigured
-                      ? `Switch to ${slot.displayName}`
-                      : `${slot.displayName} not configured yet`
+                      ? `Switch to ${displayName}`
+                      : `${displayName} not configured yet`
                 }
-                className={`py-1.5 rounded-md text-xs font-medium transition-colors text-center ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
                   slotsLoading
                     ? "bg-surface-inset text-text-muted border border-border opacity-50 cursor-wait"
                     : isActive
@@ -222,7 +226,10 @@ export default function SearchPanel({
                         : "bg-surface-inset text-text-muted border border-border opacity-40 cursor-not-allowed"
                 }`}
               >
-                {slot.displayName}
+                <span className="truncate">{displayName}</span>
+                {isActive && (
+                  <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-current ml-2 opacity-80" />
+                )}
               </button>
             );
           })}
