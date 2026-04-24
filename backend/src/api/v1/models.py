@@ -39,10 +39,19 @@ DBPool = Annotated[asyncpg.Pool | None, Depends(get_db_pool)]
 
 @router.get("")
 async def list_models(
-    models_dir: ModelsDir, pool: DBPool, user: CurrentUser
+    models_dir: ModelsDir, svc: SettingsSvc, pool: DBPool, user: CurrentUser
 ) -> list[dict[str, str]]:
     if pool is not None:
-        return await db.list_model_presets(pool, user)
+        presets = await db.list_model_presets(pool, user)
+        if not presets:
+            # No presets yet — seed Model 1 with the user's current active
+            # settings (their existing keywords for pre-multi-model users, or
+            # the app defaults for brand-new users). Safe for existing users:
+            # the condition is false as soon as they have any saved preset.
+            seed: dict[str, Any] = await db.get_settings(pool, user) or svc.load_settings()
+            await db.save_model_preset(pool, "Model_1", seed, user)
+            presets = await db.list_model_presets(pool, user)
+        return presets
     # File-based fallback
     os.makedirs(models_dir, exist_ok=True)
     result: list[dict[str, str]] = []
@@ -57,6 +66,20 @@ async def list_models(
                     "modified": datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M"),
                 }
             )
+    if not result:
+        # File-based equivalent: seed Model_1.json from current settings.
+        seed = svc.load_settings()
+        seed_path = os.path.join(models_dir, "Model_1.json")
+        with open(seed_path, "w", encoding="utf-8") as fh:
+            json.dump(seed, fh, indent=2, ensure_ascii=False)
+        mod_time = os.path.getmtime(seed_path)
+        result.append(
+            {
+                "name": "Model 1",
+                "filename": "Model_1.json",
+                "modified": datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M"),
+            }
+        )
     return result
 
 
