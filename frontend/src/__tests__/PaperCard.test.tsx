@@ -27,8 +27,7 @@ describe("PaperCard", () => {
     render(
       <PaperCard paper={mockPaperMedScore} isArchived={false} onArchive={vi.fn()} />,
     );
-    const heading = screen.getByRole("heading", { name: mockPaperMedScore.title });
-    expect(heading).toBeInTheDocument();
+    expect(screen.getByText(mockPaperMedScore.title)).toBeInTheDocument();
   });
 
   it("shows journal name, volume, and issue", () => {

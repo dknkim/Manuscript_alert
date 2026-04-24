@@ -27,10 +27,10 @@ describe("SettingsTab", () => {
   it("shows 4 sub-tab buttons", () => {
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
     // Sub-tab nav is within the border-b container
-    expect(screen.getByRole("button", { name: /🔍 Keywords/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /📰 Journals/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /📊 Scoring/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /💾 Backup/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Keywords" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Journals" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Scoring" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Backup" })).toBeInTheDocument();
   });
 
   it("shows Keywords sub-tab by default", () => {
@@ -42,7 +42,7 @@ describe("SettingsTab", () => {
   it("switches to Journals sub-tab", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /📰 Journals/ }));
+    await user.click(screen.getByRole("button", { name: "Journals" }));
     expect(screen.getByText("Target Journals")).toBeInTheDocument();
     expect(screen.getByText(/Exact Matches/)).toBeInTheDocument();
   });
@@ -50,7 +50,7 @@ describe("SettingsTab", () => {
   it("switches to Scoring sub-tab", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /📊 Scoring/ }));
+    await user.click(screen.getByRole("button", { name: "Scoring" }));
     expect(screen.getByText("Journal Impact Scoring")).toBeInTheDocument();
     expect(screen.getByText("Search Configuration")).toBeInTheDocument();
   });
@@ -58,7 +58,7 @@ describe("SettingsTab", () => {
   it("switches to Backup sub-tab", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /💾 Backup/ }));
+    await user.click(screen.getByRole("button", { name: "Backup" }));
     expect(screen.getByText("Available Backups")).toBeInTheDocument();
   });
 });
@@ -99,7 +99,7 @@ describe("Scoring sub-tab", () => {
   it("shows journal impact scoring checkbox enabled", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /📊 Scoring/ }));
+    await user.click(screen.getByRole("button", { name: "Scoring" }));
 
     const checkbox = screen.getByRole("checkbox", { name: /Enable Journal Impact Scoring/ });
     expect(checkbox).toBeChecked();
@@ -108,7 +108,7 @@ describe("Scoring sub-tab", () => {
   it("shows search configuration fields", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /📊 Scoring/ }));
+    await user.click(screen.getByRole("button", { name: "Scoring" }));
 
     expect(screen.getByText("Days Back")).toBeInTheDocument();
     expect(screen.getByText("Min Keyword Matches")).toBeInTheDocument();
@@ -118,7 +118,7 @@ describe("Scoring sub-tab", () => {
   it("shows default data sources", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /📊 Scoring/ }));
+    await user.click(screen.getByRole("button", { name: "Scoring" }));
 
     expect(screen.getByRole("checkbox", { name: "PubMed" })).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: "arXiv" })).toBeInTheDocument();
@@ -130,7 +130,7 @@ describe("Backup sub-tab", () => {
     const user = userEvent.setup();
     vi.mocked(listBackups).mockResolvedValue([]);
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /💾 Backup/ }));
+    await user.click(screen.getByRole("button", { name: "Backup" }));
 
     expect(screen.getByText(/No backups found/)).toBeInTheDocument();
   });
@@ -138,7 +138,7 @@ describe("Backup sub-tab", () => {
   it("shows create backup button", async () => {
     const user = userEvent.setup();
     render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    await user.click(screen.getByRole("button", { name: /💾 Backup/ }));
+    await user.click(screen.getByRole("button", { name: "Backup" }));
 
     expect(screen.getByRole("button", { name: /Create Backup Now/ })).toBeInTheDocument();
   });

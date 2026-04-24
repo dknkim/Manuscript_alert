@@ -48,6 +48,7 @@ export default function PaperCard({
           href={paper.url || undefined}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={paper.url ? paper.title : undefined}
           className="flex-1 min-w-0 block"
           onClick={paper.url ? undefined : (e) => e.preventDefault()}
         >

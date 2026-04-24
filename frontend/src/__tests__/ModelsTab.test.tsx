@@ -110,7 +110,7 @@ describe("ModelsTab", () => {
 
   it("shows export and import buttons", () => {
     render(<ModelsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
-    expect(screen.getByText(/Export Settings JSON/)).toBeInTheDocument();
-    expect(screen.getByText(/Import Settings/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Export/ })).toBeInTheDocument();
+    expect(screen.getByText("Import")).toBeInTheDocument();
   });
 });
