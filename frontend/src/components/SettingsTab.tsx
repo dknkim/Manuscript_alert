@@ -62,7 +62,9 @@ export default function SettingsTab({
   }, [editingSlot, onSettingsChange, slots.saveToSlot]);
 
   const handleSelectSlot = async (slotKey: SlotKey): Promise<void> => {
-    if (slots.busy) return;
+    // Don't allow selection while configuredSlots is still loading — we wouldn't
+    // know if the slot is configured, so we couldn't load the right settings.
+    if (slots.busy || slots.configuredSlots === undefined) return;
     try {
       // Load this slot's settings if it's configured and not already active.
       if (slots.configuredSlots.has(slotKey) && slots.activeSlot !== slotKey) {
@@ -117,12 +119,13 @@ export default function SettingsTab({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {MODEL_SLOTS.map((slot) => {
-            const isConfigured = slots.configuredSlots.has(slot.key);
+            const slotsLoading = slots.configuredSlots === undefined;
+            const isConfigured = !slotsLoading && (slots.configuredSlots?.has(slot.key) ?? false);
             const isEditing = editingSlot === slot.key;
             return (
               <button
                 key={slot.key}
-                disabled={slots.busy}
+                disabled={slots.busy || slotsLoading}
                 onClick={() => void handleSelectSlot(slot.key)}
                 className={`p-4 rounded-xl border text-left transition-all disabled:opacity-50 ${
                   isEditing
@@ -140,7 +143,7 @@ export default function SettingsTab({
                   {slot.displayName}
                 </p>
                 <p className="text-xs text-text-muted mt-0.5">
-                  {isConfigured ? "Configured" : "Not set up yet"}
+                  {slotsLoading ? "Loading…" : isConfigured ? "Configured" : "Not set up yet"}
                 </p>
                 {isEditing && (
                   <p className="text-xs text-accent font-medium mt-1">

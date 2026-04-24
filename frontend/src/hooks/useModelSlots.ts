@@ -12,7 +12,8 @@ export type SlotKey = (typeof MODEL_SLOTS)[number]["key"];
 const STORAGE_KEY = "manuscript_activeSlot";
 
 export function useModelSlots(onSettingsReload?: () => Promise<void>) {
-  const [configuredSlots, setConfiguredSlots] = useState<Set<string>>(new Set());
+  // undefined = still loading; Set = loaded (may be empty if none configured or on error)
+  const [configuredSlots, setConfiguredSlots] = useState<Set<string> | undefined>(undefined);
   const [activeSlot, setActiveSlot] = useState<SlotKey | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -25,7 +26,8 @@ export function useModelSlots(onSettingsReload?: () => Promise<void>) {
       );
       setConfiguredSlots(configured);
     } catch {
-      /* ignore */
+      // On error, mark as loaded-but-empty so callers don't stay in "loading" forever.
+      setConfiguredSlots(new Set());
     }
   }, []);
 

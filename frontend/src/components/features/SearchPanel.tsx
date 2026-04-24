@@ -41,7 +41,7 @@ interface SearchPanelProps {
   onHighImpactChange: (v: boolean) => void;
   onModeChange: (mode: "classic" | "agent") => void;
   onFetch: () => void;
-  configuredSlots?: Set<string>;
+  configuredSlots?: Set<string> | undefined; // undefined = still loading
   activeSlot?: string | null;
   slotBusy?: boolean;
   onSlotSwitch?: (slotKey: SlotKey) => void;
@@ -59,7 +59,7 @@ export default function SearchPanel({
   onHighImpactChange,
   onModeChange,
   onFetch,
-  configuredSlots = new Set<string>(),
+  configuredSlots = undefined,
   activeSlot = null,
   slotBusy = false,
   onSlotSwitch,
@@ -197,24 +197,29 @@ export default function SearchPanel({
         </h3>
         <div className="grid grid-cols-3 gap-1.5">
           {MODEL_SLOTS.map((slot) => {
-            const isConfigured = configuredSlots.has(slot.key);
+            const slotsLoading = configuredSlots === undefined;
+            const isConfigured = !slotsLoading && configuredSlots.has(slot.key);
             const isActive = activeSlot === slot.key;
             return (
               <button
                 key={slot.key}
-                disabled={!isConfigured || slotBusy || loading || !onSlotSwitch}
+                disabled={slotsLoading || !isConfigured || slotBusy || loading || !onSlotSwitch}
                 onClick={() => onSlotSwitch?.(slot.key)}
                 title={
-                  isConfigured
-                    ? `Switch to ${slot.displayName}`
-                    : `${slot.displayName} not configured yet`
+                  slotsLoading
+                    ? "Loading model slots…"
+                    : isConfigured
+                      ? `Switch to ${slot.displayName}`
+                      : `${slot.displayName} not configured yet`
                 }
                 className={`py-1.5 rounded-md text-xs font-medium transition-colors text-center ${
-                  isActive
-                    ? "bg-accent text-white shadow-sm"
-                    : isConfigured
-                      ? "bg-surface-inset text-text-secondary border border-border hover:bg-surface-inset/80"
-                      : "bg-surface-inset text-text-muted border border-border opacity-40 cursor-not-allowed"
+                  slotsLoading
+                    ? "bg-surface-inset text-text-muted border border-border opacity-50 cursor-wait"
+                    : isActive
+                      ? "bg-accent text-white shadow-sm"
+                      : isConfigured
+                        ? "bg-surface-inset text-text-secondary border border-border hover:bg-surface-inset/80"
+                        : "bg-surface-inset text-text-muted border border-border opacity-40 cursor-not-allowed"
                 }`}
               >
                 {slot.displayName}
@@ -222,7 +227,7 @@ export default function SearchPanel({
             );
           })}
         </div>
-        {[...configuredSlots].length === 0 && (
+        {configuredSlots !== undefined && configuredSlots.size === 0 && (
           <p className="text-xs text-text-muted mt-1.5">
             Save slots in Settings.
           </p>
