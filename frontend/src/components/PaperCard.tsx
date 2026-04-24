@@ -43,28 +43,22 @@ export default function PaperCard({
       )}
 
       <div className="flex gap-5">
-        {/* Main content */}
-        <div className="flex-1 min-w-0">
-          {paper.url ? (
-            <a
-              href={paper.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lg font-semibold text-text-primary hover:text-accent transition-colors leading-snug"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {paper.title}
-            </a>
-          ) : (
-            <h3 className="text-lg font-semibold text-text-primary leading-snug">
-              {paper.title}
-            </h3>
-          )}
+        {/* Main content — entire area is a link when URL exists */}
+        <a
+          href={paper.url || undefined}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 min-w-0 block"
+          onClick={paper.url ? undefined : (e) => e.preventDefault()}
+        >
+          <span className="text-lg font-semibold text-text-primary hover:text-accent transition-colors leading-snug">
+            {paper.title}
+          </span>
 
           {/* Meta */}
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-muted">
-            <span>{paper.authors}</span>
-            <span className="text-border">|</span>
+            <span className="hidden sm:inline">{paper.authors}</span>
+            <span className="hidden sm:inline text-border">|</span>
             <span>{paper.published}</span>
           </div>
 
@@ -75,24 +69,25 @@ export default function PaperCard({
                 {paper.journal}
               </span>
               {paper.volume && (
-                <span className="text-text-muted">
+                <span className="hidden sm:inline text-text-muted">
                   , Vol.&nbsp;{paper.volume}
                 </span>
               )}
               {paper.issue && (
-                <span className="text-text-muted">
+                <span className="hidden sm:inline text-text-muted">
                   , Issue&nbsp;{paper.issue}
                 </span>
               )}
             </div>
           )}
 
-          {/* Abstract */}
-          <p className="mt-3 text-sm text-text-secondary leading-relaxed">
+          {/* Abstract — hidden on mobile */}
+          <p className="hidden sm:block mt-3 text-sm text-text-secondary leading-relaxed">
             {abstract}
             {paper.abstract.length > 300 && (
               <button
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   setExpanded(!expanded);
                 }}
@@ -116,7 +111,7 @@ export default function PaperCard({
               ))}
             </div>
           )}
-        </div>
+        </a>
 
         {/* Score + badge + archive column */}
         <div className="flex flex-col items-center gap-3 shrink-0 w-24">
