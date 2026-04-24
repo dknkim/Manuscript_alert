@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Settings, Database, BookOpen, Moon, Sun } from "lucide-react";
@@ -26,6 +26,18 @@ function UserAvatar() {
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [dark, setDark] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const update = () =>
+      document.documentElement.style.setProperty("--header-h", `${el.getBoundingClientRect().height}px`);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   // Initialize from system preference
   useEffect(() => {
@@ -45,7 +57,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-surface">
-      <header className="bg-surface-raised border-b border-border sticky top-0 z-30">
+      <header ref={headerRef} className="bg-surface-raised border-b border-border sticky top-0 z-30">
         <div className="max-w-[1440px] mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>

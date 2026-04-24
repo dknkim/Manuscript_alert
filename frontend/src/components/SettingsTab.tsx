@@ -82,7 +82,7 @@ export default function SettingsTab({
   const editingSlotLabel = MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="max-w-5xl mx-auto px-6 pt-6 space-y-6">
       <div>
         <h2 className="text-xl font-bold text-text-primary">
           ⚙️ Application Settings
@@ -176,7 +176,7 @@ export default function SettingsTab({
       </div>
 
       {/* Sub-tab nav */}
-      <div className="flex border-b border-border">
+      <div className="sticky z-20 bg-surface flex border-b border-border" style={{ top: "var(--header-h, 64px)" }}>
         {SUB_TABS.map((t) => {
           const Icon = t.icon;
           const active = sub === t.key;
@@ -353,15 +353,17 @@ function KeywordSettings({
         )}
       </Card>
 
-      <button
-        onClick={handleSave}
-        className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
-      >
-        <Save className="w-4 h-4 shrink-0" />
-        {editingSlot
-          ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
-          : "Save Keywords Configuration"}
-      </button>
+      <div className="sticky bottom-14 lg:bottom-0 -mx-6 px-6 py-3 bg-surface border-t border-border flex justify-end">
+        <button
+          onClick={handleSave}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
+        >
+          <Save className="w-4 h-4 shrink-0" />
+          {editingSlot
+            ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+            : "Save Keywords Configuration"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -484,15 +486,17 @@ function JournalSettings({
         />
       </Card>
 
-      <button
-        onClick={handleSave}
-        className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
-      >
-        <Save className="w-4 h-4 shrink-0" />
-        {editingSlot
-          ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
-          : "Save Journal Configuration"}
-      </button>
+      <div className="sticky bottom-14 lg:bottom-0 -mx-6 px-6 py-3 bg-surface border-t border-border flex justify-end">
+        <button
+          onClick={handleSave}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
+        >
+          <Save className="w-4 h-4 shrink-0" />
+          {editingSlot
+            ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+            : "Save Journal Configuration"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -681,15 +685,17 @@ function ScoringSettings({
         </div>
       </Card>
 
-      <button
-        onClick={handleSave}
-        className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
-      >
-        <Save className="w-4 h-4 shrink-0" />
-        {editingSlot
-          ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
-          : "Save Scoring Configuration"}
-      </button>
+      <div className="sticky bottom-14 lg:bottom-0 -mx-6 px-6 py-3 bg-surface border-t border-border flex justify-end">
+        <button
+          onClick={handleSave}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
+        >
+          <Save className="w-4 h-4 shrink-0" />
+          {editingSlot
+            ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+            : "Save Scoring Configuration"}
+        </button>
+      </div>
     </div>
   );
 }
