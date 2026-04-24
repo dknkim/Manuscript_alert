@@ -8,6 +8,7 @@ on:
 
 env:
   PLAYWRIGHT_BASE_URL: http://localhost:3000
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   test:
@@ -72,7 +73,7 @@ jobs:
       - name: Wait for servers
         run: |
           for i in $(seq 1 30); do
-            curl -sf http://localhost:8000/api/health && \
+            curl -sf http://localhost:8000/api/v1/health && \
             curl -sf http://localhost:3000 && break
             sleep 2
           done

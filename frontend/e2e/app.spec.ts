@@ -88,18 +88,10 @@ test.describe("Papers page", () => {
 test.describe("Settings page", () => {
   test("shows 4 sub-tabs", async ({ page }) => {
     await page.goto("/settings");
-    await expect(
-      page.getByRole("button", { name: "🔍 Keywords" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "📰 Journals" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "📊 Scoring" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "💾 Backup" }),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Keywords" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Journals" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Scoring" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Backup" })).toBeVisible();
   });
 
   test("switches between settings sub-tabs", async ({ page }) => {
@@ -131,7 +123,7 @@ test.describe("Models page", () => {
     await expect(
       page.getByText("Save Current Settings as Model"),
     ).toBeVisible();
-    await expect(page.getByText("Quick Actions")).toBeVisible();
+    await expect(page.getByText("Settings Backup")).toBeVisible();
   });
 });
 
