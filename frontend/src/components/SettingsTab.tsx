@@ -15,7 +15,6 @@ import Flash from "@/components/ui/Flash";
 import Toggle from "@/components/ui/Toggle";
 import { useModelSlots, MODEL_SLOTS } from "@/hooks/useModelSlots";
 import type { SlotKey } from "@/hooks/useModelSlots";
-import { useSlotNames } from "@/hooks/useSlotNames";
 
 import type { LucideIcon } from "lucide-react";
 
@@ -44,7 +43,6 @@ export default function SettingsTab({
   const [sub, setSub] = useState<string>("keywords");
   const [editingSlot, setEditingSlot] = useState<SlotKey | null>(null);
   const slots = useModelSlots(onSettingsChange);
-  const { slotNames, setSlotName, getDisplayName } = useSlotNames();
   const [slotMsg, setSlotMsg] = useState<FlashMessage | null>(null);
 
   // After a sub-tab saves to active settings, also save to the selected slot.
@@ -138,11 +136,11 @@ export default function SettingsTab({
                 }`}
               >
                 <p
-                  className={`text-sm font-semibold truncate ${
+                  className={`text-sm font-semibold ${
                     isEditing ? "text-accent-text" : "text-text-primary"
                   }`}
                 >
-                  {getDisplayName(slot.key)}
+                  {slot.displayName}
                 </p>
                 <p className="text-xs text-text-muted mt-0.5">
                   {slotsLoading ? "Loading…" : isConfigured ? "Configured" : "Not set up yet"}
@@ -158,35 +156,20 @@ export default function SettingsTab({
         </div>
 
         {editingSlot ? (
-          <div className="mt-3 space-y-2">
-            <div className="flex items-center gap-2">
-              <label className="text-xs text-text-muted shrink-0 w-20">
-                Slot name
-              </label>
-              <input
-                type="text"
-                value={slotNames[editingSlot] ?? ""}
-                placeholder={MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}
-                onChange={(e) => setSlotName(editingSlot, e.target.value)}
-                maxLength={40}
-                className="flex-1 px-2 py-1 text-sm border border-border rounded-md bg-surface text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-text-muted">
-                Saves below will also update{" "}
-                <span className="font-medium text-text-primary">
-                  {getDisplayName(editingSlot)}
-                </span>
-                .
-              </p>
-              <button
-                onClick={() => setEditingSlot(null)}
-                className="text-xs text-text-muted hover:text-text-secondary transition-colors"
-              >
-                Clear selection
-              </button>
-            </div>
+          <div className="mt-3 flex items-center justify-between">
+            <p className="text-xs text-text-muted">
+              Saves below will also update{" "}
+              <span className="font-medium text-text-primary">
+                {editingSlotLabel}
+              </span>
+              .
+            </p>
+            <button
+              onClick={() => setEditingSlot(null)}
+              className="text-xs text-text-muted hover:text-text-secondary transition-colors"
+            >
+              Clear selection
+            </button>
           </div>
         ) : (
           <p className="mt-3 text-xs text-text-muted">
