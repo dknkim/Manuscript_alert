@@ -18,16 +18,28 @@ export function useModelSlots(onSettingsReload?: () => Promise<void>) {
   const [busy, setBusy] = useState(false);
 
   const refreshSlots = useCallback(async () => {
-    try {
-      const models = await listModels();
-      const filenames = new Set(models.map((m) => m.filename.replace(".json", "")));
-      const configured = new Set<string>(
-        MODEL_SLOTS.map((s) => s.key).filter((k) => filenames.has(k)),
-      );
-      setConfiguredSlots(configured);
-    } catch {
-      // On error, mark as loaded-but-empty so callers don't stay in "loading" forever.
-      setConfiguredSlots(new Set());
+    // Retry on failure so a cold backend startup doesn't permanently mark slots
+    // as unconfigured. configuredSlots stays undefined (loading) during retries.
+    const retryDelays = [500, 1500, 3000];
+    for (let attempt = 0; attempt <= retryDelays.length; attempt++) {
+      try {
+        const models = await listModels();
+        const filenames = new Set(models.map((m) => m.filename.replace(".json", "")));
+        const configured = new Set<string>(
+          MODEL_SLOTS.map((s) => s.key).filter((k) => filenames.has(k)),
+        );
+        setConfiguredSlots(configured);
+        return;
+      } catch {
+        if (attempt < retryDelays.length) {
+          await new Promise<void>((resolve) =>
+            window.setTimeout(resolve, retryDelays[attempt]),
+          );
+        } else {
+          // All retries exhausted — exit loading state so UI doesn't spin forever.
+          setConfiguredSlots(new Set());
+        }
+      }
     }
   }, []);
 

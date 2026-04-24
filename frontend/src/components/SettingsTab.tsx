@@ -45,6 +45,16 @@ export default function SettingsTab({
   const slots = useModelSlots(onSettingsChange);
   const [slotMsg, setSlotMsg] = useState<FlashMessage | null>(null);
 
+  // Once configuredSlots loads, auto-select whichever slot is currently active
+  // so the user lands directly in the editing view without an extra click.
+  useEffect(() => {
+    if (slots.configuredSlots === undefined) return;
+    if (editingSlot !== null) return;
+    if (slots.activeSlot && slots.configuredSlots.has(slots.activeSlot)) {
+      setEditingSlot(slots.activeSlot);
+    }
+  }, [slots.configuredSlots, slots.activeSlot, editingSlot]);
+
   // After a sub-tab saves to active settings, also save to the selected slot.
   const handleChange = useCallback(async () => {
     await onSettingsChange();
@@ -178,7 +188,8 @@ export default function SettingsTab({
         )}
       </div>
 
-      {/* Sub-tab nav */}
+      {/* Sub-tab nav — only shown once a slot is selected */}
+      {editingSlot && (
       <div className="sticky z-20 bg-surface flex border-b border-border" style={{ top: "var(--header-h, 64px)" }}>
         {SUB_TABS.map((t) => {
           const Icon = t.icon;
@@ -199,29 +210,47 @@ export default function SettingsTab({
           );
         })}
       </div>
+      )}
 
-      {sub === "keywords" && (
-        <KeywordSettings
-          settings={settings}
-          onChange={handleChange}
-          editingSlot={editingSlot}
-        />
+      {editingSlot ? (
+        <>
+          {sub === "keywords" && (
+            <KeywordSettings
+              settings={settings}
+              onChange={handleChange}
+              editingSlot={editingSlot}
+            />
+          )}
+          {sub === "journals" && (
+            <JournalSettings
+              settings={settings}
+              onChange={handleChange}
+              editingSlot={editingSlot}
+            />
+          )}
+          {sub === "scoring" && (
+            <ScoringSettings
+              settings={settings}
+              onChange={handleChange}
+              editingSlot={editingSlot}
+            />
+          )}
+          {sub === "backup" && <BackupSettings />}
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="text-sm font-medium text-text-primary">
+            Select a keyword set above to start configuring.
+          </p>
+          <p className="text-xs text-text-muted mt-1">
+            {slots.configuredSlots === undefined
+              ? "Loading your keyword sets…"
+              : slots.configuredSlots.size === 0
+                ? "No keyword sets saved yet. Go to the main page and save a slot first."
+                : "Choose one of the keyword sets above."}
+          </p>
+        </div>
       )}
-      {sub === "journals" && (
-        <JournalSettings
-          settings={settings}
-          onChange={handleChange}
-          editingSlot={editingSlot}
-        />
-      )}
-      {sub === "scoring" && (
-        <ScoringSettings
-          settings={settings}
-          onChange={handleChange}
-          editingSlot={editingSlot}
-        />
-      )}
-      {sub === "backup" && <BackupSettings />}
     </div>
   );
 }

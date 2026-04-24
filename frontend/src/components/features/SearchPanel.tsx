@@ -193,7 +193,7 @@ export default function SearchPanel({
       {/* Model slot switcher */}
       <div>
         <h3 className="text-xs font-semibold text-text-muted uppercase mb-2">
-          Model Slots
+          Keyword Sets
         </h3>
         <div className="flex flex-col gap-1">
           {MODEL_SLOTS.map((slot) => {
