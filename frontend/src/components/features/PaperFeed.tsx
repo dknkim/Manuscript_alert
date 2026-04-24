@@ -1,6 +1,6 @@
 "use client";
 
-import { SlidersHorizontal, BarChart2 } from "lucide-react";
+import { SlidersHorizontal, BarChart2, RefreshCw } from "lucide-react";
 import type { Paper, FetchResult, DataSources } from "@/types";
 import type { DisplayState } from "@/hooks/useAgentStream";
 import PaperCard from "@/components/PaperCard";
@@ -22,6 +22,7 @@ interface PaperFeedProps {
   serverWakingUp?: boolean;
   onOpenFilters?: () => void;
   onOpenStats?: () => void;
+  onFetch?: () => void;
 }
 
 export default function PaperFeed({
@@ -40,13 +41,14 @@ export default function PaperFeed({
   serverWakingUp,
   onOpenFilters,
   onOpenStats,
+  onFetch,
 }: PaperFeedProps) {
   const hasActivity = displayState.sources.length > 0 || isStreaming;
 
   return (
     <div className="flex-1 p-3 lg:p-6 space-y-4 min-w-0">
       {/* Mobile toolbar */}
-      {(onOpenFilters || onOpenStats) && (
+      {(onOpenFilters || onOpenStats || onFetch) && (
         <div className="lg:hidden flex gap-2">
           {onOpenFilters && (
             <button
@@ -62,6 +64,16 @@ export default function PaperFeed({
               className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm text-text-secondary hover:text-text-primary transition-colors"
             >
               <BarChart2 className="h-4 w-4" /> Stats
+            </button>
+          )}
+          {onFetch && (
+            <button
+              onClick={onFetch}
+              disabled={loading}
+              className="flex items-center justify-center px-3 py-2 rounded-lg border border-border text-text-secondary hover:text-text-primary transition-colors disabled:opacity-50"
+              title="Refresh papers"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             </button>
           )}
         </div>

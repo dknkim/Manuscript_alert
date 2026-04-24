@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { Search, Newspaper, BarChart2, Archive, Save, FolderPlus } from "lucide-react";
 import {
   saveSettings,
   saveModel,
@@ -15,16 +16,19 @@ import Toggle from "@/components/ui/Toggle";
 import { useModelSlots, MODEL_SLOTS } from "@/hooks/useModelSlots";
 import type { SlotKey } from "@/hooks/useModelSlots";
 
+import type { LucideIcon } from "lucide-react";
+
 interface SubTab {
   key: string;
   label: string;
+  icon: LucideIcon;
 }
 
 const SUB_TABS: SubTab[] = [
-  { key: "keywords", label: "🔍 Keywords" },
-  { key: "journals", label: "📰 Journals" },
-  { key: "scoring", label: "📊 Scoring" },
-  { key: "backup", label: "💾 Backup" },
+  { key: "keywords", label: "Keywords", icon: Search },
+  { key: "journals", label: "Journals", icon: Newspaper },
+  { key: "scoring", label: "Scoring", icon: BarChart2 },
+  { key: "backup", label: "Backup", icon: Archive },
 ];
 
 interface SettingsTabProps {
@@ -172,20 +176,25 @@ export default function SettingsTab({
       </div>
 
       {/* Sub-tab nav */}
-      <div className="flex gap-1 border-b border-border overflow-x-auto">
-        {SUB_TABS.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setSub(t.key)}
-            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
-              sub === t.key
-                ? "border-accent text-accent"
-                : "border-transparent text-text-muted hover:text-text-secondary"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="flex border-b border-border">
+        {SUB_TABS.map((t) => {
+          const Icon = t.icon;
+          const active = sub === t.key;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setSub(t.key)}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+                active
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-muted hover:text-text-secondary"
+              }`}
+            >
+              <Icon className="w-4 h-4 shrink-0" />
+              <span className="hidden sm:inline">{t.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {sub === "keywords" && (
@@ -346,9 +355,9 @@ function KeywordSettings({
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
-        💾{" "}
+        <Save className="w-4 h-4 shrink-0" />
         {editingSlot
           ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
           : "Save Keywords Configuration"}
@@ -477,9 +486,9 @@ function JournalSettings({
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
-        💾{" "}
+        <Save className="w-4 h-4 shrink-0" />
         {editingSlot
           ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
           : "Save Journal Configuration"}
@@ -674,9 +683,9 @@ function ScoringSettings({
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
       >
-        💾{" "}
+        <Save className="w-4 h-4 shrink-0" />
         {editingSlot
           ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
           : "Save Scoring Configuration"}
@@ -765,9 +774,9 @@ function BackupSettings() {
       <Card title="Create Manual Backup">
         <button
           onClick={handleCreate}
-          className="px-5 py-2 border border-border rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-inset transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2 border border-border rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-inset transition-colors"
         >
-          📁 Create Backup Now
+          <FolderPlus className="w-4 h-4" /> Create Backup Now
         </button>
       </Card>
     </div>

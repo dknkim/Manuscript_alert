@@ -182,6 +182,7 @@ export default function PapersPage() {
           serverWakingUp={isServerWakingUp}
           onOpenFilters={() => setFilterOpen(true)}
           onOpenStats={() => setStatsOpen(true)}
+          onFetch={handleFetch}
         />
 
         <div className="hidden lg:block">
