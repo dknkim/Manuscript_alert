@@ -138,7 +138,7 @@ export default function ModelsTab({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-8">
       <div>
         <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
           <Bot className="w-5 h-5" /> Model Management

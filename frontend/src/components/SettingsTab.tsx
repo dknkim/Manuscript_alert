@@ -82,7 +82,7 @@ export default function SettingsTab({
   const editingSlotLabel = MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 pt-6 space-y-6">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
       <div>
         <h2 className="text-xl font-bold text-text-primary">
           ⚙️ Application Settings
@@ -115,7 +115,7 @@ export default function SettingsTab({
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {MODEL_SLOTS.map((slot) => {
             const isConfigured = slots.configuredSlots.has(slot.key);
             const isEditing = editingSlot === slot.key;

@@ -130,7 +130,7 @@ export default function KnowledgeBasePage() {
   const isEmpty = dates.length === 0;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">

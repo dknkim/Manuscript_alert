@@ -46,7 +46,7 @@ export default function PaperFeed({
   const hasActivity = displayState.sources.length > 0 || isStreaming;
 
   return (
-    <div className="flex-1 p-3 lg:p-6 space-y-4 min-w-0">
+    <div className="flex-1 px-4 sm:px-6 py-6 space-y-4 min-w-0">
       {/* Mobile toolbar */}
       {(onOpenFilters || onOpenStats || onFetch) && (
         <div className="lg:hidden flex gap-2">
