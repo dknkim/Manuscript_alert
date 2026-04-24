@@ -20,6 +20,18 @@ from backend.src.services.settings_service import SettingsService
 
 router = APIRouter(prefix="/api/v1/models", tags=["models"])
 
+
+def _drop_orphaned_must_have(settings: dict[str, Any]) -> None:
+    """Remove must-have keywords that no longer exist in the keyword list.
+
+    A keyword may have been renamed or deleted in one model while the
+    must-have list retained the old name, causing papers to be silently
+    filtered to zero without any visible selection in the UI.
+    """
+    keywords: list[str] = settings.get("keywords", [])
+    must_have: list[str] = settings.get("must_have_keywords", [])
+    settings["must_have_keywords"] = [mk for mk in must_have if mk in keywords]
+
 ModelsDir = Annotated[Path, Depends(get_models_dir)]
 SettingsSvc = Annotated[SettingsService, Depends(get_settings_service)]
 DBPool = Annotated[asyncpg.Pool | None, Depends(get_db_pool)]
@@ -82,6 +94,7 @@ async def load_model(
         preset = await db.get_model_preset(pool, db_name, user)
         if preset is None:
             raise HTTPException(status_code=404, detail="Model not found")
+        _drop_orphaned_must_have(preset)
         await db.save_settings(pool, preset, user)
         return StatusResponse(status="ok")
 
@@ -91,6 +104,7 @@ async def load_model(
         raise HTTPException(status_code=404, detail="Model not found")
     with open(path, encoding="utf-8") as fh:
         loaded: dict[str, Any] = json.load(fh)
+    _drop_orphaned_must_have(loaded)
     if not svc.save_settings(loaded):
         raise HTTPException(status_code=500, detail="Failed to apply model settings")
     return StatusResponse(status="ok")

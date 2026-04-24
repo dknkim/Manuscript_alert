@@ -249,20 +249,22 @@ function KeywordSettings({
     settings.keyword_scoring?.medium_priority?.keywords || [],
   );
   const [mustHave, setMustHave] = useState<string[]>(
-    settings.must_have_keywords || [],
+    (settings.must_have_keywords || []).filter((mk) =>
+      (settings.keywords || []).includes(mk),
+    ),
   );
   const [msg, setMsg] = useState<FlashMessage | null>(null);
 
-  // Sync local state when settings change (e.g. after loading a model)
+  // Sync local state when settings change (e.g. after loading a model).
+  // Filter must-have keywords to only those present in the current keyword
+  // list — orphaned entries (renamed/deleted keywords) would be invisible
+  // in the UI yet silently filter all papers to zero.
   useEffect(() => {
-    setKeywordsText((settings.keywords || []).join("\n"));
-    setHighPriority(
-      settings.keyword_scoring?.high_priority?.keywords || [],
-    );
-    setMediumPriority(
-      settings.keyword_scoring?.medium_priority?.keywords || [],
-    );
-    setMustHave(settings.must_have_keywords || []);
+    const kws = settings.keywords || [];
+    setKeywordsText(kws.join("\n"));
+    setHighPriority(settings.keyword_scoring?.high_priority?.keywords || []);
+    setMediumPriority(settings.keyword_scoring?.medium_priority?.keywords || []);
+    setMustHave((settings.must_have_keywords || []).filter((mk) => kws.includes(mk)));
   }, [settings]);
 
   const allKeywords = keywordsText
@@ -279,7 +281,7 @@ function KeywordSettings({
           high_priority: { keywords: highPriority, boost: 1.5 },
           medium_priority: { keywords: mediumPriority, boost: 1.2 },
         },
-        must_have_keywords: mustHave,
+        must_have_keywords: mustHave.filter((mk) => allKeywords.includes(mk)),
       };
       await saveSettings(updated);
       setMsg({ type: "success", text: "Keywords configuration saved!" });
