@@ -130,12 +130,7 @@ DEFAULT_SEARCH_SETTINGS = {
     "search_mode": "Brief",
     "min_keyword_matches": 2,
     "max_results_display": 50,
-    "default_sources": {
-        "pubmed": True,
-        "arxiv": False,
-        "biorxiv": False,
-        "medrxiv": False,
-    },
+    "default_sources": {"pubmed": True, "arxiv": False, "biorxiv": False, "medrxiv": False},
     "journal_quality_filter": False,
 }
 

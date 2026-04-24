@@ -290,7 +290,7 @@ function KeywordSettings({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-14 lg:pb-0">
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
       <Card
@@ -353,7 +353,7 @@ function KeywordSettings({
         )}
       </Card>
 
-      <div className="sticky bottom-14 lg:bottom-0 -mx-6 px-6 py-3 bg-surface border-t border-border flex justify-end">
+      <div className="fixed bottom-14 left-0 right-0 z-20 lg:sticky lg:bottom-0 lg:left-auto lg:right-auto -mx-0 lg:-mx-6 px-6 pt-3 pb-5 bg-surface border-t border-border flex justify-end">
         <button
           onClick={handleSave}
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
@@ -438,7 +438,7 @@ function JournalSettings({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-14 lg:pb-0">
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
       <Card title="Target Journals">
@@ -486,7 +486,7 @@ function JournalSettings({
         />
       </Card>
 
-      <div className="sticky bottom-14 lg:bottom-0 -mx-6 px-6 py-3 bg-surface border-t border-border flex justify-end">
+      <div className="fixed bottom-14 left-0 right-0 z-20 lg:sticky lg:bottom-0 lg:left-auto lg:right-auto -mx-0 lg:-mx-6 px-6 pt-3 pb-5 bg-surface border-t border-border flex justify-end">
         <button
           onClick={handleSave}
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
@@ -606,7 +606,7 @@ function ScoringSettings({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-14 lg:pb-0">
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
       <Card title="Journal Impact Scoring">
@@ -685,7 +685,7 @@ function ScoringSettings({
         </div>
       </Card>
 
-      <div className="sticky bottom-14 lg:bottom-0 -mx-6 px-6 py-3 bg-surface border-t border-border flex justify-end">
+      <div className="fixed bottom-14 left-0 right-0 z-20 lg:sticky lg:bottom-0 lg:left-auto lg:right-auto -mx-0 lg:-mx-6 px-6 pt-3 pb-5 bg-surface border-t border-border flex justify-end">
         <button
           onClick={handleSave}
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-semibold transition-colors"
@@ -746,7 +746,7 @@ function BackupSettings() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-14 lg:pb-0">
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
       <Card title="Available Backups">
