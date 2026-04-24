@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Search, Newspaper, BarChart2, Archive, Save, FolderPlus } from "lucide-react";
 import {
   saveSettings,
@@ -54,6 +54,32 @@ export default function SettingsTab({
       setEditingSlot(slots.activeSlot);
     }
   }, [slots.configuredSlots, slots.activeSlot, editingSlot]);
+
+  // When an unconfigured slot is selected, show blank keyword fields so the
+  // user starts fresh instead of inheriting the active model's keywords.
+  const editingSettings = useMemo(() => {
+    const unconfigured =
+      editingSlot !== null &&
+      slots.configuredSlots !== undefined &&
+      !slots.configuredSlots.has(editingSlot);
+    if (!unconfigured) return settings;
+    return {
+      ...settings,
+      keywords: [],
+      must_have_keywords: [],
+      keyword_scoring: {
+        ...settings.keyword_scoring,
+        high_priority: {
+          keywords: [],
+          boost: settings.keyword_scoring?.high_priority?.boost ?? 1.5,
+        },
+        medium_priority: {
+          keywords: [],
+          boost: settings.keyword_scoring?.medium_priority?.boost ?? 1.2,
+        },
+      },
+    };
+  }, [settings, editingSlot, slots.configuredSlots]);
 
   // After a sub-tab saves to active settings, also save to the selected slot.
   const handleChange = useCallback(async () => {
@@ -216,21 +242,21 @@ export default function SettingsTab({
         <>
           {sub === "keywords" && (
             <KeywordSettings
-              settings={settings}
+              settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
             />
           )}
           {sub === "journals" && (
             <JournalSettings
-              settings={settings}
+              settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
             />
           )}
           {sub === "scoring" && (
             <ScoringSettings
-              settings={settings}
+              settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
             />
