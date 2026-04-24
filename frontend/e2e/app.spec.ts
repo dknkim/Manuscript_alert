@@ -88,10 +88,10 @@ test.describe("Papers page", () => {
 test.describe("Settings page", () => {
   test("shows 4 sub-tabs", async ({ page }) => {
     await page.goto("/settings");
-    await expect(page.getByRole("button", { name: "Keywords" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Journals" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Scoring" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Backup" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Keywords", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Journals", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Scoring", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Backup", exact: true })).toBeVisible();
   });
 
   test("switches between settings sub-tabs", async ({ page }) => {
@@ -101,17 +101,17 @@ test.describe("Settings page", () => {
     await expect(page.getByText("Research Keywords")).toBeVisible();
 
     // Switch to Journals
-    await page.getByRole("button", { name: /Journals/ }).click();
+    await page.getByRole("button", { name: "Journals", exact: true }).click();
     await expect(page.getByText("Target Journals")).toBeVisible();
 
     // Switch to Scoring
-    await page.getByRole("button", { name: /Scoring/ }).click();
+    await page.getByRole("button", { name: "Scoring", exact: true }).click();
     await expect(
       page.getByRole("heading", { name: "Journal Impact Scoring" }),
     ).toBeVisible();
 
     // Switch to Backup
-    await page.getByRole("button", { name: /Backup/ }).click();
+    await page.getByRole("button", { name: "Backup", exact: true }).click();
     await expect(page.getByText("Available Backups")).toBeVisible();
   });
 });
