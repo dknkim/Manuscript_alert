@@ -216,9 +216,9 @@ export default function SearchPanel({
                   slotsLoading
                     ? "bg-surface-inset text-text-muted border border-border opacity-50 cursor-wait"
                     : isActive
-                      ? "bg-accent text-white shadow-sm"
+                      ? "bg-accent text-white shadow-sm cursor-pointer hover:bg-accent-hover"
                       : isConfigured
-                        ? "bg-surface-inset text-text-secondary border border-border hover:bg-surface-inset/80"
+                        ? "bg-surface-inset text-text-secondary border border-border cursor-pointer hover:bg-surface hover:border-accent/50"
                         : "bg-surface-inset text-text-muted border border-border opacity-40 cursor-not-allowed"
                 }`}
               >
