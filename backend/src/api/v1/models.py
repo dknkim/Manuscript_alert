@@ -118,6 +118,15 @@ async def load_model(
         if preset is None:
             raise HTTPException(status_code=404, detail="Model not found")
         _drop_orphaned_must_have(preset)
+        # slot_names lives in active settings (not in model presets), so preserve
+        # it when overwriting active settings with the loaded preset.
+        current = await db.get_settings(pool, user)
+        if current:
+            slot_names = (current.get("ui_settings") or {}).get("slot_names")
+            if slot_names:
+                preset_ui = dict(preset.get("ui_settings") or {})
+                preset_ui["slot_names"] = slot_names
+                preset = {**preset, "ui_settings": preset_ui}
         await db.save_settings(pool, preset, user)
         return StatusResponse(status="ok")
 
@@ -128,6 +137,13 @@ async def load_model(
     with open(path, encoding="utf-8") as fh:
         loaded: dict[str, Any] = json.load(fh)
     _drop_orphaned_must_have(loaded)
+    # Preserve slot_names from current file-based settings
+    current_file = svc.load_settings()
+    slot_names = (current_file.get("ui_settings") or {}).get("slot_names")
+    if slot_names:
+        loaded_ui = dict(loaded.get("ui_settings") or {})
+        loaded_ui["slot_names"] = slot_names
+        loaded["ui_settings"] = loaded_ui
     if not svc.save_settings(loaded):
         raise HTTPException(status_code=500, detail="Failed to apply model settings")
     return StatusResponse(status="ok")
