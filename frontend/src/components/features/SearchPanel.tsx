@@ -45,6 +45,7 @@ interface SearchPanelProps {
   activeSlot?: string | null;
   slotBusy?: boolean;
   onSlotSwitch?: (slotKey: SlotKey) => void;
+  slotNames?: Partial<Record<string, string>>;
 }
 
 export default function SearchPanel({
@@ -63,6 +64,7 @@ export default function SearchPanel({
   activeSlot = null,
   slotBusy = false,
   onSlotSwitch,
+  slotNames = {},
 }: SearchPanelProps) {
   return (
     <aside className="w-72 shrink-0 bg-surface-raised border-r border-border p-5 space-y-6 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
@@ -200,6 +202,7 @@ export default function SearchPanel({
             const slotsLoading = configuredSlots === undefined;
             const isConfigured = !slotsLoading && configuredSlots.has(slot.key);
             const isActive = activeSlot === slot.key;
+            const label = slotNames[slot.key]?.trim() || slot.displayName;
             return (
               <button
                 key={slot.key}
@@ -209,8 +212,8 @@ export default function SearchPanel({
                   slotsLoading
                     ? "Loading model slots…"
                     : isConfigured
-                      ? `Switch to ${slot.displayName}`
-                      : `${slot.displayName} not configured yet`
+                      ? `Switch to ${label}`
+                      : `${label} not configured yet`
                 }
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
                   slotsLoading
@@ -222,7 +225,7 @@ export default function SearchPanel({
                         : "bg-surface-inset text-text-muted border border-border opacity-40 cursor-not-allowed"
                 }`}
               >
-                <span>{slot.displayName}</span>
+                <span>{label}</span>
                 {isActive && (
                   <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-current opacity-80" />
                 )}

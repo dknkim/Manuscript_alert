@@ -23,6 +23,10 @@ export default function PapersPage() {
     () => JSON.stringify(settings ?? null),
     [settings],
   );
+  const slotNames = useMemo(() => {
+    const names = settings?.ui_settings?.slot_names;
+    return (typeof names === "object" && names !== null ? names : {}) as Record<string, string>;
+  }, [settings]);
   // Resolve to undefined while settings are loading, then always a defined value.
   // This ensures usePaperSearch knows when settings have actually arrived.
   const defaultSources = settings
@@ -143,6 +147,7 @@ export default function PapersPage() {
         void stream.startStream(search.sources, search.searchMode);
       });
     },
+    slotNames,
   };
   const dashboardPanelProps = {
     papers: activePapers,

@@ -9,6 +9,15 @@ export const MODEL_SLOTS = [
 
 export type SlotKey = (typeof MODEL_SLOTS)[number]["key"];
 
+export function getSlotDisplayName(
+  slotKey: string,
+  customNames?: Partial<Record<string, string>>,
+): string {
+  const custom = customNames?.[slotKey]?.trim();
+  if (custom) return custom;
+  return MODEL_SLOTS.find((s) => s.key === slotKey)?.displayName ?? slotKey;
+}
+
 const STORAGE_KEY = "manuscript_activeSlot";
 
 export function useModelSlots(onSettingsReload?: () => Promise<void>) {

@@ -13,7 +13,7 @@ import type { Settings, BackupInfo, FlashMessage } from "@/types";
 import Card from "@/components/ui/Card";
 import Flash from "@/components/ui/Flash";
 import Toggle from "@/components/ui/Toggle";
-import { useModelSlots, MODEL_SLOTS } from "@/hooks/useModelSlots";
+import { useModelSlots, MODEL_SLOTS, getSlotDisplayName } from "@/hooks/useModelSlots";
 import type { SlotKey } from "@/hooks/useModelSlots";
 
 import type { LucideIcon } from "lucide-react";
@@ -44,6 +44,62 @@ export default function SettingsTab({
   const [editingSlot, setEditingSlot] = useState<SlotKey | null>(null);
   const slots = useModelSlots(onSettingsChange);
   const [slotMsg, setSlotMsg] = useState<FlashMessage | null>(null);
+
+  // Custom slot names stored in settings.ui_settings.slot_names (per-user)
+  const [slotCustomNames, setSlotCustomNames] = useState<Record<string, string>>(() => {
+    const names = settings.ui_settings?.slot_names;
+    return typeof names === "object" && names !== null ? (names as Record<string, string>) : {};
+  });
+  const [pendingSlotName, setPendingSlotName] = useState<string>("");
+
+  // Sync custom names from settings (e.g. after another tab saves them)
+  useEffect(() => {
+    const names = settings.ui_settings?.slot_names;
+    setSlotCustomNames(
+      typeof names === "object" && names !== null ? (names as Record<string, string>) : {},
+    );
+  }, [settings]);
+
+  // Reset rename input when the selected slot changes
+  useEffect(() => {
+    setPendingSlotName(editingSlot ? (slotCustomNames[editingSlot] ?? "") : "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingSlot]);
+
+  const getSlotLabel = useCallback(
+    (slotKey: string) => getSlotDisplayName(slotKey, slotCustomNames),
+    [slotCustomNames],
+  );
+
+  const handleRenameSlot = useCallback(async (): Promise<void> => {
+    if (!editingSlot) return;
+    const newName = pendingSlotName.trim();
+    const updatedSettings: Settings = {
+      ...settings,
+      ui_settings: {
+        ...settings.ui_settings,
+        slot_names: { ...slotCustomNames, [editingSlot]: newName },
+      },
+    };
+    try {
+      await saveSettings(updatedSettings);
+      setSlotCustomNames((prev) => ({ ...prev, [editingSlot]: newName }));
+      setSlotMsg({
+        type: "success",
+        text: newName
+          ? `Renamed to "${newName}"`
+          : `Reverted to "${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}"`,
+      });
+      setTimeout(() => setSlotMsg(null), 2500);
+      await onSettingsChange();
+    } catch (e: unknown) {
+      setSlotMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Failed to rename slot",
+      });
+      setTimeout(() => setSlotMsg(null), 3000);
+    }
+  }, [editingSlot, pendingSlotName, settings, slotCustomNames, onSettingsChange]);
 
   // Once configuredSlots loads, auto-select whichever slot is currently active
   // so the user lands directly in the editing view without an extra click.
@@ -90,12 +146,12 @@ export default function SettingsTab({
       } catch (e: unknown) {
         setSlotMsg({
           type: "error",
-          text: `Settings saved but failed to update ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}: ${e instanceof Error ? e.message : "Unknown error"}`,
+          text: `Settings saved but failed to update ${getSlotLabel(editingSlot)}: ${e instanceof Error ? e.message : "Unknown error"}`,
         });
         setTimeout(() => setSlotMsg(null), 4000);
       }
     }
-  }, [editingSlot, onSettingsChange, slots.saveToSlot]);
+  }, [editingSlot, onSettingsChange, slots.saveToSlot, getSlotLabel]);
 
   const handleSelectSlot = async (slotKey: SlotKey): Promise<void> => {
     // Don't allow selection while configuredSlots is still loading — we wouldn't
@@ -117,7 +173,7 @@ export default function SettingsTab({
     }
   };
 
-  const editingSlotLabel = MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName;
+  const editingSlotLabel = editingSlot ? getSlotLabel(editingSlot) : undefined;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
@@ -176,7 +232,7 @@ export default function SettingsTab({
                     isEditing ? "text-accent-text" : "text-text-primary"
                   }`}
                 >
-                  {slot.displayName}
+                  {getSlotLabel(slot.key)}
                 </p>
                 <p className="text-xs text-text-muted mt-0.5">
                   {slotsLoading ? "Loading…" : isConfigured ? "Configured" : "Not set up yet"}
@@ -192,20 +248,39 @@ export default function SettingsTab({
         </div>
 
         {editingSlot ? (
-          <div className="mt-3 flex items-center justify-between">
-            <p className="text-xs text-text-muted">
-              Saves below will also update{" "}
-              <span className="font-medium text-text-primary">
-                {editingSlotLabel}
-              </span>
-              .
-            </p>
-            <button
-              onClick={() => setEditingSlot(null)}
-              className="text-xs text-text-muted hover:text-text-secondary transition-colors"
-            >
-              Clear selection
-            </button>
+          <div className="mt-3 space-y-2">
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-text-muted shrink-0">Name:</label>
+              <input
+                type="text"
+                value={pendingSlotName}
+                onChange={(e) => setPendingSlotName(e.target.value)}
+                placeholder={MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}
+                className="flex-1 min-w-0 px-2.5 py-1 text-xs border border-border bg-surface rounded-lg text-text-primary focus:ring-1 focus:ring-accent focus:border-accent outline-none"
+                onKeyDown={(e) => { if (e.key === "Enter") void handleRenameSlot(); }}
+              />
+              <button
+                onClick={() => void handleRenameSlot()}
+                className="px-3 py-1 text-xs font-medium bg-accent-subtle text-accent-text hover:bg-accent-subtle/80 rounded-lg transition-colors shrink-0"
+              >
+                Rename
+              </button>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-text-muted">
+                Saves below will also update{" "}
+                <span className="font-medium text-text-primary">
+                  {editingSlotLabel}
+                </span>
+                .
+              </p>
+              <button
+                onClick={() => setEditingSlot(null)}
+                className="text-xs text-text-muted hover:text-text-secondary transition-colors"
+              >
+                Clear selection
+              </button>
+            </div>
           </div>
         ) : (
           <p className="mt-3 text-xs text-text-muted">
@@ -245,6 +320,7 @@ export default function SettingsTab({
               settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
+              slotLabel={editingSlotLabel}
             />
           )}
           {sub === "journals" && (
@@ -252,6 +328,7 @@ export default function SettingsTab({
               settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
+              slotLabel={editingSlotLabel}
             />
           )}
           {sub === "scoring" && (
@@ -259,6 +336,7 @@ export default function SettingsTab({
               settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
+              slotLabel={editingSlotLabel}
             />
           )}
           {sub === "backup" && <BackupSettings />}
@@ -289,10 +367,12 @@ function KeywordSettings({
   settings,
   onChange,
   editingSlot,
+  slotLabel,
 }: {
   settings: Settings;
   onChange: () => Promise<void>;
   editingSlot: SlotKey | null;
+  slotLabel?: string;
 }) {
   const [keywordsText, setKeywordsText] = useState<string>(
     (settings.keywords || []).join("\n"),
@@ -420,7 +500,7 @@ function KeywordSettings({
         >
           <Save className="w-4 h-4 shrink-0" />
           {editingSlot
-            ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+            ? `Save to ${slotLabel ?? MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
             : "Save Keywords Configuration"}
         </button>
       </div>
@@ -436,10 +516,12 @@ function JournalSettings({
   settings,
   onChange,
   editingSlot,
+  slotLabel,
 }: {
   settings: Settings;
   onChange: () => Promise<void>;
   editingSlot: SlotKey | null;
+  slotLabel?: string;
 }) {
   const tj = settings.target_journals || {
     exact_matches: [],
@@ -553,7 +635,7 @@ function JournalSettings({
         >
           <Save className="w-4 h-4 shrink-0" />
           {editingSlot
-            ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+            ? `Save to ${slotLabel ?? MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
             : "Save Journal Configuration"}
         </button>
       </div>
@@ -569,10 +651,12 @@ function ScoringSettings({
   settings,
   onChange,
   editingSlot,
+  slotLabel,
 }: {
   settings: Settings;
   onChange: () => Promise<void>;
   editingSlot: SlotKey | null;
+  slotLabel?: string;
 }) {
   const js = settings.journal_scoring || { enabled: true, high_impact_journal_boost: {} };
   const [enabled, setEnabled] = useState<boolean>(js.enabled ?? true);
@@ -752,7 +836,7 @@ function ScoringSettings({
         >
           <Save className="w-4 h-4 shrink-0" />
           {editingSlot
-            ? `Save to ${MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
+            ? `Save to ${slotLabel ?? MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
             : "Save Scoring Configuration"}
         </button>
       </div>
