@@ -64,6 +64,16 @@ export function useModelSlots(onSettingsReload?: () => Promise<void>) {
     }
   }, [refreshSlots]);
 
+  // After configuredSlots loads, discard any activeSlot that isn't configured
+  // for this user — prevents showing a previous user's active slot.
+  useEffect(() => {
+    if (configuredSlots === undefined) return;
+    if (activeSlot && !configuredSlots.has(activeSlot)) {
+      setActiveSlot(null);
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+    }
+  }, [configuredSlots, activeSlot]);
+
   const switchSlot = useCallback(
     async (slotKey: SlotKey) => {
       if (busy) return;

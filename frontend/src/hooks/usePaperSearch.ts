@@ -65,6 +65,13 @@ export function usePaperSearch(defaultSources?: DataSources) {
     setSources((prev) => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
+  // Explicitly reset sources when switching model slots, bypassing the
+  // "initialize once" guard so the new slot's defaults take effect.
+  const resetSources = useCallback((newSources: DataSources) => {
+    setSources(newSources);
+    setSourcesReady(true);
+  }, []);
+
   return {
     sources,
     sourcesReady,
@@ -76,6 +83,7 @@ export function usePaperSearch(defaultSources?: DataSources) {
     setHighImpactOnly,
     setSearchQuery,
     toggleSource,
+    resetSources,
     exportCSV,
     archive,
   };

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { getSettings } from "@/lib/api";
 import type { Settings } from "@/types";
 
@@ -12,6 +12,11 @@ export function useSettings() {
   const [error, setError] = useState<string | null>(null);
   const [warmingUp, setWarmingUp] = useState(false);
 
+  // Holds the most recently fetched settings synchronously — updated before
+  // React re-renders, so callbacks that fire right after reload() can read
+  // fresh data without waiting for the next render cycle.
+  const latestSettings = useRef<Settings | null>(null);
+
   const loadSettings = useCallback(async (withRetries: boolean) => {
     setLoading(true);
     setError(null);
@@ -24,6 +29,7 @@ export function useSettings() {
     for (let attempt = 0; attempt < attempts; attempt += 1) {
       try {
         const next = await getSettings({ timeoutMs: SETTINGS_TIMEOUT_MS });
+        latestSettings.current = next;
         setSettings(next);
         setError(null);
         setLoading(false);
@@ -43,8 +49,26 @@ export function useSettings() {
           continue;
         }
 
-        setSettings(null);
-        setError(message);
+        // All retries exhausted — fall back to the last cached value so the
+        // user at least sees something.  We intentionally do NOT pre-populate
+        // from cache on mount (see the useEffect below) because the cache is
+        // not scoped by user; showing a previous user's data is worse than a
+        // brief loading spinner.
+        try {
+          const cached = localStorage.getItem(CACHE_KEY);
+          if (cached) {
+            const fallback = JSON.parse(cached) as Settings;
+            latestSettings.current = fallback;
+            setSettings(fallback);
+            setError(null);
+          } else {
+            setSettings(null);
+            setError(message);
+          }
+        } catch {
+          setSettings(null);
+          setError(message);
+        }
         setLoading(false);
         setWarmingUp(false);
       }
@@ -56,15 +80,11 @@ export function useSettings() {
   }, [loadSettings]);
 
   useEffect(() => {
-    try {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        setSettings(JSON.parse(cached) as Settings);
-        setLoading(false);
-      }
-    } catch { /* ignore */ }
+    // Always load fresh from the API on mount — never pre-populate from the
+    // localStorage cache.  The cache key is not scoped by user, so using it
+    // immediately would show the previous user's data to whoever logs in next.
     void loadSettings(true);
   }, [loadSettings]);
 
-  return { settings, loading, error, warmingUp, reload };
+  return { settings, latestSettings, loading, error, warmingUp, reload };
 }

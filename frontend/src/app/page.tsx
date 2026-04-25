@@ -15,7 +15,7 @@ import type { Paper } from "@/types";
 const AUTO_RETRY_SECONDS = 20;
 
 export default function PapersPage() {
-  const { settings, loading, error, warmingUp, reload } = useSettings();
+  const { settings, latestSettings, loading, error, warmingUp, reload } = useSettings();
   const slots = useModelSlots(reload);
   const [retryCountdown, setRetryCountdown] = useState(0);
   const keywords = settings?.keywords || [];
@@ -144,7 +144,12 @@ export default function PapersPage() {
     slotBusy: slots.busy,
     onSlotSwitch: (k: SlotKey) => {
       void slots.switchSlot(k).then(() => {
-        void stream.startStream(search.sources, search.searchMode);
+        // latestSettings.current is set synchronously by reload() before React
+        // re-renders, so we can read the new slot's default sources here.
+        const newSources =
+          latestSettings.current?.search_settings?.default_sources;
+        if (newSources) search.resetSources(newSources);
+        void stream.startStream(newSources ?? search.sources, search.searchMode);
       });
     },
     slotNames,
