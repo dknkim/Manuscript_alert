@@ -29,6 +29,14 @@ def test_v1_save_model_invalid_name(client: TestClient) -> None:
     assert resp.status_code == 400
 
 
+def test_v1_save_slot_records_active_slot(client: TestClient) -> None:
+    resp = client.post("/api/v1/models", json={"name": "Model 1"})
+    assert resp.status_code == 200
+
+    settings = client.get("/api/v1/settings").json()
+    assert settings["ui_settings"]["active_slot"] == "Model_1"
+
+
 def test_v1_preview_model(client: TestClient) -> None:
     client.post("/api/v1/models", json={"name": "Preview Test"})
 

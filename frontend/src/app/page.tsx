@@ -16,7 +16,7 @@ const AUTO_RETRY_SECONDS = 20;
 
 export default function PapersPage() {
   const { settings, latestSettings, loading, error, warmingUp, reload } = useSettings();
-  const slots = useModelSlots(reload);
+  const slots = useModelSlots(reload, settings);
   const [retryCountdown, setRetryCountdown] = useState(0);
   const keywords = settings?.keywords || [];
   const slotNames = useMemo(() => {

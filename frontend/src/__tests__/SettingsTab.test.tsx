@@ -8,6 +8,7 @@ vi.mock("@/lib/api", () => ({
   saveSettings: vi.fn(),
   listModels: vi.fn(),
   loadModel: vi.fn(),
+  previewModel: vi.fn(),
   saveModel: vi.fn(),
   getClientCacheScope: vi.fn(),
   listBackups: vi.fn(),
@@ -15,7 +16,15 @@ vi.mock("@/lib/api", () => ({
   createBackup: vi.fn(),
 }));
 
-import { saveSettings, listModels, loadModel, saveModel, getClientCacheScope, listBackups } from "@/lib/api";
+import {
+  saveSettings,
+  listModels,
+  loadModel,
+  previewModel,
+  saveModel,
+  getClientCacheScope,
+  listBackups,
+} from "@/lib/api";
 
 async function renderWithSelectedSlot(onSettingsChange = vi.fn().mockResolvedValue(undefined)) {
   const user = userEvent.setup();
@@ -34,6 +43,7 @@ describe("SettingsTab", () => {
       { name: "Model 1", filename: "Model_1.json", modified: "2026-02-20 14:30" },
     ]);
     vi.mocked(loadModel).mockResolvedValue({ status: "ok" });
+    vi.mocked(previewModel).mockResolvedValue(mockSettings);
     vi.mocked(saveModel).mockResolvedValue({ status: "ok", filename: "Model_1.json" });
     vi.mocked(listBackups).mockResolvedValue([]);
   });
@@ -56,6 +66,15 @@ describe("SettingsTab", () => {
     await renderWithSelectedSlot();
     expect(screen.getByText("Research Keywords")).toBeInTheDocument();
     expect(screen.getByText(/Keyword Priority Scoring/)).toBeInTheDocument();
+  });
+
+  it("infers the active slot from matching settings", async () => {
+    render(<SettingsTab settings={mockSettings} onSettingsChange={vi.fn()} />);
+
+    expect(await screen.findByText("Research Keywords")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Model #1 Configured/ })).toHaveTextContent(
+      "Editing now",
+    );
   });
 
   it("switches to Journals sub-tab", async () => {

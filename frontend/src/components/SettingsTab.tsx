@@ -41,7 +41,7 @@ export default function SettingsTab({
 }: SettingsTabProps) {
   const [sub, setSub] = useState<string>("keywords");
   const [editingSlot, setEditingSlot] = useState<SlotKey | null>(null);
-  const slots = useModelSlots(onSettingsChange);
+  const slots = useModelSlots(onSettingsChange, settings);
   const [slotMsg, setSlotMsg] = useState<FlashMessage | null>(null);
 
   // Custom slot names stored in settings.ui_settings.slot_names (per-user)

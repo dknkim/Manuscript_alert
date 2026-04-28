@@ -36,6 +36,17 @@ ModelsDir = Annotated[Path, Depends(get_models_dir)]
 SettingsSvc = Annotated[SettingsService, Depends(get_settings_service)]
 DBPool = Annotated[asyncpg.Pool | None, Depends(get_db_pool)]
 
+SLOT_NAMES = {"Model_1", "Model_2", "Model_3"}
+
+
+def _with_active_slot(settings: dict[str, Any], slot_name: str) -> dict[str, Any]:
+    """Record which fixed slot produced the current active settings."""
+    if slot_name not in SLOT_NAMES:
+        return settings
+    ui_settings = dict(settings.get("ui_settings") or {})
+    ui_settings["active_slot"] = slot_name
+    return {**settings, "ui_settings": ui_settings}
+
 
 def _write_json_atomic(path: str | Path, data: dict[str, Any]) -> None:
     target = Path(path)
@@ -92,6 +103,8 @@ async def save_model(
     if pool is not None:
         settings: dict[str, Any] = await db.get_settings(pool, user) or svc.load_settings()
         await db.save_model_preset(pool, db_name, settings, user)
+        if db_name in SLOT_NAMES:
+            await db.save_settings(pool, _with_active_slot(settings, db_name), user)
         return {"status": "ok", "filename": filename}
 
     # File-based fallback
@@ -99,6 +112,8 @@ async def save_model(
     path = os.path.join(models_dir, filename)
     settings = svc.load_settings()
     _write_json_atomic(path, settings)
+    if db_name in SLOT_NAMES:
+        svc.save_settings(_with_active_slot(settings, db_name))
     return {"status": "ok", "filename": os.path.basename(path)}
 
 
@@ -122,7 +137,7 @@ async def load_model(
                 preset_ui = dict(preset.get("ui_settings") or {})
                 preset_ui["slot_names"] = slot_names
                 preset = {**preset, "ui_settings": preset_ui}
-        await db.save_settings(pool, preset, user)
+        await db.save_settings(pool, _with_active_slot(preset, db_name), user)
         return StatusResponse(status="ok")
 
     # File-based fallback
@@ -139,7 +154,7 @@ async def load_model(
         loaded_ui = dict(loaded.get("ui_settings") or {})
         loaded_ui["slot_names"] = slot_names
         loaded["ui_settings"] = loaded_ui
-    if not svc.save_settings(loaded):
+    if not svc.save_settings(_with_active_slot(loaded, db_name)):
         raise HTTPException(status_code=500, detail="Failed to apply model settings")
     return StatusResponse(status="ok")
 
