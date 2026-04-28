@@ -24,6 +24,7 @@ class PubMedFetcher:
         self.base_url: str = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
         self.search_url: str = f"{self.base_url}/esearch.fcgi"
         self.fetch_url: str = f"{self.base_url}/efetch.fcgi"
+        self.session: requests.Session = requests.Session()
         self.max_results: int = 2500
         self.rate_limit_delay: float = 0.34
         self.last_request_time: float = 0
@@ -86,54 +87,19 @@ class PubMedFetcher:
         """Search PubMed and return matching paper IDs."""
         search_query: str = self._build_search_query(keywords, start_date, end_date)
         logger.info(f"PubMed query: {search_query}")
-
-        count_params: dict[str, str] = {
-            "db": "pubmed",
-            "term": search_query,
-            "rettype": "count",
-            "tool": "scientific_alert_system",
-            "email": "research@example.com",
-        }
-
-        actual_max: int
-        try:
-            logger.info("Getting search count...")
-            count_response: requests.Response = requests.get(
-                self.search_url, params=count_params, timeout=10
-            )
-            count_response.raise_for_status()
-            count_root: ET.Element = ET.fromstring(count_response.content)
-            count_elem: ET.Element | None = count_root.find("Count")
-            total_count: int = (
-                int(count_elem.text) if count_elem is not None and count_elem.text else 0
-            )
-            self._last_total_count = total_count
-            logger.info(f"Found {total_count} total papers in PubMed")
-
-            if brief_mode:
-                max_limit = 1000
-            elif extended_mode:
-                max_limit = 5000
-            else:
-                max_limit = self.max_results
-            actual_max = min(total_count, max_limit)
-            logger.info(f"Will fetch {actual_max} papers (limit: {max_limit})")
-        except Exception as e:
-            logger.warning(f"Error getting search count: {e}")
-            if brief_mode:
-                actual_max = 1000
-            elif extended_mode:
-                actual_max = 5000
-            else:
-                actual_max = self.max_results
-            logger.info(f"Using fallback limit: {actual_max}")
+        if brief_mode:
+            max_limit = 1000
+        elif extended_mode:
+            max_limit = 5000
+        else:
+            max_limit = self.max_results
 
         self._apply_rate_limit()
 
         params: dict[str, str | int] = {
             "db": "pubmed",
             "term": search_query,
-            "retmax": actual_max,
+            "retmax": max_limit,
             "retmode": "xml",
             "sort": "pub_date",
             "tool": "scientific_alert_system",
@@ -141,15 +107,27 @@ class PubMedFetcher:
         }
         try:
             logger.info("Making PubMed search request...")
-            response: requests.Response = requests.get(self.search_url, params=params, timeout=10)
+            response: requests.Response = self.session.get(
+                self.search_url, params=params, timeout=10
+            )
             response.raise_for_status()
             logger.info("PubMed search response received")
             root: ET.Element = ET.fromstring(response.content)
+            count_elem: ET.Element | None = root.find("Count")
+            total_count: int = (
+                int(count_elem.text) if count_elem is not None and count_elem.text else 0
+            )
+            self._last_total_count = total_count
+            logger.info(f"Found {total_count} total papers in PubMed")
             id_list: ET.Element | None = root.find("IdList")
             if id_list is not None:
                 paper_ids: list[str] = [
                     id_elem.text for id_elem in id_list.findall("Id") if id_elem.text
                 ]
+                if total_count > len(paper_ids):
+                    logger.info(f"Will fetch {len(paper_ids)} papers (limit: {max_limit})")
+                else:
+                    logger.info(f"Will fetch {len(paper_ids)} papers")
                 logger.info(f"Extracted {len(paper_ids)} paper IDs")
                 return paper_ids
             logger.info("No IdList found in response")
@@ -189,7 +167,7 @@ class PubMedFetcher:
 
         logger.info(f"Starting to fetch details for {len(paper_ids)} papers...")
         all_papers: list[dict[str, object]] = []
-        batch_size: int = 100
+        batch_size: int = 250
         total_batches: int = (len(paper_ids) + batch_size - 1) // batch_size
         logger.info(f"Will process {total_batches} batches of {batch_size} papers each")
 
@@ -212,7 +190,7 @@ class PubMedFetcher:
             for retry in range(max_retries):
                 try:
                     self._apply_rate_limit()
-                    response: requests.Response = requests.get(
+                    response: requests.Response = self.session.get(
                         self.fetch_url, params=params, timeout=10
                     )
                     response.raise_for_status()
@@ -490,7 +468,9 @@ class PubMedFetcher:
                 "tool": "scientific_alert_system",
                 "email": "research@example.com",
             }
-            response: requests.Response = requests.get(self.search_url, params=params, timeout=10)
+            response: requests.Response = self.session.get(
+                self.search_url, params=params, timeout=10
+            )
             return response.status_code == 200
         except Exception:
             return False
