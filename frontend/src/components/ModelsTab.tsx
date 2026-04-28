@@ -20,6 +20,7 @@ import {
   saveSettings,
 } from "@/lib/api";
 import type { Settings, ModelInfo, FlashMessage } from "@/types";
+import { persistActiveSlot, slotKeyFromFilename } from "@/hooks/useModelSlots";
 
 interface ModelsTabProps {
   settings: Settings;
@@ -72,8 +73,9 @@ export default function ModelsTab({
   const handleLoad = async (filename: string): Promise<void> => {
     try {
       await loadModel(filename);
+      await persistActiveSlot(slotKeyFromFilename(filename));
       flash("Model loaded successfully.");
-      onSettingsChange();
+      await onSettingsChange();
     } catch (e: unknown) {
       flash(e instanceof Error ? e.message : "Unknown error", "error");
     }
@@ -126,8 +128,9 @@ export default function ModelsTab({
       const text = await file.text();
       const imported = JSON.parse(text) as Settings;
       await saveSettings(imported);
+      await persistActiveSlot(null);
       flash("Settings imported successfully.");
-      onSettingsChange();
+      await onSettingsChange();
     } catch (err: unknown) {
       flash(
         "Failed to import settings: " +

@@ -28,6 +28,7 @@ async def save_settings(
     """Overwrite the current settings row for this user (delete + insert)."""
     async with pool.acquire() as conn:
         async with conn.transaction():
+            await conn.execute("LOCK TABLE settings IN SHARE ROW EXCLUSIVE MODE")
             await conn.execute(
                 "DELETE FROM settings WHERE user_id IS NOT DISTINCT FROM $1", user_id
             )
@@ -48,8 +49,8 @@ async def list_model_presets(
 ) -> list[dict[str, str]]:
     """Return [{name, filename, modified}, ...] sorted by name."""
     rows = await pool.fetch(
-        "SELECT name, created_at FROM model_presets"
-        " WHERE user_id IS NOT DISTINCT FROM $1 ORDER BY name",
+        "SELECT DISTINCT ON (name) name, created_at FROM model_presets"
+        " WHERE user_id IS NOT DISTINCT FROM $1 ORDER BY name, created_at DESC",
         user_id,
     )
     return [
@@ -67,7 +68,9 @@ async def get_model_preset(
 ) -> dict[str, Any] | None:
     """Return the data dict for the named preset, or None."""
     row = await pool.fetchrow(
-        "SELECT data FROM model_presets WHERE user_id IS NOT DISTINCT FROM $1 AND name = $2",
+        "SELECT data FROM model_presets"
+        " WHERE user_id IS NOT DISTINCT FROM $1 AND name = $2"
+        " ORDER BY created_at DESC LIMIT 1",
         user_id,
         name,
     )
@@ -80,6 +83,7 @@ async def save_model_preset(
     """Insert or replace the named preset (delete + insert for upsert semantics)."""
     async with pool.acquire() as conn:
         async with conn.transaction():
+            await conn.execute("LOCK TABLE model_presets IN SHARE ROW EXCLUSIVE MODE")
             await conn.execute(
                 "DELETE FROM model_presets WHERE user_id IS NOT DISTINCT FROM $1 AND name = $2",
                 user_id,

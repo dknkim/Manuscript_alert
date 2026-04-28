@@ -19,10 +19,6 @@ export default function PapersPage() {
   const slots = useModelSlots(reload);
   const [retryCountdown, setRetryCountdown] = useState(0);
   const keywords = settings?.keywords || [];
-  const settingsSignature = useMemo(
-    () => JSON.stringify(settings ?? null),
-    [settings],
-  );
   const slotNames = useMemo(() => {
     const names = settings?.ui_settings?.slot_names;
     return (typeof names === "object" && names !== null ? names : {}) as Record<string, string>;
@@ -32,8 +28,20 @@ export default function PapersPage() {
   const defaultSources = settings
     ? (settings.search_settings?.default_sources ?? { pubmed: true, arxiv: false, biorxiv: false, medrxiv: false })
     : undefined;
-  const search = usePaperSearch(defaultSources);
-  const stream = useAgentStream(settings ? settingsSignature : undefined);
+  const defaultSearchMode = settings?.search_settings?.search_mode;
+  const search = usePaperSearch(defaultSources, defaultSearchMode);
+  const streamCacheKey = useMemo(
+    () =>
+      settings && search.sourcesReady
+        ? JSON.stringify({
+            settings,
+            sources: search.sources,
+            searchMode: search.searchMode,
+          })
+        : undefined,
+    [settings, search.sources, search.searchMode, search.sourcesReady],
+  );
+  const stream = useAgentStream(streamCacheKey);
   const [mode, setMode] = useState<"classic" | "agent">("classic");
   const [filterOpen, setFilterOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
@@ -70,14 +78,14 @@ export default function PapersPage() {
   // click (which clears result via reset()) doesn't re-trigger this guard.
   const didAutoFetch = useRef(false);
   useEffect(() => {
-    if (!didAutoFetch.current && keywords.length > 0 && search.sourcesReady) {
+    if (!didAutoFetch.current && keywords.length > 0 && search.sourcesReady && stream.cacheReady) {
       didAutoFetch.current = true;
       if (!stream.result) {
         stream.startStream(search.sources, search.searchMode);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keywords.length, search.sourcesReady, stream.result]);
+  }, [keywords.length, search.sourcesReady, stream.cacheReady, stream.result]);
 
   const handleFetch = () => {
     stream.startStream(search.sources, search.searchMode);
@@ -146,12 +154,17 @@ export default function PapersPage() {
       void slots.switchSlot(k).then(() => {
         // latestSettings.current is set synchronously by reload() before React
         // re-renders, so we can read the new slot's default sources here.
-        const newSources =
-          latestSettings.current?.search_settings?.default_sources;
-        if (newSources) search.resetSources(newSources);
-        void stream.startStream(newSources ?? search.sources, search.searchMode);
-      });
-    },
+          const newSources =
+            latestSettings.current?.search_settings?.default_sources;
+          const newSearchMode =
+            latestSettings.current?.search_settings?.search_mode;
+          if (newSources) search.resetSources(newSources, newSearchMode);
+          void stream.startStream(
+            newSources ?? search.sources,
+            newSearchMode ?? search.searchMode,
+          );
+        });
+      },
     slotNames,
   };
   const dashboardPanelProps = {

@@ -10,8 +10,21 @@ const DEFAULT_SOURCES: DataSources = {
 };
 
 const DEFAULT_SEARCH_MODE = "Brief (PubMed: 1000, Others: 500)";
+const SEARCH_MODE_VALUES = {
+  Brief: DEFAULT_SEARCH_MODE,
+  Standard: "Standard (PubMed: 2500, Others: 1000)",
+  Extended: "Extended (All sources: 5000)",
+} as const;
 
-export function usePaperSearch(defaultSources?: DataSources) {
+export function normalizeSearchMode(mode?: string): string {
+  if (!mode) return DEFAULT_SEARCH_MODE;
+  if (mode.startsWith("Brief")) return SEARCH_MODE_VALUES.Brief;
+  if (mode.startsWith("Standard")) return SEARCH_MODE_VALUES.Standard;
+  if (mode.startsWith("Extended")) return SEARCH_MODE_VALUES.Extended;
+  return mode;
+}
+
+export function usePaperSearch(defaultSources?: DataSources, defaultSearchMode?: string) {
   const [sources, setSources] = useState<DataSources>(DEFAULT_SOURCES);
   const [searchMode, setSearchMode] = useState(DEFAULT_SEARCH_MODE);
   const [highImpactOnly, setHighImpactOnly] = useState(false);
@@ -27,9 +40,10 @@ export function usePaperSearch(defaultSources?: DataSources) {
     if (!sourcesInitialized.current && defaultSources !== undefined) {
       sourcesInitialized.current = true;
       setSources(defaultSources);
+      setSearchMode(normalizeSearchMode(defaultSearchMode));
       setSourcesReady(true);
     }
-  }, [defaultSources]);
+  }, [defaultSources, defaultSearchMode]);
 
   // Load archived titles on mount
   useEffect(() => {
@@ -67,8 +81,11 @@ export function usePaperSearch(defaultSources?: DataSources) {
 
   // Explicitly reset sources when switching model slots, bypassing the
   // "initialize once" guard so the new slot's defaults take effect.
-  const resetSources = useCallback((newSources: DataSources) => {
+  const resetSources = useCallback((newSources: DataSources, newSearchMode?: string) => {
     setSources(newSources);
+    if (newSearchMode !== undefined) {
+      setSearchMode(normalizeSearchMode(newSearchMode));
+    }
     setSourcesReady(true);
   }, []);
 

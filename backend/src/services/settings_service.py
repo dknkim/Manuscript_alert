@@ -5,6 +5,7 @@ Handles loading, saving, and updating settings that persist across app runs.
 
 import os
 import re
+import threading
 from datetime import datetime
 from typing import Any
 
@@ -17,6 +18,8 @@ logger = Logger(__name__)
 
 class SettingsService:
     """Manages application settings with persistence to source files"""
+
+    _lock = threading.RLock()
 
     def __init__(self):
         self.settings_file = "backend/config/settings.py"
@@ -195,19 +198,19 @@ class SettingsService:
         logger.info(f"Saving settings: {len(settings.get('keywords', []))} keywords")
 
         try:
-            # Create backup first
-            logger.debug("Creating backup before save...")
-            self._create_backup()
+            with self._lock:
+                # Create backup first
+                logger.debug("Creating backup before save...")
+                self._create_backup()
 
-            # Generate the complete settings file content
-            logger.debug("Generating settings file content...")
-            content = self._generate_settings_file(settings)
-            logger.debug(f"Generated content length: {len(content)} chars")
+                # Generate the complete settings file content
+                logger.debug("Generating settings file content...")
+                content = self._generate_settings_file(settings)
+                logger.debug(f"Generated content length: {len(content)} chars")
 
-            # Write the complete file
-            logger.info(f"Writing settings to: {self.settings_file}")
-            with open(self.settings_file, "w", encoding="utf-8") as f:
-                f.write(content)
+                # Write the complete file
+                logger.info(f"Writing settings to: {self.settings_file}")
+                self._write_text_atomic(self.settings_file, content)
 
             logger.warning("✅ Settings saved successfully!")
             logger.warning("<<< SettingsService.save_settings() returning True")
@@ -220,7 +223,7 @@ class SettingsService:
 
     def _create_backup(self):
         """Create a backup of the current settings file"""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         backup_file = os.path.join(self.backup_dir, f"settings_backup_{timestamp}.py")
 
         try:
@@ -229,6 +232,27 @@ class SettingsService:
                     dst.write(src.read())
         except Exception as e:
             logger.warning(f"Could not create backup: {e}")
+
+    def _write_text_atomic(self, path: str, content: str) -> None:
+        """Replace a settings file atomically so readers never import a partial write."""
+        directory = os.path.dirname(path) or "."
+        os.makedirs(directory, exist_ok=True)
+        tmp_path = os.path.join(
+            directory,
+            f".{os.path.basename(path)}.{os.getpid()}.{threading.get_ident()}.tmp",
+        )
+        try:
+            with open(tmp_path, "w", encoding="utf-8") as fh:
+                fh.write(content)
+                fh.flush()
+                os.fsync(fh.fileno())
+            os.replace(tmp_path, path)
+        finally:
+            try:
+                if os.path.exists(tmp_path):
+                    os.remove(tmp_path)
+            except OSError:
+                pass
 
     def _update_keywords(self, content: str, keywords: list[str]) -> str:
         """Update the DEFAULT_KEYWORDS section"""
@@ -478,11 +502,10 @@ UI_SETTINGS = {ui_settings}
     def restore_backup(self, backup_file: str) -> bool:
         """Restore settings from a backup file"""
         try:
-            with open(backup_file, encoding="utf-8") as src:
-                content = src.read()
-
-            with open(self.settings_file, "w", encoding="utf-8") as dst:
-                dst.write(content)
+            with self._lock:
+                with open(backup_file, encoding="utf-8") as src:
+                    content = src.read()
+                self._write_text_atomic(self.settings_file, content)
 
             return True
         except Exception as e:

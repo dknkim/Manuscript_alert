@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import AppShell from "@/components/layout/AppShell";
 import { ClerkTokenProvider } from "@/components/ClerkTokenProvider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Manuscript Alert System",
@@ -20,7 +17,7 @@ function RootContent({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-surface text-text-primary antialiased`}
+        className="bg-surface text-text-primary antialiased"
       >
         {/* Registers Clerk token getter with the API client (no-op without Clerk) */}
         {CLERK_KEY && <ClerkTokenProvider />}

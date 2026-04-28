@@ -11,13 +11,15 @@ vi.mock("@/lib/api", () => ({
   previewModel: vi.fn(),
   deleteModel: vi.fn(),
   saveSettings: vi.fn(),
+  getClientCacheScope: vi.fn(),
 }));
 
-import { listModels, saveModel, loadModel, previewModel, deleteModel } from "@/lib/api";
+import { listModels, saveModel, loadModel, previewModel, deleteModel, getClientCacheScope } from "@/lib/api";
 
 describe("ModelsTab", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(getClientCacheScope).mockResolvedValue("local");
     vi.mocked(listModels).mockResolvedValue([]);
   });
 

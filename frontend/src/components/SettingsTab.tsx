@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Search, Newspaper, BarChart2, Archive, Save, FolderPlus } from "lucide-react";
 import {
   saveSettings,
-  saveModel,
   listBackups,
   restoreBackup,
   createBackup,
@@ -339,7 +338,7 @@ export default function SettingsTab({
               slotLabel={editingSlotLabel}
             />
           )}
-          {sub === "backup" && <BackupSettings />}
+          {sub === "backup" && <BackupSettings onSettingsChange={onSettingsChange} />}
         </>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -420,7 +419,7 @@ function KeywordSettings({
       };
       await saveSettings(updated);
       setMsg({ type: "success", text: "Keywords configuration saved!" });
-      onChange();
+      await onChange();
     } catch (e: unknown) {
       setMsg({
         type: "error",
@@ -570,7 +569,7 @@ function JournalSettings({
       };
       await saveSettings(updated);
       setMsg({ type: "success", text: "Journal configuration saved!" });
-      onChange();
+      await onChange();
     } catch (e: unknown) {
       setMsg({
         type: "error",
@@ -740,7 +739,7 @@ function ScoringSettings({
       };
       await saveSettings(updated);
       setMsg({ type: "success", text: "Scoring configuration saved!" });
-      onChange();
+      await onChange();
     } catch (e: unknown) {
       setMsg({
         type: "error",
@@ -848,7 +847,7 @@ function ScoringSettings({
    Backup sub-tab
    ───────────────────────────────────────────────────────────── */
 
-function BackupSettings() {
+function BackupSettings({ onSettingsChange }: { onSettingsChange: () => Promise<void> }) {
   const [backups, setBackups] = useState<BackupInfo[]>([]);
   const [msg, setMsg] = useState<FlashMessage | null>(null);
 
@@ -873,6 +872,7 @@ function BackupSettings() {
   const handleRestore = async (path: string): Promise<void> => {
     try {
       await restoreBackup(path);
+      await onSettingsChange();
       flash("Backup restored successfully!");
     } catch (e: unknown) {
       flash(e instanceof Error ? e.message : "Unknown error", "error");

@@ -1,10 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { getSettings } from "@/lib/api";
+import { getClientCacheScope, getSettings, isAuthConfigured } from "@/lib/api";
 import type { Settings } from "@/types";
 
 const SETTINGS_TIMEOUT_MS = 8000;
 const SETTINGS_RETRY_DELAYS_MS = [3000, 3000, 3000, 3000, 3000];
 const CACHE_KEY = "ms_settings_v1";
+
+async function getScopedCacheKey(): Promise<string | null> {
+  const scope = await getClientCacheScope({ timeoutMs: SETTINGS_TIMEOUT_MS });
+  if (!scope) return null;
+  return `${CACHE_KEY}:${scope}`;
+}
 
 export function useSettings() {
   const [settings, setSettings] = useState<Settings | null>(null);
@@ -16,8 +22,16 @@ export function useSettings() {
   // React re-renders, so callbacks that fire right after reload() can read
   // fresh data without waiting for the next render cycle.
   const latestSettings = useRef<Settings | null>(null);
+  const requestId = useRef(0);
+  const abortRef = useRef<AbortController | null>(null);
 
   const loadSettings = useCallback(async (withRetries: boolean) => {
+    const currentRequest = requestId.current + 1;
+    requestId.current = currentRequest;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError(null);
     setWarmingUp(false);
@@ -28,24 +42,45 @@ export function useSettings() {
 
     for (let attempt = 0; attempt < attempts; attempt += 1) {
       try {
-        const next = await getSettings({ timeoutMs: SETTINGS_TIMEOUT_MS });
+        const next = await getSettings({
+          timeoutMs: SETTINGS_TIMEOUT_MS,
+          signal: controller.signal,
+        });
+        if (requestId.current !== currentRequest || controller.signal.aborted) return;
         latestSettings.current = next;
         setSettings(next);
         setError(null);
         setLoading(false);
         setWarmingUp(false);
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify(next)); } catch { /* quota */ }
+        try {
+          const scopedCacheKey = await getScopedCacheKey();
+          if (scopedCacheKey && requestId.current === currentRequest) {
+            localStorage.setItem(scopedCacheKey, JSON.stringify(next));
+          }
+        } catch {
+          /* quota/auth timing */
+        }
         return;
       } catch (err) {
+        if (requestId.current !== currentRequest || controller.signal.aborted) return;
         const message =
           err instanceof Error ? err.message : "Failed to load settings";
         console.error("Failed to load settings:", err);
 
         if (attempt < attempts - 1) {
           setWarmingUp(true);
-          await new Promise((resolve) =>
-            window.setTimeout(resolve, SETTINGS_RETRY_DELAYS_MS[attempt]),
-          );
+          await new Promise<void>((resolve) => {
+            const timeout = window.setTimeout(resolve, SETTINGS_RETRY_DELAYS_MS[attempt]);
+            controller.signal.addEventListener(
+              "abort",
+              () => {
+                window.clearTimeout(timeout);
+                resolve();
+              },
+              { once: true },
+            );
+          });
+          if (requestId.current !== currentRequest || controller.signal.aborted) return;
           continue;
         }
 
@@ -55,15 +90,21 @@ export function useSettings() {
         // not scoped by user; showing a previous user's data is worse than a
         // brief loading spinner.
         try {
-          const cached = localStorage.getItem(CACHE_KEY);
+          const scopedCacheKey = await getScopedCacheKey();
+          const cached = scopedCacheKey ? localStorage.getItem(scopedCacheKey) : null;
           if (cached) {
             const fallback = JSON.parse(cached) as Settings;
+            if (requestId.current !== currentRequest || controller.signal.aborted) return;
             latestSettings.current = fallback;
             setSettings(fallback);
-            setError(null);
+            setError(`Using cached settings because fresh settings failed: ${message}`);
           } else {
             setSettings(null);
-            setError(message);
+            setError(
+              isAuthConfigured() && !scopedCacheKey
+                ? "Failed to load settings because authentication was not ready."
+                : message,
+            );
           }
         } catch {
           setSettings(null);
@@ -84,6 +125,10 @@ export function useSettings() {
     // localStorage cache.  The cache key is not scoped by user, so using it
     // immediately would show the previous user's data to whoever logs in next.
     void loadSettings(true);
+    return () => {
+      requestId.current += 1;
+      abortRef.current?.abort();
+    };
   }, [loadSettings]);
 
   return { settings, latestSettings, loading, error, warmingUp, reload };

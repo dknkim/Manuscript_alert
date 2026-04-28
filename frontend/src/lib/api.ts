@@ -43,6 +43,37 @@ export async function waitForClerkReady(timeoutMs = 5000): Promise<boolean> {
   return _isClerkReady;
 }
 
+export function isAuthConfigured(): boolean {
+  return !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+}
+
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return null;
+    const padded = payload.replace(/-/g, "+").replace(/_/g, "/").padEnd(
+      Math.ceil(payload.length / 4) * 4,
+      "=",
+    );
+    return JSON.parse(globalThis.atob(padded)) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+export async function getClientCacheScope(options?: {
+  timeoutMs?: number;
+}): Promise<string | null> {
+  if (!isAuthConfigured()) return "local";
+  const token = await getAuthToken({
+    waitForClerk: true,
+    timeoutMs: options?.timeoutMs ?? 5000,
+  });
+  if (!token) return null;
+  const sub = decodeJwtPayload(token)?.sub;
+  return typeof sub === "string" && sub ? `user:${sub}` : `token:${token.slice(0, 24)}`;
+}
+
 /** Returns the current Clerk JWT, or null if auth is not configured. */
 export async function getAuthToken(options?: {
   waitForClerk?: boolean;
@@ -104,15 +135,14 @@ async function request(
   let token = await getAuthToken({ waitForClerk: true, timeoutMs: 250 });
   let res = await fetchWithAuth(url, options, token);
 
-  if (
-    res.status === 401 &&
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
-    !_isClerkReady
-  ) {
+  if (res.status === 401 && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
     const isReady = await waitForClerkReady();
     if (isReady) {
-      token = await getAuthToken();
-      res = await fetchWithAuth(url, options, token);
+      const retryToken = await getAuthToken();
+      if (retryToken && retryToken !== token) {
+        token = retryToken;
+        res = await fetchWithAuth(url, options, token);
+      }
     }
   }
 
@@ -127,8 +157,12 @@ async function request(
 
 export async function getSettings(options?: {
   timeoutMs?: number;
+  signal?: AbortSignal;
 }): Promise<Settings> {
-  const res = await request("/settings", { timeoutMs: options?.timeoutMs });
+  const res = await request("/settings", {
+    timeoutMs: options?.timeoutMs,
+    signal: options?.signal,
+  });
   return res.json();
 }
 
@@ -162,9 +196,8 @@ export async function exportPapersCSV(
   dataSources: DataSources,
   searchMode: string,
 ): Promise<Blob> {
-  const res = await fetch(`${BASE}/papers/export`, {
+  const res = await request("/papers/export", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       data_sources: dataSources,
       search_mode: searchMode,

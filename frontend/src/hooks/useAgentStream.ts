@@ -48,6 +48,7 @@ export interface DisplayState {
 interface UseAgentStreamReturn {
   displayState: DisplayState;
   isStreaming: boolean;
+  cacheReady: boolean;
   result: FetchResult | null;
   error: string | null;
   startStream: (dataSources: DataSources, searchMode: string) => Promise<void>;
@@ -83,6 +84,7 @@ function upsertSource(
 export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
   const [display, setDisplay] = useState<DisplayState>(EMPTY_DISPLAY);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [cacheReady, setCacheReady] = useState(false);
   const [result, setResult] = useState<FetchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -90,25 +92,40 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
   const hydratedKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!cacheKey || hydratedKeyRef.current === cacheKey) return;
+    if (!cacheKey) {
+      setCacheReady(false);
+      return;
+    }
+    if (hydratedKeyRef.current === cacheKey) return;
     hydratedKeyRef.current = cacheKey;
+    setCacheReady(false);
+    setDisplay(EMPTY_DISPLAY);
+    setResult(null);
+    setError(null);
+    setIsStreaming(false);
 
     const raw = window.sessionStorage.getItem(`${STORAGE_PREFIX}${cacheKey}`);
-    if (!raw) return;
+    if (!raw) {
+      setCacheReady(true);
+      return;
+    }
 
     try {
       const snapshot = JSON.parse(raw) as StreamSnapshot;
       if (snapshot.cachedAt && Date.now() - snapshot.cachedAt > CACHE_TTL_MS) {
         window.sessionStorage.removeItem(`${STORAGE_PREFIX}${cacheKey}`);
+        setCacheReady(true);
         return;
       }
       setDisplay(snapshot.displayState ?? EMPTY_DISPLAY);
       setResult(snapshot.result ?? null);
       setError(snapshot.error ?? null);
       setIsStreaming(false);
+      setCacheReady(true);
     } catch (err) {
       console.error("Failed to restore papers cache:", err);
       window.sessionStorage.removeItem(`${STORAGE_PREFIX}${cacheKey}`);
+      setCacheReady(true);
     }
   }, [cacheKey]);
 
@@ -344,5 +361,5 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
     [reset],
   );
 
-  return { displayState: display, isStreaming, result, error, startStream, reset };
+  return { displayState: display, isStreaming, cacheReady, result, error, startStream, reset };
 }
