@@ -170,7 +170,12 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
       const ctrl = new AbortController();
       abortRef.current = ctrl;
 
-      const token = await getAuthToken({ waitForClerk: true, timeoutMs: 250 });
+      const token = await getAuthToken({ waitForClerk: true, timeoutMs: 5000 });
+      if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && !token) {
+        setError("Authentication is still loading. Please try again.");
+        setIsStreaming(false);
+        return;
+      }
 
       fetchEventSource(`${BASE}/papers/review`, {
         method: "POST",

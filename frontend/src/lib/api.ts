@@ -47,6 +47,22 @@ export function isAuthConfigured(): boolean {
   return !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 }
 
+async function requireAuthToken(timeoutMs?: number): Promise<string | null> {
+  if (!isAuthConfigured()) return null;
+
+  const ready = await waitForClerkReady(timeoutMs ?? 5000);
+  if (!ready) {
+    throw new Error("Authentication is still loading. Please try again.");
+  }
+
+  const token = await getAuthToken();
+  if (!token) {
+    throw new Error("Authentication token is not available. Please sign in again.");
+  }
+
+  return token;
+}
+
 function decodeJwtPayload(token: string): Record<string, unknown> | null {
   try {
     const payload = token.split(".")[1];
@@ -132,7 +148,7 @@ async function request(
   url: string,
   options: RequestInit & { timeoutMs?: number } = {},
 ): Promise<Response> {
-  let token = await getAuthToken({ waitForClerk: true, timeoutMs: 250 });
+  let token = await requireAuthToken(options.timeoutMs);
   let res = await fetchWithAuth(url, options, token);
 
   if (res.status === 401 && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {

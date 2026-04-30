@@ -135,6 +135,24 @@ export default function PapersPage() {
     );
   }
 
+  if (!settings) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh] px-6">
+        <div className="max-w-md w-full rounded-xl border border-border bg-surface-raised p-6 text-center">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+          <h2 className="mt-4 text-lg font-semibold text-text-primary">
+            Loading settings
+          </h2>
+          <p className="mt-2 text-sm text-text-muted">
+            {warmingUp
+              ? "Waiting for the API and your session to finish starting."
+              : "Preparing your saved keyword sets and search defaults."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const searchPanelProps = {
     sources: search.sources,
     searchMode: search.searchMode,
