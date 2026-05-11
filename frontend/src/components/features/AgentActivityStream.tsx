@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   CheckCircle,
   AlertCircle,
@@ -143,19 +143,44 @@ export default function AgentActivityStream({
   isStreaming,
 }: AgentActivityStreamProps) {
   const [expanded, setExpanded] = useState(true);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { sources, phases } = displayState;
 
-  // Auto-expand on stream start; delayed collapse on finish
+  // Auto-expand during fetches. Only collapse after fetching has completed.
   useEffect(() => {
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+
     if (isStreaming) {
       setExpanded(true);
       return;
     }
+
     if (sources.length > 0) {
-      const timer = setTimeout(() => setExpanded(false), 800);
-      return () => clearTimeout(timer);
+      collapseTimerRef.current = setTimeout(() => {
+        setExpanded(false);
+        collapseTimerRef.current = null;
+      }, 800);
     }
+
+    return () => {
+      if (collapseTimerRef.current) {
+        clearTimeout(collapseTimerRef.current);
+        collapseTimerRef.current = null;
+      }
+    };
   }, [isStreaming, sources.length]);
+
+  useEffect(() => {
+    return () => {
+      if (collapseTimerRef.current) {
+        clearTimeout(collapseTimerRef.current);
+        collapseTimerRef.current = null;
+      }
+    };
+  }, []);
 
   if (sources.length === 0 && !isStreaming) return null;
 
