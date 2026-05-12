@@ -26,7 +26,7 @@ interface SubTab {
 const SUB_TABS: SubTab[] = [
   { key: "keywords", label: "Keywords", icon: Search },
   { key: "journals", label: "Journals", icon: Newspaper },
-  { key: "scoring", label: "Scoring", icon: BarChart2 },
+  { key: "scoring", label: "Paper Sources", icon: BarChart2 },
   { key: "backup", label: "Backup", icon: Archive },
 ];
 
@@ -331,7 +331,7 @@ export default function SettingsTab({
             />
           )}
           {sub === "scoring" && (
-            <ScoringSettings
+            <PaperSourcesSettings
               settings={editingSettings}
               onChange={handleChange}
               editingSlot={editingSlot}
@@ -643,10 +643,10 @@ function JournalSettings({
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Scoring sub-tab
+   Paper Sources sub-tab
    ───────────────────────────────────────────────────────────── */
 
-function ScoringSettings({
+function PaperSourcesSettings({
   settings,
   onChange,
   editingSlot,
@@ -738,7 +738,7 @@ function ScoringSettings({
         },
       };
       await saveSettings(updated);
-      setMsg({ type: "success", text: "Scoring configuration saved!" });
+      setMsg({ type: "success", text: "Paper sources saved!" });
       await onChange();
     } catch (e: unknown) {
       setMsg({
@@ -752,7 +752,7 @@ function ScoringSettings({
     <div className="space-y-6 pb-14 lg:pb-0">
       <Flash msg={msg} onClear={() => setMsg(null)} />
 
-      <Card title="Journal Impact Scoring">
+      <div className="bg-surface-raised rounded-xl border border-border p-5">
         <label className="flex items-center gap-2 mb-4 cursor-pointer">
           <input
             type="checkbox"
@@ -764,60 +764,7 @@ function ScoringSettings({
             Enable Journal Impact Scoring
           </span>
         </label>
-
-        {enabled && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <NumField label="5+ keywords" value={b5} onChange={setB5} />
-            <NumField label="4 keywords" value={b4} onChange={setB4} />
-            <NumField label="3 keywords" value={b3} onChange={setB3} />
-            <NumField label="2 keywords" value={b2} onChange={setB2} />
-            <NumField label="1 keyword" value={b1} onChange={setB1} />
-          </div>
-        )}
-      </Card>
-
-      <Card title="Search Configuration">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <NumField
-            label="Days Back"
-            value={daysBack}
-            onChange={setDaysBack}
-            min={1}
-            max={30}
-            step={1}
-          />
-          <NumField
-            label="Min Keyword Matches"
-            value={minKw}
-            onChange={setMinKw}
-            min={1}
-            max={10}
-            step={1}
-          />
-          <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">
-              Default Search Mode
-            </label>
-            <select
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden"
-            >
-              <option>Brief</option>
-              <option>Standard</option>
-              <option>Extended</option>
-            </select>
-          </div>
-          <NumField
-            label="Max Results Display"
-            value={maxResults}
-            onChange={setMaxResults}
-            min={10}
-            max={200}
-            step={10}
-          />
-        </div>
-      </Card>
+      </div>
 
       <Card title="Default Data Sources">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -836,7 +783,7 @@ function ScoringSettings({
           <Save className="w-4 h-4 shrink-0" />
           {editingSlot
             ? `Save to ${slotLabel ?? MODEL_SLOTS.find((s) => s.key === editingSlot)?.displayName}`
-            : "Save Scoring Configuration"}
+            : "Save Paper Sources"}
         </button>
       </div>
     </div>
@@ -936,39 +883,6 @@ function BackupSettings({ onSettingsChange }: { onSettingsChange: () => Promise<
 /* ─────────────────────────────────────────────────────────────
    Local helpers
    ───────────────────────────────────────────────────────────── */
-
-function NumField({
-  label,
-  value,
-  onChange,
-  min,
-  max,
-  step = 0.1,
-}: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-}) {
-  return (
-    <div>
-      <label className="block text-sm font-medium text-text-secondary mb-1">
-        {label}
-      </label>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        min={min}
-        max={max}
-        step={step}
-        className="w-full px-3 py-2 border border-border bg-surface rounded-lg text-sm text-text-primary focus:ring-2 focus:ring-accent focus:border-accent outline-hidden"
-      />
-    </div>
-  );
-}
 
 function MultiSelect({
   label,

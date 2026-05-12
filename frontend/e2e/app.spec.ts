@@ -90,7 +90,7 @@ test.describe("Settings page", () => {
     await page.goto("/settings");
     await expect(page.getByRole("button", { name: "Keywords", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Journals", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Scoring", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Paper Sources", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Backup", exact: true })).toBeVisible();
   });
 
@@ -104,10 +104,10 @@ test.describe("Settings page", () => {
     await page.getByRole("button", { name: "Journals", exact: true }).click();
     await expect(page.getByText("Target Journals")).toBeVisible();
 
-    // Switch to Scoring
-    await page.getByRole("button", { name: "Scoring", exact: true }).click();
+    // Switch to Paper Sources
+    await page.getByRole("button", { name: "Paper Sources", exact: true }).click();
     await expect(
-      page.getByRole("heading", { name: "Journal Impact Scoring" }),
+      page.getByRole("checkbox", { name: /Enable Journal Impact Scoring/ }),
     ).toBeVisible();
 
     // Switch to Backup

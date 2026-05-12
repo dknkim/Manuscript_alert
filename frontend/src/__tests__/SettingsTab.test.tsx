@@ -58,7 +58,7 @@ describe("SettingsTab", () => {
     // Sub-tab nav is within the border-b container
     expect(screen.getByRole("button", { name: "Keywords" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Journals" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Scoring" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Paper Sources" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Backup" })).toBeInTheDocument();
   });
 
@@ -85,12 +85,15 @@ describe("SettingsTab", () => {
     expect(screen.getByText(/Exact Matches/)).toBeInTheDocument();
   });
 
-  it("switches to Scoring sub-tab", async () => {
+  it("switches to Paper Sources sub-tab", async () => {
     const user = userEvent.setup();
     await renderWithSelectedSlot();
-    await user.click(screen.getByRole("button", { name: "Scoring" }));
-    expect(screen.getByText("Journal Impact Scoring")).toBeInTheDocument();
-    expect(screen.getByText("Search Configuration")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Paper Sources" }));
+    expect(
+      screen.getByRole("checkbox", { name: /Enable Journal Impact Scoring/ }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Journal Impact Scoring")).not.toBeInTheDocument();
+    expect(screen.queryByText("Search Configuration")).not.toBeInTheDocument();
   });
 
   it("switches to Backup sub-tab", async () => {
@@ -133,30 +136,31 @@ describe("Keywords sub-tab", () => {
   });
 });
 
-describe("Scoring sub-tab", () => {
+describe("Paper Sources sub-tab", () => {
   it("shows journal impact scoring checkbox enabled", async () => {
     const user = userEvent.setup();
     await renderWithSelectedSlot();
-    await user.click(screen.getByRole("button", { name: "Scoring" }));
+    await user.click(screen.getByRole("button", { name: "Paper Sources" }));
 
     const checkbox = screen.getByRole("checkbox", { name: /Enable Journal Impact Scoring/ });
     expect(checkbox).toBeChecked();
   });
 
-  it("shows search configuration fields", async () => {
+  it("hides journal boost and search configuration fields", async () => {
     const user = userEvent.setup();
     await renderWithSelectedSlot();
-    await user.click(screen.getByRole("button", { name: "Scoring" }));
+    await user.click(screen.getByRole("button", { name: "Paper Sources" }));
 
-    expect(screen.getByText("Days Back")).toBeInTheDocument();
-    expect(screen.getByText("Min Keyword Matches")).toBeInTheDocument();
-    expect(screen.getByText("Default Search Mode")).toBeInTheDocument();
+    expect(screen.queryByText("5+ keywords")).not.toBeInTheDocument();
+    expect(screen.queryByText("Days Back")).not.toBeInTheDocument();
+    expect(screen.queryByText("Min Keyword Matches")).not.toBeInTheDocument();
+    expect(screen.queryByText("Default Search Mode")).not.toBeInTheDocument();
   });
 
   it("shows default data sources", async () => {
     const user = userEvent.setup();
     await renderWithSelectedSlot();
-    await user.click(screen.getByRole("button", { name: "Scoring" }));
+    await user.click(screen.getByRole("button", { name: "Paper Sources" }));
 
     expect(screen.getByRole("checkbox", { name: "PubMed" })).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: "arXiv" })).toBeInTheDocument();
