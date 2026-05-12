@@ -44,6 +44,12 @@ export default function PaperFeed({
   onFetch,
 }: PaperFeedProps) {
   const hasActivity = displayState.sources.length > 0 || isStreaming;
+  const enabledSourceLabels = [
+    sources.pubmed ? "PubMed" : null,
+    sources.arxiv ? "arXiv" : null,
+    sources.biorxiv ? "bioRxiv" : null,
+    sources.medrxiv ? "medRxiv" : null,
+  ].filter(Boolean);
 
   return (
     <div className="flex-1 px-4 sm:px-6 py-6 space-y-4 min-w-0">
@@ -90,6 +96,24 @@ export default function PaperFeed({
           </button>
         )}
       </div>
+
+      {loading && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="flex items-center justify-between gap-3 rounded-lg border border-accent/30 bg-accent-subtle px-4 py-3 text-sm text-accent-text"
+        >
+          <span className="flex min-w-0 items-center gap-2 font-medium">
+            <RefreshCw className="h-4 w-4 shrink-0 animate-spin" />
+            Fetching papers...
+          </span>
+          {enabledSourceLabels.length > 0 && (
+            <span className="hidden sm:block truncate text-xs text-text-muted">
+              {enabledSourceLabels.join(", ")}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* SSE activity stream */}
       {hasActivity && (
