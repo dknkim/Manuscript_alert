@@ -43,4 +43,62 @@ describe("PaperFeed", () => {
 
     expect(screen.getByRole("status")).toHaveTextContent("Fetching papers...");
   });
+
+  it("keeps status visible while scores are being calculated after sources finish", () => {
+    render(
+      <PaperFeed
+        {...defaultProps}
+        loading={false}
+        isStreaming={false}
+        displayState={{
+          sources: [
+            {
+              source: "PubMed",
+              status: "complete",
+              papersFound: 12,
+              steps: [],
+            },
+          ],
+          phases: [
+            {
+              phase: "scoring",
+              status: "active",
+              totalPapers: 12,
+            },
+          ],
+        }}
+      />,
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent("Calculating scores...");
+  });
+
+  it("hides status after final results are available", () => {
+    render(
+      <PaperFeed
+        {...defaultProps}
+        result={mockFetchResult}
+        papers={mockFetchResult.papers}
+        displayState={{
+          sources: [
+            {
+              source: "PubMed",
+              status: "complete",
+              papersFound: 12,
+              steps: [],
+            },
+          ],
+          phases: [
+            {
+              phase: "scoring",
+              status: "done",
+              totalPapers: 12,
+            },
+          ],
+        }}
+      />,
+    );
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
 });

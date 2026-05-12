@@ -90,6 +90,7 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
   const abortRef = useRef<AbortController | null>(null);
   const hasRetriedAuthRef = useRef(false);
   const hydratedKeyRef = useRef<string | null>(null);
+  const receivedCompleteRef = useRef(false);
 
   useEffect(() => {
     if (!cacheKey) {
@@ -152,6 +153,7 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
   const reset = useCallback(() => {
     abortRef.current?.abort();
     hasRetriedAuthRef.current = false;
+    receivedCompleteRef.current = false;
     setDisplay(EMPTY_DISPLAY);
     setIsStreaming(false);
     setResult(null);
@@ -166,6 +168,7 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
       reset();
       setIsStreaming(true);
       hasRetriedAuthRef.current = false;
+      receivedCompleteRef.current = false;
 
       const ctrl = new AbortController();
       abortRef.current = ctrl;
@@ -335,6 +338,7 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
             case "complete":
               // Don't add a display row — the phase section already shows
               // scoring + filtering. Just deliver the result and stop.
+              receivedCompleteRef.current = true;
               setResult(data as FetchResult);
               setIsStreaming(false);
               ctrl.abort();
@@ -352,10 +356,16 @@ export function useAgentStream(cacheKey?: string): UseAgentStreamReturn {
         },
 
         onclose() {
-          // Abort first so onerror (triggered by the throw) skips setError.
-          ctrl.abort();
+          if (receivedCompleteRef.current) {
+            // The final result has already arrived; prevent fetchEventSource
+            // from retrying after a normal server close.
+            throw new Error("done");
+          }
+
+          const message = "Stream closed before fetching and scoring completed.";
+          setError(message);
           setIsStreaming(false);
-          throw new Error("done"); // prevent fetchEventSource from retrying
+          throw new Error(message);
         },
       }).catch((err: unknown) => {
         // "done" is thrown by onclose on every clean stream end — not a real error.

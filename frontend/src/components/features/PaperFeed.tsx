@@ -50,6 +50,16 @@ export default function PaperFeed({
     sources.biorxiv ? "bioRxiv" : null,
     sources.medrxiv ? "medRxiv" : null,
   ].filter(Boolean);
+  const terminalSourceCount = displayState.sources.filter(
+    (source) => source.status === "complete" || source.status === "error",
+  ).length;
+  const allSelectedSourcesSettled =
+    enabledSourceLabels.length > 0 &&
+    terminalSourceCount >= enabledSourceLabels.length;
+  const showFetchingStatus = loading || (!result && !error && hasActivity);
+  const statusText = allSelectedSourcesSettled
+    ? "Calculating scores..."
+    : "Fetching papers...";
 
   return (
     <div className="flex-1 px-4 sm:px-6 py-6 space-y-4 min-w-0">
@@ -97,7 +107,7 @@ export default function PaperFeed({
         )}
       </div>
 
-      {loading && (
+      {showFetchingStatus && (
         <div
           role="status"
           aria-live="polite"
@@ -105,7 +115,7 @@ export default function PaperFeed({
         >
           <span className="flex min-w-0 items-center gap-2 font-medium">
             <RefreshCw className="h-4 w-4 shrink-0 animate-spin" />
-            Fetching papers...
+            {statusText}
           </span>
           {enabledSourceLabels.length > 0 && (
             <span className="hidden sm:block truncate text-xs text-text-muted">
