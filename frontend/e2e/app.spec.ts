@@ -18,7 +18,7 @@ test.describe("App loading", () => {
   test("shows navigation links", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("link", { name: "Papers" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Models" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Models" })).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Settings" })).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Knowledge Base" }),
@@ -34,12 +34,6 @@ test.describe("App loading", () => {
 });
 
 test.describe("Route navigation", () => {
-  test("navigates to Models page", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("link", { name: "Models" }).click();
-    await expect(page.getByText("Model Management")).toBeVisible();
-  });
-
   test("navigates to Settings page", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("link", { name: "Settings" }).click();

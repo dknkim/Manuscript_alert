@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Settings, Database, BookOpen, Moon, Sun } from "lucide-react";
+import { FileText, Settings, BookOpen, Moon, Sun } from "lucide-react";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +11,6 @@ const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 const NAV_ITEMS: { href: string; label: string; icon: React.ElementType }[] = [
   { href: "/", label: "Papers", icon: FileText },
-  { href: "/models", label: "Models", icon: Database },
   { href: "/settings", label: "Settings", icon: Settings },
   { href: "/kb", label: "Knowledge Base", icon: BookOpen },
 ];
